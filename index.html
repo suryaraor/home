@@ -27,11 +27,17 @@
 </head> 
 
 <body>
+	$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
     <div class="wrapper">
         <div class="sidebar-wrapper">
             <div class="profile-container">
                 <img class="profile" src="assets/images/profile.png" alt="" />
                 <h1 class="name">Surya Rayarao</h1>
+		    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+  Tooltip on top
+</button>
                 <h3 class="tagline">Full Stack Developer</h3>
             </div><!--//profile-container-->
             
