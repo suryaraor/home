@@ -17,13 +17,28 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
             text-align: center;
+        }
+        .profile-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 8px;
+            background: #e3e3e3;
+            margin-bottom: 20px;
+        }
+        .profile-box img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
         }
         .review-list {
             list-style: none;
             padding: 0;
+            text-align: left;
         }
         .review-list li {
             background: #e3e3e3;
@@ -35,6 +50,12 @@
 </head>
 <body>
     <div class="container">
+        <div class="profile-box">
+            <img src="../img/profile.jpg" alt="Surya Rayarao">
+            <h2>Surya Rayarao</h2>
+            <p>Software Engineer | Cloud & AI Specialist | Peer Reviewer</p>
+        </div>
+        
         <h1>Peer Review Work</h1>
         <h2>Completed Reviews</h2>
         <ul class="review-list">
