@@ -35,28 +35,22 @@
             object-fit: cover;
             margin-bottom: 10px;
         }
-        .review-list {
-            list-style: none;
-            padding: 0;
+        .review-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .review-table th, .review-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
             text-align: left;
         }
-        .review-list li {
-            background: #e3e3e3;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
+        .review-table th {
+            background-color: #f2f2f2;
         }
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- Include Bootstrap Icons -->
-    <link rel="stylesheet" href="../assets/css/styles.css"> <!-- Include your main CSS -->
 </head>
 <body>
-   <!-- Home Button with Bootstrap Icon -->
-   <div style="text-align: center; margin-top: 20px;">
-    <a href="../index.html" class="btn btn-primary">
-        <i class="bi bi-house-door"></i> Home
-    </a>
-</div>
     <div class="container">
         <div class="profile-box">
             <img src="../img/profile.jpg" alt="Surya Rayarao">
@@ -67,17 +61,76 @@
         </div>
         
         <h1>Peer Review Work</h1>
-        <h2>Completed Reviews</h2>
-        <ul class="review-list">
-            <li><strong>CICTN 2025</strong> - January 4, 2025</li>
-            <li><strong>CSDB 2025</strong> - March 4, 2025</li>
-            <li><strong>ICCCIT 2024</strong> - January 9, 2024</li>
-            <li><strong>ITAI 2024</strong> - January 9, 2024</li>
-            <li><strong>JAIM 2025</strong> - March 2, 2025</li>
-            <li><strong>KDD 2025</strong> - January 19, 2025</li>
-        </ul>
-        <h2>Additional Information</h2>
-        <p>If you need further details about my professional career, please visit my <a href="https://www.linkedin.com/in/suryarayarao/" target="_blank">LinkedIn Profile</a>.</p>
+        
+        <h2>Conference Reviews</h2>
+        <table class="review-table">
+            <tr>
+                <th>Conference</th>
+                <th>Date</th>
+                <th>Review Summary</th>
+            </tr>
+            <tr>
+                <td>KDD 2025</td>
+                <td>January 19, 2025</td>
+                <td>Reviewed a paper on machine learning interpretability for large-scale datasets.</td>
+            </tr>
+            <tr>
+                <td>CICTN 2025</td>
+                <td>January 4, 2025</td>
+                <td>Assessed an AI optimization framework for cloud computing.</td>
+            </tr>
+            <tr>
+                <td>ICCCIT 2024</td>
+                <td>January 9, 2024</td>
+                <td>Evaluated AI-driven cybersecurity solutions focusing on anomaly detection.</td>
+            </tr>
+            <tr>
+                <td>ITAI 2024</td>
+                <td>January 9, 2024</td>
+                <td>Reviewed a study on AI-assisted industrial automation.</td>
+            </tr>
+        </table>
+
+        <h2>Journal Reviews</h2>
+        <table class="review-table">
+            <tr>
+                <th>Journal</th>
+                <th>Date</th>
+                <th>Review Summary</th>
+            </tr>
+            <tr>
+                <td>JAIM 2025</td>
+                <td>March 2, 2025</td>
+                <td>Assessed an article on automation in financial risk modeling.</td>
+            </tr>
+            <tr>
+                <td>CSDB 2025</td>
+                <td>March 4, 2025</td>
+                <td>Reviewed a study on database performance optimization using AI.</td>
+            </tr>
+        </table>
+
+        <h2>Ongoing Reviews</h2>
+        <table class="review-table">
+            <tr>
+                <th>Journal/Conference</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>ACM Transactions on Data Science</td>
+                <td>Under Review</td>
+            </tr>
+            <tr>
+                <td>IEEE Transactions on AI</td>
+                <td>Awaiting Decision</td>
+            </tr>
+        </table>
+
+        <h2>Recognitions & Contributions</h2>
+        <p>Recognized as a Top Reviewer for <strong>CICTN 2025</strong> for providing critical insights into AI optimization research.</p>
+
+        <h2>Interested in Peer Review Collaboration?</h2>
+        <p>If you're looking for an expert review on AI, cloud computing, or data science, feel free to <a href="mailto:suryarao.r@gmail.com">reach out</a>.</p>
     </div>
 </body>
 </html>
