@@ -35,18 +35,53 @@
             object-fit: cover;
             margin-bottom: 10px;
         }
-        .publication-list {
-            list-style: none;
-            padding: 0;
-            text-align: left;
+        .search-bar {
+            margin-bottom: 20px;
         }
-        .publication-list li {
+        .publication-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .publication-card {
             background: #e3e3e3;
-            margin: 10px 0;
+            margin: 10px;
             padding: 15px;
             border-radius: 5px;
+            width: 100%;
+            max-width: 750px;
+            text-align: left;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+        .abstract {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
+    <script>
+        function toggleAbstract(id) {
+            var abstract = document.getElementById(id);
+            if (abstract.style.display === "none") {
+                abstract.style.display = "block";
+            } else {
+                abstract.style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -59,17 +94,42 @@
         </div>
         
         <h1>Research Publications</h1>
-        <h2>Published Papers</h2>
-        <ul class="publication-list">
-            <li><strong>Study of Hardware Acceleration of Graph Neural Networks</strong><br> <strong>Journal:</strong> International Journal of Computer Science and Data Engineering <br> <strong>Date:</strong> 2025 <br> <a href="https://doi.org/10.55124/csdb.v1i1.239" target="_blank">Read More</a></li>
-            <li><strong>AI-Driven Anomaly Detection for Secure Enterprise File Transfers</strong><br> <strong>Preprint</strong> <br> <strong>Date:</strong> 2025-03-05 <br> <a href="https://doi.org/10.36227/techrxiv.174114560.01924596/v1" target="_blank">Read More</a></li>
-            <li><strong>AI-Powered Agents Transforming 401(k) Compliance and Risk Management</strong><br> <strong>Preprint</strong> <br> <strong>Date:</strong> 2025-01-05 <br> <a href="https://doi.org/10.36227/techrxiv.173611324.44788458/v1" target="_blank">Read More</a></li>
-            <li><strong>Advanced Predictive Maintenance Strategies: Insights from the AI4I 2020 Dataset</strong><br> <strong>Preprint</strong> <br> <strong>Date:</strong> 2024-12-12 <br> <a href="https://doi.org/10.36227/techrxiv.173397914.41294976/v1" target="_blank">Read More</a></li>
-            <li><strong>Study of Stars Supplemental Provider Rating and its Impact on Healthcare Quality</strong><br> <strong>Journal:</strong> Journal of Business Intelligence and Data Analytics <br> <strong>Date:</strong> 2024-05-31 <br> <a href="https://doi.org/10.55124/jbid.v1i1.233" target="_blank">Read More</a></li>
-            <li><strong>Computational Molecular Biology in Data Science Applications on Bioinformatics in Genetic Sequencing of COVID Mutations</strong><br> <strong>Journal:</strong> Journal of Data Science and Information Technology <br> <strong>Date:</strong> 2024-01-04 <br> <a href="https://doi.org/10.55124/jdit.v1i1.234" target="_blank">Read More</a></li>
-        </ul>
+        <input class="search-bar" type="text" id="search" placeholder="Search publications..." onkeyup="filterPubs()">
+        <div class="publication-list" id="publicationList">
+            <div class="publication-card">
+                <strong>Study of Hardware Acceleration of Graph Neural Networks</strong>
+                <p><strong>Journal:</strong> International Journal of Computer Science and Data Engineering</p>
+                <p><strong>Date:</strong> 2025</p>
+                <p><a href="https://doi.org/10.55124/csdb.v1i1.239" target="_blank">🔗 DOI</a></p>
+                <button onclick="toggleAbstract('abstract1')">Show Abstract</button>
+                <p class="abstract" id="abstract1">This paper explores the role of hardware accelerators in improving the efficiency of Graph Neural Networks.</p>
+            </div>
+            <div class="publication-card">
+                <strong>AI-Driven Anomaly Detection for Secure Enterprise File Transfers</strong>
+                <p><strong>Preprint</strong></p>
+                <p><strong>Date:</strong> 2025-03-05</p>
+                <p><a href="https://doi.org/10.36227/techrxiv.174114560.01924596/v1" target="_blank">🔗 DOI</a></p>
+                <button onclick="toggleAbstract('abstract2')">Show Abstract</button>
+                <p class="abstract" id="abstract2">This research focuses on AI-powered anomaly detection mechanisms for secure enterprise file transfers.</p>
+            </div>
+        </div>
         <h2>Additional Information</h2>
         <p>For a full list of my publications, visit my <a href="https://orcid.org/0009-0001-8467-7865" target="_blank">ORCID Profile</a>.</p>
     </div>
+    
+    <script>
+        function filterPubs() {
+            let input = document.getElementById("search").value.toLowerCase();
+            let cards = document.querySelectorAll(".publication-card");
+            cards.forEach(card => {
+                let text = card.innerText.toLowerCase();
+                if (text.includes(input)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+    </script>
 </body>
 </html>
