@@ -1,143 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research Publications - Surya Rayarao</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 40px;
-            background-color: #f4f4f4;
-            transition: background 0.3s ease-in-out;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-        .profile-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #007bff, #6610f2);
-            color: white;
-            margin-bottom: 20px;
-        }
-        .profile-box img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 10px;
-            border: 3px solid white;
-        }
-        .search-bar {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        .publication-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .publication-card {
-            background: white;
-            margin: 15px;
-            padding: 20px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 750px;
-            text-align: left;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-        }
-        .publication-card:hover {
-            transform: translateY(-5px);
-        }
-        .abstract {
-            display: none;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #555;
-        }
-        .tag {
-            background: #007bff;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-right: 5px;
-        }
-        .dark-mode {
-            background-color: #222;
-            color: white;
-        }
-        .dark-mode .publication-card {
-            background: #333;
-            color: white;
-            box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.2);
-        }
-        .toggle-btn {
-            margin-top: 10px;
-            padding: 8px 16px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-    </style>
+.profile-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 12px;
+    background: #444;
+    color: white;
+    margin-bottom: 20px;
+}
+    color: white;
+    margin-bottom: 20px;
+}
+.profile-box img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 3px solid white;
+}
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+.publication-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.publication-card {
+    background: white;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 750px;
+    text-align: left;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+.publication-card:hover {
+    transform: translateY(-5px);
+}
+.abstract {
+    display: none;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+.tag {
+    background: #007bff;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 5px;
+}
+.dark-mode {
+    background-color: #222;
+    color: white;
+}
+.dark-mode .publication-card {
+    background: #333;
+    color: white;
+    box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.2);
+}
+.toggle-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="profile-box">
-            <img src="../img/profile.jpg" alt="Surya Rayarao">
-            <h2>Surya Rayarao</h2>
-            <p>Lead Software Engineer at SS&C Technologies</p>
-            <p>Master's in Data Science Student at UT Austin</p>
-            <p>Cloud & AI Specialist | Researcher</p>
-        </div>
-        
-        <h1>Research Publications</h1>
-        <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-        <input class="search-bar" type="text" id="search" placeholder="Search publications..." onkeyup="filterPubs()">
-        <div class="publication-list" id="publicationList">
-            
-            <!-- Auto-generated list of publications -->
-            %PUBLICATIONS%
-        </div>
-        <h2>Additional Information</h2>
-        <p>For a full list of my publications, visit my <a href="https://orcid.org/0009-0001-8467-7865" target="_blank">ORCID Profile</a>.</p>
-    </div>
+<div class="container">
+<div class="profile-box">
+    <img src="../img/profile.jpg" alt="Surya Rayarao">
+    <h2>Surya Rayarao</h2>
+    <p>Lead Software Engineer at SS&C Technologies</p>
+    <p>Master's in Data Science Student at UT Austin</p>
+    <p>Cloud & AI Specialist | Researcher</p>
+</div>
+
+<h1>Research Publications</h1>
+<button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+<input class="search-bar" type="text" id="search" placeholder="Search publications..." onkeyup="filterPubs()">
+<div class="publication-list" id="publicationList">
     
-    <script>
-        function filterPubs() {
-            let input = document.getElementById("search").value.toLowerCase();
-            let cards = document.querySelectorAll(".publication-card");
-            cards.forEach(card => {
-                let text = card.innerText.toLowerCase();
-                if (text.includes(input)) {
-                    card.style.display = "block";
-                } else {
-                    card.style.display = "none";
-                }
-            });
+    <!-- Auto-generated list of publications -->
+    <div class="publication-card">
+        <strong>Study of Hardware Acceleration of Graph Neural Networks</strong>
+        <p><strong>Journal:</strong> International Journal of Computer Science and Data Engineering</p>
+        <p><strong>Date:</strong> 2025</p>
+        <p><a href="https://doi.org/10.55124/csdb.v1i1.239" target="_blank">🔗 DOI</a></p>
+    </div>
+    <div class="publication-card">
+        <strong>AI-Driven Anomaly Detection for Secure Enterprise File Transfers</strong>
+        <p><strong>Preprint</strong></p>
+        <p><strong>Date:</strong> 2025-03-05</p>
+        <p><a href="https://doi.org/10.36227/techrxiv.174114560.01924596/v1" target="_blank">🔗 DOI</a></p>
+    </div>
+    <div class="publication-card">
+        <strong>AI-Powered Agents Transforming 401(k) Compliance and Risk Management</strong>
+        <p><strong>Preprint</strong></p>
+        <p><strong>Date:</strong> 2025-01-05</p>
+        <p><a href="https://doi.org/10.36227/techrxiv.173611324.44788458/v1" target="_blank">🔗 DOI</a></p>
+    </div>
+    <div class="publication-card">
+        <strong>Advanced Predictive Maintenance Strategies: Insights from the AI4I 2020 Dataset</strong>
+        <p><strong>Preprint</strong></p>
+        <p><strong>Date:</strong> 2024-12-12</p>
+        <p><a href="https://doi.org/10.36227/techrxiv.173397914.41294976/v1" target="_blank">🔗 DOI</a></p>
+    </div>
+    <div class="publication-card">
+        <strong>Study of Stars Supplemental Provider Rating and its Impact on Healthcare Quality</strong>
+        <p><strong>Journal:</strong> Journal of Business Intelligence and Data Analytics</p>
+        <p><strong>Date:</strong> 2024-05-31</p>
+        <p><a href="https://doi.org/10.55124/jbid.v1i1.233" target="_blank">🔗 DOI</a></p>
+    </div>
+    <div class="publication-card">
+        <strong>Computational Molecular Biology in Data Science Applications on Bioinformatics in Genetic Sequencing of COVID Mutations</strong>
+        <p><strong>Journal:</strong> Journal of Data Science and Information Technology</p>
+        <p><strong>Date:</strong> 2024-01-04</p>
+        <p><a href="https://doi.org/10.55124/jdit.v1i1.234" target="_blank">🔗 DOI</a></p>
+    </div>
+    <div class="publication-card">
+        <strong>Leveraging Data Analytics to Explore the Impact of CMS Medicare Measures on Health Screens and Stars Supplemental Provider Rating</strong>
+        <p><strong>Journal:</strong> Journal of Business Intelligence and Data Analytics</p>
+        <p><strong>Date:</strong> 2024-01-04</p>
+        <p><a href="https://doi.org/10.55124/jbid.v1i1.234" target="_blank">🔗 DOI</a></p>
+    </div>
+    <div class="publication-card">
+        <strong>Data Science Applications in Bioinformatics for Genetic Sequencing of COVID Mutations</strong>
+        <p><strong>Journal:</strong> Journal of Data Science and Information Technology</p>
+        <p><strong>Date:</strong> 2014-01-04</p>
+        <p><a href="https://doi.org/10.55124/jdit.v1i1.233" target="_blank">🔗 DOI</a></p>
+    </div>
+    <div class="publication-card">
+        <strong>Revolutionizing Transaction Security with AI Agents: A Predictive Approach to Anomaly Detection</strong>
+        <p><strong>Other</strong></p>
+        <p><strong>Date:</strong> 2025</p>
+        <p><a href="https://doi.org/10.2139/ssrn.5076974" target="_blank">🔗 DOI</a></p>
+    </div>
+</div>
+<h2>Additional Information</h2>
+<p>For a full list of my publications, visit my <a href="https://orcid.org/0009-0001-8467-7865" target="_blank">ORCID Profile</a>.</p>
+</div>
+
+<script>
+function filterPubs() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let cards = document.querySelectorAll(".publication-card");
+    cards.forEach(card => {
+        let text = card.innerText.toLowerCase();
+        if (text.includes(input)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
         }
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-        }
-    </script>
+    });
+}
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+}
+</script>
 </body>
 </html>
