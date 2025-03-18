@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patent - Adaptive Cognitive Data Fabric</title>
+    <title>Patent - Adaptive Cognitive Data Fabric and Others</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         /* Global Styles */
@@ -29,6 +29,46 @@
         }
         a:hover {
             color: #eb3812;
+        }
+
+        /* Tab Styles */
+        .tabs {
+            margin-bottom: 30px;
+        }
+        .tab-list {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .tab-item {
+            padding: 15px 30px;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+            background: #f0f0f0;
+            transition: background 0.3s;
+            flex: 1;
+        }
+        .tab-item:hover {
+            background: #e0e0e0;
+        }
+        .tab-item.active {
+            background: #F05F40;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .tab-content.active {
+            display: block;
         }
 
         /* Container Styles */
@@ -82,7 +122,6 @@
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* Footer */
         footer {
             text-align: center;
             color: #777;
@@ -133,35 +172,48 @@
         <!-- Profile Section -->
         <div class="profile-box">
             <img src="../img/profile.jpg" alt="Inventor Image"> <!-- Updated image path -->
-            <h2>Adaptive Cognitive Data Fabric System</h2>
-            <p>Inventors: Surya Rao Rayarao, Santhosh Kumar Pendyala, Vijay Kumar Adari, and others</p>
-            <p>Filed: 2025 | Patent Number: PTO/AIA/14 OMB 0651-0032</p> <!-- Updated patent number -->
+            <h2>Surya Rao Rayarao's Patents</h2>
+            <p>Inventor: Surya Rao Rayarao</p>
         </div>
-        
-        <!-- Patent Overview -->
-        <h1>Patent Overview</h1>
-        <p>The Adaptive Cognitive Data Fabric (ACDF) patent introduces an innovative approach to the autonomous management of complex data ecosystems. It leverages quantum-resistant security, AI-driven optimization, and blockchain-based federated governance to ensure data integrity, scalability, and compliance across diverse environments.</p>
 
-        <!-- Key Features -->
-        <h2>Key Features</h2>
-        <ul>
-            <li><strong>Quantum-Resistant Data Collector:</strong> Secure, multi-protocol data ingestion using post-quantum cryptographic safeguards.</li>
-            <li><strong>Self-Healing Stream Reconciliation:</strong> Ensures synchronization of heterogeneous data streams through Byzantine fault tolerance.</li>
-            <li><strong>Adaptive Pipeline Orchestrator:</strong> AI-based dynamic optimization of data workflows with reinforcement learning algorithms.</li>
-            <li><strong>Cognitive Model Retrainer:</strong> Uses continual learning techniques to prevent concept drift and maintain model accuracy.</li>
-            <li><strong>Federated Metadata Manager:</strong> Blockchain-based immutable provenance tracking to ensure compliance and governance transparency.</li>
-        </ul>
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <ul class="tab-list">
+                <li class="tab-item active" id="patent1-tab" onclick="showPatent(1)">Patent 1: Adaptive Cognitive Data Fabric</li>
+                <li class="tab-item" id="patent2-tab" onclick="showPatent(2)">Patent 2: AI Driven Predictive Analytics</li>
+                <li class="tab-item" id="patent3-tab" onclick="showPatent(3)">Patent 3: Personalized Medicine Framework</li>
+                <li class="tab-item" id="patent4-tab" onclick="showPatent(4)">Patent 4: AI-Powered Cyber Security</li>
+            </ul>
+            <!-- Patent 1 Content -->
+            <div class="tab-content active" id="patent1-content">
+                <h2>Patent 1: Adaptive Cognitive Data Fabric</h2>
+                <p><strong>Filed:</strong> 2025 | <strong>Patent Number:</strong> PTO/AIA/14 OMB 0651-0032</p>
+                <p><strong>Description:</strong> The Adaptive Cognitive Data Fabric (ACDF) system integrates quantum-resistant data collection, AI-driven optimization, and blockchain-based federated governance to optimize data management.</p>
+            </div>
+            <!-- Patent 2 Content -->
+            <div class="tab-content" id="patent2-content">
+                <h2>Patent 2: AI Driven Predictive Analytics and Algorithmic Trading</h2>
+                <p><strong>Filed:</strong> 10 March 2025 | <strong>Patent Number:</strong> [Pending]</p>
+                <p><strong>Description:</strong> This invention focuses on an AI-driven system for predictive analytics and algorithmic trading, aimed at optimizing financial market performance.</p>
+            </div>
+            <!-- Patent 3 Content -->
+            <div class="tab-content" id="patent3-content">
+                <h2>Patent 3: Machine Learning Based Personalized Medicine</h2>
+                <p><strong>Filed:</strong> 11 March 2025 | <strong>Patent Number:</strong> [Pending]</p>
+                <p><strong>Description:</strong> This system uses machine learning to deliver personalized medicine, focusing on advanced diagnostics and customized treatment recommendations.</p>
+            </div>
+            <!-- Patent 4 Content -->
+            <div class="tab-content" id="patent4-content">
+                <h2>Patent 4: AI-Powered Cyber Security System</h2>
+                <p><strong>Filed:</strong> 15 March 2025 | <strong>Patent Number:</strong> [Pending]</p>
+                <p><strong>Description:</strong> The AI-powered cybersecurity system enhances real-time threat detection and autonomously responds to security threats, ensuring data integrity.</p>
+            </div>
+        </div>
 
-        <!-- Surya's Contribution -->
+        <!-- Contribution Section -->
         <h2>Surya's Contribution</h2>
         <div class="contribution-section">
-            <p>As one of the key inventors of the Adaptive Cognitive Data Fabric system, I, <strong>Surya Rayarao</strong>, played an instrumental role in the conceptualization, design, and development of this system. My contributions include:</p>
-            <ul>
-                <li><strong>AI-Driven Workflow Optimization:</strong> Designing advanced algorithms for the dynamic reconfiguration of data processing workflows using multi-agent reinforcement learning.</li>
-                <li><strong>Federated Governance Framework:</strong> Contributing to the design and implementation of a decentralized governance mechanism that ensures data security, integrity, and regulatory compliance.</li>
-                <li><strong>Quantum-Resistant Data Collection:</strong> Integrating cutting-edge post-quantum cryptographic techniques for secure data ingestion across heterogeneous environments.</li>
-                <li><strong>Scalability & Adaptability:</strong> Ensuring that the system is scalable and adaptable to rapidly evolving data environments, enhancing its utility across diverse industries such as healthcare, finance, and IoT.</li>
-            </ul>
+            <p>As the sole inventor of these patents, Surya Rao Rayarao has made significant contributions in the fields of AI-driven systems, predictive analytics, personalized medicine, and cybersecurity. His work spans multiple cutting-edge technologies aimed at solving real-world challenges.</p>
         </div>
 
         <!-- Supporting Documentation -->
@@ -173,19 +225,31 @@
             <li><a href="../assets/docs/inventor-details-file.pdf" target="_blank">Inventor Details</a></li>
         </ul>
 
-        <!-- Importance of the Patent -->
-        <h2>Importance of the Patent</h2>
-        <p>This patent addresses a critical need for secure, adaptable, and efficient data management frameworks capable of handling multi-source, multi-modal data across distributed environments. As data volumes continue to grow, traditional systems are ill-equipped to manage such vast and varied datasets, often resulting in inefficiencies and security vulnerabilities.</p>
-        <p>This innovation provides a scalable, secure, and intelligent framework for autonomous data governance, ensuring compliance with evolving regulations without compromising performance. Its implications span across industries such as healthcare, finance, and IoT, where data integrity, real-time processing, and regulatory adherence are paramount.</p>
-
-        <!-- Contact Section -->
-        <p>If you need more details about this patent or related technologies, feel free to <a href="mailto:suryarao.r@gmail.com">reach out</a> or explore the supporting documentation above.</p>
-
-        <!-- Footer -->
         <footer>
             <p>&copy; 2025 Surya Rayarao. All Rights Reserved.</p>
         </footer>
     </div>
+
+    <script>
+        // JavaScript for tab navigation
+        function showPatent(patentNumber) {
+            // Hide all patent contents
+            var contents = document.querySelectorAll('.tab-content');
+            contents.forEach(function(content) {
+                content.classList.remove('active');
+            });
+
+            // Show the selected patent content
+            document.getElementById('patent' + patentNumber + '-content').classList.add('active');
+
+            // Change the active tab
+            var tabs = document.querySelectorAll('.tab-item');
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            document.getElementById('patent' + patentNumber + '-tab').classList.add('active');
+        }
+    </script>
 
 </body>
 </html>
