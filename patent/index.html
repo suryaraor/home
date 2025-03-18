@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patent - Adaptive Cognitive Data Fabric and Others</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- FontAwesome for Flag Icons -->
     <style>
         /* Global Styles */
         body {
@@ -52,6 +53,9 @@
             background: #f0f0f0;
             transition: background 0.3s;
             flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .tab-item:hover {
             background: #e0e0e0;
@@ -59,6 +63,9 @@
         .tab-item.active {
             background: #F05F40;
             color: white;
+        }
+        .tab-item i {
+            margin-right: 8px; /* Space between the flag icon and text */
         }
         .tab-content {
             display: none;
@@ -179,10 +186,18 @@
         <!-- Tab Navigation -->
         <div class="tabs">
             <ul class="tab-list">
-                <li class="tab-item active" id="patent1-tab" onclick="showPatent(1)">Patent 1: Adaptive Cognitive Data Fabric</li>
-                <li class="tab-item" id="patent2-tab" onclick="showPatent(2)">Patent 2: AI Driven Predictive Analytics</li>
-                <li class="tab-item" id="patent3-tab" onclick="showPatent(3)">Patent 3: Personalized Medicine Framework</li>
-                <li class="tab-item" id="patent4-tab" onclick="showPatent(4)">Patent 4: AI-Powered Cyber Security</li>
+                <li class="tab-item active" id="patent1-tab" onclick="showPatent(1)">
+                    <i class="fas fa-flag-usa"></i> Patent 1: Adaptive Cognitive Data Fabric
+                </li>
+                <li class="tab-item" id="patent2-tab" onclick="showPatent(2)">
+                    <i class="fas fa-flag-india"></i> Patent 2: AI Driven Predictive Analytics
+                </li>
+                <li class="tab-item" id="patent3-tab" onclick="showPatent(3)">
+                    <i class="fas fa-flag-india"></i> Patent 3: Personalized Medicine Framework
+                </li>
+                <li class="tab-item" id="patent4-tab" onclick="showPatent(4)">
+                    <i class="fas fa-flag-india"></i> Patent 4: AI-Powered Cyber Security
+                </li>
             </ul>
             <!-- Patent 1 Content -->
             <div class="tab-content active" id="patent1-content">
