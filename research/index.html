@@ -59,29 +59,7 @@
             font-size: 14px;
             color: #555;
         }
-        button {
-            margin-top: 10px;
-            padding: 5px 10px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
     </style>
-    <script>
-        function toggleAbstract(id) {
-            var abstract = document.getElementById(id);
-            if (abstract.style.display === "none") {
-                abstract.style.display = "block";
-            } else {
-                abstract.style.display = "none";
-            }
-        }
-    </script>
 </head>
 <body>
     <div class="container">
@@ -96,21 +74,61 @@
         <h1>Research Publications</h1>
         <input class="search-bar" type="text" id="search" placeholder="Search publications..." onkeyup="filterPubs()">
         <div class="publication-list" id="publicationList">
+            
+            <!-- Auto-generated list of publications -->
             <div class="publication-card">
                 <strong>Study of Hardware Acceleration of Graph Neural Networks</strong>
                 <p><strong>Journal:</strong> International Journal of Computer Science and Data Engineering</p>
                 <p><strong>Date:</strong> 2025</p>
                 <p><a href="https://doi.org/10.55124/csdb.v1i1.239" target="_blank">🔗 DOI</a></p>
-                <button onclick="toggleAbstract('abstract1')">Show Abstract</button>
-                <p class="abstract" id="abstract1">This paper explores the role of hardware accelerators in improving the efficiency of Graph Neural Networks.</p>
             </div>
             <div class="publication-card">
                 <strong>AI-Driven Anomaly Detection for Secure Enterprise File Transfers</strong>
                 <p><strong>Preprint</strong></p>
                 <p><strong>Date:</strong> 2025-03-05</p>
                 <p><a href="https://doi.org/10.36227/techrxiv.174114560.01924596/v1" target="_blank">🔗 DOI</a></p>
-                <button onclick="toggleAbstract('abstract2')">Show Abstract</button>
-                <p class="abstract" id="abstract2">This research focuses on AI-powered anomaly detection mechanisms for secure enterprise file transfers.</p>
+            </div>
+            <div class="publication-card">
+                <strong>AI-Powered Agents Transforming 401(k) Compliance and Risk Management</strong>
+                <p><strong>Preprint</strong></p>
+                <p><strong>Date:</strong> 2025-01-05</p>
+                <p><a href="https://doi.org/10.36227/techrxiv.173611324.44788458/v1" target="_blank">🔗 DOI</a></p>
+            </div>
+            <div class="publication-card">
+                <strong>Advanced Predictive Maintenance Strategies: Insights from the AI4I 2020 Dataset</strong>
+                <p><strong>Preprint</strong></p>
+                <p><strong>Date:</strong> 2024-12-12</p>
+                <p><a href="https://doi.org/10.36227/techrxiv.173397914.41294976/v1" target="_blank">🔗 DOI</a></p>
+            </div>
+            <div class="publication-card">
+                <strong>Study of Stars Supplemental Provider Rating and its Impact on Healthcare Quality</strong>
+                <p><strong>Journal:</strong> Journal of Business Intelligence and Data Analytics</p>
+                <p><strong>Date:</strong> 2024-05-31</p>
+                <p><a href="https://doi.org/10.55124/jbid.v1i1.233" target="_blank">🔗 DOI</a></p>
+            </div>
+            <div class="publication-card">
+                <strong>Computational Molecular Biology in Data Science Applications on Bioinformatics in Genetic Sequencing of COVID Mutations</strong>
+                <p><strong>Journal:</strong> Journal of Data Science and Information Technology</p>
+                <p><strong>Date:</strong> 2024-01-04</p>
+                <p><a href="https://doi.org/10.55124/jdit.v1i1.234" target="_blank">🔗 DOI</a></p>
+            </div>
+            <div class="publication-card">
+                <strong>Leveraging Data Analytics to Explore the Impact of CMS Medicare Measures on Health Screens and Stars Supplemental Provider Rating</strong>
+                <p><strong>Journal:</strong> Journal of Business Intelligence and Data Analytics</p>
+                <p><strong>Date:</strong> 2024-01-04</p>
+                <p><a href="https://doi.org/10.55124/jbid.v1i1.234" target="_blank">🔗 DOI</a></p>
+            </div>
+            <div class="publication-card">
+                <strong>Data Science Applications in Bioinformatics for Genetic Sequencing of COVID Mutations</strong>
+                <p><strong>Journal:</strong> Journal of Data Science and Information Technology</p>
+                <p><strong>Date:</strong> 2014-01-04</p>
+                <p><a href="https://doi.org/10.55124/jdit.v1i1.233" target="_blank">🔗 DOI</a></p>
+            </div>
+            <div class="publication-card">
+                <strong>Revolutionizing Transaction Security with AI Agents: A Predictive Approach to Anomaly Detection</strong>
+                <p><strong>Other</strong></p>
+                <p><strong>Date:</strong> 2025</p>
+                <p><a href="https://doi.org/10.2139/ssrn.5076974" target="_blank">🔗 DOI</a></p>
             </div>
         </div>
         <h2>Additional Information</h2>
