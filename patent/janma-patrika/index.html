@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Janma Patrika</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(to right, #ff7e5f, #feb47b); 
+            margin: 0; 
+            padding: 0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container { 
+            width: 80%; 
+            margin: 50px auto; 
+            padding: 20px; 
+            background: white; 
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); 
+            border-radius: 10px; 
+            text-align: center;
+        }
+        h2 { 
+            color: #d35400; 
+            font-size: 28px; 
+            margin-bottom: 20px;
+        }
+        .profiles-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .profile { 
+            width: 250px;
+            padding: 20px; 
+            border-radius: 10px;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            color: white;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .profile h3 { 
+            margin: 0; 
+            font-size: 22px; 
+            color: #fff;
+        }
+        .profile p { 
+            margin: 5px 0; 
+            font-size: 16px; 
+        }
+        .copy-btn {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            background: #ffffff;
+            color: #ff5e62;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .copy-btn:hover {
+            background: #ffe6e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🌟 జన్మ పత్రిక 🌟</h2>
+        <div class="profiles-container" id="profiles"></div>
+    </div>
+    <script>
+        const profiles = [
+            {
+                "name": "దీక్షిత శాస్త్రుల",
+                "dob": "ఆగస్టు 26, 2002, సోమవారము, సాయంత్రం 6.28 గంటలు",
+                "details": "చిత్రభాను నామ సంవత్సరం, దక్షిణాయనం, శ్రావణ మాసం, కృష్ణ పక్షం, చవితి తిథి, రేవతీ నక్షత్రం, 3వ పాదం, మీన రాశి"
+            },
+            {
+                "name": "సహస్ర రాయరావు",
+                "dob": "జూలై 19, 2009, ఆదివారము, ఉదయం 11.45 గంటలు",
+                "details": "విరోధి నామ సంవత్సరం, దక్షిణాయనం, ఆషాడ మాసం, కృష్ణపక్షం, ద్వాదశి తిథి, రోహిణి నక్షత్రం, 4వ పాదం, వృషభ రాశి"
+            },
+            {
+                "name": "అద్వైత శాస్త్రుల",
+                "dob": "ఆగస్టు 2, 2009, ఆదివారము, రాత్రి 8.26 గంటలు",
+                "details": "విరోధి నామ సంవత్సరం, దక్షిణాయనం, శ్రావణ మాసం, శుక్ల పక్షం, ద్వాదశి తిథి, మూల నక్షత్రం, 3వ పాదం, ధనుస్సు రాశి"
+            },
+            {
+                "name": "చైత్ర రాయరావు",
+                "dob": "ఆగస్టు 19, 2012, ఆదివారము, మధ్యాహ్నం 12:58 PM గంటలు",
+                "details": "నందన నామ సంవత్సరం, దక్షిణాయనం, శ్రావణ మాసం, శుక్ల పక్షం, త్రితీయ తిథి, పూర్వ ఫాల్గుని నక్షత్రం, 4వ పాదం, సింహ రాశి"
+            },
+            {
+                "name": "సహాన రాయరావు",
+                "dob": "మార్చి 11, 2014, మంగళవారము, మద్యాహ్నం 1:15 PM",
+                "details": "విజయ నామ సంవత్సరం, ఉత్తరాయణం, ఫాల్గుణ మాసం, శుక్ల పక్షం, ఏకాదశి తిథి, పునర్వసు నక్షత్రం, 3వ పాదం, మిథున రాశి"
+            },
+            {
+                "name": "అక్షర రాయరావు",
+                "dob": "ఫిబ్రవరి 13, 2020, గురువారము, ఉదయం 10.38 గంటలు Newark Delaware EST USA (రాత్రి 9.08 గంటలు హైదరాబాద్ Local Time)",
+                "details": "వికారి నామ సంవత్సరం, ఉత్తరాయణం, మాఘ మాసం, కృష్ణపక్షం, షష్టీ తిథి, చిత్త నక్షత్రం, 3వ పాదం, తులా రాశి"
+            }
+        ];
+        
+        const profilesContainer = document.getElementById('profiles');
+        profiles.forEach(profile => {
+            const profileDiv = document.createElement('div');
+            profileDiv.classList.add('profile');
+            profileDiv.innerHTML = `<h3>${profile.name}</h3><p><strong>🗓️ పుట్టిన తేదీ & సమయం:</strong> ${profile.dob}</p><p><strong>🌟 జన్మ వివరాలు:</strong> ${profile.details}</p><button class='copy-btn' onclick='copyToClipboard("${profile.name}\n🗓️ ${profile.dob}\n🌟 ${profile.details}")'>Copy</button>`;
+            profilesContainer.appendChild(profileDiv);
+        });
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copied to clipboard!");
+            });
+        }
+    </script>
+</body>
+</html>
