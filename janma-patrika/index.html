@@ -48,6 +48,10 @@
             flex-direction: column;
             justify-content: space-between;
         }
+        .profile:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
         .profile h3 { 
             margin: 0; 
             font-size: 24px; 
@@ -114,18 +118,26 @@
         
         const profilesContainer = document.getElementById('profiles');
         profiles.forEach(profile => {
-            const profileDiv = document.createElement('div');
-            profileDiv.classList.add('profile');
-            profileDiv.innerHTML = `<h3>${profile.name}</h3><p><strong>🗓️ పుట్టిన తేదీ & సమయం:</strong> ${profile.dob}</p><p><strong>🌟 జన్మ వివరాలు:</strong> ${profile.details}</p><button class='copy-btn' onclick='copyToClipboard(this)'>Copy</button>`;
-            profilesContainer.appendChild(profileDiv);
+            const profileHTML = `
+                <div class="profile">
+                    <h3>${profile.name}</h3>
+                    <p><strong>🗓️ పుట్టిన తేదీ & సమయం:</strong> ${profile.dob}</p>
+                    <p><strong>🌟 జన్మ వివరాలు:</strong> ${profile.details}</p>
+                    <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy profile details">Copy</button>
+                </div>`;
+            profilesContainer.insertAdjacentHTML('beforeend', profileHTML);
         });
         
         function copyToClipboard(button) {
             const profileDiv = button.parentElement;
             const text = profileDiv.innerText.replace("Copy", "");
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Copied to clipboard!");
-            });
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert("Copied to clipboard!");
+                })
+                .catch(err => {
+                    alert("Failed to copy: " + err.message);
+                });
         }
     </script>
 </body>
