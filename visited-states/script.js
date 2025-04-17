@@ -3,6 +3,7 @@ const BIN_ID = "67ead44f8960c979a57bde21"; // Added Bin ID
 
 document.addEventListener("DOMContentLoaded", () => {
     const states = document.querySelectorAll(".state");
+    document.getElementById('loader').style.display = 'none';
 
     // Load visited states from JSONBin
     fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
@@ -31,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
             textElement.setAttribute("text-anchor", "middle");
             textElement.style.fill = "black";
             textElement.style.fontSize = "12px";
-            console.log('adding state '+textElement.textContent);
             state.parentNode.appendChild(textElement);
+            document.getElementById('loader').style.display = 'none';
 
             // Add click event listener to toggle visited state
             state.addEventListener("click", () => {
@@ -48,8 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     state.style.fill = ""; // Reset color if unvisited
                 }
-                console.log("visited States: "+visitedStates);
-
+                
                 // Save updated visited states to JSONBin
                 fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: "PUT",
