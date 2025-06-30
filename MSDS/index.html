@@ -579,66 +579,6 @@
             flex: 1;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .about-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .container {
-                padding: 0 1rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-            }
-            
-            .timeline-item {
-                padding-left: 60px;
-            }
-
-            .course-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .category-title {
-                font-size: 1.2rem;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .requirement {
-                margin-left: 0;
-                margin-top: 0.25rem;
-            }
-
-            .progress-summary {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-                padding: 1.5rem;
-            }
-
-            .rec-course-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .step {
-                flex-direction: column;
-                text-align: center;
-                gap: 0.75rem;
-            }
-
-            .step-number {
-                margin: 0 auto;
-            }
-        }
-
         /* New styles for course recommendations section */
         .recommendation-container {
             margin-top: 1.5rem;
@@ -729,7 +669,236 @@
         }
 
         /* End of new styles */
+
+        /* Navigation Menu Styles */
+        .nav-menu {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--ut-orange);
+        }
+
+        .nav-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--ut-light-gray);
+        }
+
+        .nav-title {
+            color: var(--ut-orange);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, var(--ut-orange), #D15500);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #D15500, var(--ut-orange));
+        }
+
+        .nav-button.active {
+            background: linear-gradient(135deg, var(--ut-charcoal), #495057);
+        }
+
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+        }
+
+        .nav-item {
+            background: linear-gradient(135deg, var(--ut-light-gray), #e9ecef);
+            color: var(--ut-charcoal);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            border: 2px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(135deg, var(--ut-orange), #D15500);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--ut-orange), #D15500);
+            color: var(--white);
+            border-color: var(--ut-charcoal);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeInContent 0.4s ease-in-out;
+        }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .about-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .timeline-item {
+                padding-left: 60px;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-title {
+                font-size: 1.2rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .requirement {
+                margin-left: 0;
+                margin-top: 0.25rem;
+            }
+
+            .progress-summary {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+
+            .rec-course-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .step-number {
+                margin: 0 auto;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .nav-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-buttons {
+                padding: 1rem;
+            }
+            
+            .nav-button {
+                flex: 1;
+                justify-content: center;
+                min-width: 200px;
+            }
+        }
     </style>
+    <script>
+        function showSection(sectionId) {
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            // Show the selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to the clicked nav item
+            const activeNavItem = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+            
+            // Scroll to top of content
+            document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const isVisible = section.classList.contains('active');
+            
+            if (isVisible) {
+                section.classList.remove('active');
+                // Scroll to the toggle button area
+                section.previousElementSibling.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                section.classList.add('active');
+                // Scroll to the newly opened section
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Initialize the page to show the overview section
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('overview-section');
+        });
+    </script>
 </head>
 <body>
     <header class="header">
@@ -745,10 +914,60 @@
         </div>
     </header>
 
-    <main class="main-content">
+    <nav class="nav-menu">
+        <div class="container nav-container">
+            <div class="nav-item" onclick="showSection('overview-section')">
+                <i class="fas fa-home"></i>
+                Overview
+            </div>
+            <div class="nav-item" onclick="showSection('about-section')">
+                <i class="fas fa-user"></i>
+                About Me
+            </div>
+            <div class="nav-item" onclick="showSection('program-progress-section')">
+                <i class="fas fa-chart-line"></i>
+                Program Progress
+            </div>
+            <div class="nav-item" onclick="showSection('program-structure-section')">
+                <i class="fas fa-graduation-cap"></i>
+                MSDS Program Structure
+            </div>
+            <div class="nav-item" onclick="showSection('course-timeline-section')">
+                <i class="fas fa-book"></i>
+                Academic Journey
+            </div>
+            <div class="nav-item" onclick="showSection('skills-section')">
+                <i class="fas fa-code"></i>
+                Technical Skills
+            </div>
+            <div class="nav-item" onclick="showSection('contact-section')">
+                <i class="fas fa-envelope"></i>
+                Connect
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content" id="main-content">
         <div class="container">
+            <!-- Overview Section -->
+            <section class="section content-section" id="overview-section">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    Overview
+                </h2>
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    I'm Surya Rao Rayarao, a Master's in Data Science student at The University of Texas at Austin. This is my personal page where I share my academic journey, course recommendations, and insights for fellow and future MSDS students.
+                </p>
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    My journey in the MSDS program is guided by a passion for data and a commitment to leveraging data science for real-world impact. I'm excited to connect with like-minded individuals and contribute to the data science community.
+                </p>
+                <p style="font-size: 1.1rem;">
+                    Feel free to explore my course recommendations and reach out if you have any questions or would like to connect!
+                </p>
+            </section>
+
             <!-- About Section -->
-            <section class="section">
+            <section class="section content-section" id="about-section">
                 <h2 class="section-title">
                     <i class="fas fa-user"></i>
                     About Me
@@ -766,7 +985,7 @@
             </section>
 
             <!-- Program Progress -->
-            <section class="section">
+            <section class="section content-section" id="program-progress-section">
                 <h2 class="section-title">
                     <i class="fas fa-chart-line"></i>
                     Program Progress
@@ -792,7 +1011,7 @@
             </section>
 
             <!-- Program Structure -->
-            <section class="section">
+            <section class="section content-section" id="program-structure-section">
                 <h2 class="section-title">
                     <i class="fas fa-graduation-cap"></i>
                     MSDS Program Structure
@@ -932,7 +1151,7 @@
             </section>
 
             <!-- Course Timeline -->
-            <section class="section">
+            <section class="section content-section" id="course-timeline-section">
                 <h2 class="section-title">
                     <i class="fas fa-book"></i>
                     Academic Journey
@@ -1018,8 +1237,19 @@
                 </div>
             </section>
 
-            <!-- Course Recommendations -->
-            <section class="section">
+            <!-- Course Strategy Navigation -->
+            <section class="section content-section">
+                <div class="section-toggle-info">
+                    <strong>🎯 Interested in my detailed course strategy and future plans?</strong> 
+                    Click below to see my semester-by-semester plan, course rationale, and tips for fellow working professionals in the MSDS program.
+                </div>
+                <button class="nav-button" onclick="toggleSection('course-strategy')" style="margin-bottom: 2rem;">
+                    📈 View My Detailed Course Strategy & Future Plans
+                </button>
+            </section>
+
+            <!-- Hidden Course Strategy Section -->
+            <section class="section content-section hidden-section" id="course-strategy">
                 <h2 class="section-title">
                     <i class="fas fa-lightbulb"></i>
                     My Course Strategy - Tips for Fellow Students
@@ -1177,10 +1407,17 @@
                         </ul>
                     </div>
                 </div>
+                
+                <!-- Button to hide this section -->
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="nav-button" onclick="toggleSection('course-strategy')" style="background: linear-gradient(135deg, var(--ut-charcoal), #495057);">
+                        ⬆️ Hide Course Strategy Details
+                    </button>
+                </div>
             </section>
 
             <!-- Skills -->
-            <section class="section">
+            <section class="section content-section" id="skills-section">
                 <h2 class="section-title">
                     <i class="fas fa-code"></i>
                     Technical Skills
@@ -1219,7 +1456,7 @@
             </section>
 
             <!-- Contact -->
-            <section class="section">
+            <section class="section content-section" id="contact-section">
                 <h2 class="section-title">
                     <i class="fas fa-envelope"></i>
                     Connect With Me
@@ -1232,10 +1469,10 @@
                             suryarao.r@utexas.edu
                         </div>
                     </a>
-                    <a href="tel:+19134136752" class="contact-item">
-                        <i class="fas fa-phone"></i>
+                    <a href="https://wa.me/19134136752" class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
                         <div>
-                            <strong>Phone</strong><br>
+                            <strong>WhatsApp</strong><br>
                             (913) 413-6752
                         </div>
                     </a>
@@ -1250,7 +1487,7 @@
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
                             <strong>Location</strong><br>
-                            Austin, Texas
+                            Kansas City, USA
                         </div>
                     </div>
                 </div>
