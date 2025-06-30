@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSDS Student - University of Texas at Austin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ut-orange: #BF5700;
+            --ut-charcoal: #333F48;
+            --ut-light-gray: #F8F9FA;
+            --ut-dark-gray: #6C757D;
+            --white: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--ut-charcoal);
+            background: linear-gradient(135deg, var(--ut-light-gray) 0%, #E9ECEF 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--ut-orange) 0%, #D15500 100%);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="30" cy="80" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="70" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+        }
+
+        .header .university {
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--ut-orange);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-title {
+            color: var(--ut-orange);
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            font-size: 1.5rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ut-orange), var(--ut-charcoal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: var(--shadow-lg);
+            color: var(--white);
+            font-size: 4rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .progress-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .progress-item {
+            background: var(--ut-light-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .progress-item:hover {
+            border-color: var(--ut-orange);
+            transform: translateY(-2px);
+        }
+
+        .progress-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--ut-orange);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-label {
+            font-weight: 500;
+            color: var(--ut-charcoal);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill-item {
+            background: var(--ut-light-gray);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .skill-item:hover {
+            background: var(--ut-orange);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .skill-item i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--ut-light-gray);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--ut-charcoal);
+        }
+
+        .contact-item:hover {
+            background: var(--ut-orange);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .footer {
+            background: var(--ut-charcoal);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            opacity: 0.9;
+        }
+
+        .timeline {
+            position: relative;
+            margin-top: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--ut-orange);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 80px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 21px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--ut-orange);
+            border: 4px solid var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .timeline-content {
+            background: var(--ut-light-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .timeline-date {
+            color: var(--ut-orange);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .program-structure {
+            margin-top: 2rem;
+        }
+
+        .program-category {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            color: var(--ut-orange);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid var(--ut-light-gray);
+            padding-bottom: 0.5rem;
+        }
+
+        .requirement {
+            font-size: 0.9rem;
+            color: var(--ut-dark-gray);
+            font-weight: 400;
+            margin-left: auto;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .course-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .course-item.completed {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-color: #28a745;
+        }
+
+        .course-item.current {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-color: var(--ut-orange);
+        }
+
+        .course-item.pending {
+            background: var(--ut-light-gray);
+            border-color: transparent;
+        }
+
+        .course-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .course-status {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .course-item.completed .course-status {
+            background: #28a745;
+            color: white;
+        }
+
+        .course-item.current .course-status {
+            background: var(--ut-orange);
+            color: white;
+        }
+
+        .course-item.pending .course-status {
+            background: var(--ut-dark-gray);
+            color: white;
+        }
+
+        .course-info {
+            flex: 1;
+        }
+
+        .course-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .course-note {
+            font-size: 0.85rem;
+            color: var(--ut-dark-gray);
+            font-weight: 500;
+        }
+
+        .progress-summary {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--ut-orange), #D15500);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .summary-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .recommendation-container {
+            margin-top: 2rem;
+        }
+
+        .priority-section {
+            margin-bottom: 3rem;
+        }
+
+        .priority-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .priority-title.high-priority {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-left-color: #ff6b35;
+            color: #d63031;
+        }
+
+        .priority-title.medium-priority {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left-color: #2196f3;
+            color: #1565c0;
+        }
+
+        .priority-title.low-priority {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            border-left-color: #9c27b0;
+            color: #7b1fa2;
+        }
+
+        .course-recommendations {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .rec-course-item {
+            background: var(--white);
+            border: 2px solid var(--ut-light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .rec-course-item:hover {
+            border-color: var(--ut-orange);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .rec-course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .rec-course-header h4 {
+            color: var(--ut-orange);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .course-type {
+            background: var(--ut-orange);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .rec-course-item p {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .rec-course-item p:last-child {
+            margin-bottom: 0;
+        }
+
+        .rec-course-item strong {
+            color: var(--ut-charcoal);
+        }
+
+        .graduation-timeline {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--ut-light-gray), #e9ecef);
+            border-radius: 12px;
+            border: 2px solid var(--ut-orange);
+        }
+
+        .timeline-steps {
+            margin-top: 1.5rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--ut-orange);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .step:last-child .step-number {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .about-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .timeline-item {
+                padding-left: 60px;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-title {
+                font-size: 1.2rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .requirement {
+                margin-left: 0;
+                margin-top: 0.25rem;
+            }
+
+            .progress-summary {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+
+            .rec-course-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .step-number {
+                margin: 0 auto;
+            }
+        }
+
+        /* New styles for course recommendations section */
+        .recommendation-container {
+            margin-top: 1.5rem;
+        }
+
+        .priority-section {
+            margin-bottom: 2rem;
+        }
+
+        .priority-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .course-recommendations {
+            background: var(--ut-light-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .rec-course-item {
+            margin-bottom: 1rem;
+        }
+
+        .rec-course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-type {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ut-dark-gray);
+            background: var(--white);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--ut-orange);
+        }
+
+        .graduation-timeline {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--ut-light-gray);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .timeline-steps {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .step-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ut-orange);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            margin-right: 1rem;
+        }
+
+        .step-content {
+            flex: 1;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        /* End of new styles */
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Surya Rao Rayarao</h1>
+                <p class="subtitle">Master's in Data Science Student</p>
+                <p class="university">
+                    <i class="fas fa-graduation-cap"></i>
+                    The University of Texas at Austin
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- About Section -->
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-user"></i>
+                    About Me
+                </h2>
+                <div class="about-grid">
+                    <div class="profile-image">
+                        <img src="profile_pic.jpg" alt="Surya Rao Rayarao" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                    </div>
+                    <div class="about-text">
+                        <p>Welcome to my personal page! I'm Surya Rao Rayarao, currently pursuing my Master's in Data Science at The University of Texas at Austin. I'm following a balanced 10-course plan, taking one course per semester to maintain work-life balance while enjoying the full UT Austin student experience.</p>
+                        <p>I'm passionate about leveraging data to solve real-world problems and am excited to share my journey and course recommendations with fellow UT Austin MSDS students. My interests include machine learning, statistical analysis, data visualization, and simulation-based inference.</p>
+                        <p>As a working professional in the program, I've designed my course sequence to balance academic rigor with career demands. I'd love to connect with other students to discuss course strategies, share experiences, and collaborate on projects! Let's support each other through this amazing program.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Program Progress -->
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    Program Progress
+                </h2>
+                <div class="progress-container">
+                    <div class="progress-item">
+                        <span class="progress-number">Summer</span>
+                        <div class="progress-label">Current Semester</div>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-number">12</span>
+                        <div class="progress-label">Credit Hours (In Progress)</div>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-number">4</span>
+                        <div class="progress-label">Courses (3 Complete + 1 Current of 10 Total)</div>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-number">Fall 2027</span>
+                        <div class="progress-label">Expected Graduation (Balanced Plan)</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Program Structure -->
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    MSDS Program Structure
+                </h2>
+                <p style="margin-bottom: 2rem; font-size: 1.1rem; color: var(--ut-dark-gray);">
+                    My 10-course plan for graduation in Fall 2027. This balanced approach allows for work-life integration while maximizing the UT Austin student experience and building strong foundations in data science.
+                </p>
+                
+                <div class="program-structure">
+                    <div class="program-category">
+                        <h3 class="category-title">
+                            <i class="fas fa-foundation"></i>
+                            Core Required Courses (5 courses)
+                        </h3>
+                        <div class="course-grid">
+                            <div class="course-item completed">
+                                <div class="course-status">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Probability & Inference</div>
+                                    <div class="course-note">DSC 381 ✓</div>
+                                </div>
+                            </div>
+                            <div class="course-item current">
+                                <div class="course-status">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Regression & Predictive Modeling</div>
+                                    <div class="course-note">DSC 382 (Current)</div>
+                                </div>
+                            </div>
+                            <div class="course-item completed">
+                                <div class="course-status">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Machine Learning</div>
+                                    <div class="course-note">DSC 391L ✓</div>
+                                </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Data Structures & Algorithms</div>
+                                    <div class="course-note">Fall 2025</div>
+                                </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Deep Learning</div>
+                                    <div class="course-note">Spring 2026</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="program-category">
+                        <h3 class="category-title">
+                            <i class="fas fa-star"></i>
+                            Selected Electives (5 courses)
+                        </h3>
+                        <div class="course-grid">
+                            <div class="course-item completed">
+                                <div class="course-status">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Data Exploration & Visualization</div>
+                                    <div class="course-note">DSC 385 ✓</div>
+                                </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Advanced Predictive Models</div>
+                                    <div class="course-note">Fall 2026</div>
+                                </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Natural Language Processing</div>
+                                    <div class="course-note">Spring 2027</div>
+                                </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Design Principles & Causal Inference</div>
+                                    <div class="course-note">Summer 2027</div>
+                                </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Optimization</div>
+                                    <div class="course-note">Fall 2027 (Final Course)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-summary">
+                    <div class="summary-item">
+                        <div class="summary-number">3</div>
+                        <div class="summary-label">Courses Completed</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-number">1</div>
+                        <div class="summary-label">Currently Taking</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-number">6</div>
+                        <div class="summary-label">Remaining to Complete</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-number">10</div>
+                        <div class="summary-label">Total for Graduation</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Course Timeline -->
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-book"></i>
+                    Academic Journey
+                </h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Fall 2024 - Course #57120</div>
+                            <div class="timeline-title">DSC 381: Probability & Simulation Based Inference for Data Science</div>
+                            <p>Completed - Foundations of probability theory, statistical inference, and simulation methods for data science applications.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Fall 2024 - Course #57130</div>
+                            <div class="timeline-title">DSC 385: Data Exploration, Visualization & Foundations of Unsupervised Learning</div>
+                            <p>Completed - Advanced data exploration techniques, visualization methods, and unsupervised learning algorithms.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Spring 2025 - Course #57445</div>
+                            <div class="timeline-title">DSC 391L: Machine Learning</div>
+                            <p>Completed - Comprehensive study of supervised and unsupervised learning algorithms, model evaluation, and practical implementation.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Summer 2025 - Course #86720</div>
+                            <div class="timeline-title">DSC 382: Foundations of Regression & Modeling</div>
+                            <p>Currently Taking - Advanced regression techniques and statistical modeling methods. Builds upon foundations from DSC 381.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Future Semesters</div>
+                            <div class="timeline-title">My 10-Course Plan: Balanced Progress for Working Professionals</div>
+                            <p>One course per semester approach to complete the MSDS program by Fall 2027. This strategy allows for deep engagement with coursework while maintaining work commitments and enjoying the full UT Austin community experience.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Fall 2025 - Course #5</div>
+                            <div class="timeline-title">Data Structures & Algorithms</div>
+                            <p><strong>Why I chose this timing:</strong> Complete the final foundational requirement while DSC 382 concepts are fresh. Essential for advanced algorithm courses later.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Spring 2026 - Course #6</div>
+                            <div class="timeline-title">Deep Learning</div>
+                            <p><strong>My strategy:</strong> Complete all required courses first. With ML background from DSC 391L, this is the perfect next step for advanced AI skills.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Summer 2026 - Course #7</div>
+                            <div class="timeline-title">Advanced Predictive Models</div>
+                            <p><strong>Building momentum:</strong> Summer courses work well for working professionals. Builds directly on DSC 382 regression foundations - perfect progression!</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Fall 2026 - Course #8</div>
+                            <div class="timeline-title">Natural Language Processing</div>
+                            <p><strong>Career focus:</strong> NLP is huge in the job market. My ML and Deep Learning background will make this course much more manageable.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Spring 2027 - Course #9</div>
+                            <div class="timeline-title">Design Principles & Causal Inference</div>
+                            <p><strong>Unique skillset:</strong> This builds beautifully on DSC 381 probability foundations. Great for distinguishing yourself in interviews!</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Summer 2027 - Course #10</div>
+                            <div class="timeline-title">Optimization</div>
+                            <p><strong>Perfect finale:</strong> Mathematical foundations that tie everything together. Great preparation for advanced roles or PhD paths.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Course Recommendations -->
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-lightbulb"></i>
+                    My Course Strategy - Tips for Fellow Students
+                </h2>
+                <p style="margin-bottom: 2rem; font-size: 1.1rem; color: var(--ut-dark-gray);">
+                    Here's my balanced 10-course strategy for working professionals in the MSDS program. Taking one course per semester allows for deep learning, work-life balance, and full engagement with the UT Austin community. Fellow students - feel free to adapt this plan to your needs!
+                </p>
+
+                <div class="recommendation-container">
+                    <div class="priority-section">
+                        <h3 class="priority-title high-priority">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            My Next Steps - Fall 2025
+                        </h3>
+                        <div class="course-recommendations">
+                            <div class="rec-course-item">
+                                <div class="rec-course-header">
+                                    <h4>Data Structures & Algorithms</h4>
+                                    <span class="course-type">Foundation Course</span>
+                                </div>
+                                <p><strong>Why I'm taking this next:</strong> Need to complete all foundational requirements before diving into advanced electives.</p>
+                                <p><strong>Working professional tip:</strong> This course has a heavy coding component, so I'm planning to start reviewing algorithms early.</p>
+                                <p><strong>For fellow students:</strong> If you're also working full-time, consider brushing up on Python data structures beforehand!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="priority-section">
+                        <h3 class="priority-title medium-priority">
+                            <i class="fas fa-star"></i>
+                            My 2026 Plan - Core Completion
+                        </h3>
+                        <div class="course-recommendations">
+                            <div class="rec-course-item">
+                                <div class="rec-course-header">
+                                    <h4>Spring 2026: Deep Learning</h4>
+                                    <span class="course-type">Required Course</span>
+                                </div>
+                                <p><strong>My reasoning:</strong> Get all required courses done first. Plus, my ML background from DSC 391L will make this transition smooth.</p>
+                                <p><strong>Student tip:</strong> Deep Learning builds heavily on Linear Algebra - might be worth reviewing if it's been a while!</p>
+                            </div>
+                            <div class="rec-course-item">
+                                <div class="rec-course-header">
+                                    <h4>Summer 2026: Advanced Predictive Models</h4>
+                                    <span class="course-type">Strategic Elective</span>
+                                </div>
+                                <p><strong>Perfect timing:</strong> Coming right after DSC 382 (Regression), the concepts will be fresh and this builds naturally.</p>
+                                <p><strong>Summer advantage:</strong> Smaller class sizes and more professor interaction - great for working students!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="priority-section">
+                        <h3 class="priority-title low-priority">
+                            <i class="fas fa-clock"></i>
+                            My Final Year Strategy (2027)
+                        </h3>
+                        <div class="course-recommendations">
+                            <div class="rec-course-item">
+                                <div class="rec-course-header">
+                                    <h4>Fall 2026: Natural Language Processing</h4>
+                                    <span class="course-type">High-Demand Skill</span>
+                                </div>
+                                <p><strong>Career focus:</strong> NLP is exploding in the job market - ChatGPT, transformers, etc. Great ROI on time investment.</p>
+                                <p><strong>Foundation ready:</strong> By this point, I'll have solid ML and Deep Learning foundations to tackle advanced NLP concepts.</p>
+                            </div>
+                            <div class="rec-course-item">
+                                <div class="rec-course-header">
+                                    <h4>Spring 2027: Design Principles & Causal Inference</h4>
+                                    <span class="course-type">Unique Differentiator</span>
+                                </div>
+                                <p><strong>Why I chose this:</strong> Builds on my DSC 381 probability background and teaches skills most data scientists lack.</p>
+                                <p><strong>Interview gold:</strong> Understanding causality vs correlation makes you stand out in interviews!</p>
+                            </div>
+                            <div class="rec-course-item">
+                                <div class="rec-course-header">
+                                    <h4>Summer 2027: Optimization</h4>
+                                    <span class="course-type">Mathematical Foundation</span>
+                                </div>
+                                <p><strong>Perfect finale:</strong> Ties together mathematical concepts from the entire program. Great if you're considering PhD paths.</p>
+                                <p><strong>Alternative consideration:</strong> Could swap with Reinforcement Learning if you're more interested in cutting-edge AI applications.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="graduation-timeline">
+                    <h3 style="color: var(--ut-orange); margin-bottom: 1rem;">
+                        <i class="fas fa-graduation-cap"></i>
+                        My Path to Fall 2027 Graduation (One Course Per Semester)
+                    </h3>
+                    <div class="timeline-steps">
+                        <div class="step">
+                            <div class="step-number">✓</div>
+                            <div class="step-content">
+                                <strong>Summer 2025:</strong> Complete DSC 382 (Regression & Modeling) - In Progress
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <strong>Fall 2025:</strong> Data Structures & Algorithms (Final Foundation Course)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">6</div>
+                            <div class="step-content">
+                                <strong>Spring 2026:</strong> Deep Learning (Final Required Course)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">7</div>
+                            <div class="step-content">
+                                <strong>Summer 2026:</strong> Advanced Predictive Models (First Strategic Elective)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">8</div>
+                            <div class="step-content">
+                                <strong>Fall 2026:</strong> Natural Language Processing (High-Demand Skill)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">9</div>
+                            <div class="step-content">
+                                <strong>Spring 2027:</strong> Design Principles & Causal Inference (Unique Differentiator)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">10</div>
+                            <div class="step-content">
+                                <strong>Summer 2027:</strong> Optimization (Perfect Mathematical Finale)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">🎓</div>
+                            <div class="step-content">
+                                <strong>Fall 2027:</strong> Graduate with Master's in Data Science!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 1.5rem; border-radius: 10px; margin-top: 2rem; border-left: 4px solid var(--ut-orange);">
+                        <h4 style="color: var(--ut-orange); margin-bottom: 1rem;">
+                            <i class="fas fa-heart"></i>
+                            Why I Love the One-Course-Per-Semester Approach
+                        </h4>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--ut-dark-gray);">
+                            <li><strong>Work-Life Balance:</strong> Maintain career progression while excelling academically</li>
+                            <li><strong>Deep Learning:</strong> Really absorb and apply concepts from each course</li>
+                            <li><strong>Community Engagement:</strong> More time to participate in student organizations and networking</li>
+                            <li><strong>Quality Projects:</strong> Can dedicate proper time to course projects and build an impressive portfolio</li>
+                            <li><strong>Stress Management:</strong> Sustainable pace reduces burnout and maintains enthusiasm for learning</li>
+                            <li><strong>UT Austin Experience:</strong> Enjoy the full university experience - research opportunities, conferences, social events</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills -->
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-code"></i>
+                    Technical Skills
+                </h2>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <i class="fab fa-python"></i>
+                        <div>Python</div>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <div>R</div>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-database"></i>
+                        <div>SQL</div>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-brain"></i>
+                        <div>Machine Learning</div>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-chart-pie"></i>
+                        <div>Data Visualization</div>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-calculator"></i>
+                        <div>Statistics</div>
+                    </div>
+                    <div class="fab fa-aws"></div>
+                    <div class="skill-item">
+                        <i class="fas fa-project-diagram"></i>
+                        <div>Deep Learning</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-envelope"></i>
+                    Connect With Me
+                </h2>
+                <div class="contact-grid">
+                    <a href="mailto:suryarao.r@utexas.edu" class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email</strong><br>
+                            suryarao.r@utexas.edu
+                        </div>
+                    </a>
+                    <a href="tel:+19134136752" class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <strong>Phone</strong><br>
+                            (913) 413-6752
+                        </div>
+                    </a>
+                    <div class="contact-item">
+                        <i class="fas fa-id-card"></i>
+                        <div>
+                            <strong>UT EID</strong><br>
+                            sr57945
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Location</strong><br>
+                            Austin, Texas
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Surya Rao Rayarao | MSDS Student | The University of Texas at Austin</p>
+            <p>Hook 'em Horns! 🤘</p>
+        </div>
+    </footer>
+</body>
+</html>
