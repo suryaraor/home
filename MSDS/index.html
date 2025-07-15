@@ -39,6 +39,7 @@
             box-shadow: var(--shadow-lg);
             position: relative;
             overflow: hidden;
+            z-index: 5;
         }
 
         .header::before {
@@ -88,6 +89,8 @@
 
         .main-content {
             padding: 3rem 0;
+            position: relative;
+            z-index: 1;
         }
 
         .section {
@@ -98,6 +101,8 @@
             box-shadow: var(--shadow);
             border-left: 4px solid var(--ut-orange);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
 
         .section:hover {
@@ -150,6 +155,8 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .progress-item {
@@ -184,6 +191,8 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .skill-item {
@@ -212,6 +221,8 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .contact-item {
@@ -334,6 +345,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1rem;
+            position: relative;
+            z-index: 1;
         }
 
         .course-item {
@@ -345,6 +358,7 @@
             border: 2px solid transparent;
             transition: all 0.3s ease;
             position: relative;
+            z-index: 2;
         }
 
         .course-item.completed {
@@ -365,6 +379,7 @@
         .course-item:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow);
+            z-index: 100;
         }
 
         .course-status {
@@ -678,6 +693,8 @@
             border-radius: 12px;
             margin-bottom: 2rem;
             border-left: 4px solid var(--ut-orange);
+            position: relative;
+            z-index: 10;
         }
 
         .nav-header {
@@ -778,28 +795,25 @@
 
         /* Course hover tooltip styles */
         .course-tooltip {
-            position: absolute;
+            position: fixed !important;
             background: var(--white);
             border: 2px solid var(--ut-orange);
             border-radius: 8px;
             padding: 1rem;
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 99999 !important;
             width: 320px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
             pointer-events: none;
-            top: 100%;
-            left: 50%;
             transform: translateX(-50%);
-            margin-top: 0.5rem;
         }
 
-        .course-item:hover .course-tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
+        /* Remove old hover rules - now handled by JavaScript */
 
         .tooltip-header {
             color: var(--ut-orange);
@@ -808,6 +822,8 @@
             border-bottom: 2px solid var(--ut-light-gray);
             padding-bottom: 0.5rem;
             font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
         }
 
         .tooltip-progress {
@@ -916,46 +932,53 @@
             border-radius: 6px;
             transition: all 0.3s ease;
             border: 1px solid transparent;
+            z-index: 2;
         }
 
         .elective-course-item:hover {
             background-color: rgba(191, 87, 0, 0.1);
             border-color: var(--ut-orange);
             transform: translateY(-1px);
+            z-index: 100;
         }
 
         .elective-course-item .course-tooltip {
-            position: absolute;
+            position: fixed !important;
             background: var(--white);
             border: 2px solid var(--ut-orange);
             border-radius: 8px;
             padding: 1rem;
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 99999 !important;
             width: 320px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
             pointer-events: none;
-            top: 100%;
-            left: 50%;
             transform: translateX(-50%);
-            margin-top: 0.5rem;
         }
 
-        .elective-course-item:hover .course-tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
+        /* Remove old hover rules - now handled by JavaScript */
 
         /* Responsive tooltip positioning */
         @media (max-width: 768px) {
             .course-tooltip,
             .elective-course-item .course-tooltip {
                 width: 280px;
-                left: 0;
-                transform: none;
+                max-width: 90vw;
             }
+        }
+
+        /* Prevent text selection when hovering over tooltips */
+        .course-tooltip,
+        .elective-course-item .course-tooltip {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         /* Course detail styles */
@@ -968,6 +991,8 @@
             border: 1px solid #e9ecef;
             border-radius: 8px;
             overflow: hidden;
+            position: relative;
+            z-index: 2;
         }
 
         .course-detail-header {
@@ -1343,6 +1368,7 @@
                     const tooltip = createTooltip(courseName);
                     if (tooltip) {
                         item.insertAdjacentHTML('beforeend', tooltip);
+                        setupTooltipEventListeners(item);
                     }
                 });
 
@@ -1364,11 +1390,71 @@
                         const tooltip = createTooltip(courseName);
                         if (tooltip) {
                             item.insertAdjacentHTML('beforeend', tooltip);
+                            setupTooltipEventListeners(item);
                         }
                     }
                 });
             }, 200);
         });
+
+        function setupTooltipEventListeners(item) {
+            const tooltip = item.querySelector('.course-tooltip');
+            if (!tooltip) return;
+
+            item.addEventListener('mouseenter', function(e) {
+                positionTooltip(tooltip, item);
+                tooltip.style.opacity = '1';
+                tooltip.style.visibility = 'visible';
+                tooltip.style.pointerEvents = 'auto';
+            });
+
+            item.addEventListener('mouseleave', function() {
+                tooltip.style.opacity = '0';
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.pointerEvents = 'none';
+            });
+
+            // Reposition tooltip on window resize
+            window.addEventListener('resize', function() {
+                if (tooltip.style.opacity === '1') {
+                    positionTooltip(tooltip, item);
+                }
+            });
+        }
+
+        function positionTooltip(tooltip, item) {
+            const rect = item.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const viewportWidth = window.innerWidth;
+            
+            // Calculate horizontal position (center of item)
+            let left = rect.left + (rect.width / 2);
+            
+            // Ensure tooltip doesn't go off screen horizontally
+            const tooltipWidth = 320;
+            if (left + tooltipWidth/2 > viewportWidth) {
+                left = viewportWidth - tooltipWidth/2 - 10;
+            } else if (left - tooltipWidth/2 < 0) {
+                left = tooltipWidth/2 + 10;
+            }
+            
+            // Calculate vertical position
+            let top = rect.bottom + 10;
+            
+            // Check if tooltip would go off bottom of screen
+            if (top + tooltipRect.height > viewportHeight) {
+                top = rect.top - tooltipRect.height - 10;
+            }
+            
+            // Ensure tooltip doesn't go off top of screen
+            if (top < 10) {
+                top = 10;
+            }
+            
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+        }
 
         function toggleCourseDetail(courseId) {
             const content = document.getElementById(courseId);
