@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UT Austin MSDS Interactive Curriculum Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Academic Slate (Neutrals: slate-50, slate-200, slate-500, slate-800; Accent: teal-600, teal-700) -->
+    <!-- Application Structure Plan: The SPA is designed as an interactive, step-by-step guide, abandoning the linear report format for a more engaging user flow. The structure is: 1. Introduction to the 'T-shaped' philosophy with a visual diagram. 2. A section-by-section exploration of the curriculum (Core, Elective Group 1, Elective Group 2). 3. An interactive showcase where users can click on any course (pre-selected based on the report's recommendation) to view the detailed strategic rationale in a modal window. 4. A final summary presenting the complete 10-course path. This task-oriented design allows users to actively explore choices and understand the 'why' behind each recommendation, which is more effective for comprehension and decision-making than passively reading the report. -->
+    <!-- Visualization & Content Choices: 1. Overall Composition: Donut Chart (Chart.js/Canvas) to inform users of the core vs. elective split. 2. 'T-Shaped' Concept: Diagram (HTML/CSS with Tailwind) to organize and visually explain the core strategy. 3. Course Selection: Interactive Cards (HTML/CSS/JS) to allow users to compare and explore course options. Clicking a card triggers a modal. This interaction is chosen over a static list to encourage exploration. 4. Detailed Rationale: Modal Window (HTML/CSS/JS) to provide in-depth information on demand without cluttering the main interface. This supports the goal of organizing complex information cleanly. 5. Final Pathway: A structured Table (HTML/Tailwind) to clearly present the final organized list of courses. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .chart-container { position: relative; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
+        .card-active { transform: scale(1.02); box-shadow: 0 0 0 2px #0d9488; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div id="modal-content" class="bg-white rounded-xl shadow-2xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modal-title" class="text-2xl font-bold text-teal-700"></h3>
+                <button id="modal-close" class="text-slate-500 hover:text-slate-800">&times;</button>
+            </div>
+            <p id="modal-body" class="text-slate-600 whitespace-pre-line"></p>
+        </div>
+    </div>
+
+    <nav class="sticky top-0 bg-white/80 backdrop-blur-lg shadow-sm z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center items-center h-16 space-x-4 md:space-x-8">
+                <a href="#intro" class="text-sm font-semibold text-slate-600 hover:text-teal-600 transition-colors">Strategy</a>
+                <a href="#core" class="text-sm font-semibold text-slate-600 hover:text-teal-600 transition-colors">Core Courses</a>
+                <a href="#electives" class="text-sm font-semibold text-slate-600 hover:text-teal-600 transition-colors">Electives</a>
+                <a href="#summary" class="text-sm font-semibold text-slate-600 hover:text-teal-600 transition-colors">Final Pathway</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="text-center py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl font-black text-teal-700 tracking-tight leading-tight">Your AI-Focused Path Through the UT Austin MSDS</h1>
+            <p class="mt-4 text-lg md:text-xl text-slate-500 max-w-3xl mx-auto">An interactive guide to the 10-course curriculum designed to build a top-tier, "T-shaped" data scientist with a specialization in Generative AI.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8 space-y-16">
+
+        <section id="intro" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-2 text-teal-700">The "T-Shaped" Professional Strategy</h2>
+            <p class="text-center text-slate-500 mb-12 max-w-3xl mx-auto">The curriculum is engineered to create a graduate with two key attributes: a broad, versatile foundation across all of data science, and a deep, specialized expertise in the most impactful area of AI.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white p-8 rounded-xl shadow-lg">
+                <div class="flex flex-col items-center justify-center h-full">
+                    <div class="w-full max-w-xs">
+                        <div class="bg-teal-600 text-white font-bold text-center p-3 rounded-t-lg">Broad Foundation</div>
+                        <div class="flex justify-center">
+                            <div class="w-1/3 bg-teal-600 text-white font-bold text-center p-3 rounded-b-lg">Deep Specialization</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-xl mb-4">What This Means For You:</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-slate-50 rounded-lg border-l-4 border-teal-600">
+                            <h4 class="font-semibold">Horizontal Bar: Foundational Breadth</h4>
+                            <p class="text-slate-600 text-sm">You'll master the full data science lifecycle—from computer science fundamentals and statistical theory to advanced modeling and causal inference. This makes you a versatile problem-solver.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-lg border-l-4 border-teal-600">
+                            <h4 class="font-semibold">Vertical Stem: AI Depth</h4>
+                            <p class="text-slate-600 text-sm">You'll gain state-of-the-art expertise in Generative AI and the optimization techniques required to build and train large-scale models, positioning you at the forefront of the industry.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="core" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-2 text-teal-700">Step 1: The Unshakeable Foundation</h2>
+            <p class="text-center text-slate-500 mb-12 max-w-3xl mx-auto">These five mandatory courses form the bedrock of your degree, integrating computer science and statistics. Click on any course to see its strategic importance.</p>
+            <div id="core-courses-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            </div>
+        </section>
+        
+        <section id="electives" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-2 text-teal-700">Step 2: Choosing Your Electives</h2>
+            <p class="text-center text-slate-500 mb-12 max-w-3xl mx-auto">With the foundation set, you'll select five electives to build out your "T-shaped" profile. The recommended choices below are designed to maximize your AI specialization. The green checkmark indicates a course you have already completed.</p>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                     <div class="md:col-span-1">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2">Program Composition</h3>
+                        <p class="text-slate-600 mb-4">Your 10-course journey is evenly split between a mandatory core and strategic electives.</p>
+                        <div class="chart-container">
+                            <canvas id="compositionDonutChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 space-y-8">
+                        <div>
+                            <h4 class="text-xl font-bold mb-4">Elective Group 1: Building Foundational Breadth <span class="text-base font-normal text-slate-500">(Choose 2 more)</span></h4>
+                            <div id="elective-group-1-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-4">Elective Group 2: Forging AI Depth <span class="text-base font-normal text-slate-500">(Choose 2)</span></h4>
+                            <div id="elective-group-2-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="summary" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-2 text-teal-700">The Final Pathway: Your 10-Course Curriculum</h2>
+            <p class="text-center text-slate-500 mb-12 max-w-3xl mx-auto">This curated curriculum synthesizes the analysis into a single, cohesive program of study designed to make you a leader in the field of Artificial Intelligence.</p>
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-white uppercase bg-teal-700">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Course Title</th>
+                                <th scope="col" class="px-6 py-3">Category</th>
+                                <th scope="col" class="px-6 py-3 hidden md:table-cell">Strategic Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summary-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="text-center py-8 bg-slate-200 mt-16">
+        <p class="text-slate-500 text-sm">This interactive guide is based on the Strategic Curriculum Design Report. All course descriptions and rationales are adapted from the source material.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const courseData = [
+                { id: 'ds_algo', title: 'Data Structures & Algorithms', category: 'Core', status: 'Mandatory', rationale: "This course is the primary element that elevates a data scientist from a user of tools to a builder of solutions. Efficiently processing large volumes of data and implementing custom models requires a deep understanding of how data is stored and manipulated. It's a key differentiator that provides a significant competitive advantage over graduates from less computationally rigorous programs." },
+                { id: 'prob_inf', title: 'Probability & Inference', category: 'Core', status: 'Completed', rationale: "This course provides the theoretical justification for nearly every statistical and machine learning model. It trains students to think critically about data, evidence, and uncertainty, which is crucial for avoiding common but serious errors like p-hacking or misinterpreting statistical significance. Mastery provides the intellectual rigor to be a trusted scientific voice within an organization." },
+                { id: 'reg_pred', title: 'Regression & Predictive Modeling', category: 'Core', status: 'Mandatory', rationale: "Regression is the most widely deployed modeling technique in business and research. This course acts as the critical bridge from abstract theory to tangible application. By covering both frequentist and Bayesian perspectives, it equips students with a modern, dual-lens toolkit essential for any credible data scientist." },
+                { id: 'ml', title: 'Machine Learning', category: 'Core', status: 'Completed', rationale: "Machine learning skills are the single most in-demand qualification for data scientists. This course is the central pillar of the curriculum, providing the fundamental algorithms that power the most impactful applications in the tech industry. It forms the technical core that enables a graduate to 'build ML models' and 'drive decisions'." },
+                { id: 'dl', title: 'Deep Learning', category: 'Core', status: 'Mandatory', rationale: "Deep learning is the engine behind the current AI revolution. Expertise here is a massive differentiator in the job market. This course serves as a critical gateway to specialization, providing the necessary context and hands-on skills in PyTorch to make informed and successful choices in advanced electives." },
+                { id: 'viz', title: 'Data Exploration & Visualization', category: 'Elective 1', status: 'Completed', rationale: "As a completed course, this provides a critical foundational skill. The ability to effectively visualize data is the starting point for most projects and is crucial for communicating findings to all stakeholders. It enhances the value of every other technical skill you will acquire." },
+                { id: 'causal', title: 'Design Principles & Causal Inference', category: 'Elective 1', status: 'Included', rationale: "This course provides a skill set that is a hallmark of senior data scientists. While many can predict 'what will happen,' far fewer can answer the 'what if?' questions that drive strategy. Mastering causal inference is a significant accelerator for career advancement, positioning you as a more valuable strategic asset." },
+                { id: 'adv_pred', title: 'Advanced Predictive Models', category: 'Elective 1', status: 'Included', rationale: "Real-world data is messy and structured. This course provides the critical bridge from academic exercises to real-world applicability by teaching how to handle complex dependencies in time series and spatial data. It dramatically expands your operational range, increasing your value to an employer." },
+                { id: 'prin_ds', title: 'Principles of Data Science', category: 'Elective 1', status: 'Excluded', rationale: "This is excluded due to significant topical overlap with the mandatory Machine Learning course. Given limited elective slots, it's more strategic to select courses that introduce entirely new domains of knowledge (like Causal Inference) rather than deeper reinforcement of existing topics. This creates a more versatile data scientist." },
+                { id: 'health_ds', title: 'Data Science for Health Discovery', category: 'Elective 1', status: 'Excluded', rationale: "This is a high-quality but narrowly focused course. Selecting it commits you to the healthcare domain. The 'AI-First' strategy prioritizes cross-industry skills first to maximize career flexibility and optionality upon graduation. Key concepts are also covered more generally in other recommended electives." },
+                { id: 'gen_ai', title: 'Advances in Deep Generative Models', category: 'Elective 2', status: 'Included', rationale: "This course is the new centerpiece of a top-tier AI specialization. Generative AI is the technology defining the future of the industry. Expertise in GANs, VAEs, and Diffusion Models is arguably the single most valuable and in-demand skill set in the current job market. This is an essential, non-negotiable choice." },
+                { id: 'opt', title: 'Optimization', category: 'Elective 2', status: 'Included', rationale: "If Generative AI is *what* you build, Optimization is *how* you build it at scale. Understanding optimization is the key that unlocks the ability to train large, complex models efficiently. This course is the keystone that locks the entire AI specialization together, distinguishing an engineer or scientist from an analyst." },
+                { id: 'nlp', title: 'Natural Language Processing', category: 'Elective 2', status: 'Excluded', rationale: "This is a difficult but necessary trade-off. While NLP is a huge field, the 'Generative AI' course covers the underlying model architectures (like Transformers) in a way that is applicable across multiple domains, not just text. Pairing the broader 'Generative AI' course with the fundamental 'Optimization' course creates a more robust and versatile AI expert." },
+                { id: 'adv_dl', title: 'Advances in Deep Learning', category: 'Elective 2', status: 'Excluded', rationale: "This is a 'win-more' course focused on hyper-specialization. The topics are critical for large-scale AI research labs but less foundational for a broader range of AI roles. The 'Optimization' course is a prerequisite to appreciating the challenges this course aims to solve. The chosen electives create a more versatile graduate." },
+                { id: 'rl', title: 'Reinforcement Learning', category: 'Elective 2', status: 'Excluded', rationale: "This is a pragmatic exclusion based on market demand. While RL is a fascinating and powerful field, the number of jobs requiring expertise in Generative AI is currently an order of magnitude larger. The chosen combination of 'Generative AI' and 'Optimization' is a more versatile and immediately marketable skill set." },
+            ];
+
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const modalClose = document.getElementById('modal-close');
+
+            const openModal = (title, body) => {
+                modalTitle.textContent = title;
+                modalBody.textContent = body;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            };
+
+            const closeModal = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            modalClose.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            const createCourseCard = (course) => {
+                const card = document.createElement('div');
+                card.className = 'p-4 rounded-lg shadow-md bg-white cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105';
+                card.dataset.id = course.id;
+                
+                let statusBadge = '';
+                switch(course.status) {
+                    case 'Included':
+                        card.classList.add('border-2', 'border-teal-600');
+                        break;
+                    case 'Excluded':
+                        card.classList.add('bg-slate-100', 'opacity-70');
+                        break;
+                    case 'Completed':
+                        card.classList.add('border-2', 'border-green-500');
+                        statusBadge = `<span class="absolute top-2 right-2 text-xl text-green-500">&#10004;</span>`;
+                        break;
+                }
+
+                card.innerHTML = `
+                    <div class="relative">
+                        <h4 class="font-bold text-slate-800 pr-6">${course.title}</h4>
+                        <p class="text-xs text-slate-500">${course.category}</p>
+                        ${statusBadge}
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    openModal(course.title, course.rationale);
+                });
+                return card;
+            };
+
+            const coreContainer = document.getElementById('core-courses-container');
+            const elective1Container = document.getElementById('elective-group-1-container');
+            const elective2Container = document.getElementById('elective-group-2-container');
+            const summaryTableBody = document.getElementById('summary-table-body');
+
+            const includedCourses = courseData.filter(c => c.status === 'Mandatory' || c.status === 'Included' || c.status === 'Completed');
+
+            courseData.forEach(course => {
+                const card = createCourseCard(course);
+                if (course.category === 'Core') {
+                    coreContainer.appendChild(card);
+                } else if (course.category === 'Elective 1') {
+                    elective1Container.appendChild(card);
+                } else {
+                    elective2Container.appendChild(card);
+                }
+            });
+            
+            const categoryOrder = { 'Core': 1, 'Elective 1': 2, 'Elective 2': 3 };
+            let lastCategory = '';
+
+            includedCourses
+                .sort((a,b) => categoryOrder[a.category] - categoryOrder[b.category])
+                .forEach(course => {
+                if(course.category !== lastCategory){
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = "bg-slate-100";
+                    headerRow.innerHTML = `<td colspan="3" class="px-6 py-2 font-bold text-teal-700">${course.category === 'Core' ? 'Foundational Core' : (course.category === 'Elective 1' ? 'Advanced Modeling & Reasoning' : 'AI Frontier Specialization')}</td>`;
+                    summaryTableBody.appendChild(headerRow);
+                    lastCategory = course.category;
+                }
+                const row = document.createElement('tr');
+                row.className = 'border-b border-slate-200';
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-semibold text-slate-900">${course.title}${course.status === 'Completed' ? ' <span class="text-green-500 font-normal">(Completed)</span>' : ''}</td>
+                    <td class="px-6 py-4">${course.category}</td>
+                    <td class="px-6 py-4 hidden md:table-cell text-slate-600">${course.rationale.substring(0, 100)}...</td>
+                `;
+                summaryTableBody.appendChild(row);
+            });
+
+            const compositionCtx = document.getElementById('compositionDonutChart').getContext('2d');
+            new Chart(compositionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mandatory Core', 'Strategic Electives'],
+                    datasets: [{
+                        data: [5, 5],
+                        backgroundColor: ['#0f766e', '#5eead4'],
+                        borderColor: '#ffffff',
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 12 } } },
+                        tooltip: { callbacks: { title: (items) => items[0].label } }
+                    },
+                    cutout: '60%'
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -785,11 +785,15 @@
             padding: 1rem;
             box-shadow: var(--shadow-lg);
             z-index: 1000;
-            width: 300px;
+            width: 320px;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
             pointer-events: none;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 0.5rem;
         }
 
         .course-item:hover .course-tooltip {
@@ -800,61 +804,54 @@
         .tooltip-header {
             color: var(--ut-orange);
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            border-bottom: 1px solid var(--ut-light-gray);
+            margin-bottom: 0.75rem;
+            border-bottom: 2px solid var(--ut-light-gray);
             padding-bottom: 0.5rem;
-        }
-
-        .tooltip-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .tooltip-stat {
-            font-size: 0.85rem;
-            color: var(--ut-dark-gray);
-        }
-
-        .tooltip-stat strong {
-            color: var(--ut-charcoal);
-        }
-
-        .tooltip-description {
-            font-size: 0.9rem;
-            color: var(--ut-dark-gray);
-            line-height: 1.4;
+            font-size: 1.1rem;
         }
 
         .tooltip-progress {
-            margin-top: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .progress-bar-container {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .progress-bar-label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--ut-dark-gray);
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.3rem;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
         .progress-bar {
             width: 100%;
-            height: 6px;
+            height: 8px;
             background-color: #e9ecef;
-            border-radius: 3px;
+            border-radius: 4px;
             overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
         }
 
         .progress-bar-fill {
             height: 100%;
-            border-radius: 3px;
-            transition: width 0.3s ease;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.2) 100%);
+            border-radius: 4px;
         }
 
         .progress-bar-fill.difficulty {
@@ -869,9 +866,62 @@
             background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
         }
 
+        .tooltip-prereq {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: var(--ut-light-gray);
+            border-radius: 4px;
+            border-left: 3px solid var(--ut-orange);
+        }
+
+        .tooltip-prereq strong {
+            color: var(--ut-orange);
+        }
+
+        .tooltip-description {
+            font-size: 0.9rem;
+            color: var(--ut-dark-gray);
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+
+        .tooltip-topics {
+            background: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border-left: 3px solid #28a745;
+        }
+
+        .tooltip-topics strong {
+            color: #28a745;
+            font-size: 0.85rem;
+        }
+
+        .tooltip-topics ul {
+            margin: 0.5rem 0 0 0;
+            padding-left: 1rem;
+            font-size: 0.8rem;
+            color: var(--ut-dark-gray);
+        }
+
+        .tooltip-topics li {
+            margin-bottom: 0.2rem;
+        }
+
         /* Elective course item hover styles */
+        .elective-course-item {
+            position: relative;
+            cursor: pointer;
+            padding: 0.75rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
         .elective-course-item:hover {
-            background-color: var(--ut-light-gray);
+            background-color: rgba(191, 87, 0, 0.1);
+            border-color: var(--ut-orange);
+            transform: translateY(-1px);
         }
 
         .elective-course-item .course-tooltip {
@@ -882,13 +932,14 @@
             padding: 1rem;
             box-shadow: var(--shadow-lg);
             z-index: 1000;
-            width: 300px;
+            width: 320px;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
             pointer-events: none;
             top: 100%;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             margin-top: 0.5rem;
         }
 
@@ -897,84 +948,152 @@
             visibility: visible;
         }
 
+        /* Responsive tooltip positioning */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
+            .course-tooltip,
+            .elective-course-item .course-tooltip {
+                width: 280px;
+                left: 0;
+                transform: none;
             }
-            
-            .about-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .container {
-                padding: 0 1rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-            }
-            
-            .timeline-item {
-                padding-left: 60px;
-            }
+        }
 
-            .course-grid {
-                grid-template-columns: 1fr;
-            }
+        /* Course detail styles */
+        .course-details-category {
+            margin-bottom: 3rem;
+        }
 
-            .category-title {
-                font-size: 1.2rem;
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        .course-detail-item {
+            margin-bottom: 1rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
-            .requirement {
-                margin-left: 0;
-                margin-top: 0.25rem;
-            }
+        .course-detail-header {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--ut-light-gray), #e9ecef);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
 
-            .progress-summary {
+        .course-detail-header:hover {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+        }
+
+        .course-detail-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .course-detail-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .course-detail-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        .course-detail-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .course-detail-content.expanded {
+            max-height: 1000px;
+        }
+
+        .course-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            padding: 1.5rem;
+        }
+
+        .course-detail-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            font-size: 0.9rem;
+        }
+
+        .mini-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin-top: 0.3rem;
+            overflow: hidden;
+        }
+
+        .mini-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745 0%, #ffc107 50%, #dc3545 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .mini-progress-bar.rating .mini-progress-fill {
+            background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
+        }
+
+        .course-status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .course-status-badge.completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .course-status-badge.current {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .course-status-badge.pending {
+            background: #e2e3e5;
+            color: #6c757d;
+        }
+
+        .course-status-badge.new {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #d63031;
+            border: 1px solid #ffc107;
+        }
+
+        .course-topics {
+            margin-top: 1rem;
+        }
+
+        .course-topics ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .personal-insights {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid var(--ut-orange);
+        }
+
+        @media (max-width: 768px) {
+            .course-detail-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
-                padding: 1.5rem;
-            }
-
-            .rec-course-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .step {
-                flex-direction: column;
-                text-align: center;
-                gap: 0.75rem;
-            }
-
-            .step-number {
-                margin: 0 auto;
-            }
-
-            .nav-container {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-            }
-
-            .nav-item {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            .nav-buttons {
-                padding: 1rem;
-            }
-            
-            .nav-button {
-                flex: 1;
-                justify-content: center;
-                min-width: 200px;
             }
         }
     </style>
@@ -1100,6 +1219,14 @@
                 prereq: 'DSC 391L, Probability',
                 description: 'Learning through interaction with environments using reward-based systems.',
                 topics: ['Markov decision processes', 'Q-learning', 'Policy gradients', 'Deep RL']
+            },
+            'Advances in Deep Generative Models (Generative AI)': {
+                difficulty: '4.7/5',
+                workload: '20 hrs/week',
+                rating: '4.4/5',
+                prereq: 'Deep Learning, Linear algebra',
+                description: 'Explores theory and practice of deep generative models including GANs, VAEs, and diffusion models for real-world applications.',
+                topics: ['Generative adversarial networks', 'Variational autoencoders', 'Diffusion models', 'Mathematical principles']
             }
         };
 
@@ -1141,6 +1268,15 @@
             const workload = parseFloat(data.workload);
             const rating = parseFloat(data.rating);
             
+            const topicsHtml = data.topics ? `
+                <div class="tooltip-topics">
+                    <strong>Key Topics:</strong>
+                    <ul>
+                        ${data.topics.map(topic => `<li>${topic}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : '';
+            
             return `
                 <div class="course-tooltip">
                     <div class="tooltip-header">${courseName}</div>
@@ -1149,10 +1285,11 @@
                         ${createProgressBar(workload, ranges.workload, 'Workload', data.workload)}
                         ${createProgressBar(rating, ranges.rating, 'Rating', data.rating)}
                     </div>
-                    <div style="margin-top: 0.5rem;">
-                        <div class="tooltip-stat"><strong>Prereq:</strong> ${data.prereq}</div>
+                    <div class="tooltip-prereq">
+                        <strong>Prerequisites:</strong> ${data.prereq}
                     </div>
                     <div class="tooltip-description">${data.description}</div>
+                    ${topicsHtml}
                 </div>
             `;
         }
@@ -1198,7 +1335,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             showSection('overview-section');
             
-            // Add tooltips to course items
+            // Add tooltips to course items with improved timing
             setTimeout(() => {
                 const courseItems = document.querySelectorAll('.course-item');
                 courseItems.forEach(item => {
@@ -1209,17 +1346,42 @@
                     }
                 });
 
-                // Add tooltips to elective course items
+                // Add tooltips to elective course items with better text extraction
                 const electiveCourseItems = document.querySelectorAll('.elective-course-item');
                 electiveCourseItems.forEach(item => {
-                    const courseName = item.querySelector('span').textContent.replace(/✓\s*/, '').trim();
-                    const tooltip = createTooltip(courseName);
-                    if (tooltip) {
-                        item.insertAdjacentHTML('beforeend', tooltip);
+                    const spanElement = item.querySelector('span');
+                    if (spanElement) {
+                        // Extract clean course name by removing icons and extra text
+                        let courseName = spanElement.textContent
+                            .replace(/✓\s*/, '')
+                            .replace(/⭐\s*/, '')
+                            .replace(/NEW Fall 2025!/g, '')
+                            .trim();
+                        
+                        // Remove any remaining HTML-like content
+                        courseName = courseName.replace(/<[^>]*>/g, '');
+                        
+                        const tooltip = createTooltip(courseName);
+                        if (tooltip) {
+                            item.insertAdjacentHTML('beforeend', tooltip);
+                        }
                     }
                 });
-            }, 100);
+            }, 200);
         });
+
+        function toggleCourseDetail(courseId) {
+            const content = document.getElementById(courseId);
+            const arrow = content.previousElementSibling.querySelector('.course-detail-arrow');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                arrow.classList.remove('rotated');
+            } else {
+                content.classList.add('expanded');
+                arrow.classList.add('rotated');
+            }
+        }
     </script>
 </head>
 <body>
@@ -1253,6 +1415,10 @@
             <div class="nav-item" onclick="showSection('program-structure-section')">
                 <i class="fas fa-graduation-cap"></i>
                 MSDS Program Structure
+            </div>
+            <div class="nav-item" onclick="showSection('course-details-section')">
+                <i class="fas fa-book-open"></i>
+                Course Details
             </div>
             <div class="nav-item" onclick="showSection('course-timeline-section')">
                 <i class="fas fa-book"></i>
@@ -1339,16 +1505,25 @@
                     MSDS Program Structure
                 </h2>
                 <p style="margin-bottom: 2rem; font-size: 1.1rem; color: var(--ut-dark-gray);">
-                    My 10-course plan for graduation in Fall 2027. This balanced approach allows for work-life integration while maximizing the UT Austin student experience and building strong foundations in data science.
+                    My 10-course plan for graduation in Fall 2027. This strategic approach focuses on foundational mastery, advanced modeling expertise, and cutting-edge AI specialization.
                 </p>
                 
                 <div class="program-structure">
                     <div class="program-category">
                         <h3 class="category-title">
                             <i class="fas fa-foundation"></i>
-                            Core Required Courses (5 courses)
+                            Foundational Core (5 courses)
                         </h3>
                         <div class="course-grid">
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Data Structures & Algorithms</div>
+                                    <div class="course-note">Fall 2025</div>
+                                </div>
+                            </div>
                             <div class="course-item completed">
                                 <div class="course-status">
                                     <i class="fas fa-check-circle"></i>
@@ -1381,15 +1556,6 @@
                                     <i class="fas fa-circle"></i>
                                 </div>
                                 <div class="course-info">
-                                    <div class="course-name">Data Structures & Algorithms</div>
-                                    <div class="course-note">Fall 2025</div>
-                                </div>
-                            </div>
-                            <div class="course-item pending">
-                                <div class="course-status">
-                                    <i class="fas fa-circle"></i>
-                                </div>
-                                <div class="course-info">
                                     <div class="course-name">Deep Learning</div>
                                     <div class="course-note">Spring 2026</div>
                                 </div>
@@ -1399,69 +1565,62 @@
 
                     <div class="program-category">
                         <h3 class="category-title">
-                            <i class="fas fa-star"></i>
-                            Selected Electives (5 courses)
+                            <i class="fas fa-brain"></i>
+                            Advanced Modeling & Reasoning (3 courses)
                         </h3>
-                        
-                        <!-- Elective Courses 1 - My selections -->
-                        <div style="margin-bottom: 2rem;">
-                            <h4 style="color: var(--ut-orange); margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 1px solid var(--ut-light-gray); padding-bottom: 0.5rem;">
-                                <i class="fas fa-star"></i> From Elective Courses 1 (3 selected)
-                            </h4>
-                            <div class="course-grid">
-                                <div class="course-item completed">
-                                    <div class="course-status">
-                                        <i class="fas fa-check-circle"></i>
-                                    </div>
-                                    <div class="course-info">
-                                        <div class="course-name">Data Exploration & Visualization</div>
-                                        <div class="course-note">DSC 385 ✓</div>
-                                    </div>
+                        <div class="course-grid">
+                            <div class="course-item completed">
+                                <div class="course-status">
+                                    <i class="fas fa-check-circle"></i>
                                 </div>
-                                <div class="course-item pending">
-                                    <div class="course-status">
-                                        <i class="fas fa-circle"></i>
-                                    </div>
-                                    <div class="course-info">
-                                        <div class="course-name">Advanced Predictive Models</div>
-                                        <div class="course-note">Summer 2026</div>
-                                    </div>
+                                <div class="course-info">
+                                    <div class="course-name">Data Exploration & Visualization</div>
+                                    <div class="course-note">DSC 385 ✓</div>
                                 </div>
-                                <div class="course-item pending">
-                                    <div class="course-status">
-                                        <i class="fas fa-circle"></i>
-                                    </div>
-                                    <div class="course-info">
-                                        <div class="course-name">Design Principles & Causal Inference</div>
-                                        <div class="course-note">Spring 2027</div>
-                                    </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Design Principles & Causal Inference</div>
+                                    <div class="course-note">Spring 2027</div>
+                                </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Advanced Predictive Models</div>
+                                    <div class="course-note">Summer 2026</div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Elective Courses 2 - My selections -->
-                        <div>
-                            <h4 style="color: var(--ut-orange); margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 1px solid var(--ut-light-gray); padding-bottom: 0.5rem;">
-                                <i class="fas fa-brain"></i> From Elective Courses 2 (2 selected)
-                            </h4>
-                            <div class="course-grid">
-                                <div class="course-item pending">
-                                    <div class="course-status">
-                                        <i class="fas fa-circle"></i>
-                                    </div>
-                                    <div class="course-info">
-                                        <div class="course-name">Natural Language Processing</div>
-                                        <div class="course-note">Fall 2026</div>
-                                    </div>
+                    <div class="program-category">
+                        <h3 class="category-title">
+                            <i class="fas fa-rocket"></i>
+                            AI Frontier Specialization (2 courses)
+                        </h3>
+                        <div class="course-grid">
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-star"></i>
                                 </div>
-                                <div class="course-item pending">
-                                    <div class="course-status">
-                                        <i class="fas fa-circle"></i>
-                                    </div>
-                                    <div class="course-info">
-                                        <div class="course-name">Optimization</div>
-                                        <div class="course-note">Summer 2027</div>
-                                    </div>
+                                <div class="course-info">
+                                    <div class="course-name">Advances in Deep Generative Models (Generative AI)</div>
+                                    <div class="course-note">Fall 2026 (NEW!)</div>
+                                </div>
+                            </div>
+                            <div class="course-item pending">
+                                <div class="course-status">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-name">Optimization</div>
+                                    <div class="course-note">Summer 2027</div>
                                 </div>
                             </div>
                         </div>
@@ -1481,19 +1640,19 @@
                                         <span style="font-size: 0.9rem; color: var(--ut-dark-gray); font-weight: 400;">(Complete 3 of 5)</span>
                                     </h4>
                                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
+                                        <div class="elective-course-item">
                                             <span><i class="fas fa-check" style="color: #28a745; margin-right: 0.5rem;"></i>Advanced Predictive Models</span>
                                         </div>
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
+                                        <div class="elective-course-item">
                                             <span><i class="fas fa-check" style="color: #28a745; margin-right: 0.5rem;"></i>Data Exploration & Visualization</span>
                                         </div>
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
+                                        <div class="elective-course-item">
                                             <span>Data Science for Health Discovery and Innovation</span>
                                         </div>
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
+                                        <div class="elective-course-item">
                                             <span><i class="fas fa-check" style="color: #28a745; margin-right: 0.5rem;"></i>Design Principles & Causal Inference</span>
                                         </div>
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
+                                        <div class="elective-course-item">
                                             <span>Principles of Data Science</span>
                                         </div>
                                     </div>
@@ -1501,29 +1660,39 @@
                                 <div>
                                     <h4 style="color: var(--ut-orange); margin-bottom: 1rem; font-size: 1.2rem;">
                                         <i class="fas fa-brain"></i> Elective Courses 2
-                                        <span style="font-size: 0.9rem; color: var(--ut-dark-gray); font-weight: 400;">(Complete 2 of 4)</span>
+                                        <span style="font-size: 0.9rem; color: var(--ut-dark-gray); font-weight: 400;">(Complete 2 of 5)</span>
                                     </h4>
                                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
+                                        <div class="elective-course-item">
                                             <span>Advances in Deep Learning</span>
                                         </div>
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
-                                            <span><i class="fas fa-check" style="color: #28a745; margin-right: 0.5rem;"></i>Natural Language Processing</span>
+                                        <div class="elective-course-item" style="background-color: #fff3cd; border: 1px solid #ffc107;">
+                                            <span><i class="fas fa-check" style="color: #28a745; margin-right: 0.5rem;"></i><strong>Advances in Deep Generative Models (Generative AI)</strong> <span style="font-size: 0.8rem; color: #d63031; font-weight: 600;">NEW Fall 2025!</span></span>
                                         </div>
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
+                                        <div class="elective-course-item">
+                                            <span>Natural Language Processing</span>
+                                        </div>
+                                        <div class="elective-course-item">
                                             <span><i class="fas fa-check" style="color: #28a745; margin-right: 0.5rem;"></i>Optimization</span>
                                         </div>
-                                        <div class="elective-course-item" style="position: relative; cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: background-color 0.2s ease;">
+                                        <div class="elective-course-item">
                                             <span>Reinforcement Learning</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div style="margin-top: 2rem; padding: 1rem; background: var(--white); border-radius: 8px; border-left: 4px solid var(--ut-orange);">
-                                <p style="margin: 0; font-size: 0.95rem; color: var(--ut-dark-gray);">
-                                    <strong>Note:</strong> Students must complete 3 courses from Elective Courses 1 and 2 courses from Elective Courses 2 for a total of 5 electives. 
-                                    Check the official <a href="https://cdso.utexas.edu/msds" target="_blank" style="color: var(--ut-orange);">MSDS website</a> for the most current information.
+                                <p style="margin: 0; font-size: 0.95rem; color: var(--ut-dark-gray); margin-bottom: 1rem;">
+                                    <strong>My Strategy:</strong> I've selected 3 courses from Elective Courses 1 and 2 courses from Elective Courses 2, focusing on advanced modeling and cutting-edge AI technologies.
                                 </p>
+                                <div style="background: linear-gradient(135deg, #e8f5e8, #d4f1d4); padding: 1rem; border-radius: 6px; border-left: 4px solid #28a745;">
+                                    <h5 style="color: #155724; margin-bottom: 0.5rem; font-size: 1rem;">
+                                        <i class="fas fa-lightbulb"></i> Strategic Course Selection
+                                    </h5>
+                                    <p style="margin: 0; font-size: 0.9rem; color: var(--ut-charcoal);">
+                                        This combination provides a strong foundation in statistical modeling, causal inference, and state-of-the-art generative AI - perfectly positioned for the future of data science!
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1595,42 +1764,42 @@
                         <div class="timeline-content">
                             <div class="timeline-date">Fall 2025 - Course #5</div>
                             <div class="timeline-title">Data Structures & Algorithms</div>
-                            <p><strong>Why I chose this timing:</strong> Complete the final foundational requirement while DSC 382 concepts are fresh. Essential for advanced algorithm courses later.</p>
+                            <p><strong>Foundation Building:</strong> Essential algorithmic thinking and data structure mastery for advanced coursework.</p>
                         </div>
                     </div>
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-date">Spring 2026 - Course #6</div>
                             <div class="timeline-title">Deep Learning</div>
-                            <p><strong>My strategy:</strong> Complete all required courses first. With ML background from DSC 391L, this is the perfect next step for advanced AI skills.</p>
+                            <p><strong>Core Technology:</strong> Neural networks and deep learning architectures - the foundation for AI specialization.</p>
                         </div>
                     </div>
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-date">Summer 2026 - Course #7</div>
                             <div class="timeline-title">Advanced Predictive Models</div>
-                            <p><strong>Building momentum:</strong> Summer courses work well for working professionals. Builds directly on DSC 382 regression foundations - perfect progression!</p>
+                            <p><strong>Modeling Mastery:</strong> Advanced ensemble methods and model interpretation techniques.</p>
                         </div>
                     </div>
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-date">Fall 2026 - Course #8</div>
-                            <div class="timeline-title">Natural Language Processing</div>
-                            <p><strong>Career focus:</strong> NLP is huge in the job market. My ML and Deep Learning background will make this course much more manageable.</p>
+                            <div class="timeline-title">Advances in Deep Generative Models (Generative AI)</div>
+                            <p><strong>AI Frontier:</strong> Cutting-edge generative AI including GANs, VAEs, and diffusion models - perfectly timed with the AI revolution!</p>
                         </div>
                     </div>
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-date">Spring 2027 - Course #9</div>
                             <div class="timeline-title">Design Principles & Causal Inference</div>
-                            <p><strong>Unique skillset:</strong> This builds beautifully on DSC 381 probability foundations. Great for distinguishing yourself in interviews!</p>
+                            <p><strong>Research Excellence:</strong> Experimental design and causal thinking - skills that distinguish data scientists from analysts.</p>
                         </div>
                     </div>
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-date">Summer 2027 - Course #10</div>
                             <div class="timeline-title">Optimization</div>
-                            <p><strong>Perfect finale:</strong> Mathematical foundations that tie everything together. Great preparation for advanced roles or PhD paths.</p>
+                            <p><strong>Mathematical Foundation:</strong> The mathematical backbone of machine learning and AI optimization.</p>
                         </div>
                     </div>
                 </div>
@@ -1651,85 +1820,84 @@
             <section class="section content-section hidden-section" id="course-strategy">
                 <h2 class="section-title">
                     <i class="fas fa-lightbulb"></i>
-                    My Course Strategy - Tips for Fellow Students
+                    My Strategic Course Plan - AI-Focused Data Science
                 </h2>
                 <p style="margin-bottom: 2rem; font-size: 1.1rem; color: var(--ut-dark-gray);">
-                    Here's my balanced 10-course strategy for working professionals in the MSDS program. Taking one course per semester allows for deep learning, work-life balance, and full engagement with the UT Austin community. Fellow students - feel free to adapt this plan to your needs!
+                    My 10-course strategy combines foundational mastery with cutting-edge AI specialization. This plan positions me at the forefront of the AI revolution while maintaining strong statistical and modeling foundations.
                 </p>
 
                 <div class="recommendation-container">
                     <div class="priority-section">
                         <h3 class="priority-title high-priority">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            My Next Steps - Fall 2025
+                            <i class="fas fa-foundation"></i>
+                            Foundation Phase (Fall 2025 - Spring 2026)
                         </h3>
                         <div class="course-recommendations">
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
                                     <h4>Data Structures & Algorithms</h4>
-                                    <span class="course-type">Foundation Course</span>
+                                    <span class="course-type">Core Foundation</span>
                                 </div>
-                                <p><strong>Why I'm taking this next:</strong> Need to complete all foundational requirements before diving into advanced electives.</p>
-                                <p><strong>Working professional tip:</strong> This course has a heavy coding component, so I'm planning to start reviewing algorithms early.</p>
-                                <p><strong>For fellow students:</strong> If you're also working full-time, consider brushing up on Python data structures beforehand!</p>
+                                <p><strong>Why this timing:</strong> Complete all foundational requirements before specializing in AI.</p>
+                                <p><strong>Strategic value:</strong> Essential for understanding AI algorithm implementations and optimizations.</p>
+                            </div>
+                            <div class="rec-course-item">
+                                <div class="rec-course-header">
+                                    <h4>Deep Learning</h4>
+                                    <span class="course-type">AI Foundation</span>
+                                </div>
+                                <p><strong>Perfect progression:</strong> Builds on ML foundations and prepares for generative AI specialization.</p>
+                                <p><strong>Industry relevance:</strong> Essential for any AI-focused career path.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="priority-section">
                         <h3 class="priority-title medium-priority">
-                            <i class="fas fa-star"></i>
-                            My 2026 Plan - Core Completion
+                            <i class="fas fa-brain"></i>
+                            Advanced Modeling Phase (Summer 2026)
                         </h3>
                         <div class="course-recommendations">
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Spring 2026: Deep Learning</h4>
-                                    <span class="course-type">Required Course</span>
+                                    <h4>Advanced Predictive Models</h4>
+                                    <span class="course-type">Modeling Mastery</span>
                                 </div>
-                                <p><strong>My reasoning:</strong> Get all required courses done first. Plus, my ML background from DSC 391L will make this transition smooth.</p>
-                                <p><strong>Student tip:</strong> Deep Learning builds heavily on Linear Algebra - might be worth reviewing if it's been a while!</p>
-                            </div>
-                            <div class="rec-course-item">
-                                <div class="rec-course-header">
-                                    <h4>Summer 2026: Advanced Predictive Models</h4>
-                                    <span class="course-type">Strategic Elective</span>
-                                </div>
-                                <p><strong>Perfect timing:</strong> Coming right after DSC 382 (Regression), the concepts will be fresh and this builds naturally.</p>
-                                <p><strong>Summer advantage:</strong> Smaller class sizes and more professor interaction - great for working students!</p>
+                                <p><strong>Strategic timing:</strong> Bridges traditional ML and modern AI approaches.</p>
+                                <p><strong>Career impact:</strong> Advanced ensemble methods are highly valued in industry.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="priority-section">
                         <h3 class="priority-title low-priority">
-                            <i class="fas fa-clock"></i>
-                            My Final Year Strategy (2027)
+                            <i class="fas fa-rocket"></i>
+                            AI Specialization Phase (Fall 2026 - Summer 2027)
                         </h3>
                         <div class="course-recommendations">
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Fall 2026: Natural Language Processing</h4>
-                                    <span class="course-type">High-Demand Skill</span>
+                                    <h4>Advances in Deep Generative Models</h4>
+                                    <span class="course-type">AI Frontier</span>
                                 </div>
-                                <p><strong>Career focus:</strong> NLP is exploding in the job market - ChatGPT, transformers, etc. Great ROI on time investment.</p>
-                                <p><strong>Foundation ready:</strong> By this point, I'll have solid ML and Deep Learning foundations to tackle advanced NLP concepts.</p>
+                                <p><strong>Perfect timing:</strong> Brand new course covering GANs, VAEs, and diffusion models.</p>
+                                <p><strong>Market advantage:</strong> Generative AI is the hottest field in tech right now!</p>
                             </div>
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Spring 2027: Design Principles & Causal Inference</h4>
-                                    <span class="course-type">Unique Differentiator</span>
+                                    <h4>Design Principles & Causal Inference</h4>
+                                    <span class="course-type">Research Excellence</span>
                                 </div>
-                                <p><strong>Why I chose this:</strong> Builds on my DSC 381 probability background and teaches skills most data scientists lack.</p>
-                                <p><strong>Interview gold:</strong> Understanding causality vs correlation makes you stand out in interviews!</p>
+                                <p><strong>Differentiation:</strong> Experimental design skills that separate data scientists from analysts.</p>
+                                <p><strong>Foundation synergy:</strong> Perfectly builds on probability and statistics background.</p>
                             </div>
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Summer 2027: Optimization</h4>
-                                    <span class="course-type">Mathematical Foundation</span>
+                                    <h4>Optimization</h4>
+                                    <span class="course-type">Mathematical Mastery</span>
                                 </div>
-                                <p><strong>Perfect finale:</strong> Ties together mathematical concepts from the entire program. Great if you're considering PhD paths.</p>
-                                <p><strong>Alternative consideration:</strong> Could swap with Reinforcement Learning if you're more interested in cutting-edge AI applications.</p>
+                                <p><strong>Perfect finale:</strong> The mathematical foundation underlying all AI and ML algorithms.</p>
+                                <p><strong>Career preparation:</strong> Essential for research roles and PhD preparation.</p>
                             </div>
                         </div>
                     </div>
@@ -1738,53 +1906,64 @@
                 <div class="graduation-timeline">
                     <h3 style="color: var(--ut-orange); margin-bottom: 1rem;">
                         <i class="fas fa-graduation-cap"></i>
-                        My Path to Fall 2027 Graduation (One Course Per Semester)
+                        My AI-Focused Path to Fall 2027 Graduation
                     </h3>
                     <div class="timeline-steps">
                         <div class="step">
-                            <div class="step-number">✓</div>
+                            <div class="step-number">5</div>
                             <div class="step-content">
-                                <strong>Summer 2026:</strong> Advanced Predictive Models (First Strategic Elective)
+                                <strong>Fall 2025:</strong> Data Structures & Algorithms (Foundation Completion)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">6</div>
+                            <div class="step-content">
+                                <strong>Spring 2026:</strong> Deep Learning (AI Foundation)
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">7</div>
+                            <div class="step-content">
+                                <strong>Summer 2026:</strong> Advanced Predictive Models (Modeling Mastery)
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">8</div>
                             <div class="step-content">
-                                <strong>Fall 2026:</strong> Natural Language Processing (High-Demand Skill)
+                                <strong>Fall 2026:</strong> Advances in Deep Generative Models (AI Frontier!)
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">9</div>
                             <div class="step-content">
-                                <strong>Spring 2027:</strong> Design Principles & Causal Inference (Unique Differentiator)
+                                <strong>Spring 2027:</strong> Design Principles & Causal Inference (Research Excellence)
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">10</div>
                             <div class="step-content">
-                                <strong>Summer 2027:</strong> Optimization (Perfect Mathematical Finale)
+                                <strong>Summer 2027:</strong> Optimization (Mathematical Foundation)
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">🎓</div>
                             <div class="step-content">
-                                <strong>Fall 2027:</strong> Graduate with Master's in Data Science!
+                                <strong>Fall 2027:</strong> Graduate as an AI-Specialized Data Scientist!
                             </div>
                         </div>
                     </div>
                     
-                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 1.5rem; border-radius: 10px; margin-top: 2rem; border-left: 4px solid var(--ut-orange);">
-                        <h4 style="color: var(--ut-orange); margin-bottom: 1rem;">
-                            <i class="fas fa-heart"></i>
-                            Why I Love the One-Course-Per-Semester Approach
+                    <div style="background: linear-gradient(135deg, #e8f5e8 0%, #d4f1d4 100%); padding: 1.5rem; border-radius: 10px; margin-top: 2rem; border-left: 4px solid #28a745;">
+                        <h4 style="color: #155724; margin-bottom: 1rem;">
+                            <i class="fas fa-rocket"></i>
+                            Why This AI-Focused Strategy is Perfect for 2025-2027
                         </h4>
                         <ul style="margin: 0; padding-left: 1.5rem; color: var(--ut-dark-gray);">
-                            <li><strong>Work-Life Balance:</strong> Maintain career progression while excelling academically</li>
-                            <li><strong>Deep Learning:</strong> Really absorb and apply concepts from each course</li>
-                            <li><strong>Community Engagement:</strong> More time to participate in student organizations and networking</li>
-                            <li><strong>Quality Projects:</strong> Can dedicate proper time to course projects and build an impressive portfolio</li>
-                            <li><strong>Stress Management:</strong> Sustainable pace reduces burnout and maintains enthusiasm for learning</li>
-                            <li><strong>UT Austin Experience:</strong> Enjoy the full university experience - research opportunities, conferences, social events</li>
+                            <li><strong>Market Timing:</strong> Graduate right as generative AI becomes mainstream in enterprise</li>
+                            <li><strong>Unique Positioning:</strong> Combination of statistical rigor and cutting-edge AI expertise</li>
+                            <li><strong>Career Flexibility:</strong> Prepared for research, industry, or entrepreneurship paths</li>
+                            <li><strong>Future-Proof Skills:</strong> Mathematical foundations that adapt to new AI developments</li>
+                            <li><strong>Competitive Edge:</strong> Causal inference skills that most AI practitioners lack</li>
                         </ul>
                     </div>
                 </div>
@@ -1794,6 +1973,624 @@
                     <button class="nav-button" onclick="toggleSection('course-strategy')" style="background: linear-gradient(135deg, var(--ut-charcoal), #495057);">
                         ⬆️ Hide Course Strategy Details
                     </button>
+                </div>
+            </section>
+
+            <!-- Course Details Section -->
+            <section class="section content-section" id="course-details-section">
+                <h2 class="section-title">
+                    <i class="fas fa-book-open"></i>
+                    Detailed Course Information
+                </h2>
+                <p style="margin-bottom: 2rem; font-size: 1.1rem; color: var(--ut-dark-gray);">
+                    Click on any course below to see detailed information, prerequisites, difficulty ratings, and my personal insights.
+                </p>
+
+                <!-- Foundational Core Courses -->
+                <div class="course-details-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-foundation"></i>
+                        Foundational Core (5 courses)
+                    </h3>
+                    
+                    <!-- ...existing DSC 381, DSC 382, DSC 391L course details... -->
+
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('dsa-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-circle" style="color: var(--ut-dark-gray); margin-right: 0.5rem;"></i>
+                                <strong>Data Structures & Algorithms</strong>
+                                <span class="course-status-badge pending">Fall 2025</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="dsa-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 4.8/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 96%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 22 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 92%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 3.9/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 78%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> Strong programming</p>
+                                    <p><strong>Description:</strong> Fundamental data structures and algorithms for efficient data processing.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Arrays & Lists</li>
+                                            <li>Trees & Graphs</li>
+                                            <li>Sorting algorithms</li>
+                                            <li>Time complexity</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>My Strategy:</strong>
+                                        <p>Planning to brush up on Python fundamentals over the summer. This will be the most coding-intensive course in my plan.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('deep-learning-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-circle" style="color: var(--ut-dark-gray); margin-right: 0.5rem;"></i>
+                                <strong>Deep Learning</strong>
+                                <span class="course-status-badge pending">Spring 2026</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="deep-learning-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 4.7/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 94%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 20 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 83%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.4/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 88%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> DSC 391L, Linear algebra</p>
+                                    <p><strong>Description:</strong> Neural networks, deep learning architectures, and modern AI applications.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Neural networks</li>
+                                            <li>CNNs</li>
+                                            <li>RNNs</li>
+                                            <li>Transformers</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>My Plan:</strong>
+                                        <p>This is the gateway to my AI specialization. Planning to review linear algebra concepts beforehand to ensure success.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Modeling & Reasoning -->
+                <div class="course-details-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-brain"></i>
+                        Advanced Modeling & Reasoning (3 courses)
+                    </h3>
+                    
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('dsc385-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-check-circle" style="color: #28a745; margin-right: 0.5rem;"></i>
+                                <strong>DSC 385: Data Exploration & Visualization</strong>
+                                <span class="course-status-badge completed">Completed</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="dsc385-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 3.5/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 70%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 14 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 58%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.5/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 90%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> Programming basics</p>
+                                    <p><strong>Description:</strong> Data exploration, visualization techniques, and foundations of unsupervised learning.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Data visualization</li>
+                                            <li>PCA</li>
+                                            <li>Clustering</li>
+                                            <li>Dimensionality reduction</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>My Experience:</strong>
+                                        <p>Great introduction to the art of data storytelling. The visualization techniques learned here are invaluable for any data scientist.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('advanced-predictive-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-circle" style="color: var(--ut-dark-gray); margin-right: 0.5rem;"></i>
+                                <strong>Advanced Predictive Models</strong>
+                                <span class="course-status-badge pending">Summer 2026</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="advanced-predictive-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 4.3/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 86%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 18 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 75%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.2/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 84%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> DSC 382, DSC 391L</p>
+                                    <p><strong>Description:</strong> Advanced modeling techniques including ensemble methods and model interpretation.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Random forests</li>
+                                            <li>Gradient boosting</li>
+                                            <li>Model interpretation</li>
+                                            <li>Feature engineering</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>My Strategy:</strong>
+                                        <p>Perfect timing after DSC 382 - the regression concepts will be fresh and this builds naturally into ensemble methods.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('causal-inference-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-circle" style="color: var(--ut-dark-gray); margin-right: 0.5rem;"></i>
+                                <strong>Design Principles & Causal Inference</strong>
+                                <span class="course-status-badge pending">Spring 2027</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="causal-inference-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 4.1/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 82%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 16 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 67%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.0/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 80%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> DSC 381, DSC 382</p>
+                                    <p><strong>Description:</strong> Experimental design, causal inference methods, and statistical thinking.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>A/B testing</li>
+                                            <li>Causal graphs</li>
+                                            <li>Instrumental variables</li>
+                                            <li>Difference-in-differences</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>My Vision:</strong>
+                                        <p>This course will set me apart - understanding causality vs correlation is what separates true data scientists from analysts.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Frontier Specialization -->
+                <div class="course-details-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-rocket"></i>
+                        AI Frontier Specialization (2 courses)
+                    </h3>
+                    
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('generative-ai-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-star" style="color: var(--ut-orange); margin-right: 0.5rem;"></i>
+                                <strong>Advances in Deep Generative Models (Generative AI)</strong>
+                                <span class="course-status-badge new">NEW Fall 2026</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="generative-ai-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 4.7/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 94%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 20 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 83%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.4/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 88%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> Deep Learning, Linear algebra</p>
+                                    <p><strong>Description:</strong> Explores theory and practice of deep generative models including GANs, VAEs, and diffusion models for real-world applications.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Generative adversarial networks</li>
+                                            <li>Variational autoencoders</li>
+                                            <li>Diffusion models</li>
+                                            <li>Mathematical principles</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>My Strategy:</strong>
+                                        <p>This is the crown jewel of my AI specialization! Perfect timing to enter the generative AI field at its peak. I'll be graduating right as this technology becomes mainstream.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('optimization-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-circle" style="color: var(--ut-dark-gray); margin-right: 0.5rem;"></i>
+                                <strong>Optimization</strong>
+                                <span class="course-status-badge pending">Summer 2027</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="optimization-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 4.4/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 88%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 17 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 71%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 3.8/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 76%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> Linear algebra, Calculus</p>
+                                    <p><strong>Description:</strong> Mathematical optimization techniques for machine learning and data science.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Linear programming</li>
+                                            <li>Convex optimization</li>
+                                            <li>Gradient descent</li>
+                                            <li>Constrained optimization</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>Perfect Finale:</strong>
+                                        <p>The mathematical foundation that ties together everything I've learned. This course will prepare me for advanced research roles or PhD programs.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Available Electives -->
+                <div class="course-details-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-graduation-cap"></i>
+                        Other Available Electives
+                        <span class="requirement">Courses I considered but didn't select</span>
+                    </h3>
+                    
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('health-innovation-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-heart" style="color: #dc3545; margin-right: 0.5rem;"></i>
+                                <strong>Data Science for Health Discovery and Innovation</strong>
+                                <span class="course-status-badge" style="background: #f8d7da; color: #721c24;">Not Selected</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="health-innovation-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 3.8/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 76%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 15 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 63%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.1/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 82%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> DSC 381, Programming</p>
+                                    <p><strong>Description:</strong> Applied data science techniques for healthcare and medical research applications.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Medical data analysis</li>
+                                            <li>Biostatistics</li>
+                                            <li>Clinical trials</li>
+                                            <li>Health informatics</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>Why I Didn't Choose This:</strong>
+                                        <p>While healthcare is important, my career focus is on AI and general data science applications rather than domain-specific health applications.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('principles-ds-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-book" style="color: #6c757d; margin-right: 0.5rem;"></i>
+                                <strong>Principles of Data Science</strong>
+                                <span class="course-status-badge" style="background: #f8d7da; color: #721c24;">Not Selected</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="principles-ds-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 3.3/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 66%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 12 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.0/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 80%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> Basic statistics</p>
+                                    <p><strong>Description:</strong> Foundational concepts in data science including ethics, methodology, and best practices.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Data ethics</li>
+                                            <li>Scientific method</li>
+                                            <li>Data lifecycle</li>
+                                            <li>Reproducibility</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>Why I Didn't Choose This:</strong>
+                                        <p>This appears to be more foundational than my current level. I prefer courses that push my technical boundaries rather than cover basic principles.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('nlp-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-comments" style="color: #007bff; margin-right: 0.5rem;"></i>
+                                <strong>Natural Language Processing</strong>
+                                <span class="course-status-badge" style="background: #cce5ff; color: #0056b3;">Strong Consideration</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="nlp-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 4.6/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 92%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 19 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 79%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.3/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 86%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> DSC 391L, Deep Learning</p>
+                                    <p><strong>Description:</strong> Text processing, language models, and NLP applications using modern techniques.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Text preprocessing</li>
+                                            <li>Word embeddings</li>
+                                            <li>Language models</li>
+                                            <li>Sentiment analysis</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>Why I Chose Generative AI Instead:</strong>
+                                        <p>While NLP is excellent, generative AI covers broader applications and is more cutting-edge. The new generative models course includes language models as part of its curriculum.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-detail-item">
+                        <div class="course-detail-header" onclick="toggleCourseDetail('reinforcement-learning-detail')">
+                            <div class="course-detail-title">
+                                <i class="fas fa-robot" style="color: #6f42c1; margin-right: 0.5rem;"></i>
+                                <strong>Reinforcement Learning</strong>
+                                <span class="course-status-badge" style="background: #e2d9f3; color: #432874;">Future Consideration</span>
+                            </div>
+                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                        </div>
+                        <div class="course-detail-content" id="reinforcement-learning-detail">
+                            <div class="course-detail-grid">
+                                <div class="course-detail-stats">
+                                    <div class="stat-item">
+                                        <strong>Difficulty:</strong> 4.8/5
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 96%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Workload:</strong> 21 hrs/week
+                                        <div class="mini-progress-bar">
+                                            <div class="mini-progress-fill" style="width: 88%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong>Rating:</strong> 4.1/5
+                                        <div class="mini-progress-bar rating">
+                                            <div class="mini-progress-fill" style="width: 82%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-detail-info">
+                                    <p><strong>Prerequisites:</strong> DSC 391L, Probability</p>
+                                    <p><strong>Description:</strong> Learning through interaction with environments using reward-based systems.</p>
+                                    <div class="course-topics">
+                                        <strong>Key Topics:</strong>
+                                        <ul>
+                                            <li>Markov decision processes</li>
+                                            <li>Q-learning</li>
+                                            <li>Policy gradients</li>
+                                            <li>Deep RL</li>
+                                        </ul>
+                                    </div>
+                                    <div class="personal-insights">
+                                        <strong>Why I Chose Optimization Instead:</strong>
+                                        <p>While RL is fascinating, optimization provides broader mathematical foundations. I can always pursue RL in PhD studies or through online courses.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
