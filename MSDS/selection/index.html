@@ -258,6 +258,18 @@
             transform: scale(1.1);
         }
 
+        .export-btn:hover {
+            background: #a84400 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(191, 87, 0, 0.3);
+        }
+
+        .export-format-btn:hover {
+            border-color: var(--ut-orange) !important;
+            background: rgba(191, 87, 0, 0.05) !important;
+            transform: translateY(-1px);
+        }
+
         .course-header {
             display: flex;
             justify-content: space-between;
@@ -690,6 +702,14 @@
                 </div>
             </div>
 
+            <!-- Export Section -->
+            <div class="export-section" style="margin: 2rem 0; text-align: center;">
+                <button id="exportBtn" class="export-btn" onclick="showExportModal()" style="background: var(--ut-orange); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                    <i class="fas fa-download" style="margin-right: 0.5rem;"></i>
+                    Export My Course Selection
+                </button>
+            </div>
+
             <!-- Filters -->
             <div class="filters">
                 <div class="filter-grid">
@@ -759,6 +779,7 @@
     </main>
 
     <!-- Modal -->
+    <!-- Course Modal -->
     <div id="courseModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -767,6 +788,75 @@
             </div>
             <div class="modal-body" id="modalBody">
                 <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <span class="close" onclick="closeExportModal()">&times;</span>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.5rem;">Export Course Selection</h2>
+                    <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Download your selected courses</p>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <div id="exportContent">
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--ut-orange); margin-bottom: 1rem;">Choose Export Format:</h3>
+                        <div style="display: grid; gap: 1rem;">
+                            <button onclick="exportSelection('json')" class="export-format-btn" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 2px solid #e9ecef; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s ease;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <i class="fas fa-code" style="color: var(--ut-orange); font-size: 1.2rem;"></i>
+                                    <div>
+                                        <div style="font-weight: 600; margin-bottom: 0.25rem;">JSON Format</div>
+                                        <div style="font-size: 0.9rem; color: #6c757d;">Machine-readable format for developers</div>
+                                    </div>
+                                </div>
+                                <i class="fas fa-download" style="color: #6c757d;"></i>
+                            </button>
+                            
+                            <button onclick="exportSelection('csv')" class="export-format-btn" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 2px solid #e9ecef; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s ease;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <i class="fas fa-table" style="color: var(--ut-orange); font-size: 1.2rem;"></i>
+                                    <div>
+                                        <div style="font-weight: 600; margin-bottom: 0.25rem;">CSV (Spreadsheet)</div>
+                                        <div style="font-size: 0.9rem; color: #6c757d;">Open in Excel, Google Sheets, etc.</div>
+                                    </div>
+                                </div>
+                                <i class="fas fa-download" style="color: #6c757d;"></i>
+                            </button>
+                            
+                            <button onclick="exportSelection('txt')" class="export-format-btn" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 2px solid #e9ecef; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s ease;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <i class="fas fa-file-alt" style="color: var(--ut-orange); font-size: 1.2rem;"></i>
+                                    <div>
+                                        <div style="font-weight: 600; margin-bottom: 0.25rem;">Text Summary</div>
+                                        <div style="font-size: 0.9rem; color: #6c757d;">Human-readable course plan</div>
+                                    </div>
+                                </div>
+                                <i class="fas fa-download" style="color: #6c757d;"></i>
+                            </button>
+                            
+                            <button onclick="exportSelection('pdf')" class="export-format-btn" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 2px solid #e9ecef; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s ease;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <i class="fas fa-file-pdf" style="color: var(--ut-orange); font-size: 1.2rem;"></i>
+                                    <div>
+                                        <div style="font-weight: 600; margin-bottom: 0.25rem;">PDF Report</div>
+                                        <div style="font-size: 0.9rem; color: #6c757d;">Professional course plan document</div>
+                                    </div>
+                                </div>
+                                <i class="fas fa-download" style="color: #6c757d;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="selectionSummary" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                        <!-- Selection summary will be populated by JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1228,12 +1318,6 @@
             modal.style.display = 'none';
         }
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-
         // Toggle course selection
         function toggleCourseSelection(courseId, event) {
             if (event) {
@@ -1662,10 +1746,267 @@
             filterCourses();
         });
 
+        // Export functionality
+        function showExportModal() {
+            const exportModal = document.getElementById('exportModal');
+            updateSelectionSummary();
+            exportModal.style.display = 'block';
+        }
+
+        function closeExportModal() {
+            const exportModal = document.getElementById('exportModal');
+            exportModal.style.display = 'none';
+        }
+
+        function updateSelectionSummary() {
+            const selectedCoursesArray = Array.from(selectedCourses);
+            const selectedCourseObjects = selectedCoursesArray.map(id => courses.find(c => c.id === id));
+            
+            const counts = {
+                total: selectedCoursesArray.length,
+                foundational: selectedCourseObjects.filter(c => c.type === 'foundational').length,
+                required: selectedCourseObjects.filter(c => c.type === 'required').length,
+                elective1: selectedCourseObjects.filter(c => c.type === 'elective-1').length,
+                elective2: selectedCourseObjects.filter(c => c.type === 'elective-2').length
+            };
+
+            const summaryHTML = `
+                <h4 style="color: var(--ut-orange); margin-bottom: 1rem;">Current Selection Summary</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--ut-orange);">${counts.total}</div>
+                        <div>Total Selected</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--green);">${counts.foundational}/3</div>
+                        <div>Foundational</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--red);">${counts.required}/2</div>
+                        <div>Required</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--blue);">${counts.elective1}/3</div>
+                        <div>Elective Group 1</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: #6610f2;">${counts.elective2}/2</div>
+                        <div>Elective Group 2</div>
+                    </div>
+                </div>
+                ${selectedCoursesArray.length === 0 ? '<p style="text-align: center; color: #6c757d; font-style: italic;">No courses selected yet</p>' : ''}
+            `;
+            
+            document.getElementById('selectionSummary').innerHTML = summaryHTML;
+        }
+
+        function exportSelection(format) {
+            const selectedCoursesArray = Array.from(selectedCourses);
+            const selectedCourseObjects = selectedCoursesArray.map(id => courses.find(c => c.id === id));
+            
+            if (selectedCourseObjects.length === 0) {
+                alert('Please select some courses before exporting.');
+                return;
+            }
+
+            const timestamp = new Date().toISOString().split('T')[0];
+            
+            switch(format) {
+                case 'json':
+                    exportJSON(selectedCourseObjects, timestamp);
+                    break;
+                case 'csv':
+                    exportCSV(selectedCourseObjects, timestamp);
+                    break;
+                case 'txt':
+                    exportTXT(selectedCourseObjects, timestamp);
+                    break;
+                case 'pdf':
+                    exportPDF(selectedCourseObjects, timestamp);
+                    break;
+            }
+            
+            closeExportModal();
+        }
+
+        function exportJSON(courses, timestamp) {
+            const exportData = {
+                exportDate: timestamp,
+                program: 'UT Austin MSDS',
+                totalCourses: courses.length,
+                courses: courses.map(course => ({
+                    id: course.id,
+                    title: course.title,
+                    code: course.code,
+                    type: course.type,
+                    credits: course.credits,
+                    difficulty: course.difficulty,
+                    workload: course.workload,
+                    rating: course.rating,
+                    recommendation: course.recommendation
+                }))
+            };
+            
+            downloadFile(`msds-course-selection-${timestamp}.json`, JSON.stringify(exportData, null, 2), 'application/json');
+        }
+
+        function exportCSV(courses, timestamp) {
+            const headers = ['Course Code', 'Course Title', 'Type', 'Credits', 'Difficulty', 'Workload (hrs)', 'Rating', 'Recommendation'];
+            const rows = courses.map(course => [
+                course.code,
+                course.title,
+                course.type,
+                course.credits,
+                course.difficulty,
+                course.workload,
+                course.rating,
+                course.recommendation
+            ]);
+            
+            const csvContent = [headers, ...rows].map(row => 
+                row.map(field => `"${field}"`).join(',')
+            ).join('\\n');
+            
+            downloadFile(`msds-course-selection-${timestamp}.csv`, csvContent, 'text/csv');
+        }
+
+        function exportTXT(courses, timestamp) {
+            const typeLabels = {
+                'foundational': 'Foundational Courses',
+                'required': 'Additional Required Courses',
+                'elective-1': 'Elective Group 1',
+                'elective-2': 'Elective Group 2'
+            };
+            
+            let content = `UT Austin Master's in Data Science - Course Selection Plan\\n`;
+            content += `Generated on: ${timestamp}\\n`;
+            content += `Total Courses Selected: ${courses.length}/10\\n\\n`;
+            
+            const groupedCourses = {};
+            courses.forEach(course => {
+                if (!groupedCourses[course.type]) {
+                    groupedCourses[course.type] = [];
+                }
+                groupedCourses[course.type].push(course);
+            });
+            
+            Object.keys(groupedCourses).forEach(type => {
+                content += `${typeLabels[type]}:\\n`;
+                content += `${'='.repeat(typeLabels[type].length)}\\n`;
+                groupedCourses[type].forEach(course => {
+                    content += `• ${course.code}: ${course.title}\\n`;
+                    content += `  Difficulty: ${course.difficulty}/5 | Workload: ${course.workload}hrs | Rating: ${course.rating}/5\\n`;
+                    content += `  Recommendation: ${course.recommendation.charAt(0).toUpperCase() + course.recommendation.slice(1)}\\n\\n`;
+                });
+                content += '\\n';
+            });
+            
+            downloadFile(`msds-course-selection-${timestamp}.txt`, content, 'text/plain');
+        }
+
+        function exportPDF(courses, timestamp) {
+            // For PDF export, we'll create an HTML version and prompt user to print to PDF
+            const typeLabels = {
+                'foundational': 'Foundational Courses',
+                'required': 'Additional Required Courses',
+                'elective-1': 'Elective Group 1',
+                'elective-2': 'Elective Group 2'
+            };
+            
+            const groupedCourses = {};
+            courses.forEach(course => {
+                if (!groupedCourses[course.type]) {
+                    groupedCourses[course.type] = [];
+                }
+                groupedCourses[course.type].push(course);
+            });
+            
+            let htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>MSDS Course Selection Plan</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #BF5700; padding-bottom: 20px; }
+                        .course-group { margin-bottom: 25px; }
+                        .course-group h2 { color: #BF5700; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+                        .course { margin-bottom: 15px; padding: 10px; border-left: 3px solid #BF5700; background-color: #f9f9f9; }
+                        .course-title { font-weight: bold; font-size: 1.1em; }
+                        .course-details { margin-top: 5px; color: #666; }
+                        @media print { body { margin: 0; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>UT Austin Master's in Data Science</h1>
+                        <h2>Course Selection Plan</h2>
+                        <p>Generated on: ${timestamp}</p>
+                        <p>Total Courses Selected: ${courses.length}/10</p>
+                    </div>
+            `;
+            
+            Object.keys(groupedCourses).forEach(type => {
+                htmlContent += `<div class="course-group">`;
+                htmlContent += `<h2>${typeLabels[type]}</h2>`;
+                groupedCourses[type].forEach(course => {
+                    htmlContent += `
+                        <div class="course">
+                            <div class="course-title">${course.code}: ${course.title}</div>
+                            <div class="course-details">
+                                Difficulty: ${course.difficulty}/5 | Workload: ${course.workload} hrs/week | Rating: ${course.rating}/5 | 
+                                Recommendation: ${course.recommendation.charAt(0).toUpperCase() + course.recommendation.slice(1)}
+                            </div>
+                        </div>
+                    `;
+                });
+                htmlContent += `</div>`;
+            });
+            
+            htmlContent += `</body></html>`;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+            printWindow.focus();
+            
+            setTimeout(() => {
+                printWindow.print();
+            }, 1000);
+        }
+
+        function downloadFile(filename, content, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const courseModal = document.getElementById('courseModal');
+            const exportModal = document.getElementById('exportModal');
+            
+            if (event.target == courseModal) {
+                courseModal.style.display = 'none';
+            }
+            if (event.target == exportModal) {
+                exportModal.style.display = 'none';
+            }
+        }
+
         // Make functions globally available
         window.openCourseModal = openCourseModal;
         window.toggleCourseSelection = toggleCourseSelection;
         window.removeCourse = removeCourse;
+        window.showExportModal = showExportModal;
+        window.closeExportModal = closeExportModal;
+        window.exportSelection = exportSelection;
     </script>
 </body>
 </html>
