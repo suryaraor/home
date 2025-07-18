@@ -1724,9 +1724,23 @@
 
         // Display courses
         function displayCourses(coursesToDisplay) {
-            currentlyDisplayedCourses = coursesToDisplay;
+            // Sort courses by recommendation: recommend first, then caution, then avoid
+            const recommendationOrder = { 'recommend': 1, 'caution': 2, 'avoid': 3 };
+            const sortedCourses = [...coursesToDisplay].sort((a, b) => {
+                const aOrder = recommendationOrder[a.recommendation] || 4;
+                const bOrder = recommendationOrder[b.recommendation] || 4;
+                
+                // If same recommendation level, sort alphabetically by title
+                if (aOrder === bOrder) {
+                    return a.title.localeCompare(b.title);
+                }
+                
+                return aOrder - bOrder;
+            });
+            
+            currentlyDisplayedCourses = sortedCourses;
             const courseGrid = document.getElementById('courseGrid');
-            courseGrid.innerHTML = coursesToDisplay.map(course => createCourseCard(course)).join('');
+            courseGrid.innerHTML = sortedCourses.map(course => createCourseCard(course)).join('');
         }
 
         // Initialize page
