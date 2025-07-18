@@ -694,7 +694,7 @@
             margin-bottom: 2rem;
             border-left: 4px solid var(--ut-orange);
             position: relative;
-            z-index: 10;
+            z-index: 100;
         }
 
         .nav-header {
@@ -796,12 +796,12 @@
         /* Course hover tooltip styles */
         .course-tooltip {
             position: fixed !important;
-            background: var(--white);
-            border: 2px solid var(--ut-orange);
+            background: var(--white) !important;
+            border: 4px solid var(--ut-orange);
             border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            z-index: 99999 !important;
+            padding: 1.5rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(191, 87, 0, 0.1);
+            z-index: 2147483647 !important;
             width: 320px;
             max-width: 90vw;
             max-height: 80vh;
@@ -810,7 +810,24 @@
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
             pointer-events: none;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateZ(0);
+            isolation: isolate;
+            will-change: transform, opacity;
+        }
+
+        /* Tooltip backdrop overlay */
+        .tooltip-backdrop {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.15);
+            z-index: 2147483646 !important;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none;
         }
 
         /* Remove old hover rules - now handled by JavaScript */
@@ -824,10 +841,14 @@
             font-size: 1.1rem;
             position: relative;
             z-index: 1;
+            background: var(--white);
         }
 
         .tooltip-progress {
             margin-bottom: 1rem;
+            background: var(--white);
+            position: relative;
+            z-index: 1;
         }
 
         .progress-bar-container {
@@ -899,6 +920,9 @@
             color: var(--ut-dark-gray);
             line-height: 1.5;
             margin-bottom: 0.75rem;
+            background: var(--white);
+            position: relative;
+            z-index: 1;
         }
 
         .tooltip-topics {
@@ -944,12 +968,12 @@
 
         .elective-course-item .course-tooltip {
             position: fixed !important;
-            background: var(--white);
-            border: 2px solid var(--ut-orange);
+            background: var(--white) !important;
+            border: 4px solid var(--ut-orange);
             border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            z-index: 99999 !important;
+            padding: 1.5rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(191, 87, 0, 0.1);
+            z-index: 2147483647 !important;
             width: 320px;
             max-width: 90vw;
             max-height: 80vh;
@@ -958,7 +982,9 @@
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
             pointer-events: none;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateZ(0);
+            isolation: isolate;
+            will-change: transform, opacity;
         }
 
         /* Remove old hover rules - now handled by JavaScript */
@@ -979,6 +1005,19 @@
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
+        }
+
+        /* Ensure child elements don't interfere with tooltip z-index */
+        .course-item *,
+        .elective-course-item * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Override any high z-index child elements when tooltip is active */
+        .course-item:hover *,
+        .elective-course-item:hover * {
+            z-index: 1 !important;
         }
 
         /* Course detail styles */
@@ -1397,11 +1436,37 @@
             }, 200);
         });
 
+        // Global backdrop element
+        let globalBackdrop = null;
+
+        function createGlobalBackdrop() {
+            if (!globalBackdrop) {
+                globalBackdrop = document.createElement('div');
+                globalBackdrop.className = 'tooltip-backdrop';
+                document.body.appendChild(globalBackdrop);
+            }
+            return globalBackdrop;
+        }
+
         function setupTooltipEventListeners(item) {
             const tooltip = item.querySelector('.course-tooltip');
             if (!tooltip) return;
 
+            // Get or create the global backdrop
+            const backdrop = createGlobalBackdrop();
+            
+            // Store original z-index
+            const originalZIndex = item.style.zIndex;
+
             item.addEventListener('mouseenter', function(e) {
+                // Temporarily reduce z-index of the item
+                item.style.zIndex = '1';
+                
+                // Show backdrop
+                backdrop.style.opacity = '1';
+                backdrop.style.visibility = 'visible';
+                
+                // Position and show tooltip
                 positionTooltip(tooltip, item);
                 tooltip.style.opacity = '1';
                 tooltip.style.visibility = 'visible';
@@ -1409,6 +1474,14 @@
             });
 
             item.addEventListener('mouseleave', function() {
+                // Restore original z-index
+                item.style.zIndex = originalZIndex;
+                
+                // Hide backdrop
+                backdrop.style.opacity = '0';
+                backdrop.style.visibility = 'hidden';
+                
+                // Hide tooltip
                 tooltip.style.opacity = '0';
                 tooltip.style.visibility = 'hidden';
                 tooltip.style.pointerEvents = 'none';

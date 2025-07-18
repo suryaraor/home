@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSDS Course Selection Guide - University of Texas at Austin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ut-orange: #BF5700;
+            --ut-charcoal: #333F48;
+            --ut-light-gray: #F8F9FA;
+            --ut-dark-gray: #6C757D;
+            --white: #FFFFFF;
+            --green: #28a745;
+            --red: #dc3545;
+            --yellow: #ffc107;
+            --blue: #007bff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--ut-charcoal);
+            background: linear-gradient(135deg, var(--ut-light-gray) 0%, #E9ECEF 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--ut-orange) 0%, #D15500 100%);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="30" cy="80" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="70" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+
+        .progress-tracker {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--green);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--ut-charcoal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .progress-item {
+            background: var(--ut-light-gray);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .progress-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ut-orange);
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: var(--ut-dark-gray);
+            font-weight: 500;
+        }
+
+        .progress-bar-full {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-bar-fill-full {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green) 0%, var(--ut-orange) 100%);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .filters {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--ut-orange);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--ut-orange);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 2px solid var(--ut-light-gray);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--ut-orange);
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .course-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .course-card.selected {
+            background: rgba(191, 87, 0, 0.05);
+            border-left-color: var(--ut-orange);
+            box-shadow: 0 4px 12px rgba(191, 87, 0, 0.2);
+        }
+
+        .course-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .course-card.required {
+            border-left-color: var(--red);
+        }
+
+        .course-card.elective {
+            border-left-color: var(--blue);
+        }
+
+        .course-card.elective-1 {
+            border-left-color: var(--blue);
+        }
+
+        .course-card.elective-2 {
+            border-left-color: #6610f2;
+        }
+
+        .course-card.foundational {
+            border-left-color: var(--green);
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .course-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ut-charcoal);
+            margin-bottom: 0.25rem;
+        }
+
+        .course-code {
+            font-size: 0.85rem;
+            color: var(--ut-dark-gray);
+            font-weight: 500;
+        }
+
+        .course-type {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .course-type.required {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--red);
+        }
+
+        .course-type.elective {
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--blue);
+        }
+
+        .course-type.elective-1 {
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--blue);
+        }
+
+        .course-type.elective-2 {
+            background: rgba(102, 16, 242, 0.1);
+            color: #6610f2;
+        }
+
+        .course-type.foundational {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--green);
+        }
+
+        .recommendation-badge {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .recommendation-badge.recommend {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .recommendation-badge.caution {
+            background: var(--yellow);
+            color: var(--ut-charcoal);
+        }
+
+        .recommendation-badge.avoid {
+            background: var(--red);
+            color: var(--white);
+        }
+
+        .course-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            background: var(--ut-light-gray);
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--ut-orange);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--ut-dark-gray);
+        }
+
+        .course-description {
+            font-size: 0.9rem;
+            color: var(--ut-dark-gray);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .course-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.5rem;
+            background: rgba(191, 87, 0, 0.1);
+            color: var(--ut-orange);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2147483647;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--ut-orange), #D15500);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .recommendation-section {
+            background: var(--ut-light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--ut-orange);
+        }
+
+        .recommendation-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .recommendation-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .recommendation-icon.recommend {
+            background: var(--green);
+        }
+
+        .recommendation-icon.caution {
+            background: var(--yellow);
+            color: var(--ut-charcoal);
+        }
+
+        .recommendation-icon.avoid {
+            background: var(--red);
+        }
+
+        .recommendation-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ut-charcoal);
+        }
+
+        .recommendation-subtitle {
+            font-size: 1rem;
+            color: var(--ut-dark-gray);
+        }
+
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .reasons-section {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .reasons-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reasons-title.pros {
+            color: var(--green);
+        }
+
+        .reasons-title.cons {
+            color: var(--red);
+        }
+
+        .reason-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--ut-light-gray);
+            border-radius: 6px;
+        }
+
+        .reason-number {
+            background: var(--ut-orange);
+            color: var(--white);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .reason-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .course-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-section {
+            background: var(--ut-light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .detail-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ut-orange);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar-container {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .difficulty {
+            background: linear-gradient(90deg, var(--green) 0%, var(--yellow) 50%, var(--red) 100%);
+        }
+
+        .workload {
+            background: linear-gradient(90deg, var(--green) 0%, var(--yellow) 50%, var(--red) 100%);
+        }
+
+        .rating {
+            background: linear-gradient(90deg, var(--red) 0%, var(--yellow) 50%, var(--green) 100%);
+        }
+
+        @media (max-width: 768px) {
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reasons-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 1% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>MSDS Course Selection Guide</h1>
+                <p class="subtitle">Comprehensive course recommendations for UT Austin Master's in Data Science</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Progress Tracker -->
+            <div class="progress-tracker">
+                <div class="progress-header">
+                    <div class="progress-title">
+                        <i class="fas fa-graduation-cap"></i>
+                        MSDS Degree Progress
+                    </div>
+                </div>
+                <div class="progress-grid">
+                    <div class="progress-item">
+                        <div class="progress-number" id="totalSelected">0</div>
+                        <div class="progress-label">Total Selected</div>
+                        <div class="progress-bar-full">
+                            <div class="progress-bar-fill-full" id="totalProgress" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 10 courses</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-number" id="requiredSelected">0</div>
+                        <div class="progress-label">Required Core</div>
+                        <div class="progress-bar-full">
+                            <div class="progress-bar-fill-full" id="requiredProgress" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 3 courses</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-number" id="foundationalSelected">0</div>
+                        <div class="progress-label">Foundational</div>
+                        <div class="progress-bar-full">
+                            <div class="progress-bar-fill-full" id="foundationalProgress" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 2 courses</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-number" id="elective1Selected">0</div>
+                        <div class="progress-label">Elective Group 1</div>
+                        <div class="progress-bar-full">
+                            <div class="progress-bar-fill-full" id="elective1Progress" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 3 of 5</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-number" id="elective2Selected">0</div>
+                        <div class="progress-label">Elective Group 2</div>
+                        <div class="progress-bar-full">
+                            <div class="progress-bar-fill-full" id="elective2Progress" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 2 of 5</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">Course Type</label>
+                        <select class="filter-select" id="typeFilter">
+                            <option value="all">All Courses</option>
+                            <option value="required">Required Core</option>
+                            <option value="foundational">Foundational</option>
+                            <option value="elective-1">Elective Group 1</option>
+                            <option value="elective-2">Elective Group 2</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Difficulty Level</label>
+                        <select class="filter-select" id="difficultyFilter">
+                            <option value="all">All Levels</option>
+                            <option value="easy">Easy (3.0-3.5)</option>
+                            <option value="moderate">Moderate (3.5-4.0)</option>
+                            <option value="hard">Hard (4.0-4.5)</option>
+                            <option value="very-hard">Very Hard (4.5+)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Workload</label>
+                        <select class="filter-select" id="workloadFilter">
+                            <option value="all">All Workloads</option>
+                            <option value="light">Light (10-14 hrs)</option>
+                            <option value="moderate">Moderate (14-18 hrs)</option>
+                            <option value="heavy">Heavy (18-22 hrs)</option>
+                            <option value="very-heavy">Very Heavy (22+ hrs)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Recommendation</label>
+                        <select class="filter-select" id="recommendationFilter">
+                            <option value="all">All Recommendations</option>
+                            <option value="recommend">Recommended</option>
+                            <option value="caution">Consider Carefully</option>
+                            <option value="avoid">Not Recommended</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Search</label>
+                        <input type="text" class="filter-select" id="searchFilter" placeholder="Search courses...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Grid -->
+            <div class="course-grid" id="courseGrid">
+                <!-- Courses will be populated by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <div id="modalHeader"></div>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive course data with detailed information
+        const courses = [
+            {
+                id: 'dsc381',
+                title: 'Probability and Simulation-based Inference',
+                code: 'DSC 381',
+                type: 'required',
+                difficulty: 4.2,
+                workload: 18,
+                rating: 4.1,
+                credits: 3,
+                description: 'Comprehensive introduction to probability theory and statistical inference using simulation-based methods.',
+                prerequisites: 'Statistics background, basic programming',
+                topics: ['Probability distributions', 'Bayesian inference', 'Monte Carlo methods', 'Hypothesis testing', 'Statistical simulation'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Essential foundation for all advanced data science courses',
+                    'Bayesian thinking is crucial for modern machine learning',
+                    'Simulation-based approach builds practical coding skills',
+                    'Excellent preparation for DSC 382 and machine learning courses',
+                    'Strong faculty with industry-relevant teaching approach'
+                ],
+                reasonsAgainst: [
+                    'Heavy workload can be overwhelming for new students',
+                    'Mathematical rigor may be challenging without strong math background',
+                    'Significant time investment required for assignments',
+                    'Simulation coding can be frustrating for programming beginners',
+                    'Fast-paced curriculum leaves little room for catching up'
+                ],
+                recommendationReason: 'This is an absolute must-take course as it forms the statistical foundation for everything else in the program. The Bayesian approach and simulation methods are increasingly important in modern data science.'
+            },
+            {
+                id: 'dsc382',
+                title: 'Statistical Modeling',
+                code: 'DSC 382',
+                type: 'required',
+                difficulty: 4.0,
+                workload: 16,
+                rating: 4.3,
+                credits: 3,
+                description: 'Advanced regression techniques including linear, logistic, and generalized linear models with emphasis on model selection and validation.',
+                prerequisites: 'DSC 381 or equivalent',
+                topics: ['Multiple regression', 'Logistic regression', 'Model selection', 'Regularization', 'GLMs', 'Cross-validation'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Core statistical modeling skills essential for data science',
+                    'Excellent preparation for machine learning courses',
+                    'Practical focus on real-world modeling challenges',
+                    'Strong emphasis on model interpretation and validation',
+                    'Well-structured curriculum with incremental complexity'
+                ],
+                reasonsAgainst: [
+                    'Can be repetitive if you have strong statistics background',
+                    'Heavy emphasis on R programming may not suit Python users',
+                    'Mathematical notation can be intimidating initially',
+                    'Group projects may have uneven workload distribution',
+                    'Some advanced topics covered superficially due to time constraints'
+                ],
+                recommendationReason: 'Essential required course that bridges classical statistics with modern data science. The modeling skills learned here are fundamental to becoming an effective data scientist.'
+            },
+            {
+                id: 'dsc385',
+                title: 'Data Exploration and Visualization',
+                code: 'DSC 385',
+                type: 'foundational',
+                difficulty: 3.5,
+                workload: 14,
+                rating: 4.5,
+                credits: 3,
+                description: 'Comprehensive exploration of data visualization techniques, exploratory data analysis, and unsupervised learning methods.',
+                prerequisites: 'Basic programming, statistics fundamentals',
+                topics: ['Data visualization', 'Exploratory data analysis', 'PCA', 'Clustering', 'Dimensionality reduction', 'Interactive visualizations'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Excellent introduction to data science for beginners',
+                    'Highly practical with immediate applicable skills',
+                    'Great visualization skills crucial for communication',
+                    'Manageable workload allows focus on learning',
+                    'Prepares well for more advanced unsupervised learning'
+                ],
+                reasonsAgainst: [
+                    'May be too basic for experienced data analysts',
+                    'Limited depth in advanced visualization techniques',
+                    'Less mathematical rigor compared to other core courses',
+                    'Some visualization tools may become outdated quickly',
+                    'Group projects can be challenging with different skill levels'
+                ],
+                recommendationReason: 'Perfect entry point into data science with practical skills you\'ll use immediately. The visualization and EDA skills are essential for any data science role.'
+            },
+            {
+                id: 'dsc391l',
+                title: 'Machine Learning',
+                code: 'DSC 391L',
+                type: 'required',
+                difficulty: 4.5,
+                workload: 20,
+                rating: 4.2,
+                credits: 3,
+                description: 'Comprehensive machine learning course covering supervised and unsupervised algorithms with hands-on implementation.',
+                prerequisites: 'DSC 381, Programming experience',
+                topics: ['Supervised learning', 'Classification', 'Regression', 'Cross-validation', 'Model evaluation', 'Feature engineering'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Core machine learning skills essential for data science careers',
+                    'Comprehensive coverage of fundamental ML algorithms',
+                    'Strong balance between theory and practical implementation',
+                    'Excellent preparation for advanced ML and deep learning courses',
+                    'High-quality assignments that build portfolio projects'
+                ],
+                reasonsAgainst: [
+                    'Very high workload can be overwhelming',
+                    'Fast-paced coverage may not allow deep understanding',
+                    'Requires strong programming skills from day one',
+                    'Mathematical complexity can be challenging',
+                    'Heavy competition among students can create stress'
+                ],
+                recommendationReason: 'Absolutely essential course that forms the core of modern data science. Despite the heavy workload, the skills learned are fundamental to any data science career.'
+            },
+            {
+                id: 'algorithms',
+                title: 'Data Structures and Algorithms',
+                code: 'CS 361E',
+                type: 'elective-1',
+                difficulty: 4.8,
+                workload: 22,
+                rating: 3.9,
+                credits: 3,
+                description: 'Fundamental data structures and algorithms essential for efficient data processing and software engineering.',
+                prerequisites: 'Strong programming background',
+                topics: ['Arrays & Lists', 'Trees & Graphs', 'Sorting algorithms', 'Time complexity', 'Dynamic programming', 'Algorithm design'],
+                recommendation: 'caution',
+                reasonsFor: [
+                    'Essential for technical interviews at top tech companies',
+                    'Builds strong foundation for efficient code writing',
+                    'Critical for roles involving large-scale data processing',
+                    'Excellent preparation for distributed systems and databases',
+                    'Develops problem-solving and analytical thinking skills'
+                ],
+                reasonsAgainst: [
+                    'Extremely high workload may detract from other courses',
+                    'More relevant for software engineering than pure data science',
+                    'Very challenging for students without CS background',
+                    'Time investment may not yield immediate data science benefits',
+                    'Can be overwhelming when combined with other technical courses'
+                ],
+                recommendationReason: 'Only recommended if you\'re targeting software engineering roles or top tech companies. The workload is extreme and may not be the best use of time for pure data science roles.'
+            },
+            {
+                id: 'deeplearning',
+                title: 'Deep Learning',
+                code: 'DSC 395T',
+                type: 'elective-1',
+                difficulty: 4.7,
+                workload: 20,
+                rating: 4.4,
+                credits: 3,
+                description: 'Comprehensive deep learning course covering neural networks, CNNs, RNNs, and modern architectures.',
+                prerequisites: 'DSC 391L, Linear algebra, Python proficiency',
+                topics: ['Neural networks', 'CNNs', 'RNNs', 'Transformers', 'Deep learning frameworks', 'Computer vision', 'NLP'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Cutting-edge skills in highest demand in industry',
+                    'Opens doors to AI/ML engineer roles',
+                    'Excellent hands-on experience with modern frameworks',
+                    'Strong theoretical foundation with practical applications',
+                    'Prepares for advanced AI specialization tracks'
+                ],
+                reasonsAgainst: [
+                    'Very high computational requirements and costs',
+                    'Requires significant mathematical background',
+                    'Fast-moving field means some content becomes outdated',
+                    'Heavy workload with complex programming assignments',
+                    'Can be overwhelming without solid ML foundation'
+                ],
+                recommendationReason: 'Highly recommended for students interested in AI/ML roles. The skills are in extremely high demand, but ensure you have solid ML fundamentals first.'
+            },
+            {
+                id: 'advanced-predictive',
+                title: 'Advanced Predictive Modeling',
+                code: 'DSC 394T',
+                type: 'elective-1',
+                difficulty: 4.3,
+                workload: 18,
+                rating: 4.2,
+                credits: 3,
+                description: 'Advanced modeling techniques including ensemble methods, model interpretation, and cutting-edge predictive algorithms.',
+                prerequisites: 'DSC 382, DSC 391L',
+                topics: ['Random forests', 'Gradient boosting', 'XGBoost', 'Model interpretation', 'Feature engineering', 'Ensemble methods'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Directly applicable advanced techniques for industry',
+                    'Builds on core ML with practical sophisticated methods',
+                    'Strong focus on model interpretability (crucial for business)',
+                    'Excellent preparation for data scientist roles',
+                    'Manageable workload with high practical value'
+                ],
+                reasonsAgainst: [
+                    'May overlap with DSC 391L content for some topics',
+                    'Less cutting-edge compared to deep learning approaches',
+                    'Requires solid foundation in both statistics and ML',
+                    'Some techniques may be superseded by newer methods',
+                    'Heavy focus on tree-based methods may limit breadth'
+                ],
+                recommendationReason: 'Excellent choice for practical data science skills. The techniques taught are widely used in industry and the interpretability focus is increasingly important.'
+            },
+            {
+                id: 'nlp',
+                title: 'Natural Language Processing',
+                code: 'DSC 395T',
+                type: 'elective-1',
+                difficulty: 4.6,
+                workload: 19,
+                rating: 4.3,
+                credits: 3,
+                description: 'Comprehensive NLP course covering text processing, language models, and modern NLP applications.',
+                prerequisites: 'DSC 391L, Deep Learning recommended',
+                topics: ['Text preprocessing', 'Word embeddings', 'Language models', 'Sentiment analysis', 'Named entity recognition', 'Transformers'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Rapidly growing field with huge industry demand',
+                    'Excellent specialization for many data science roles',
+                    'Strong practical applications in business',
+                    'Good balance of theory and hands-on implementation',
+                    'Opens doors to AI/ML engineer positions'
+                ],
+                reasonsAgainst: [
+                    'High workload with complex programming assignments',
+                    'Requires strong deep learning background',
+                    'Fast-moving field with quickly changing best practices',
+                    'Can be overwhelming without solid ML foundation',
+                    'Heavy computational requirements'
+                ],
+                recommendationReason: 'Highly recommended for students interested in AI applications. NLP skills are in extremely high demand, but ensure you have solid ML and preferably deep learning background first.'
+            },
+            {
+                id: 'generative-ai',
+                title: 'Advances in Deep Generative Models (Generative AI)',
+                code: 'DSC 395T',
+                type: 'elective-1',
+                difficulty: 4.7,
+                workload: 20,
+                rating: 4.4,
+                credits: 3,
+                description: 'Theory and practice of deep generative models including GANs, VAEs, and diffusion models for real-world applications.',
+                prerequisites: 'Deep Learning, Linear algebra, Strong programming skills',
+                topics: ['Generative adversarial networks', 'Variational autoencoders', 'Diffusion models', 'Mathematical principles', 'Creative AI applications'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Hottest area in AI with tremendous industry interest',
+                    'Opens doors to cutting-edge AI research and development roles',
+                    'Strong practical applications in creative industries',
+                    'Excellent preparation for AI startup opportunities',
+                    'Valuable skills for consulting in AI transformation'
+                ],
+                reasonsAgainst: [
+                    'Requires very strong deep learning foundation',
+                    'High computational costs for projects',
+                    'Rapidly evolving field with quickly changing techniques',
+                    'May be too specialized for general data science roles',
+                    'Complex mathematical concepts require significant time investment'
+                ],
+                recommendationReason: 'Highly recommended for students with solid deep learning background interested in AI research or cutting-edge applications. The field is exploding with opportunities but requires strong technical foundation.'
+            },
+            {
+                id: 'health-data',
+                title: 'Data Science for Health Discovery and Innovation',
+                code: 'DSC 394T',
+                type: 'elective-2',
+                difficulty: 3.8,
+                workload: 15,
+                rating: 4.1,
+                credits: 3,
+                description: 'Applied data science techniques for healthcare applications, medical research, and health informatics.',
+                prerequisites: 'DSC 381, Programming experience',
+                topics: ['Medical data analysis', 'Biostatistics', 'Clinical trials', 'Health informatics', 'Medical imaging', 'Electronic health records'],
+                recommendation: 'caution',
+                reasonsFor: [
+                    'Growing field with significant societal impact',
+                    'Specialized knowledge valuable for healthcare industry',
+                    'Unique application area with interesting challenges',
+                    'Good networking opportunities with medical professionals',
+                    'Relatively manageable workload'
+                ],
+                reasonsAgainst: [
+                    'Very niche field limiting general applicability',
+                    'Requires domain knowledge that may not transfer',
+                    'Limited job market compared to general data science',
+                    'May not provide as strong technical skill development',
+                    'Could be better to specialize after gaining broad skills'
+                ],
+                recommendationReason: 'Only recommended if you have specific interest in healthcare. Better to build strong general data science skills first, then specialize in health applications.'
+            },
+            {
+                id: 'causal-inference',
+                title: 'Design Principles and Causal Inference',
+                code: 'DSC 394T',
+                type: 'elective-2',
+                difficulty: 4.1,
+                workload: 16,
+                rating: 4.0,
+                credits: 3,
+                description: 'Experimental design, causal inference methods, and advanced statistical thinking for data science.',
+                prerequisites: 'DSC 381, DSC 382',
+                topics: ['A/B testing', 'Causal graphs', 'Instrumental variables', 'Difference-in-differences', 'Randomized experiments', 'Observational studies'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Critical thinking skills for making business decisions',
+                    'Highly valued in tech companies for product analytics',
+                    'Bridges statistics and business impact measurement',
+                    'Essential for roles involving experimentation',
+                    'Develops rigorous analytical thinking'
+                ],
+                reasonsAgainst: [
+                    'Heavy theoretical content with limited hands-on coding',
+                    'Can be dry and abstract for practical-minded students',
+                    'Requires strong statistical background to fully appreciate',
+                    'May not feel immediately applicable to some data science roles',
+                    'Mathematical complexity can be challenging'
+                ],
+                recommendationReason: 'Recommended for students interested in analytics roles at tech companies or consulting. The causal thinking skills are increasingly important but may feel abstract initially.'
+            },
+            {
+                id: 'optimization',
+                title: 'Optimization',
+                code: 'DSC 394T',
+                type: 'elective-2',
+                difficulty: 4.4,
+                workload: 17,
+                rating: 3.8,
+                credits: 3,
+                description: 'Mathematical optimization techniques for machine learning, including linear programming and convex optimization.',
+                prerequisites: 'Linear algebra, Calculus, DSC 391L',
+                topics: ['Linear programming', 'Convex optimization', 'Gradient descent', 'Constrained optimization', 'Integer programming'],
+                recommendation: 'caution',
+                reasonsFor: [
+                    'Deep mathematical understanding of ML algorithms',
+                    'Essential for developing new algorithms or research',
+                    'Valuable for roles involving large-scale optimization',
+                    'Strong foundation for advanced ML techniques',
+                    'Develops rigorous mathematical thinking'
+                ],
+                reasonsAgainst: [
+                    'Heavy mathematical content may not suit all students',
+                    'Limited immediate practical application for most data science roles',
+                    'May be overkill unless pursuing research or very technical roles',
+                    'Time might be better spent on more practical courses',
+                    'Can be quite theoretical and abstract'
+                ],
+                recommendationReason: 'Only recommended for students with strong mathematical background pursuing research or very technical roles. Most data scientists would benefit more from other electives.'
+            },
+            {
+                id: 'reinforcement',
+                title: 'Reinforcement Learning',
+                code: 'DSC 395T',
+                type: 'elective-2',
+                difficulty: 4.8,
+                workload: 21,
+                rating: 4.1,
+                credits: 3,
+                description: 'Learning through interaction with environments using reward-based systems and advanced RL algorithms.',
+                prerequisites: 'DSC 391L, Strong probability background',
+                topics: ['Markov decision processes', 'Q-learning', 'Policy gradients', 'Deep RL', 'Multi-agent systems'],
+                recommendation: 'caution',
+                reasonsFor: [
+                    'Cutting-edge field with potential for breakthrough applications',
+                    'Excellent for game development and robotics applications',
+                    'Develops strong theoretical understanding of learning',
+                    'May lead to research opportunities',
+                    'Growing importance in autonomous systems'
+                ],
+                reasonsAgainst: [
+                    'Very limited practical applications in most data science roles',
+                    'Extremely high mathematical and computational complexity',
+                    'Heavy workload with complex implementations',
+                    'May not provide good return on time investment',
+                    'Better to master supervised learning first'
+                ],
+                recommendationReason: 'Only recommended for students with specific interest in RL applications like gaming or robotics. Most data science roles don\'t require RL skills, so time might be better spent elsewhere.'
+            },
+            {
+                id: 'advanced-dl',
+                title: 'Advances in Deep Learning',
+                code: 'DSC 395T',
+                type: 'elective-2',
+                difficulty: 4.9,
+                workload: 24,
+                rating: 4.3,
+                credits: 3,
+                description: 'Cutting-edge deep learning techniques, latest research developments, and advanced neural network architectures.',
+                prerequisites: 'Deep Learning course, strong mathematical background',
+                topics: ['Advanced architectures', 'Generative models', 'Attention mechanisms', 'Latest research', 'Custom model development'],
+                recommendation: 'caution',
+                reasonsFor: [
+                    'Exposure to cutting-edge research and techniques',
+                    'Excellent preparation for PhD programs or research roles',
+                    'Develops skills to read and implement latest papers',
+                    'May lead to research opportunities with faculty',
+                    'Positions you at forefront of AI development'
+                ],
+                reasonsAgainst: [
+                    'Extremely high workload may impact other courses',
+                    'Very theoretical with limited immediate practical application',
+                    'Requires extensive mathematical background',
+                    'May be overkill for most industry data science roles',
+                    'Rapidly changing field means content may become outdated'
+                ],
+                recommendationReason: 'Only recommended for students pursuing research careers or roles at cutting-edge AI companies. The extreme workload and theoretical focus may not be worth it for most students.'
+            }
+        ];
+
+        // Modal functionality
+        const modal = document.getElementById('courseModal');
+        const span = document.getElementsByClassName('close')[0];
+        let selectedCourses = new Set();
+
+        span.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Toggle course selection
+        function toggleCourseSelection(courseId, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            if (selectedCourses.has(courseId)) {
+                selectedCourses.delete(courseId);
+            } else {
+                selectedCourses.add(courseId);
+            }
+            
+            updateProgressTracker();
+            displayCourses(getCurrentlyDisplayedCourses());
+        }
+
+        // Update progress tracker
+        function updateProgressTracker() {
+            const selectedCoursesArray = Array.from(selectedCourses);
+            const selectedCourseObjects = selectedCoursesArray.map(id => courses.find(c => c.id === id));
+            
+            const counts = {
+                total: selectedCoursesArray.length,
+                required: selectedCourseObjects.filter(c => c.type === 'required').length,
+                foundational: selectedCourseObjects.filter(c => c.type === 'foundational').length,
+                elective1: selectedCourseObjects.filter(c => c.type === 'elective-1').length,
+                elective2: selectedCourseObjects.filter(c => c.type === 'elective-2').length
+            };
+
+            const targets = {
+                total: 10,
+                required: 3,
+                foundational: 2,
+                elective1: 3,
+                elective2: 2
+            };
+
+            // Update counts
+            document.getElementById('totalSelected').textContent = counts.total;
+            document.getElementById('requiredSelected').textContent = counts.required;
+            document.getElementById('foundationalSelected').textContent = counts.foundational;
+            document.getElementById('elective1Selected').textContent = counts.elective1;
+            document.getElementById('elective2Selected').textContent = counts.elective2;
+
+            // Update progress bars
+            document.getElementById('totalProgress').style.width = `${Math.min(100, (counts.total / targets.total) * 100)}%`;
+            document.getElementById('requiredProgress').style.width = `${Math.min(100, (counts.required / targets.required) * 100)}%`;
+            document.getElementById('foundationalProgress').style.width = `${Math.min(100, (counts.foundational / targets.foundational) * 100)}%`;
+            document.getElementById('elective1Progress').style.width = `${Math.min(100, (counts.elective1 / targets.elective1) * 100)}%`;
+            document.getElementById('elective2Progress').style.width = `${Math.min(100, (counts.elective2 / targets.elective2) * 100)}%`;
+        }
+
+        let currentlyDisplayedCourses = courses;
+        
+        function getCurrentlyDisplayedCourses() {
+            return currentlyDisplayedCourses;
+        }
+
+        // Create course card HTML
+        function createCourseCard(course) {
+            const difficultyPercentage = ((course.difficulty - 3.0) / 2.0) * 100;
+            const workloadPercentage = ((course.workload - 10) / 15) * 100;
+            const ratingPercentage = ((course.rating - 3.0) / 2.0) * 100;
+
+            const recommendationLabels = {
+                recommend: 'Recommended',
+                caution: 'Consider',
+                avoid: 'Not Recommended'
+            };
+
+            const typeLabels = {
+                required: 'Required',
+                foundational: 'Foundational',
+                'elective-1': 'Elective Group 1',
+                'elective-2': 'Elective Group 2'
+            };
+
+            const isSelected = selectedCourses.has(course.id);
+
+            return `
+                <div class="course-card ${course.type} ${isSelected ? 'selected' : ''}" onclick="openCourseModal('${course.id}')">
+                    <div class="course-header">
+                        <div>
+                            <div class="course-title">${course.title}</div>
+                            <div class="course-code">${course.code}</div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <div class="course-type ${course.type}">${typeLabels[course.type]}</div>
+                            <button 
+                                class="select-btn ${isSelected ? 'selected' : ''}" 
+                                onclick="toggleCourseSelection('${course.id}', event)"
+                                style="background: ${isSelected ? 'var(--green)' : 'var(--ut-orange)'}; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;"
+                            >
+                                ${isSelected ? 'Selected' : 'Select'}
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="course-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${course.difficulty}/5</div>
+                            <div class="stat-label">Difficulty</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${course.workload}h</div>
+                            <div class="stat-label">Workload</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${course.rating}/5</div>
+                            <div class="stat-label">Rating</div>
+                        </div>
+                    </div>
+                    
+                    <div class="course-description">
+                        ${course.description}
+                    </div>
+                    
+                    <div class="course-tags">
+                        ${course.topics.slice(0, 3).map(topic => `<span class="tag">${topic}</span>`).join('')}
+                        ${course.topics.length > 3 ? `<span class="tag">+${course.topics.length - 3} more</span>` : ''}
+                    </div>
+                    
+                    <div class="recommendation-badge ${course.recommendation}">
+                        ${recommendationLabels[course.recommendation]}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create modal content
+        function createModalContent(course) {
+            const difficultyPercentage = ((course.difficulty - 3.0) / 2.0) * 100;
+            const workloadPercentage = ((course.workload - 10) / 15) * 100;
+            const ratingPercentage = ((course.rating - 3.0) / 2.0) * 100;
+
+            const recommendationConfig = {
+                recommend: {
+                    icon: 'fas fa-thumbs-up',
+                    title: 'Highly Recommended',
+                    subtitle: 'This course provides excellent value and should be prioritized'
+                },
+                caution: {
+                    icon: 'fas fa-exclamation-triangle',
+                    title: 'Consider Carefully',
+                    subtitle: 'This course has value but may not be optimal for all students'
+                },
+                avoid: {
+                    icon: 'fas fa-thumbs-down',
+                    title: 'Not Recommended',
+                    subtitle: 'Better alternatives exist for most students'
+                }
+            };
+
+            const config = recommendationConfig[course.recommendation];
+
+            return `
+                <div>
+                    <h2>${course.title}</h2>
+                    <p>${course.code} • ${course.credits} Credits • ${course.type.charAt(0).toUpperCase() + course.type.slice(1)}</p>
+                </div>
+            `;
+        }
+
+        function createModalBody(course) {
+            const difficultyPercentage = ((course.difficulty - 3.0) / 2.0) * 100;
+            const workloadPercentage = ((course.workload - 10) / 15) * 100;
+            const ratingPercentage = ((course.rating - 3.0) / 2.0) * 100;
+
+            const recommendationConfig = {
+                recommend: {
+                    icon: 'fas fa-thumbs-up',
+                    title: 'Highly Recommended',
+                    subtitle: 'This course provides excellent value and should be prioritized'
+                },
+                caution: {
+                    icon: 'fas fa-exclamation-triangle',
+                    title: 'Consider Carefully',
+                    subtitle: 'This course has value but may not be optimal for all students'
+                },
+                avoid: {
+                    icon: 'fas fa-thumbs-down',
+                    title: 'Not Recommended',
+                    subtitle: 'Better alternatives exist for most students'
+                }
+            };
+
+            const config = recommendationConfig[course.recommendation];
+
+            return `
+                <div class="recommendation-section">
+                    <div class="recommendation-header">
+                        <div class="recommendation-icon ${course.recommendation}">
+                            <i class="${config.icon}"></i>
+                        </div>
+                        <div>
+                            <div class="recommendation-title">${config.title}</div>
+                            <div class="recommendation-subtitle">${config.subtitle}</div>
+                        </div>
+                    </div>
+                    <p><strong>Why:</strong> ${course.recommendationReason}</p>
+                </div>
+
+                <div class="reasons-grid">
+                    <div class="reasons-section">
+                        <h3 class="reasons-title pros">
+                            <i class="fas fa-plus-circle"></i>
+                            Top 5 Reasons to Take
+                        </h3>
+                        ${course.reasonsFor.map((reason, index) => `
+                            <div class="reason-item">
+                                <div class="reason-number">${index + 1}</div>
+                                <div class="reason-text">${reason}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="reasons-section">
+                        <h3 class="reasons-title cons">
+                            <i class="fas fa-minus-circle"></i>
+                            Top 5 Concerns
+                        </h3>
+                        ${course.reasonsAgainst.map((reason, index) => `
+                            <div class="reason-item">
+                                <div class="reason-number">${index + 1}</div>
+                                <div class="reason-text">${reason}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="course-details-grid">
+                    <div class="detail-section">
+                        <h3 class="detail-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Course Metrics
+                        </h3>
+                        
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-label">
+                                <span>Difficulty</span>
+                                <span>${course.difficulty}/5</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill difficulty" style="width: ${difficultyPercentage}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-label">
+                                <span>Weekly Workload</span>
+                                <span>${course.workload} hours</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill workload" style="width: ${workloadPercentage}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-label">
+                                <span>Student Rating</span>
+                                <span>${course.rating}/5</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill rating" style="width: ${ratingPercentage}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3 class="detail-title">
+                            <i class="fas fa-info-circle"></i>
+                            Course Details
+                        </h3>
+                        <p><strong>Prerequisites:</strong> ${course.prerequisites}</p>
+                        <p><strong>Credits:</strong> ${course.credits}</p>
+                        <p><strong>Description:</strong> ${course.description}</p>
+                        
+                        <h4 style="margin-top: 1rem; color: var(--ut-orange);">Key Topics Covered:</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                            ${course.topics.map(topic => `<span class="tag">${topic}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Open course modal
+        function openCourseModal(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            if (course) {
+                document.getElementById('modalHeader').innerHTML = createModalContent(course);
+                document.getElementById('modalBody').innerHTML = createModalBody(course);
+                modal.style.display = 'block';
+            }
+        }
+
+        // Filter courses
+        function filterCourses() {
+            const typeFilter = document.getElementById('typeFilter').value;
+            const difficultyFilter = document.getElementById('difficultyFilter').value;
+            const workloadFilter = document.getElementById('workloadFilter').value;
+            const recommendationFilter = document.getElementById('recommendationFilter').value;
+            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+
+            let filteredCourses = courses;
+
+            // Type filter
+            if (typeFilter !== 'all') {
+                filteredCourses = filteredCourses.filter(course => course.type === typeFilter);
+            }
+
+            // Recommendation filter
+            if (recommendationFilter !== 'all') {
+                filteredCourses = filteredCourses.filter(course => course.recommendation === recommendationFilter);
+            }
+
+            // Difficulty filter
+            if (difficultyFilter !== 'all') {
+                const ranges = {
+                    'easy': [3.0, 3.5],
+                    'moderate': [3.5, 4.0],
+                    'hard': [4.0, 4.5],
+                    'very-hard': [4.5, 5.0]
+                };
+                const [min, max] = ranges[difficultyFilter];
+                filteredCourses = filteredCourses.filter(course => course.difficulty >= min && course.difficulty < max);
+            }
+
+            // Workload filter
+            if (workloadFilter !== 'all') {
+                const ranges = {
+                    'light': [10, 14],
+                    'moderate': [14, 18],
+                    'heavy': [18, 22],
+                    'very-heavy': [22, 30]
+                };
+                const [min, max] = ranges[workloadFilter];
+                filteredCourses = filteredCourses.filter(course => course.workload >= min && course.workload < max);
+            }
+
+            // Search filter
+            if (searchFilter) {
+                filteredCourses = filteredCourses.filter(course => 
+                    course.title.toLowerCase().includes(searchFilter) ||
+                    course.code.toLowerCase().includes(searchFilter) ||
+                    course.description.toLowerCase().includes(searchFilter) ||
+                    course.topics.some(topic => topic.toLowerCase().includes(searchFilter))
+                );
+            }
+
+            displayCourses(filteredCourses);
+        }
+
+        // Display courses
+        function displayCourses(coursesToDisplay) {
+            currentlyDisplayedCourses = coursesToDisplay;
+            const courseGrid = document.getElementById('courseGrid');
+            courseGrid.innerHTML = coursesToDisplay.map(course => createCourseCard(course)).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayCourses(courses);
+            updateProgressTracker();
+
+            // Add event listeners for filters
+            document.getElementById('typeFilter').addEventListener('change', filterCourses);
+            document.getElementById('difficultyFilter').addEventListener('change', filterCourses);
+            document.getElementById('workloadFilter').addEventListener('change', filterCourses);
+            document.getElementById('recommendationFilter').addEventListener('change', filterCourses);
+            document.getElementById('searchFilter').addEventListener('input', filterCourses);
+        });
+
+        // Make functions globally available
+        window.openCourseModal = openCourseModal;
+        window.toggleCourseSelection = toggleCourseSelection;
+    </script>
+</body>
+</html>
