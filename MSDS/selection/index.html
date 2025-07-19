@@ -499,6 +499,142 @@
             padding: 2rem;
         }
 
+        /* Semester Planning Styles */
+        .year-section {
+            margin-bottom: 2rem;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .year-section.current-year {
+            border-color: var(--ut-orange);
+            box-shadow: 0 0 0 2px rgba(191, 87, 0, 0.1);
+        }
+
+        .year-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1rem 1.5rem;
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .current-year .year-header {
+            background: linear-gradient(135deg, var(--ut-orange) 0%, #ff6b35 100%);
+            color: white;
+        }
+
+        .semesters-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+
+        .semester-column {
+            min-height: 200px;
+        }
+
+        .semester-header {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0 0 1rem 0;
+            text-align: center;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .semester-drop-zone {
+            min-height: 120px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .semester-drop-zone:hover {
+            border-color: var(--ut-orange);
+            background: rgba(191, 87, 0, 0.05);
+        }
+
+        .semester-drop-zone.drag-over {
+            border-color: var(--ut-orange);
+            background: rgba(191, 87, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        .planned-course-chip {
+            position: relative;
+            margin-bottom: 0.5rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: move;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .planned-course-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .planned-course-chip:last-child {
+            margin-bottom: 0;
+        }
+
+        .selected-course-chip[draggable="true"] {
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .selected-course-chip[draggable="true"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .semesters-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .semester-column {
+                min-height: 150px;
+            }
+        }
+
+        /* Notification animations */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
         .recommendation-section {
             background: var(--ut-light-gray);
             border-radius: 8px;
@@ -769,10 +905,20 @@
 
             <!-- Export Section -->
             <div class="export-section" style="margin: 2rem 0; text-align: center;">
-                <button id="exportBtn" class="export-btn" onclick="showExportModal()" style="background: var(--ut-orange); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease;">
-                    <i class="fas fa-download" style="margin-right: 0.5rem;"></i>
-                    Export My Course Selection
-                </button>
+                <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+                    <button id="planSemesterBtn" class="plan-semester-btn" onclick="showSemesterPlanModal()" style="background: var(--blue); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                        <i class="fas fa-calendar-alt" style="margin-right: 0.5rem;"></i>
+                        Plan Semesters
+                    </button>
+                    <button id="importBtn" class="import-btn" onclick="showImportModal()" style="background: var(--green); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                        <i class="fas fa-upload" style="margin-right: 0.5rem;"></i>
+                        Import Course Selection
+                    </button>
+                    <button id="exportBtn" class="export-btn" onclick="showExportModal()" style="background: var(--ut-orange); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                        <i class="fas fa-download" style="margin-right: 0.5rem;"></i>
+                        Export My Course Selection
+                    </button>
+                </div>
             </div>
 
             <!-- Filters -->
@@ -921,6 +1067,114 @@
                     <div id="selectionSummary" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
                         <!-- Selection summary will be populated by JavaScript -->
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Semester Planning Modal -->
+    <div id="semesterPlanModal" class="modal">
+        <div class="modal-content" style="max-width: 95vw; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header">
+                <span class="close" onclick="closeSemesterPlanModal()">&times;</span>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.5rem;">Semester Planning</h2>
+                    <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Drag and drop your selected courses into semesters</p>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <div style="margin-bottom: 2rem; padding: 1rem; background: #e3f2fd; border-radius: 8px; border-left: 4px solid var(--blue);">
+                    <h4 style="margin: 0 0 0.5rem 0; color: var(--blue);">
+                        <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                        How to Use
+                    </h4>
+                    <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.6;">
+                        <li>Drag courses from the "Selected Courses" section below into your preferred semesters</li>
+                        <li>Each semester shows course count and total credits</li>
+                        <li>Consider prerequisites when planning your course sequence</li>
+                        <li>Typical full-time load is 2-3 courses (6-9 credits) per semester</li>
+                    </ul>
+                </div>
+                
+                <div id="semesterPlanGrid" style="margin-bottom: 2rem;">
+                    <!-- Semester grid will be populated by JavaScript -->
+                </div>
+                
+                <div style="border-top: 2px solid #e9ecef; padding-top: 1.5rem;">
+                    <h4 style="color: var(--ut-orange); margin-bottom: 1rem;">
+                        <i class="fas fa-graduation-cap" style="margin-right: 0.5rem;"></i>
+                        Unplanned Courses
+                    </h4>
+                    <p style="color: #6c757d; margin-bottom: 1rem; font-style: italic;">
+                        Drag these courses to your preferred semesters above
+                    </p>
+                    <div id="unplannedCoursesContainer">
+                        <!-- This will show courses that haven't been assigned to semesters -->
+                    </div>
+                </div>
+                
+                <div style="border-top: 2px solid #e9ecef; padding-top: 1.5rem; margin-top: 1.5rem; text-align: center;">
+                    <button onclick="saveSemesterPlan()" style="background: var(--green); color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-right: 1rem; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                        <i class="fas fa-save" style="margin-right: 0.5rem;"></i>
+                        Save Semester Plan
+                    </button>
+                    <button onclick="clearSemesterPlan()" style="background: #ffc107; color: black; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-right: 1rem; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                        <i class="fas fa-eraser" style="margin-right: 0.5rem;"></i>
+                        Clear All
+                    </button>
+                    <button onclick="closeSemesterPlanModal()" style="background: #6c757d; color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                        <i class="fas fa-times" style="margin-right: 0.5rem;"></i>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <span class="close" onclick="closeImportModal()">&times;</span>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.5rem;">Import Course Selection</h2>
+                    <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Load a previously exported course plan</p>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <div style="margin-bottom: 2rem; padding: 1rem; background: #e8f5e8; border-radius: 8px; border-left: 4px solid var(--green);">
+                    <h4 style="margin: 0 0 0.5rem 0; color: var(--green);">
+                        <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                        How to Import
+                    </h4>
+                    <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.6;">
+                        <li>Select a JSON file that was previously exported from this tool</li>
+                        <li>The import will restore your course selections and semester planning</li>
+                        <li>This will <strong>replace</strong> your current selections - make sure to export first if needed</li>
+                        <li>Only JSON files exported from this MSDS tool are supported</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <label for="importFileInput" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--ut-orange);">
+                        Select JSON File to Import:
+                    </label>
+                    <input type="file" id="importFileInput" accept=".json" style="width: 100%; padding: 0.75rem; border: 2px dashed #ddd; border-radius: 8px; background: #f8f9fa; cursor: pointer; transition: all 0.3s ease;">
+                </div>
+                
+                <div id="importPreview" style="display: none; margin-bottom: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
+                    <!-- Import preview will be shown here -->
+                </div>
+                
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button id="confirmImportBtn" onclick="confirmImport()" disabled style="background: var(--green); color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease; opacity: 0.5;">
+                        <i class="fas fa-upload" style="margin-right: 0.5rem;"></i>
+                        Import Course Plan
+                    </button>
+                    <button onclick="closeImportModal()" style="background: #6c757d; color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                        <i class="fas fa-times" style="margin-right: 0.5rem;"></i>
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>
@@ -1378,6 +1632,35 @@
         const span = document.getElementsByClassName('close')[0];
         let selectedCourses = new Set();
         let removedCourses = new Set();
+        let semesterPlan = {}; // Store course assignments to semesters
+
+        // Generate semester plan structure for 5 years (2 before + current + 2 after)
+        function initializeSemesterPlan() {
+            const currentYear = new Date().getFullYear();
+            const startYear = currentYear - 2;
+            const endYear = currentYear + 2;
+            
+            // Try to load existing plan from localStorage
+            const savedPlan = localStorage.getItem('msdsSemesterPlan');
+            if (savedPlan) {
+                try {
+                    semesterPlan = JSON.parse(savedPlan);
+                    console.log('Loaded semester plan from storage:', semesterPlan);
+                    return;
+                } catch (e) {
+                    console.log('Error loading semester plan from storage, creating new one');
+                }
+            }
+            
+            // Create new plan if no saved plan exists
+            for (let year = startYear; year <= endYear; year++) {
+                semesterPlan[year] = {
+                    spring: [],
+                    summer: [],
+                    fall: []
+                };
+            }
+        }
 
         span.onclick = function() {
             modal.style.display = 'none';
@@ -1486,6 +1769,16 @@
                 container.style.display = 'block';
             }
 
+            // Get unplanned courses (courses that are selected but not assigned to any semester)
+            const plannedCourseIds = new Set();
+            Object.values(semesterPlan).forEach(year => {
+                Object.values(year).forEach(semester => {
+                    semester.forEach(courseId => plannedCourseIds.add(courseId));
+                });
+            });
+            
+            const unplannedCourses = selectedCourseObjects.filter(course => !plannedCourseIds.has(course.id));
+
             // Group courses by type for better organization
             const typeLabels = {
                 'foundational': 'Foundational',
@@ -1502,17 +1795,30 @@
             };
 
             // Sort courses by type for organized display
-            const sortedCourses = selectedCourseObjects.sort((a, b) => {
+            const sortedCourses = unplannedCourses.sort((a, b) => {
                 const typeOrder = { 'foundational': 1, 'required': 2, 'elective-1': 3, 'elective-2': 4 };
                 return (typeOrder[a.type] || 5) - (typeOrder[b.type] || 5);
             });
 
-            // Create chips HTML
-            const chipsHTML = sortedCourses.map(course => `
-                <div class="selected-course-chip" style="border-color: ${typeColors[course.type]}; color: ${typeColors[course.type]};">
+            // Create chips HTML for unplanned courses
+            const chipsHTML = sortedCourses.map(course => {
+                const semesterInfo = getSemesterInfo(course.id);
+                return `
+                <div class="selected-course-chip" 
+                     draggable="true" 
+                     data-course-id="${course.id}"
+                     style="border-color: ${typeColors[course.type]}; color: ${typeColors[course.type]}; cursor: move; position: relative;"
+                     onmouseenter="this.style.opacity='0.8'"
+                     onmouseleave="this.style.opacity='1'">
                     <div>
                         <div class="course-chip-title">${course.title}</div>
                         <div class="course-chip-code">${course.code} • ${typeLabels[course.type]}</div>
+                        ${semesterInfo ? `
+                            <div style="font-size: 0.7rem; color: var(--ut-orange); font-weight: 600; margin-top: 0.25rem;">
+                                <i class="fas fa-calendar" style="margin-right: 0.25rem;"></i>
+                                Planned for ${semesterInfo.label}
+                            </div>
+                        ` : ''}
                     </div>
                     <button 
                         class="remove-chip-btn" 
@@ -1523,9 +1829,291 @@
                         ×
                     </button>
                 </div>
-            `).join('');
+            `;
+            }).join('');
 
             listElement.innerHTML = chipsHTML;
+            
+            // Add drag event listeners to course chips
+            const courseChips = listElement.querySelectorAll('.selected-course-chip');
+            courseChips.forEach(chip => {
+                chip.addEventListener('dragstart', handleDragStart);
+                chip.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        // Drag and drop functionality
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.courseId);
+            e.target.style.opacity = '0.5';
+        }
+
+        function handleDragEnd(e) {
+            e.target.style.opacity = '1';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDrop(e, year, semester) {
+            e.preventDefault();
+            const courseId = e.dataTransfer.getData('text/plain');
+            
+            if (!courseId) return;
+            
+            // Remove course from any existing semester assignment
+            Object.keys(semesterPlan).forEach(y => {
+                Object.keys(semesterPlan[y]).forEach(s => {
+                    const index = semesterPlan[y][s].indexOf(courseId);
+                    if (index > -1) {
+                        semesterPlan[y][s].splice(index, 1);
+                    }
+                });
+            });
+            
+            // Add course to new semester
+            semesterPlan[year][semester].push(courseId);
+            
+            // Update displays
+            updateSelectedCoursesDisplay();
+            updateSemesterPlanDisplay();
+        }
+
+        // Show semester planning modal
+        function showSemesterPlanModal() {
+            updateSemesterPlanDisplay();
+            document.getElementById('semesterPlanModal').style.display = 'block';
+        }
+
+        function closeSemesterPlanModal() {
+            document.getElementById('semesterPlanModal').style.display = 'none';
+        }
+
+        // Save semester plan and return to main screen
+        function saveSemesterPlan() {
+            // Save to localStorage for persistence
+            localStorage.setItem('msdsSemesterPlan', JSON.stringify(semesterPlan));
+            
+            // Close modal
+            closeSemesterPlanModal();
+            
+            // Update the main screen to show semester tags
+            displayCourses(getCurrentlyDisplayedCourses());
+            updateSelectedCoursesDisplay();
+            
+            // Show success message
+            showNotification('Semester plan saved successfully! 🎉', 'success');
+        }
+
+        // Clear semester plan
+        function clearSemesterPlan() {
+            if (confirm('Are you sure you want to clear all semester assignments? This action cannot be undone.')) {
+                // Clear all semester assignments
+                Object.keys(semesterPlan).forEach(year => {
+                    Object.keys(semesterPlan[year]).forEach(semester => {
+                        semesterPlan[year][semester] = [];
+                    });
+                });
+                
+                // Update display
+                updateSemesterPlanDisplay();
+                updateSelectedCoursesDisplay();
+                
+                showNotification('Semester plan cleared successfully!', 'success');
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            // Remove existing notification if any
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--green)' : '#dc3545'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Get semester info for a course
+        function getSemesterInfo(courseId) {
+            for (const year in semesterPlan) {
+                for (const semester in semesterPlan[year]) {
+                    if (semesterPlan[year][semester].includes(courseId)) {
+                        return {
+                            year: parseInt(year),
+                            semester: semester,
+                            label: `${semester.charAt(0).toUpperCase() + semester.slice(1)} ${year}`
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Update semester plan display
+        function updateSemesterPlanDisplay() {
+            const container = document.getElementById('semesterPlanGrid');
+            const unplannedContainer = document.getElementById('unplannedCoursesContainer');
+            const currentYear = new Date().getFullYear();
+            
+            // Get unplanned courses
+            const selectedCoursesArray = Array.from(selectedCourses);
+            const selectedCourseObjects = selectedCoursesArray.map(id => courses.find(c => c.id === id));
+            const plannedCourseIds = new Set();
+            Object.values(semesterPlan).forEach(year => {
+                Object.values(year).forEach(semester => {
+                    semester.forEach(courseId => plannedCourseIds.add(courseId));
+                });
+            });
+            const unplannedCourses = selectedCourseObjects.filter(course => !plannedCourseIds.has(course.id));
+            
+            let html = '';
+            
+            Object.keys(semesterPlan).sort().forEach(year => {
+                const isCurrentYear = parseInt(year) === currentYear;
+                html += `
+                    <div class="year-section ${isCurrentYear ? 'current-year' : ''}">
+                        <h3 class="year-header">${year} ${isCurrentYear ? '(Current Year)' : ''}</h3>
+                        <div class="semesters-row">
+                            ${['spring', 'summer', 'fall'].map(semester => {
+                                const semesterCourses = semesterPlan[year][semester];
+                                const totalCredits = semesterCourses.reduce((total, courseId) => {
+                                    const course = courses.find(c => c.id === courseId);
+                                    return total + (course ? course.credits : 0);
+                                }, 0);
+                                
+                                return `
+                                <div class="semester-column">
+                                    <h4 class="semester-header">${semester.charAt(0).toUpperCase() + semester.slice(1)} ${year}</h4>
+                                    <div class="semester-drop-zone" 
+                                         ondragover="handleDragOver(event)"
+                                         ondrop="handleDrop(event, '${year}', '${semester}')"
+                                         ondragenter="this.classList.add('drag-over')"
+                                         ondragleave="this.classList.remove('drag-over')">
+                                        ${semesterCourses.map(courseId => {
+                                            const course = courses.find(c => c.id === courseId);
+                                            if (!course) return '';
+                                            
+                                            const typeColors = {
+                                                'foundational': 'var(--green)',
+                                                'required': 'var(--red)',
+                                                'elective-1': 'var(--blue)',
+                                                'elective-2': '#6610f2'
+                                            };
+                                            
+                                            return `
+                                                <div class="planned-course-chip" 
+                                                     draggable="true"
+                                                     data-course-id="${course.id}"
+                                                     style="border: 2px solid ${typeColors[course.type]};">
+                                                    <div style="font-weight: 600; color: ${typeColors[course.type]}; margin-bottom: 0.25rem;">${course.title}</div>
+                                                    <div style="font-size: 0.75rem; color: #6c757d;">${course.code} • ${course.credits} credits</div>
+                                                    <button onclick="removeCourseFromSemester('${courseId}', '${year}', '${semester}')" 
+                                                            style="position: absolute; top: 4px; right: 4px; background: #dc3545; color: white; border: none; width: 18px; height: 18px; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center;">×</button>
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                        ${semesterCourses.length === 0 ? 
+                                            '<div style="text-align: center; color: #6c757d; font-style: italic; margin-top: 2rem;">Drop courses here</div>' : 
+                                            ''
+                                        }
+                                    </div>
+                                    <div style="text-align: center; margin-top: 0.75rem; font-size: 0.85rem; color: #6c757d; font-weight: 500;">
+                                        ${semesterCourses.length} course${semesterCourses.length !== 1 ? 's' : ''}
+                                        ${totalCredits > 0 ? ` • ${totalCredits} credits` : ''}
+                                    </div>
+                                </div>
+                            `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Update unplanned courses section
+            const typeColors = {
+                'foundational': 'var(--green)',
+                'required': 'var(--red)',
+                'elective-1': 'var(--blue)',
+                'elective-2': '#6610f2'
+            };
+            
+            const typeLabels = {
+                'foundational': 'Foundational',
+                'required': 'Required',
+                'elective-1': 'Elective 1',
+                'elective-2': 'Elective 2'
+            };
+            
+            if (unplannedCourses.length === 0) {
+                unplannedContainer.innerHTML = '<div style="text-align: center; color: #6c757d; font-style: italic; padding: 2rem;">All selected courses have been planned! 🎉</div>';
+            } else {
+                const unplannedHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                        ${unplannedCourses.map(course => `
+                            <div class="selected-course-chip" 
+                                 draggable="true" 
+                                 data-course-id="${course.id}"
+                                 style="border-color: ${typeColors[course.type]}; color: ${typeColors[course.type]}; cursor: move; margin: 0;">
+                                <div>
+                                    <div class="course-chip-title">${course.title}</div>
+                                    <div class="course-chip-code">${course.code} • ${typeLabels[course.type]} • ${course.credits} credits</div>
+                                </div>
+                                <div style="font-size: 0.75rem; color: #6c757d; margin-top: 0.25rem;">
+                                    Difficulty: ${course.difficulty}/5 • Workload: ${course.workload}h
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                unplannedContainer.innerHTML = unplannedHTML;
+            }
+            
+            // Add drag event listeners to all course chips
+            const allCourseChips = container.querySelectorAll('[draggable="true"]');
+            const unplannedChips = unplannedContainer.querySelectorAll('[draggable="true"]');
+            
+            [...allCourseChips, ...unplannedChips].forEach(chip => {
+                chip.addEventListener('dragstart', handleDragStart);
+                chip.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        // Remove course from specific semester
+        function removeCourseFromSemester(courseId, year, semester) {
+            const index = semesterPlan[year][semester].indexOf(courseId);
+            if (index > -1) {
+                semesterPlan[year][semester].splice(index, 1);
+                updateSelectedCoursesDisplay();
+                updateSemesterPlanDisplay();
+            }
         }
 
         let currentlyDisplayedCourses = courses;
@@ -1555,6 +2143,7 @@
 
             const isSelected = selectedCourses.has(course.id);
             const isRemoved = removedCourses.has(course.id);
+            const semesterInfo = getSemesterInfo(course.id);
 
             return `
                 <div class="course-card ${course.type} ${isSelected ? 'selected' : ''} ${isRemoved ? 'removed' : ''}" onclick="openCourseModal('${course.id}')">
@@ -1566,6 +2155,12 @@
                     >
                         ×
                     </button>
+                    ${semesterInfo ? `
+                        <div style="position: absolute; top: 8px; right: 8px; background: var(--ut-orange); color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; z-index: 5;">
+                            <i class="fas fa-calendar" style="margin-right: 0.25rem;"></i>
+                            ${semesterInfo.label}
+                        </div>
+                    ` : ''}
                     <div class="course-header">
                         <div>
                             <div class="course-title">${course.title}</div>
@@ -1873,6 +2468,16 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize semester plan structure
+            initializeSemesterPlan();
+            
+            // Auto-select all foundational and required courses
+            courses.forEach(course => {
+                if (course.type === 'foundational' || course.type === 'required') {
+                    selectedCourses.add(course.id);
+                }
+            });
+            
             updateProgressTracker();
             updateSelectedCoursesDisplay();
             
@@ -1884,6 +2489,12 @@
             document.getElementById('searchFilter').addEventListener('input', filterCourses);
             document.getElementById('hideSelectedFilter').addEventListener('change', filterCourses);
             document.getElementById('hideRemovedFilter').addEventListener('change', filterCourses);
+            
+            // Add file input listener for import functionality
+            const fileInput = document.getElementById('importFileInput');
+            if (fileInput) {
+                fileInput.addEventListener('change', handleFileSelection);
+            }
             
             // Apply initial filters (hide selected is checked by default)
             filterCourses();
@@ -1913,9 +2524,20 @@
                 elective2: selectedCourseObjects.filter(c => c.type === 'elective-2').length
             };
 
+            // Count planned vs unplanned courses
+            const plannedCourseIds = new Set();
+            Object.values(semesterPlan).forEach(year => {
+                Object.values(year).forEach(semester => {
+                    semester.forEach(courseId => plannedCourseIds.add(courseId));
+                });
+            });
+            
+            const plannedCount = selectedCoursesArray.filter(id => plannedCourseIds.has(id)).length;
+            const unplannedCount = selectedCoursesArray.length - plannedCount;
+
             const summaryHTML = `
                 <h4 style="color: var(--ut-orange); margin-bottom: 1rem;">Current Selection Summary</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
                     <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
                         <div style="font-size: 2rem; font-weight: 700; color: var(--ut-orange);">${counts.total}</div>
                         <div>Total Selected</div>
@@ -1937,6 +2559,33 @@
                         <div>Elective Group 2</div>
                     </div>
                 </div>
+                
+                ${selectedCoursesArray.length > 0 ? `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="text-align: center; padding: 1rem; background: rgba(40, 167, 69, 0.1); border-radius: 8px; border: 1px solid rgba(40, 167, 69, 0.3);">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--green);">${plannedCount}</div>
+                        <div style="color: var(--green); font-weight: 500;">Planned in Semesters</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border: 1px solid rgba(255, 193, 7, 0.3);">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: #856404;">${unplannedCount}</div>
+                        <div style="color: #856404; font-weight: 500;">Not Yet Planned</div>
+                    </div>
+                </div>
+                
+                ${plannedCount > 0 ? `
+                <div style="background: rgba(40, 167, 69, 0.05); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--green); margin-bottom: 1rem;">
+                    <h5 style="color: var(--green); margin: 0 0 0.5rem 0;">
+                        <i class="fas fa-calendar-check" style="margin-right: 0.5rem;"></i>
+                        Semester Planning Status
+                    </h5>
+                    <p style="margin: 0; color: #155724;">
+                        You have planned ${plannedCount} out of ${selectedCoursesArray.length} selected courses into specific semesters. 
+                        ${unplannedCount > 0 ? `Consider using the "Plan Semesters" feature to organize your remaining ${unplannedCount} courses.` : 'Great job planning all your courses!'}
+                    </p>
+                </div>
+                ` : ''}
+                ` : ''}
+                
                 ${selectedCoursesArray.length === 0 ? '<p style="text-align: center; color: #6c757d; font-style: italic;">No courses selected yet</p>' : ''}
             `;
             
@@ -1952,20 +2601,31 @@
                 return;
             }
 
+            // Add semester information to courses
+            const coursesWithSemesters = selectedCourseObjects.map(course => {
+                const semesterInfo = getSemesterInfo(course.id);
+                return {
+                    ...course,
+                    semester: semesterInfo ? `${semesterInfo.semester} ${semesterInfo.year}` : 'Not Planned',
+                    semesterYear: semesterInfo ? semesterInfo.year : null,
+                    semesterName: semesterInfo ? semesterInfo.semester : null
+                };
+            });
+
             const timestamp = new Date().toISOString().split('T')[0];
             
             switch(format) {
                 case 'json':
-                    exportJSON(selectedCourseObjects, timestamp);
+                    exportJSON(coursesWithSemesters, timestamp);
                     break;
                 case 'csv':
-                    exportCSV(selectedCourseObjects, timestamp);
+                    exportCSV(coursesWithSemesters, timestamp);
                     break;
                 case 'txt':
-                    exportTXT(selectedCourseObjects, timestamp);
+                    exportTXT(coursesWithSemesters, timestamp);
                     break;
                 case 'pdf':
-                    exportPDF(selectedCourseObjects, timestamp);
+                    exportPDF(coursesWithSemesters, timestamp);
                     break;
             }
             
@@ -1973,29 +2633,75 @@
         }
 
         function exportJSON(courses, timestamp) {
+            // Group courses by semester
+            const coursesBySemester = {};
+            const unplannedCourses = [];
+            
+            courses.forEach(course => {
+                if (course.semester && course.semester !== 'Not Planned') {
+                    if (!coursesBySemester[course.semester]) {
+                        coursesBySemester[course.semester] = [];
+                    }
+                    coursesBySemester[course.semester].push({
+                        id: course.id,
+                        title: course.title,
+                        code: course.code,
+                        type: course.type,
+                        credits: course.credits,
+                        difficulty: course.difficulty,
+                        workload: course.workload,
+                        rating: course.rating,
+                        recommendation: course.recommendation
+                    });
+                } else {
+                    unplannedCourses.push({
+                        id: course.id,
+                        title: course.title,
+                        code: course.code,
+                        type: course.type,
+                        credits: course.credits,
+                        difficulty: course.difficulty,
+                        workload: course.workload,
+                        rating: course.rating,
+                        recommendation: course.recommendation
+                    });
+                }
+            });
+            
             const exportData = {
                 exportDate: timestamp,
                 program: 'UT Austin MSDS',
                 totalCourses: courses.length,
-                courses: courses.map(course => ({
-                    id: course.id,
-                    title: course.title,
-                    code: course.code,
-                    type: course.type,
-                    credits: course.credits,
-                    difficulty: course.difficulty,
-                    workload: course.workload,
-                    rating: course.rating,
-                    recommendation: course.recommendation
-                }))
+                semesterPlan: coursesBySemester,
+                unplannedCourses: unplannedCourses,
+                summary: {
+                    plannedCourses: courses.filter(c => c.semester !== 'Not Planned').length,
+                    unplannedCourses: unplannedCourses.length
+                }
             };
             
             downloadFile(`msds-course-selection-${timestamp}.json`, JSON.stringify(exportData, null, 2), 'application/json');
         }
 
         function exportCSV(courses, timestamp) {
-            const headers = ['Course Code', 'Course Title', 'Type', 'Credits', 'Difficulty', 'Workload (hrs)', 'Rating', 'Recommendation'];
-            const rows = courses.map(course => [
+            const headers = ['Course Code', 'Course Title', 'Type', 'Credits', 'Difficulty', 'Workload (hrs)', 'Rating', 'Recommendation', 'Semester'];
+            
+            // Sort courses by semester for better organization
+            const sortedCourses = courses.sort((a, b) => {
+                if (a.semester === 'Not Planned' && b.semester !== 'Not Planned') return 1;
+                if (a.semester !== 'Not Planned' && b.semester === 'Not Planned') return -1;
+                if (a.semester === 'Not Planned' && b.semester === 'Not Planned') return 0;
+                
+                // Sort by year then by semester
+                if (a.semesterYear !== b.semesterYear) {
+                    return a.semesterYear - b.semesterYear;
+                }
+                
+                const semesterOrder = { 'spring': 1, 'summer': 2, 'fall': 3 };
+                return (semesterOrder[a.semesterName] || 0) - (semesterOrder[b.semesterName] || 0);
+            });
+            
+            const rows = sortedCourses.map(course => [
                 course.code,
                 course.title,
                 course.type,
@@ -2003,7 +2709,8 @@
                 course.difficulty,
                 course.workload,
                 course.rating,
-                course.recommendation
+                course.recommendation,
+                course.semester
             ]);
             
             const csvContent = [headers, ...rows].map(row => 
@@ -2025,24 +2732,78 @@
             content += `Generated on: ${timestamp}\\n`;
             content += `Total Courses Selected: ${courses.length}/10\\n\\n`;
             
-            const groupedCourses = {};
+            // Group courses by semester first
+            const coursesBySemester = {};
+            const unplannedCourses = [];
+            
             courses.forEach(course => {
-                if (!groupedCourses[course.type]) {
-                    groupedCourses[course.type] = [];
+                if (course.semester && course.semester !== 'Not Planned') {
+                    if (!coursesBySemester[course.semester]) {
+                        coursesBySemester[course.semester] = [];
+                    }
+                    coursesBySemester[course.semester].push(course);
+                } else {
+                    unplannedCourses.push(course);
                 }
-                groupedCourses[course.type].push(course);
             });
             
-            Object.keys(groupedCourses).forEach(type => {
-                content += `${typeLabels[type]}:\\n`;
-                content += `${'='.repeat(typeLabels[type].length)}\\n`;
-                groupedCourses[type].forEach(course => {
-                    content += `• ${course.code}: ${course.title}\\n`;
-                    content += `  Difficulty: ${course.difficulty}/5 | Workload: ${course.workload}hrs | Rating: ${course.rating}/5\\n`;
-                    content += `  Recommendation: ${course.recommendation.charAt(0).toUpperCase() + course.recommendation.slice(1)}\\n\\n`;
-                });
-                content += '\\n';
+            // Sort semesters chronologically
+            const sortedSemesters = Object.keys(coursesBySemester).sort((a, b) => {
+                const [semesterA, yearA] = a.split(' ');
+                const [semesterB, yearB] = b.split(' ');
+                
+                if (yearA !== yearB) return parseInt(yearA) - parseInt(yearB);
+                
+                const semesterOrder = { 'spring': 1, 'summer': 2, 'fall': 3 };
+                return semesterOrder[semesterA] - semesterOrder[semesterB];
             });
+            
+            // Export by semester
+            if (sortedSemesters.length > 0) {
+                content += 'SEMESTER PLAN:\\n';
+                content += '==============\\n\\n';
+                
+                sortedSemesters.forEach(semester => {
+                    const semesterCourses = coursesBySemester[semester];
+                    const totalCredits = semesterCourses.reduce((sum, course) => sum + course.credits, 0);
+                    
+                    content += `${semester.toUpperCase()} (${semesterCourses.length} courses, ${totalCredits} credits):\\n`;
+                    content += `${'-'.repeat(semester.length + 20)}\\n`;
+                    
+                    semesterCourses.forEach(course => {
+                        content += `• ${course.code}: ${course.title}\\n`;
+                        content += `  Type: ${typeLabels[course.type] || course.type}\\n`;
+                        content += `  Difficulty: ${course.difficulty}/5 | Workload: ${course.workload}hrs | Rating: ${course.rating}/5\\n`;
+                        content += `  Recommendation: ${course.recommendation.charAt(0).toUpperCase() + course.recommendation.slice(1)}\\n\\n`;
+                    });
+                    content += '\\n';
+                });
+            }
+            
+            // Export unplanned courses
+            if (unplannedCourses.length > 0) {
+                content += 'UNPLANNED COURSES:\\n';
+                content += '==================\\n\\n';
+                
+                const groupedUnplanned = {};
+                unplannedCourses.forEach(course => {
+                    if (!groupedUnplanned[course.type]) {
+                        groupedUnplanned[course.type] = [];
+                    }
+                    groupedUnplanned[course.type].push(course);
+                });
+                
+                Object.keys(groupedUnplanned).forEach(type => {
+                    content += `${typeLabels[type]}:\\n`;
+                    content += `${'='.repeat(typeLabels[type].length)}\\n`;
+                    groupedUnplanned[type].forEach(course => {
+                        content += `• ${course.code}: ${course.title}\\n`;
+                        content += `  Difficulty: ${course.difficulty}/5 | Workload: ${course.workload}hrs | Rating: ${course.rating}/5\\n`;
+                        content += `  Recommendation: ${course.recommendation.charAt(0).toUpperCase() + course.recommendation.slice(1)}\\n\\n`;
+                    });
+                    content += '\\n';
+                });
+            }
             
             downloadFile(`msds-course-selection-${timestamp}.txt`, content, 'text/plain');
         }
@@ -2056,12 +2817,30 @@
                 'elective-2': 'Elective Group 2'
             };
             
-            const groupedCourses = {};
+            // Group courses by semester
+            const coursesBySemester = {};
+            const unplannedCourses = [];
+            
             courses.forEach(course => {
-                if (!groupedCourses[course.type]) {
-                    groupedCourses[course.type] = [];
+                if (course.semester && course.semester !== 'Not Planned') {
+                    if (!coursesBySemester[course.semester]) {
+                        coursesBySemester[course.semester] = [];
+                    }
+                    coursesBySemester[course.semester].push(course);
+                } else {
+                    unplannedCourses.push(course);
                 }
-                groupedCourses[course.type].push(course);
+            });
+            
+            // Sort semesters chronologically
+            const sortedSemesters = Object.keys(coursesBySemester).sort((a, b) => {
+                const [semesterA, yearA] = a.split(' ');
+                const [semesterB, yearB] = b.split(' ');
+                
+                if (yearA !== yearB) return parseInt(yearA) - parseInt(yearB);
+                
+                const semesterOrder = { 'spring': 1, 'summer': 2, 'fall': 3 };
+                return semesterOrder[semesterA] - semesterOrder[semesterB];
             });
             
             let htmlContent = `
@@ -2072,12 +2851,16 @@
                     <style>
                         body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
                         .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #BF5700; padding-bottom: 20px; }
+                        .semester-group { margin-bottom: 30px; page-break-inside: avoid; }
+                        .semester-group h2 { color: #BF5700; border-bottom: 2px solid #BF5700; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+                        .semester-info { font-size: 0.9em; color: #666; font-weight: normal; }
                         .course-group { margin-bottom: 25px; }
-                        .course-group h2 { color: #BF5700; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+                        .course-group h3 { color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 20px; }
                         .course { margin-bottom: 15px; padding: 10px; border-left: 3px solid #BF5700; background-color: #f9f9f9; }
                         .course-title { font-weight: bold; font-size: 1.1em; }
                         .course-details { margin-top: 5px; color: #666; }
-                        @media print { body { margin: 0; } }
+                        .unplanned { border-left-color: #dc3545; }
+                        @media print { body { margin: 0; } .semester-group { page-break-inside: avoid; } }
                     </style>
                 </head>
                 <body>
@@ -2089,22 +2872,62 @@
                     </div>
             `;
             
-            Object.keys(groupedCourses).forEach(type => {
-                htmlContent += `<div class="course-group">`;
-                htmlContent += `<h2>${typeLabels[type]}</h2>`;
-                groupedCourses[type].forEach(course => {
-                    htmlContent += `
-                        <div class="course">
-                            <div class="course-title">${course.code}: ${course.title}</div>
-                            <div class="course-details">
-                                Difficulty: ${course.difficulty}/5 | Workload: ${course.workload} hrs/week | Rating: ${course.rating}/5 | 
-                                Recommendation: ${course.recommendation.charAt(0).toUpperCase() + course.recommendation.slice(1)}
+            // Add semester-organized courses
+            if (sortedSemesters.length > 0) {
+                htmlContent += `<h2 style="color: #BF5700; margin-top: 30px;">Semester Plan</h2>`;
+                
+                sortedSemesters.forEach(semester => {
+                    const semesterCourses = coursesBySemester[semester];
+                    const totalCredits = semesterCourses.reduce((sum, course) => sum + course.credits, 0);
+                    
+                    htmlContent += `<div class="semester-group">`;
+                    htmlContent += `<h2>${semester.toUpperCase()} <span class="semester-info">${semesterCourses.length} courses, ${totalCredits} credits</span></h2>`;
+                    
+                    semesterCourses.forEach(course => {
+                        htmlContent += `
+                            <div class="course">
+                                <div class="course-title">${course.code}: ${course.title}</div>
+                                <div class="course-details">
+                                    Type: ${typeLabels[course.type]} | Credits: ${course.credits} | 
+                                    Difficulty: ${course.difficulty}/5 | Workload: ${course.workload} hrs/week | Rating: ${course.rating}/5 | 
+                                    Recommendation: ${course.recommendation.charAt(0).toUpperCase() + course.recommendation.slice(1)}
+                                </div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    });
+                    htmlContent += `</div>`;
+                });
+            }
+            
+            // Add unplanned courses
+            if (unplannedCourses.length > 0) {
+                htmlContent += `<div class="course-group">`;
+                htmlContent += `<h3>Unplanned Courses</h3>`;
+                
+                const groupedUnplanned = {};
+                unplannedCourses.forEach(course => {
+                    if (!groupedUnplanned[course.type]) {
+                        groupedUnplanned[course.type] = [];
+                    }
+                    groupedUnplanned[course.type].push(course);
+                });
+                
+                Object.keys(groupedUnplanned).forEach(type => {
+                    htmlContent += `<h4 style="color: #666; margin-top: 15px;">${typeLabels[type]}</h4>`;
+                    groupedUnplanned[type].forEach(course => {
+                        htmlContent += `
+                            <div class="course unplanned">
+                                <div class="course-title">${course.code}: ${course.title}</div>
+                                <div class="course-details">
+                                    Credits: ${course.credits} | Difficulty: ${course.difficulty}/5 | Workload: ${course.workload} hrs/week | Rating: ${course.rating}/5 | 
+                                    Recommendation: ${course.recommendation.charAt(0).toUpperCase() + course.recommendation.slice(1)}
+                                </div>
+                            </div>
+                        `;
+                    });
                 });
                 htmlContent += `</div>`;
-            });
+            }
             
             htmlContent += `</body></html>`;
             
@@ -2130,16 +2953,239 @@
             window.URL.revokeObjectURL(url);
         }
 
+        // Import functionality
+        let importData = null;
+
+        function showImportModal() {
+            const importModal = document.getElementById('importModal');
+            resetImportModal();
+            importModal.style.display = 'block';
+        }
+
+        function closeImportModal() {
+            const importModal = document.getElementById('importModal');
+            importModal.style.display = 'none';
+            resetImportModal();
+        }
+
+        function resetImportModal() {
+            document.getElementById('importFileInput').value = '';
+            document.getElementById('importPreview').style.display = 'none';
+            document.getElementById('confirmImportBtn').disabled = true;
+            document.getElementById('confirmImportBtn').style.opacity = '0.5';
+            importData = null;
+        }
+
+        function handleFileSelection(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                resetImportModal();
+                return;
+            }
+
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                showNotification('Please select a valid JSON file.', 'error');
+                resetImportModal();
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    validateAndPreviewImportData(data);
+                } catch (error) {
+                    showNotification('Invalid JSON file. Please check the file format.', 'error');
+                    resetImportModal();
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function validateAndPreviewImportData(data) {
+            // Validate the imported data structure
+            if (!data.program || data.program !== 'UT Austin MSDS') {
+                showNotification('This file was not exported from the UT Austin MSDS Course Selection tool.', 'error');
+                resetImportModal();
+                return;
+            }
+
+            if (!data.semesterPlan && !data.unplannedCourses) {
+                showNotification('Invalid file format. Missing course data.', 'error');
+                resetImportModal();
+                return;
+            }
+
+            importData = data;
+            showImportPreview(data);
+        }
+
+        function showImportPreview(data) {
+            const previewDiv = document.getElementById('importPreview');
+            const confirmBtn = document.getElementById('confirmImportBtn');
+            
+            let totalPlannedCourses = 0;
+            let totalSemesters = 0;
+            let unplannedCount = data.unplannedCourses ? data.unplannedCourses.length : 0;
+            
+            if (data.semesterPlan) {
+                Object.keys(data.semesterPlan).forEach(semester => {
+                    if (data.semesterPlan[semester].length > 0) {
+                        totalSemesters++;
+                        totalPlannedCourses += data.semesterPlan[semester].length;
+                    }
+                });
+            }
+
+            const totalCourses = totalPlannedCourses + unplannedCount;
+
+            const previewHTML = `
+                <h4 style="color: var(--ut-orange); margin: 0 0 1rem 0;">
+                    <i class="fas fa-eye" style="margin-right: 0.5rem;"></i>
+                    Import Preview
+                </h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; border: 1px solid #ddd;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--ut-orange);">${totalCourses}</div>
+                        <div style="font-size: 0.9rem;">Total Courses</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; border: 1px solid #ddd;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--green);">${totalPlannedCourses}</div>
+                        <div style="font-size: 0.9rem;">Planned in Semesters</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; border: 1px solid #ddd;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--blue);">${totalSemesters}</div>
+                        <div style="font-size: 0.9rem;">Semesters Used</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; border: 1px solid #ddd;">
+                        <div style="font-size: 1.5rem; font-weight: 600; color: #856404;">${unplannedCount}</div>
+                        <div style="font-size: 0.9rem;">Unplanned</div>
+                    </div>
+                </div>
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                    <div style="color: #856404; font-weight: 600; margin-bottom: 0.5rem;">
+                        <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>
+                        Warning
+                    </div>
+                    <div style="color: #856404; font-size: 0.9rem;">
+                        Importing this file will replace all your current course selections and semester planning. 
+                        Make sure to export your current progress first if you want to keep it.
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.9rem; color: #6c757d;">
+                    <strong>Export Date:</strong> ${data.exportDate || 'Unknown'}<br>
+                    <strong>File Type:</strong> ${data.program || 'Unknown Program'}
+                </div>
+            `;
+
+            previewDiv.innerHTML = previewHTML;
+            previewDiv.style.display = 'block';
+            
+            // Enable the confirm button
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = '1';
+        }
+
+        function confirmImport() {
+            if (!importData) {
+                showNotification('No valid import data available.', 'error');
+                return;
+            }
+
+            try {
+                // Clear current selections
+                selectedCourses.clear();
+                removedCourses.clear();
+                
+                // Initialize semester plan
+                initializeSemesterPlan();
+                
+                // Import course selections
+                const allImportedCourseIds = new Set();
+                
+                // Add courses from semester plan
+                if (importData.semesterPlan) {
+                    Object.keys(importData.semesterPlan).forEach(semesterKey => {
+                        const coursesInSemester = importData.semesterPlan[semesterKey];
+                        coursesInSemester.forEach(course => {
+                            const courseId = course.id || course;
+                            if (courses.find(c => c.id === courseId)) {
+                                selectedCourses.add(courseId);
+                                allImportedCourseIds.add(courseId);
+                            }
+                        });
+                    });
+                }
+                
+                // Add unplanned courses
+                if (importData.unplannedCourses) {
+                    importData.unplannedCourses.forEach(course => {
+                        const courseId = course.id || course;
+                        if (courses.find(c => c.id === courseId)) {
+                            selectedCourses.add(courseId);
+                            allImportedCourseIds.add(courseId);
+                        }
+                    });
+                }
+                
+                // Import semester plan
+                if (importData.semesterPlan) {
+                    Object.keys(importData.semesterPlan).forEach(semesterKey => {
+                        const [semesterName, year] = semesterKey.split(' ');
+                        const yearNum = parseInt(year);
+                        
+                        if (semesterPlan[yearNum] && semesterPlan[yearNum][semesterName]) {
+                            // Clear existing assignments for this semester
+                            semesterPlan[yearNum][semesterName] = [];
+                            
+                            // Add imported courses
+                            const coursesInSemester = importData.semesterPlan[semesterKey];
+                            coursesInSemester.forEach(course => {
+                                const courseId = course.id || course;
+                                if (courses.find(c => c.id === courseId)) {
+                                    semesterPlan[yearNum][semesterName].push(courseId);
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('msdsSemesterPlan', JSON.stringify(semesterPlan));
+                
+                // Update displays
+                updateProgressTracker();
+                updateSelectedCoursesDisplay();
+                filterCourses(); // Refresh the course grid
+                
+                // Close modal and show success
+                closeImportModal();
+                showNotification(`Successfully imported ${allImportedCourseIds.size} courses and semester plan! 🎉`, 'success');
+                
+            } catch (error) {
+                console.error('Import error:', error);
+                showNotification('Error importing file. Please check the file format and try again.', 'error');
+            }
+        }
+
         // Close modals when clicking outside
         window.onclick = function(event) {
             const courseModal = document.getElementById('courseModal');
             const exportModal = document.getElementById('exportModal');
+            const importModal = document.getElementById('importModal');
+            const semesterPlanModal = document.getElementById('semesterPlanModal');
             
             if (event.target == courseModal) {
                 courseModal.style.display = 'none';
             }
             if (event.target == exportModal) {
                 exportModal.style.display = 'none';
+            }
+            if (event.target == importModal) {
+                importModal.style.display = 'none';
+            }
+            if (event.target == semesterPlanModal) {
+                semesterPlanModal.style.display = 'none';
             }
         }
 
@@ -2149,7 +3195,17 @@
         window.removeCourse = removeCourse;
         window.showExportModal = showExportModal;
         window.closeExportModal = closeExportModal;
+        window.showImportModal = showImportModal;
+        window.closeImportModal = closeImportModal;
+        window.confirmImport = confirmImport;
         window.exportSelection = exportSelection;
+        window.showSemesterPlanModal = showSemesterPlanModal;
+        window.closeSemesterPlanModal = closeSemesterPlanModal;
+        window.saveSemesterPlan = saveSemesterPlan;
+        window.clearSemesterPlan = clearSemesterPlan;
+        window.removeCourseFromSemester = removeCourseFromSemester;
+        window.handleDragOver = handleDragOver;
+        window.handleDrop = handleDrop;
     </script>
 </body>
 </html>
