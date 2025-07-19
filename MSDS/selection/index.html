@@ -918,6 +918,10 @@
                         <i class="fas fa-download" style="margin-right: 0.5rem;"></i>
                         Export My Course Selection
                     </button>
+                    <button id="clearCacheBtn" class="clear-cache-btn" onclick="showClearCacheConfirm()" style="background: #dc3545; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: all 0.3s ease;">
+                        <i class="fas fa-trash-alt" style="margin-right: 0.5rem;"></i>
+                        Clear All Data
+                    </button>
                 </div>
             </div>
 
@@ -1634,6 +1638,142 @@
         let removedCourses = new Set();
         let semesterPlan = {}; // Store course assignments to semesters
 
+        // State persistence functions
+        function saveStateToCache() {
+            const state = {
+                selectedCourses: Array.from(selectedCourses),
+                removedCourses: Array.from(removedCourses),
+                semesterPlan: semesterPlan,
+                lastSaved: new Date().toISOString()
+            };
+            
+            try {
+                localStorage.setItem('msdsAppState', JSON.stringify(state));
+                console.log('State saved to cache successfully');
+            } catch (error) {
+                console.error('Failed to save state to cache:', error);
+            }
+        }
+
+        function loadStateFromCache() {
+            try {
+                const savedState = localStorage.getItem('msdsAppState');
+                if (savedState) {
+                    const state = JSON.parse(savedState);
+                    
+                    // Restore selected courses
+                    selectedCourses.clear();
+                    if (state.selectedCourses && Array.isArray(state.selectedCourses)) {
+                        state.selectedCourses.forEach(courseId => {
+                            if (courses.find(c => c.id === courseId)) {
+                                selectedCourses.add(courseId);
+                            }
+                        });
+                    }
+                    
+                    // Restore removed courses
+                    removedCourses.clear();
+                    if (state.removedCourses && Array.isArray(state.removedCourses)) {
+                        state.removedCourses.forEach(courseId => {
+                            if (courses.find(c => c.id === courseId)) {
+                                removedCourses.add(courseId);
+                            }
+                        });
+                    }
+                    
+                    // Restore semester plan
+                    if (state.semesterPlan && typeof state.semesterPlan === 'object') {
+                        semesterPlan = state.semesterPlan;
+                        // Also save to the semester plan storage key for consistency
+                        localStorage.setItem('msdsSemesterPlan', JSON.stringify(semesterPlan));
+                    }
+                    
+                    console.log('State loaded from cache successfully');
+                    showNotification('Previous session restored from cache! 📚', 'success');
+                    return true;
+                }
+            } catch (error) {
+                console.error('Failed to load state from cache:', error);
+            }
+            return false;
+        }
+
+        function clearStateFromCache() {
+            try {
+                localStorage.removeItem('msdsAppState');
+                localStorage.removeItem('msdsSemesterPlan');
+                console.log('State cleared from cache successfully');
+                showNotification('Cache cleared successfully! 🧹', 'success');
+            } catch (error) {
+                console.error('Failed to clear state from cache:', error);
+                showNotification('Failed to clear cache', 'error');
+            }
+        }
+
+        function hasStateInCache() {
+            try {
+                const savedState = localStorage.getItem('msdsAppState');
+                return savedState !== null;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function showClearCacheConfirm() {
+            const hasCache = hasStateInCache();
+            
+            if (!hasCache) {
+                showNotification('No cached data found to clear.', 'error');
+                return;
+            }
+            
+            const confirmMessage = 'Are you sure you want to clear ALL cached data?\n\nThis will:\n• Remove all course selections\n• Clear semester planning\n• Reset to default state\n\nThis action cannot be undone!';
+            
+            if (confirm(confirmMessage)) {
+                // Clear state
+                selectedCourses.clear();
+                removedCourses.clear();
+                
+                // Reset semester plan
+                initializeSemesterPlan();
+                Object.keys(semesterPlan).forEach(year => {
+                    Object.keys(semesterPlan[year]).forEach(semester => {
+                        semesterPlan[year][semester] = [];
+                    });
+                });
+                
+                // Clear cache
+                clearStateFromCache();
+                
+                // Reset to default selections (foundational and required)
+                courses.forEach(course => {
+                    if (course.type === 'foundational' || course.type === 'required') {
+                        selectedCourses.add(course.id);
+                    }
+                });
+                
+                // Update displays
+                updateProgressTracker();
+                updateSelectedCoursesDisplay();
+                filterCourses();
+                
+                // Save new default state
+                autoSaveState();
+            }
+        }
+
+        // Auto-save state when changes are made
+        function autoSaveState() {
+            // Debounce the save operation to avoid too frequent saves
+            if (window.autoSaveTimeout) {
+                clearTimeout(window.autoSaveTimeout);
+            }
+            
+            window.autoSaveTimeout = setTimeout(() => {
+                saveStateToCache();
+            }, 1000); // Save after 1 second of inactivity
+        }
+
         // Generate semester plan structure for 5 years (2 before + current + 2 after)
         function initializeSemesterPlan() {
             const currentYear = new Date().getFullYear();
@@ -1681,6 +1821,9 @@
             updateProgressTracker();
             updateSelectedCoursesDisplay();
             
+            // Auto-save state
+            autoSaveState();
+            
             // Re-apply filters to handle hide selected functionality
             const hideSelectedFilter = document.getElementById('hideSelectedFilter').checked;
             if (hideSelectedFilter) {
@@ -1704,6 +1847,9 @@
             
             updateProgressTracker();
             updateSelectedCoursesDisplay();
+            
+            // Auto-save state
+            autoSaveState();
             
             // Re-apply filters to handle hide removed functionality
             const hideRemovedFilter = document.getElementById('hideRemovedFilter').checked;
@@ -1876,6 +2022,9 @@
             // Add course to new semester
             semesterPlan[year][semester].push(courseId);
             
+            // Auto-save state
+            autoSaveState();
+            
             // Update displays
             updateSelectedCoursesDisplay();
             updateSemesterPlanDisplay();
@@ -1895,6 +2044,9 @@
         function saveSemesterPlan() {
             // Save to localStorage for persistence
             localStorage.setItem('msdsSemesterPlan', JSON.stringify(semesterPlan));
+            
+            // Auto-save state
+            autoSaveState();
             
             // Close modal
             closeSemesterPlanModal();
@@ -1916,6 +2068,9 @@
                         semesterPlan[year][semester] = [];
                     });
                 });
+                
+                // Auto-save state
+                autoSaveState();
                 
                 // Update display
                 updateSemesterPlanDisplay();
@@ -2111,6 +2266,10 @@
             const index = semesterPlan[year][semester].indexOf(courseId);
             if (index > -1) {
                 semesterPlan[year][semester].splice(index, 1);
+                
+                // Auto-save state
+                autoSaveState();
+                
                 updateSelectedCoursesDisplay();
                 updateSemesterPlanDisplay();
             }
@@ -2471,12 +2630,20 @@
             // Initialize semester plan structure
             initializeSemesterPlan();
             
-            // Auto-select all foundational and required courses
-            courses.forEach(course => {
-                if (course.type === 'foundational' || course.type === 'required') {
-                    selectedCourses.add(course.id);
-                }
-            });
+            // Try to load state from cache first
+            const stateLoaded = loadStateFromCache();
+            
+            // If no state was loaded from cache, auto-select foundational and required courses
+            if (!stateLoaded) {
+                courses.forEach(course => {
+                    if (course.type === 'foundational' || course.type === 'required') {
+                        selectedCourses.add(course.id);
+                    }
+                });
+                
+                // Save initial state to cache
+                autoSaveState();
+            }
             
             updateProgressTracker();
             updateSelectedCoursesDisplay();
@@ -3153,6 +3320,9 @@
                 // Save to localStorage
                 localStorage.setItem('msdsSemesterPlan', JSON.stringify(semesterPlan));
                 
+                // Auto-save state
+                autoSaveState();
+                
                 // Update displays
                 updateProgressTracker();
                 updateSelectedCoursesDisplay();
@@ -3206,6 +3376,8 @@
         window.removeCourseFromSemester = removeCourseFromSemester;
         window.handleDragOver = handleDragOver;
         window.handleDrop = handleDrop;
+        window.showClearCacheConfirm = showClearCacheConfirm;
+        window.clearStateFromCache = clearStateFromCache;
     </script>
 </body>
 </html>
