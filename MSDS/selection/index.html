@@ -110,6 +110,28 @@
             border-radius: 8px;
             padding: 1rem;
             text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .progress-item:hover {
+            background: var(--ut-white);
+            border-color: var(--ut-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .progress-item.active {
+            background: var(--ut-white);
+            border-color: var(--ut-orange);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .clear-filters-btn:hover {
+            background: #bf5700 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .progress-number {
@@ -251,6 +273,28 @@
         .course-card.removed .course-code {
             text-decoration: line-through;
             color: #6c757d;
+        }
+
+        .course-card.completed {
+            background: rgba(40, 167, 69, 0.1);
+            border-left-color: var(--green);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+        }
+
+        .course-card.completed .course-title {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .course-card.completed::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .remove-btn:hover {
@@ -846,7 +890,7 @@
                     </div>
                 </div>
                 <div class="progress-grid">
-                    <div class="progress-item">
+                    <div class="progress-item clickable-tile" data-filter-type="selected">
                         <div class="progress-number" id="totalSelected">0</div>
                         <div class="progress-label">Total Selected</div>
                         <div class="progress-bar-full">
@@ -854,7 +898,7 @@
                         </div>
                         <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 10 courses</div>
                     </div>
-                    <div class="progress-item">
+                    <div class="progress-item clickable-tile" data-filter-type="foundational">
                         <div class="progress-number" id="foundationalSelected">0</div>
                         <div class="progress-label">Foundational Courses</div>
                         <div class="progress-bar-full">
@@ -862,7 +906,7 @@
                         </div>
                         <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 3 courses</div>
                     </div>
-                    <div class="progress-item">
+                    <div class="progress-item clickable-tile" data-filter-type="required">
                         <div class="progress-number" id="requiredSelected">0</div>
                         <div class="progress-label">Additional Required</div>
                         <div class="progress-bar-full">
@@ -870,7 +914,7 @@
                         </div>
                         <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 2 courses</div>
                     </div>
-                    <div class="progress-item">
+                    <div class="progress-item clickable-tile" data-filter-type="elective1">
                         <div class="progress-number" id="elective1Selected">0</div>
                         <div class="progress-label">Elective Group 1</div>
                         <div class="progress-bar-full">
@@ -878,13 +922,21 @@
                         </div>
                         <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 3 of 5</div>
                     </div>
-                    <div class="progress-item">
+                    <div class="progress-item clickable-tile" data-filter-type="elective2">
                         <div class="progress-number" id="elective2Selected">0</div>
                         <div class="progress-label">Elective Group 2</div>
                         <div class="progress-bar-full">
                             <div class="progress-bar-fill-full" id="elective2Progress" style="width: 0%"></div>
                         </div>
                         <div style="font-size: 0.8rem; color: var(--ut-dark-gray);">Target: 2 of 5</div>
+                    </div>
+                    <div class="progress-item clickable-tile" data-filter-type="completed">
+                        <div class="progress-number" id="completedCourses" style="color: var(--green);">0</div>
+                        <div class="progress-label">Completed Courses</div>
+                        <div class="progress-bar-full">
+                            <div class="progress-bar-fill-full" id="completedProgress" style="width: 0%; background: var(--green);"></div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--green);">Track your progress</div>
                     </div>
                 </div>
             </div>
@@ -934,8 +986,8 @@
                             <option value="all">All Courses</option>
                             <option value="foundational">Foundational Courses</option>
                             <option value="required">Additional Required</option>
-                            <option value="elective-1">Elective Group 1</option>
-                            <option value="elective-2">Elective Group 2</option>
+                            <option value="elective1">Elective Group 1</option>
+                            <option value="elective2">Elective Group 2</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -971,17 +1023,62 @@
                         <label class="filter-label">Search</label>
                         <input type="text" class="filter-select" id="searchFilter" placeholder="Search courses...">
                     </div>
-                    <div class="filter-group">
-                        <label class="filter-label" style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" id="hideSelectedFilter" checked style="margin: 0;">
-                            Hide Selected Courses
-                        </label>
+                </div>
+                
+                <!-- Course Status Filters -->
+                <div class="filters-section" style="margin-top: 1rem;">
+                    <h4 style="margin: 0 0 1rem 0; color: var(--ut-orange); font-size: 1rem;">Show/Hide by Status</h4>
+                    <div class="filters-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="filter-group">
+                            <label class="filter-label" style="display: flex; align-items: center; gap: 0.5rem; color: var(--green);">
+                                <input type="checkbox" id="showSelectedFilter" checked style="margin: 0;">
+                                <i class="fas fa-check-circle" style="color: var(--green);"></i>
+                                Show Selected Courses
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label" style="display: flex; align-items: center; gap: 0.5rem; color: var(--ut-orange);">
+                                <input type="checkbox" id="showScheduledFilter" checked style="margin: 0;">
+                                <i class="fas fa-calendar" style="color: var(--ut-orange);"></i>
+                                Show Scheduled Courses
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label" style="display: flex; align-items: center; gap: 0.5rem; color: #dc3545;">
+                                <input type="checkbox" id="showRemovedFilter" style="margin: 0;">
+                                <i class="fas fa-times-circle" style="color: #dc3545;"></i>
+                                Show Removed Courses
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label" style="display: flex; align-items: center; gap: 0.5rem; color: var(--green);">
+                                <input type="checkbox" id="showCompletedFilter" checked style="margin: 0;">
+                                <i class="fas fa-graduation-cap" style="color: var(--green);"></i>
+                                Show Completed Courses
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label" style="display: flex; align-items: center; gap: 0.5rem; color: var(--blue);">
+                                <input type="checkbox" id="showUnselectedFilter" checked style="margin: 0;">
+                                <i class="fas fa-circle" style="color: var(--blue);"></i>
+                                Show Unselected Courses
+                            </label>
+                        </div>
                     </div>
-                    <div class="filter-group">
-                        <label class="filter-label" style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" id="hideRemovedFilter" checked style="margin: 0;">
-                            Hide Removed Courses
-                        </label>
+                    
+                    <!-- Clear Filters Button -->
+                    <div style="margin-top: 1rem; text-align: center;">
+                        <button class="clear-filters-btn" onclick="clearQuickFilter()" style="
+                            background: var(--ut-orange); 
+                            color: white; 
+                            border: none; 
+                            padding: 10px 20px; 
+                            border-radius: 5px; 
+                            cursor: pointer; 
+                            font-weight: 500;
+                            transition: all 0.3s ease;">
+                            <i class="fas fa-refresh"></i> Clear All Filters
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1185,234 +1282,263 @@
     </div>
 
     <script>
-        // Comprehensive course data with detailed information
+        // Comprehensive course data with detailed information from ratings.json
         const courses = [
             // Foundational Courses (3)
             {
-                id: 'data-structures',
-                title: 'Data Structures & Algorithms',
-                code: 'CS 361E',
-                type: 'foundational',
-                difficulty: 4.8,
-                workload: 22,
-                rating: 3.9,
-                credits: 3,
-                description: 'Fundamental data structures and algorithms essential for efficient data processing and software engineering.',
-                prerequisites: 'Strong programming background',
-                topics: ['Arrays & Lists', 'Trees & Graphs', 'Sorting algorithms', 'Time complexity', 'Dynamic programming', 'Algorithm design'],
-                recommendation: 'caution',
-                reasonsFor: [
-                    'Essential for technical interviews at top tech companies',
-                    'Builds strong foundation for efficient code writing',
-                    'Critical for roles involving large-scale data processing',
-                    'Excellent preparation for distributed systems and databases',
-                    'Develops problem-solving and analytical thinking skills'
-                ],
-                reasonsAgainst: [
-                    'Extremely high workload may detract from other courses',
-                    'More relevant for software engineering than pure data science',
-                    'Very challenging for students without CS background',
-                    'Time investment may not yield immediate data science benefits',
-                    'Can be overwhelming when combined with other technical courses'
-                ],
-                recommendationReason: 'Only recommended if you\'re targeting software engineering roles or top tech companies. The workload is extreme and may not be the best use of time for pure data science roles.'
-            },
-            {
                 id: 'probability-inference',
-                title: 'Probability & Inference',
+                title: 'Probability & Simulation Based Inference for Data Science',
                 code: 'DSC 381',
                 type: 'foundational',
-                difficulty: 4.2,
-                workload: 18,
-                rating: 4.1,
+                difficulty: 3.5, // Converted from 7/10 scale
+                workload: 18, // Based on workload rating 6/10
+                rating: 3.5, // Converted from 7/10 scale
                 credits: 3,
-                description: 'Comprehensive introduction to probability theory and statistical inference using simulation-based methods.',
-                prerequisites: 'Statistics background, basic programming',
-                topics: ['Probability distributions', 'Bayesian inference', 'Monte Carlo methods', 'Hypothesis testing', 'Statistical simulation'],
+                description: 'Introduction to inference through simulation process. Covers probability, exponential families, conditional probabilities, Bayes theorem, Maximum Likelihood estimation, confidence intervals, and hypothesis testing with emphasis on simulation.',
+                prerequisites: 'Graduate standing',
+                topics: ['Probability theory', 'Bayesian inference', 'Maximum likelihood estimation', 'Simulation methods', 'Hypothesis testing'],
                 recommendation: 'recommend',
                 reasonsFor: [
-                    'Essential foundation for all advanced data science courses',
-                    'Bayesian thinking is crucial for modern machine learning',
-                    'Simulation-based approach builds practical coding skills',
-                    'Excellent preparation for regression and machine learning courses',
-                    'Strong faculty with industry-relevant teaching approach'
+                    'Essential foundation for all advanced statistics and ML courses',
+                    'Simulation-based approach makes abstract concepts more intuitive',
+                    'Strong preparation for data science interviews and practical work',
+                    'No prerequisites beyond graduate standing makes it accessible',
+                    'Covers both frequentist and Bayesian approaches comprehensively'
                 ],
                 reasonsAgainst: [
-                    'Heavy workload can be overwhelming for new students',
-                    'Mathematical rigor may be challenging without strong math background',
-                    'Significant time investment required for assignments',
-                    'Simulation coding can be frustrating for programming beginners',
-                    'Fast-paced curriculum leaves little room for catching up'
+                    'Heavy statistical theory may overwhelm students without math background',
+                    'Simulation focus requires comfort with programming from day one',
+                    'Can feel abstract without immediate practical applications',
+                    'Prerequisite for many other courses, creating bottleneck if failed',
+                    'May duplicate content for students with strong statistics background'
                 ],
-                recommendationReason: 'This is an absolute must-take course as it forms the statistical foundation for everything else in the program. The Bayesian approach and simulation methods are increasingly important in modern data science.'
+                recommendationReason: 'Essential foundation for all advanced data science courses. The Bayesian approach and simulation methods are increasingly important in modern data science.'
             },
             {
-                id: 'regression-predictive',
-                title: 'Regression & Predictive Modeling',
+                id: 'regression-modeling',
+                title: 'Foundations of Regression & Modeling',
                 code: 'DSC 382',
                 type: 'foundational',
-                difficulty: 4.0,
-                workload: 16,
-                rating: 4.3,
+                difficulty: 3.0, // Converted from 6/10 scale
+                workload: 16, // Based on workload rating 6/10
+                rating: 3.5, // Converted from 7/10 scale
                 credits: 3,
-                description: 'Advanced regression techniques including linear, logistic, and generalized linear models with emphasis on model selection and validation.',
-                prerequisites: 'Probability & Inference or equivalent',
-                topics: ['Multiple regression', 'Logistic regression', 'Model selection', 'Regularization', 'GLMs', 'Cross-validation'],
+                description: 'Introduction to regression-based modeling. Covers simple and multiple regression, model interpretation, prediction, regularization, and generalized linear models.',
+                prerequisites: 'Graduate standing and DSC 381',
+                topics: ['Simple and multiple linear regression', 'Model diagnostics and validation', 'Regularization (Ridge, Lasso)', 'Generalized linear models', 'Prediction and inference'],
                 recommendation: 'recommend',
                 reasonsFor: [
-                    'Core statistical modeling skills essential for data science',
-                    'Excellent preparation for machine learning courses',
-                    'Practical focus on real-world modeling challenges',
-                    'Strong emphasis on model interpretation and validation',
-                    'Well-structured curriculum with incremental complexity'
+                    'Essential prerequisite knowledge for most advanced MSDS courses',
+                    'Strong theoretical foundation in statistical modeling approaches',
+                    'Immediately applicable to most data science and analytics roles',
+                    'Clear progression from simple to complex modeling techniques',
+                    'Excellent preparation for understanding advanced ML algorithms'
                 ],
                 reasonsAgainst: [
-                    'Can be repetitive if you have strong statistics background',
-                    'Heavy emphasis on R programming may not suit Python users',
-                    'Mathematical notation can be intimidating initially',
-                    'Group projects may have uneven workload distribution',
-                    'Some advanced topics covered superficially due to time constraints'
+                    'May feel repetitive for students with prior statistics education',
+                    'Heavy mathematical notation can be intimidating for beginners',
+                    'Limited coverage of modern ML techniques like ensemble methods',
+                    'Requires DSC 381 prerequisite potentially delaying program progress',
+                    'Focus on classical methods may feel outdated compared to deep learning'
                 ],
                 recommendationReason: 'Essential foundational course that bridges classical statistics with modern data science. The modeling skills learned here are fundamental to becoming an effective data scientist.'
             },
-            
-            // Additional Required Courses (2)
             {
-                id: 'deep-learning',
-                title: 'Deep Learning',
+                id: 'data-structures',
+                title: 'Data Structures & Algorithms',
                 code: 'DSC 395T',
-                type: 'required',
-                difficulty: 4.7,
-                workload: 20,
-                rating: 4.4,
+                type: 'foundational',
+                difficulty: 3.0, // Converted from 6/10 scale
+                workload: 18, // Based on workload rating 7/10
+                rating: 3.0, // Converted from 6/10 scale
                 credits: 3,
-                description: 'Comprehensive deep learning course covering neural networks, CNNs, RNNs, and modern architectures.',
-                prerequisites: 'Machine Learning, Linear algebra, Python proficiency',
-                topics: ['Neural networks', 'CNNs', 'RNNs', 'Transformers', 'Deep learning frameworks', 'Computer vision', 'NLP'],
-                recommendation: 'recommend',
+                description: 'Programming skills development with fundamental data structures and algorithms concepts. Extensive Python programming assignments.',
+                prerequisites: 'Graduate standing',
+                topics: ['Data structures (stacks, queues, trees, graphs)', 'Algorithm analysis and complexity', 'Programming methodology', 'Testing and debugging', 'Python implementation skills'],
+                recommendation: 'caution',
                 reasonsFor: [
-                    'Cutting-edge skills in highest demand in industry',
-                    'Opens doors to AI/ML engineer roles',
-                    'Excellent hands-on experience with modern frameworks',
-                    'Strong theoretical foundation with practical applications',
-                    'Prepares for advanced AI specialization tracks'
+                    'Essential foundation for students without strong computer science background',
+                    'Six programming assignments provide extensive hands-on practice',
+                    'Develops crucial debugging and testing skills for data science work',
+                    'Python focus aligns with most data science industry requirements',
+                    'No prerequisites makes it accessible early in the program'
                 ],
                 reasonsAgainst: [
-                    'Very high computational requirements and costs',
-                    'Requires significant mathematical background',
-                    'Fast-moving field means some content becomes outdated',
-                    'Heavy workload with complex programming assignments',
-                    'Can be overwhelming without solid ML foundation'
+                    'May be redundant for students with computer science or engineering background',
+                    'Heavy programming workload can be overwhelming for beginners',
+                    'Focus on classical CS topics may not feel directly relevant to data science',
+                    'Time-intensive assignments may compete with other course priorities',
+                    'Less exciting content compared to ML and AI focused courses'
                 ],
-                recommendationReason: 'Required course with cutting-edge skills in extremely high demand. Essential for AI/ML career paths, but ensure you have solid ML fundamentals first.'
+                recommendationReason: 'Only recommended if you lack strong programming background. Essential for building coding skills, but may be redundant for students with CS experience.'
             },
+            
+            // Additional Required Courses (2)
             {
                 id: 'machine-learning',
                 title: 'Machine Learning',
                 code: 'DSC 391L',
                 type: 'required',
-                difficulty: 4.5,
-                workload: 20,
-                rating: 4.2,
+                difficulty: 3.5, // Converted from 7/10 scale
+                workload: 18, // Based on workload rating 7/10
+                rating: 3.5, // Converted from 7/10 scale
                 credits: 3,
-                description: 'Comprehensive machine learning course covering supervised and unsupervised algorithms with hands-on implementation.',
-                prerequisites: 'Probability & Inference, Programming experience',
-                topics: ['Supervised learning', 'Classification', 'Regression', 'Cross-validation', 'Model evaluation', 'Feature engineering'],
+                description: 'Computing systems that improve performance with experience. Covers inductive classification methods including decision trees, neural networks, Bayesian methods, and computational learning theory.',
+                prerequisites: 'Graduate standing and DSC 382',
+                topics: ['Decision trees and random forests', 'Neural networks', 'Bayesian methods', 'SVM and kernel methods', 'Computational learning theory'],
                 recommendation: 'recommend',
                 reasonsFor: [
-                    'Core machine learning skills essential for data science careers',
-                    'Comprehensive coverage of fundamental ML algorithms',
-                    'Strong balance between theory and practical implementation',
-                    'Excellent preparation for advanced ML and deep learning courses',
-                    'High-quality assignments that build portfolio projects'
+                    'Comprehensive coverage of fundamental ML algorithms and theory',
+                    'Strong foundation for advanced courses like Deep Learning and RL',
+                    'Balance of theoretical understanding and practical implementation',
+                    'Python programming assignments build essential coding skills',
+                    'Excellent preparation for ML engineer and data scientist roles'
                 ],
                 reasonsAgainst: [
-                    'Very high workload can be overwhelming',
-                    'Fast-paced coverage may not allow deep understanding',
-                    'Requires strong programming skills from day one',
-                    'Mathematical complexity can be challenging',
-                    'Heavy competition among students can create stress'
+                    'Requires DSC 382 prerequisite which may delay enrollment',
+                    'Theory-heavy approach may feel disconnected from real applications',
+                    'Fast pace covers many algorithms without deep specialization',
+                    'Programming assignments can be time-intensive for coding beginners',
+                    'May overlap with undergraduate ML courses for CS background students'
                 ],
                 recommendationReason: 'Absolutely essential required course that forms the core of modern data science. Despite the heavy workload, the skills learned are fundamental to any data science career.'
+            },
+            {
+                id: 'deep-learning',
+                title: 'Deep Learning',
+                code: 'DSC 394D',
+                type: 'required',
+                difficulty: 4.0, // Converted from 8/10 scale
+                workload: 24, // Based on workload rating 9/10
+                rating: 4.0, // Converted from 8/10 scale
+                credits: 3,
+                description: 'Covers theory and practice of deep learning with hands-on PyTorch implementation. Includes computer vision, NLP, reinforcement learning, and generative modeling applications.',
+                prerequisites: 'DSC 381 and DSC 382',
+                topics: ['Deep neural network architectures', 'Convolutional neural networks', 'Sequence modeling and transformers', 'Generative adversarial networks', 'Practical PyTorch implementation'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Cutting-edge curriculum covering latest deep learning developments',
+                    'Hands-on PyTorch experience highly valued by tech industry',
+                    'SuperTuxKart project provides engaging practical application',
+                    'Strong theoretical foundation combined with implementation skills',
+                    'Excellent preparation for AI/ML engineer roles at top companies'
+                ],
+                reasonsAgainst: [
+                    'Extremely high workload requiring significant time commitment',
+                    'Steep learning curve may overwhelm students without strong math background',
+                    'Extensive hyperparameter tuning can be frustrating and time-consuming',
+                    'Requires powerful GPU or cloud resources for assignments',
+                    'Prerequisites (DSC 381 and 382) may delay enrollment for new students'
+                ],
+                recommendationReason: 'Required course with cutting-edge skills in extremely high demand. Essential for AI/ML career paths, but ensure you have solid ML fundamentals first.'
             },
             
             // Elective Courses 1 (complete 3 of 5)
             {
-                id: 'advanced-predictive',
-                title: 'Advanced Predictive Models',
-                code: 'DSC 394T',
-                type: 'elective-1',
-                difficulty: 4.3,
-                workload: 18,
-                rating: 4.2,
-                credits: 3,
-                description: 'Advanced modeling techniques including ensemble methods, model interpretation, and cutting-edge predictive algorithms.',
-                prerequisites: 'Regression & Predictive Modeling, Machine Learning',
-                topics: ['Random forests', 'Gradient boosting', 'XGBoost', 'Model interpretation', 'Feature engineering', 'Ensemble methods'],
-                recommendation: 'recommend',
-                reasonsFor: [
-                    'Directly applicable advanced techniques for industry',
-                    'Builds on core ML with practical sophisticated methods',
-                    'Strong focus on model interpretability (crucial for business)',
-                    'Excellent preparation for data scientist roles',
-                    'Manageable workload with high practical value'
-                ],
-                reasonsAgainst: [
-                    'May overlap with Machine Learning content for some topics',
-                    'Less cutting-edge compared to deep learning approaches',
-                    'Requires solid foundation in both statistics and ML',
-                    'Some techniques may be superseded by newer methods',
-                    'Heavy focus on tree-based methods may limit breadth'
-                ],
-                recommendationReason: 'Excellent choice for practical data science skills. The techniques taught are widely used in industry and the interpretability focus is increasingly important.'
-            },
-            {
                 id: 'data-exploration',
-                title: 'Data Exploration & Visualization',
+                title: 'Data Exploration, Visualization & Foundations of Unsupervised Learning',
                 code: 'DSC 385',
                 type: 'elective-1',
-                difficulty: 3.5,
-                workload: 14,
-                rating: 4.5,
+                difficulty: 2.5, // Converted from 5/10 scale
+                workload: 12, // Based on workload rating 5/10
+                rating: 4.0, // Converted from 8/10 scale
                 credits: 3,
-                description: 'Comprehensive exploration of data visualization techniques, exploratory data analysis, and unsupervised learning methods.',
-                prerequisites: 'Basic programming, statistics fundamentals',
-                topics: ['Data visualization', 'Exploratory data analysis', 'PCA', 'Clustering', 'Dimensionality reduction', 'Interactive visualizations'],
+                description: 'Learn to visualize data sets and reason about data visualizations. Covers data quality assessment, clustering, dimension reduction, and reproducibility. Heavy R programming component.',
+                prerequisites: 'Graduate standing and DSC 388G',
+                topics: ['Data visualization with R and ggplot2', 'Clustering methods', 'Dimension reduction (PCA, UMAP)', 'Data quality assessment', 'Reproducible analysis'],
                 recommendation: 'recommend',
                 reasonsFor: [
-                    'Excellent introduction to practical data science skills',
-                    'Highly practical with immediate applicable skills',
-                    'Great visualization skills crucial for communication',
-                    'Manageable workload allows focus on learning',
-                    'Prepares well for more advanced unsupervised learning'
+                    'Extremely practical skills immediately applicable to any data science role',
+                    'Professor Claus Wilke is exceptional with top-tier teaching materials',
+                    'Manageable workload allows focus on other difficult courses',
+                    'R programming skills highly valued in data science industry',
+                    'Beautiful visualizations improve communication with stakeholders'
                 ],
                 reasonsAgainst: [
-                    'May be too basic for experienced data analysts',
-                    'Limited depth in advanced visualization techniques',
-                    'Less mathematical rigor compared to other core courses',
-                    'Some visualization tools may become outdated quickly',
-                    'Group projects can be challenging with different skill levels'
+                    'May be too easy for students seeking challenging coursework',
+                    'Heavy focus on R may not align with Python-focused career paths',
+                    'Limited depth in unsupervised learning algorithms theory',
+                    'Prerequisite DSC 388G creates scheduling dependency',
+                    'Visualization focus may feel less technical compared to ML courses'
                 ],
                 recommendationReason: 'Perfect entry point into practical data science with skills you\'ll use immediately. The visualization and EDA skills are essential for any data science role.'
             },
             {
-                id: 'health-data',
-                title: 'Data Science for Health Discovery and Innovation',
-                code: 'DSC 394T',
+                id: 'advanced-predictive',
+                title: 'Advanced Predictive Models for Complex Data',
+                code: 'DSC 383',
                 type: 'elective-1',
-                difficulty: 3.8,
-                workload: 15,
-                rating: 4.1,
+                difficulty: 4.0, // Converted from 8/10 scale
+                workload: 18, // Based on workload rating 7/10
+                rating: 3.5, // Converted from 7/10 scale
                 credits: 3,
-                description: 'Applied data science techniques for healthcare applications, medical research, and health informatics.',
-                prerequisites: 'Probability & Inference, Programming experience',
-                topics: ['Medical data analysis', 'Biostatistics', 'Clinical trials', 'Health informatics', 'Medical imaging', 'Electronic health records'],
+                description: 'Advanced regression techniques for time series, spatial data, longitudinal data, and mixed models.',
+                prerequisites: 'Recommend DSC 382 prior',
+                topics: ['Time series analysis', 'Spatial statistics', 'Mixed-effects models', 'Longitudinal data analysis', 'Random Forest extensions'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Advanced techniques essential for real-world complex data scenarios',
+                    'Extends regression foundation to sophisticated modeling approaches',
+                    'Highly valuable for financial, environmental, and social science applications',
+                    'Covers modern statistical methods beyond traditional linear models',
+                    'Strong preparation for senior data scientist and statistician roles'
+                ],
+                reasonsAgainst: [
+                    'Very mathematically demanding requiring strong statistical background',
+                    'Builds heavily on DSC 382 making it inaccessible to newer students',
+                    'Complex methods may be difficult to implement without extensive practice',
+                    'May feel too specialized for general data science career paths',
+                    'Limited programming focus compared to more applied courses'
+                ],
+                recommendationReason: 'Excellent choice for practical data science skills. The techniques taught are widely used in industry and the interpretability focus is increasingly important.'
+            },
+            {
+                id: 'causal-inference',
+                title: 'Design Principles & Causal Inference for Data-Based Decision Making',
+                code: 'DSC 384',
+                type: 'elective-1',
+                difficulty: 3.5, // Converted from 7/10 scale
+                workload: 18, // Based on workload rating 7/10
+                rating: 3.0, // Converted from 6/10 scale
+                credits: 3,
+                description: 'Examines design structures for big data, causal inference, and data-based decision making processes.',
+                prerequisites: 'Recommend DSC 382 prior',
+                topics: ['Causal inference methods', 'Experimental design', 'Observational studies', 'Decision-making frameworks', 'Big data design principles'],
+                recommendation: 'recommend',
+                reasonsFor: [
+                    'Critical skills for making valid inferences from observational data',
+                    'Highly relevant for business analytics and policy research roles',
+                    'Addresses common pitfalls in data science interpretation',
+                    'Strong foundation for A/B testing and experimental design',
+                    'Increasingly important as organizations rely more on data-driven decisions'
+                ],
+                reasonsAgainst: [
+                    'Online MOOC format limits discussion and clarification opportunities',
+                    'Complex philosophical and methodological concepts may be confusing',
+                    'Heavy focus on theory with limited hands-on implementation',
+                    'May feel abstract without immediate practical programming applications',
+                    'Requires strong statistical thinking background to fully appreciate'
+                ],
+                recommendationReason: 'Recommended for students interested in analytics roles at tech companies or consulting. The causal thinking skills are increasingly important but may feel abstract initially.'
+            },
+            {
+                id: 'health-data',
+                title: 'Data Science in Healthcare Discovery and Innovation',
+                code: 'DSC 395T',
+                type: 'elective-1',
+                difficulty: 3.5, // Converted from 7/10 scale
+                workload: 16, // Based on workload rating 6/10
+                rating: 3.5, // Converted from 7/10 scale
+                credits: 3,
+                description: 'Statistical methods for health data science including survival analysis, observational studies, and randomized trial design.',
+                prerequisites: 'Graduate standing',
+                topics: ['Survival analysis', 'Propensity score analysis', 'Clinical trial design', 'Longitudinal health data', 'Healthcare prediction models'],
                 recommendation: 'caution',
                 reasonsFor: [
-                    'Growing field with significant societal impact',
-                    'Specialized knowledge valuable for healthcare industry',
-                    'Unique application area with interesting challenges',
-                    'Good networking opportunities with medical professionals',
+                    'Specialized application of data science methods',
+                    'Important for healthcare industry applications',
+                    'Covers unique statistical challenges in health data',
+                    'Good for students interested in healthcare applications',
                     'Relatively manageable workload'
                 ],
                 reasonsAgainst: [
@@ -1423,35 +1549,6 @@
                     'Could be better to specialize after gaining broad skills'
                 ],
                 recommendationReason: 'Only recommended if you have specific interest in healthcare. Better to build strong general data science skills first, then specialize in health applications.'
-            },
-            {
-                id: 'causal-inference',
-                title: 'Design Principles & Causal Inference',
-                code: 'DSC 394T',
-                type: 'elective-1',
-                difficulty: 4.1,
-                workload: 16,
-                rating: 4.0,
-                credits: 3,
-                description: 'Experimental design, causal inference methods, and advanced statistical thinking for data science.',
-                prerequisites: 'Probability & Inference, Regression & Predictive Modeling',
-                topics: ['A/B testing', 'Causal graphs', 'Instrumental variables', 'Difference-in-differences', 'Randomized experiments', 'Observational studies'],
-                recommendation: 'recommend',
-                reasonsFor: [
-                    'Critical thinking skills for making business decisions',
-                    'Highly valued in tech companies for product analytics',
-                    'Bridges statistics and business impact measurement',
-                    'Essential for roles involving experimentation',
-                    'Develops rigorous analytical thinking'
-                ],
-                reasonsAgainst: [
-                    'Heavy theoretical content with limited hands-on coding',
-                    'Can be dry and abstract for practical-minded students',
-                    'Requires strong statistical background to fully appreciate',
-                    'May not feel immediately applicable to some data science roles',
-                    'Mathematical complexity can be challenging'
-                ],
-                recommendationReason: 'Recommended for students interested in analytics roles at tech companies or consulting. The causal thinking skills are increasingly important but may feel abstract initially.'
             },
             {
                 id: 'principles-ds',
@@ -1485,120 +1582,120 @@
             
             // Elective Courses 2 (complete 2 of 5)
             {
-                id: 'advances-deep-learning',
-                title: 'Advances in Deep Learning',
+                id: 'reinforcement',
+                title: 'Reinforcement Learning: Theory and Practice',
                 code: 'DSC 395T',
                 type: 'elective-2',
-                difficulty: 4.9,
-                workload: 24,
-                rating: 4.3,
+                difficulty: 3.5, // Converted from 7/10 scale
+                workload: 16, // Based on workload rating 6/10
+                rating: 4.0, // Converted from 8/10 scale
                 credits: 3,
-                description: 'Cutting-edge deep learning techniques, latest research developments, and advanced neural network architectures.',
-                prerequisites: 'Deep Learning course, strong mathematical background',
-                topics: ['Advanced architectures', 'Generative models', 'Attention mechanisms', 'Latest research', 'Custom model development'],
+                description: 'Theory and practice of modern reinforcement learning with emphasis on temporal difference learning algorithms. Covers model-free and model-based methods.',
+                prerequisites: 'Recommended DSC 391L prior',
+                topics: ['Markov decision processes', 'Temporal difference learning', 'Q-learning and SARSA', 'Policy gradient methods', 'Actor-critic algorithms'],
                 recommendation: 'caution',
                 reasonsFor: [
-                    'Exposure to cutting-edge research and techniques',
-                    'Excellent preparation for PhD programs or research roles',
-                    'Develops skills to read and implement latest papers',
-                    'May lead to research opportunities with faculty',
-                    'Positions you at forefront of AI development'
+                    'Taught by world-renowned RL researchers Peter Stone and Scott Niekum',
+                    'Highly relevant to current AI developments and agent-based systems',
+                    'Strong theoretical foundation with practical algorithm implementation',
+                    'Excellent timing with recent advances in RL applications',
+                    'Valuable for robotics, gaming, and autonomous systems careers'
                 ],
                 reasonsAgainst: [
-                    'Extremely high workload may impact other courses',
-                    'Very theoretical with limited immediate practical application',
-                    'Requires extensive mathematical background',
-                    'May be overkill for most industry data science roles',
-                    'Rapidly changing field means content may become outdated'
+                    'Complex mathematical concepts may challenge students without strong background',
+                    'Limited professor engagement on discussion forums reported by students',
+                    'Theoretical focus may not translate immediately to practical applications',
+                    'Recommended prerequisite DSC 391L creates dependency on course scheduling',
+                    'Fast-evolving field means some content may become outdated quickly'
                 ],
-                recommendationReason: 'Only recommended for students pursuing research careers or roles at cutting-edge AI companies. The extreme workload and theoretical focus may not be worth it for most students.'
+                recommendationReason: 'Only recommended for students with specific interest in RL applications like gaming or robotics. Most data science roles don\'t require RL skills, so time might be better spent elsewhere.'
+            },
+            {
+                id: 'optimization',
+                title: 'Optimization',
+                code: 'DSC 388J',
+                type: 'elective-2',
+                difficulty: 4.0, // Converted from 8/10 scale
+                workload: 18, // Based on workload rating 7/10
+                rating: 3.0, // Converted from 6/10 scale
+                credits: 3,
+                description: 'Background on convex sets and functions, linear programming, convex programming, and iterative optimization methods.',
+                prerequisites: 'Recommended DSC 391L prior',
+                topics: ['Convex optimization theory', 'Linear and quadratic programming', 'Gradient descent methods', 'Constrained optimization', 'Large-scale optimization algorithms'],
+                recommendation: 'caution',
+                reasonsFor: [
+                    'Essential mathematical foundation for understanding modern ML algorithms',
+                    'Strong preparation for research-oriented roles and PhD programs',
+                    'Deep understanding of optimization improves ML model performance',
+                    'Highly valued skill set for quantitative finance and operations research',
+                    'Provides theoretical basis for advanced deep learning techniques'
+                ],
+                reasonsAgainst: [
+                    'Very mathematical and theoretical with steep learning curve',
+                    'May feel disconnected from practical data science applications',
+                    'Heavy linear algebra requirements may overwhelm unprepared students',
+                    'Limited immediate applicability without additional ML context',
+                    'Some students report lectures feel like abstract \'brainteasers\''
+                ],
+                recommendationReason: 'Only recommended for students with strong mathematical background pursuing research or very technical roles. Most data scientists would benefit more from other electives.'
             },
             {
                 id: 'nlp',
                 title: 'Natural Language Processing',
                 code: 'DSC 395T',
                 type: 'elective-2',
-                difficulty: 4.6,
-                workload: 19,
-                rating: 4.3,
+                difficulty: 3.5, // Converted from 7/10 scale
+                workload: 18, // Based on workload rating 7/10
+                rating: 4.0, // Converted from 8/10 scale
                 credits: 3,
-                description: 'Comprehensive NLP course covering text processing, language models, and modern NLP applications.',
-                prerequisites: 'Machine Learning, Deep Learning recommended',
-                topics: ['Text preprocessing', 'Word embeddings', 'Language models', 'Sentiment analysis', 'Named entity recognition', 'Transformers'],
+                description: 'Computational methods for syntactic and semantic analysis of natural language, including current NLP systems and discourse structures.',
+                prerequisites: 'Recommended DSC 391L prior',
+                topics: ['Transformer architectures', 'Language modeling', 'Human feedback training', 'Semantic analysis', 'Modern NLP applications'],
                 recommendation: 'recommend',
                 reasonsFor: [
-                    'Rapidly growing field with huge industry demand',
-                    'Excellent specialization for many data science roles',
-                    'Strong practical applications in business',
-                    'Good balance of theory and hands-on implementation',
-                    'Opens doors to AI/ML engineer positions'
+                    'Extremely timely with ChatGPT and large language model developments',
+                    'Understanding transformer architecture essential for modern AI roles',
+                    'Covers cutting-edge techniques like human feedback reinforcement learning',
+                    'Taught by active researchers at forefront of NLP developments',
+                    'High industry demand for NLP skills across many sectors'
                 ],
                 reasonsAgainst: [
-                    'High workload with complex programming assignments',
-                    'Requires strong deep learning background',
-                    'Fast-moving field with quickly changing best practices',
-                    'Can be overwhelming without solid ML foundation',
-                    'Heavy computational requirements'
+                    'Rapidly evolving field means course content may become outdated quickly',
+                    'Requires strong machine learning background to fully understand concepts',
+                    'Heavy computational requirements for running large language models',
+                    'May be too specialized for general data science career paths',
+                    'Limited hands-on coding compared to implementation-focused courses'
                 ],
                 recommendationReason: 'Highly recommended for students interested in AI applications. NLP skills are in extremely high demand, but ensure you have solid ML and preferably deep learning background first.'
             },
             {
-                id: 'optimization',
-                title: 'Optimization',
-                code: 'DSC 394T',
-                type: 'elective-2',
-                difficulty: 4.4,
-                workload: 17,
-                rating: 3.8,
-                credits: 3,
-                description: 'Mathematical optimization techniques for machine learning, including linear programming and convex optimization.',
-                prerequisites: 'Linear algebra, Calculus, Machine Learning',
-                topics: ['Linear programming', 'Convex optimization', 'Gradient descent', 'Constrained optimization', 'Integer programming'],
-                recommendation: 'caution',
-                reasonsFor: [
-                    'Deep mathematical understanding of ML algorithms',
-                    'Essential for developing new algorithms or research',
-                    'Valuable for roles involving large-scale optimization',
-                    'Strong foundation for advanced ML techniques',
-                    'Develops rigorous mathematical thinking'
-                ],
-                reasonsAgainst: [
-                    'Heavy mathematical content may not suit all students',
-                    'Limited immediate practical application for most data science roles',
-                    'May be overkill unless pursuing research or very technical roles',
-                    'Time might be better spent on more practical courses',
-                    'Can be quite theoretical and abstract'
-                ],
-                recommendationReason: 'Only recommended for students with strong mathematical background pursuing research or very technical roles. Most data scientists would benefit more from other electives.'
-            },
-            {
-                id: 'reinforcement',
-                title: 'Reinforcement Learning',
+                id: 'advances-deep-learning',
+                title: 'Advances in Deep Learning',
                 code: 'DSC 395T',
                 type: 'elective-2',
-                difficulty: 4.8,
-                workload: 21,
-                rating: 4.1,
+                difficulty: 4.0, // Converted from 8/10 scale
+                workload: 21, // Based on workload rating 8/10
+                rating: 3.5, // Converted from 7/10 scale
                 credits: 3,
-                description: 'Learning through interaction with environments using reward-based systems and advanced RL algorithms.',
-                prerequisites: 'Machine Learning, Strong probability background',
-                topics: ['Markov decision processes', 'Q-learning', 'Policy gradients', 'Deep RL', 'Multi-agent systems'],
+                description: 'Advanced topics in deep learning beyond foundational course. Covers cutting-edge research and specialized applications.',
+                prerequisites: 'DSC 394D',
+                topics: ['Advanced neural architectures', 'Recent research developments', 'Specialized deep learning applications', 'State-of-the-art techniques', 'Research paper analysis'],
                 recommendation: 'caution',
                 reasonsFor: [
-                    'Cutting-edge field with potential for breakthrough applications',
-                    'Excellent for game development and robotics applications',
-                    'Develops strong theoretical understanding of learning',
-                    'May lead to research opportunities',
-                    'Growing importance in autonomous systems'
+                    'Cutting-edge content covering latest research and developments',
+                    'Perfect for students pursuing research or advanced industry roles',
+                    'Builds on solid foundation from prerequisite deep learning course',
+                    'Exposure to state-of-the-art techniques before they become mainstream',
+                    'Strong preparation for PhD programs or research scientist positions'
                 ],
                 reasonsAgainst: [
-                    'Very limited practical applications in most data science roles',
-                    'Extremely high mathematical and computational complexity',
-                    'Heavy workload with complex implementations',
-                    'May not provide good return on time investment',
-                    'Better to master supervised learning first'
+                    'Requires completion of already challenging DSC 394D prerequisite',
+                    'Rapidly evolving field means course content may become outdated quickly',
+                    'Very high difficulty level may overwhelm students seeking practical skills',
+                    'Limited practical applications compared to foundational deep learning',
+                    'May not be offered every semester due to specialized nature'
                 ],
-                recommendationReason: 'Only recommended for students with specific interest in RL applications like gaming or robotics. Most data science roles don\'t require RL skills, so time might be better spent elsewhere.'
+                recommendationReason: 'Only recommended for students pursuing research careers or roles at cutting-edge AI companies. The extreme workload and theoretical focus may not be worth it for most students.'
             },
             {
                 id: 'generative-ai',
@@ -1636,6 +1733,7 @@
         const span = document.getElementsByClassName('close')[0];
         let selectedCourses = new Set();
         let removedCourses = new Set();
+        let completedCourses = new Set(); // Track completed courses
         let semesterPlan = {}; // Store course assignments to semesters
 
         // State persistence functions
@@ -1643,6 +1741,7 @@
             const state = {
                 selectedCourses: Array.from(selectedCourses),
                 removedCourses: Array.from(removedCourses),
+                completedCourses: Array.from(completedCourses),
                 semesterPlan: semesterPlan,
                 lastSaved: new Date().toISOString()
             };
@@ -1677,6 +1776,16 @@
                         state.removedCourses.forEach(courseId => {
                             if (courses.find(c => c.id === courseId)) {
                                 removedCourses.add(courseId);
+                            }
+                        });
+                    }
+                    
+                    // Restore completed courses
+                    completedCourses.clear();
+                    if (state.completedCourses && Array.isArray(state.completedCourses)) {
+                        state.completedCourses.forEach(courseId => {
+                            if (courses.find(c => c.id === courseId)) {
+                                completedCourses.add(courseId);
                             }
                         });
                     }
@@ -1733,6 +1842,7 @@
                 // Clear state
                 selectedCourses.clear();
                 removedCourses.clear();
+                completedCourses.clear();
                 
                 // Reset semester plan
                 initializeSemesterPlan();
@@ -1806,6 +1916,30 @@
             modal.style.display = 'none';
         }
 
+        // Toggle course completion status
+        function toggleCourseCompletion(courseId, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            if (completedCourses.has(courseId)) {
+                completedCourses.delete(courseId);
+            } else {
+                completedCourses.add(courseId);
+            }
+            
+            // Auto-save state
+            autoSaveState();
+            
+            // Re-apply filters to handle hide completed functionality
+            const hideCompletedFilter = document.getElementById('hideCompletedFilter')?.checked;
+            if (hideCompletedFilter) {
+                filterCourses();
+            } else {
+                displayCourses(getCurrentlyDisplayedCourses());
+            }
+        }
+
         // Toggle course selection
         function toggleCourseSelection(courseId, event) {
             if (event) {
@@ -1864,13 +1998,15 @@
         function updateProgressTracker() {
             const selectedCoursesArray = Array.from(selectedCourses);
             const selectedCourseObjects = selectedCoursesArray.map(id => courses.find(c => c.id === id));
+            const completedCoursesArray = Array.from(completedCourses);
             
             const counts = {
                 total: selectedCoursesArray.length,
                 foundational: selectedCourseObjects.filter(c => c.type === 'foundational').length,
                 required: selectedCourseObjects.filter(c => c.type === 'required').length,
                 elective1: selectedCourseObjects.filter(c => c.type === 'elective-1').length,
-                elective2: selectedCourseObjects.filter(c => c.type === 'elective-2').length
+                elective2: selectedCourseObjects.filter(c => c.type === 'elective-2').length,
+                completed: completedCoursesArray.length
             };
 
             const targets = {
@@ -1887,6 +2023,7 @@
             document.getElementById('requiredSelected').textContent = counts.required;
             document.getElementById('elective1Selected').textContent = counts.elective1;
             document.getElementById('elective2Selected').textContent = counts.elective2;
+            document.getElementById('completedCourses').textContent = counts.completed;
 
             // Update progress bars
             document.getElementById('totalProgress').style.width = `${Math.min(100, (counts.total / targets.total) * 100)}%`;
@@ -1894,6 +2031,7 @@
             document.getElementById('requiredProgress').style.width = `${Math.min(100, (counts.required / targets.required) * 100)}%`;
             document.getElementById('elective1Progress').style.width = `${Math.min(100, (counts.elective1 / targets.elective1) * 100)}%`;
             document.getElementById('elective2Progress').style.width = `${Math.min(100, (counts.elective2 / targets.elective2) * 100)}%`;
+            document.getElementById('completedProgress').style.width = `${Math.min(100, (counts.completed / Math.max(counts.total, 1)) * 100)}%`;
         }
 
         // Update selected courses display
@@ -2302,10 +2440,11 @@
 
             const isSelected = selectedCourses.has(course.id);
             const isRemoved = removedCourses.has(course.id);
+            const isCompleted = completedCourses.has(course.id);
             const semesterInfo = getSemesterInfo(course.id);
 
             return `
-                <div class="course-card ${course.type} ${isSelected ? 'selected' : ''} ${isRemoved ? 'removed' : ''}" onclick="openCourseModal('${course.id}')">
+                <div class="course-card ${course.type} ${isSelected ? 'selected' : ''} ${isRemoved ? 'removed' : ''} ${isCompleted ? 'completed' : ''}" onclick="openCourseModal('${course.id}')">
                     <button 
                         class="remove-btn" 
                         onclick="removeCourse('${course.id}', event)"
@@ -2314,6 +2453,12 @@
                     >
                         ×
                     </button>
+                    ${isCompleted ? `
+                        <div style="position: absolute; top: 8px; left: 40px; background: var(--green); color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; z-index: 5;">
+                            <i class="fas fa-check" style="margin-right: 0.25rem;"></i>
+                            Completed
+                        </div>
+                    ` : ''}
                     ${semesterInfo ? `
                         <div style="position: absolute; top: 8px; right: 8px; background: var(--ut-orange); color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; z-index: 5;">
                             <i class="fas fa-calendar" style="margin-right: 0.25rem;"></i>
@@ -2327,6 +2472,15 @@
                         </div>
                         <div style="display: flex; gap: 0.5rem; align-items: center;">
                             <div class="course-type ${course.type}">${typeLabels[course.type]}</div>
+                            <button 
+                                class="completed-btn ${isCompleted ? 'completed' : ''}" 
+                                onclick="toggleCourseCompletion('${course.id}', event)"
+                                style="background: ${isCompleted ? 'var(--green)' : '#6c757d'}; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-right: 0.25rem;"
+                                title="${isCompleted ? 'Mark as not completed' : 'Mark as completed'}"
+                            >
+                                <i class="fas ${isCompleted ? 'fa-check' : 'fa-clock'}" style="margin-right: 0.25rem;"></i>
+                                ${isCompleted ? 'Done' : 'Todo'}
+                            </button>
                             <button 
                                 class="select-btn ${isSelected ? 'selected' : ''}" 
                                 onclick="toggleCourseSelection('${course.id}', event)"
@@ -2535,6 +2689,100 @@
             }
         }
 
+        // Helper function to check if a course is scheduled
+        function isCourseScheduled(courseId) {
+            for (const year in semesterPlan) {
+                for (const semester in semesterPlan[year]) {
+                    if (semesterPlan[year][semester].includes(courseId)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // Apply quick filter based on tile click
+        function applyQuickFilter(filterType) {
+            // Reset all filters first
+            document.getElementById('typeFilter').value = 'all';
+            document.getElementById('difficultyFilter').value = 'all';
+            document.getElementById('workloadFilter').value = 'all';
+            document.getElementById('recommendationFilter').value = 'all';
+            document.getElementById('searchFilter').value = '';
+            
+            // Reset status filters - uncheck all first
+            document.getElementById('showSelectedFilter').checked = false;
+            document.getElementById('showScheduledFilter').checked = false;
+            document.getElementById('showRemovedFilter').checked = false;
+            document.getElementById('showCompletedFilter').checked = false;
+            document.getElementById('showUnselectedFilter').checked = false;
+            
+            // Remove active class from all tiles
+            document.querySelectorAll('.clickable-tile').forEach(tile => {
+                tile.classList.remove('active');
+            });
+            
+            // Add active class to clicked tile
+            document.querySelector(`[data-filter-type="${filterType}"]`).classList.add('active');
+            
+            // Apply specific filter based on tile type
+            switch(filterType) {
+                case 'selected':
+                    document.getElementById('showSelectedFilter').checked = true;
+                    break;
+                case 'foundational':
+                    document.getElementById('typeFilter').value = 'foundational';
+                    document.getElementById('showUnselectedFilter').checked = true;
+                    document.getElementById('showSelectedFilter').checked = true;
+                    break;
+                case 'required':
+                    document.getElementById('typeFilter').value = 'required';
+                    document.getElementById('showUnselectedFilter').checked = true;
+                    document.getElementById('showSelectedFilter').checked = true;
+                    break;
+                case 'elective1':
+                    document.getElementById('typeFilter').value = 'elective1';
+                    document.getElementById('showUnselectedFilter').checked = true;
+                    document.getElementById('showSelectedFilter').checked = true;
+                    break;
+                case 'elective2':
+                    document.getElementById('typeFilter').value = 'elective2';
+                    document.getElementById('showUnselectedFilter').checked = true;
+                    document.getElementById('showSelectedFilter').checked = true;
+                    break;
+                case 'completed':
+                    document.getElementById('showCompletedFilter').checked = true;
+                    break;
+            }
+            
+            // Apply the filters
+            filterCourses();
+        }
+
+        // Clear quick filter and restore default view
+        function clearQuickFilter() {
+            // Remove active class from all tiles
+            document.querySelectorAll('.clickable-tile').forEach(tile => {
+                tile.classList.remove('active');
+            });
+            
+            // Reset to default filter state
+            document.getElementById('typeFilter').value = 'all';
+            document.getElementById('difficultyFilter').value = 'all';
+            document.getElementById('workloadFilter').value = 'all';
+            document.getElementById('recommendationFilter').value = 'all';
+            document.getElementById('searchFilter').value = '';
+            
+            // Default status filters (as originally set)
+            document.getElementById('showSelectedFilter').checked = true;
+            document.getElementById('showScheduledFilter').checked = true;
+            document.getElementById('showRemovedFilter').checked = false;
+            document.getElementById('showCompletedFilter').checked = true;
+            document.getElementById('showUnselectedFilter').checked = true;
+            
+            filterCourses();
+        }
+
         // Filter courses
         function filterCourses() {
             const typeFilter = document.getElementById('typeFilter').value;
@@ -2542,8 +2790,13 @@
             const workloadFilter = document.getElementById('workloadFilter').value;
             const recommendationFilter = document.getElementById('recommendationFilter').value;
             const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
-            const hideSelectedFilter = document.getElementById('hideSelectedFilter').checked;
-            const hideRemovedFilter = document.getElementById('hideRemovedFilter').checked;
+            
+            // New status filters - show checkboxes
+            const showSelectedFilter = document.getElementById('showSelectedFilter')?.checked ?? true;
+            const showScheduledFilter = document.getElementById('showScheduledFilter')?.checked ?? true;
+            const showRemovedFilter = document.getElementById('showRemovedFilter')?.checked ?? false;
+            const showCompletedFilter = document.getElementById('showCompletedFilter')?.checked ?? true;
+            const showUnselectedFilter = document.getElementById('showUnselectedFilter')?.checked ?? true;
 
             let filteredCourses = courses;
 
@@ -2552,15 +2805,46 @@
                 filteredCourses = filteredCourses.filter(course => course.type === typeFilter);
             }
 
-            // Hide selected filter
-            if (hideSelectedFilter) {
-                filteredCourses = filteredCourses.filter(course => !selectedCourses.has(course.id));
-            }
+            // Status filters - show only courses that match at least one selected status
+            filteredCourses = filteredCourses.filter(course => {
+                const isSelected = selectedCourses.has(course.id);
+                const isScheduled = isCourseScheduled(course.id);
+                const isRemoved = removedCourses.has(course.id);
+                const isCompleted = completedCourses.has(course.id);
+                const isUnselected = !isSelected && !isRemoved;
 
-            // Hide removed filter
-            if (hideRemovedFilter) {
-                filteredCourses = filteredCourses.filter(course => !removedCourses.has(course.id));
-            }
+                // If course is removed, only show if showRemovedFilter is checked
+                if (isRemoved) {
+                    return showRemovedFilter;
+                }
+
+                // If course is completed, only show if showCompletedFilter is checked
+                if (isCompleted) {
+                    return showCompletedFilter;
+                }
+
+                // If course is selected and scheduled, show if either filter is checked
+                if (isSelected && isScheduled) {
+                    return showSelectedFilter || showScheduledFilter;
+                }
+
+                // If course is selected but not scheduled
+                if (isSelected && !isScheduled) {
+                    return showSelectedFilter;
+                }
+
+                // If course is scheduled but not selected (shouldn't happen, but just in case)
+                if (isScheduled && !isSelected) {
+                    return showScheduledFilter;
+                }
+
+                // If course is unselected
+                if (isUnselected) {
+                    return showUnselectedFilter;
+                }
+
+                return false;
+            });
 
             // Recommendation filter
             if (recommendationFilter !== 'all') {
@@ -2606,18 +2890,37 @@
 
         // Display courses
         function displayCourses(coursesToDisplay) {
-            // Sort courses by recommendation: recommend first, then caution, then avoid
-            const recommendationOrder = { 'recommend': 1, 'caution': 2, 'avoid': 3 };
+            // Sort courses by semester (older to newer), then by course name
             const sortedCourses = [...coursesToDisplay].sort((a, b) => {
-                const aOrder = recommendationOrder[a.recommendation] || 4;
-                const bOrder = recommendationOrder[b.recommendation] || 4;
+                const aSemesterInfo = getSemesterInfo(a.id);
+                const bSemesterInfo = getSemesterInfo(b.id);
                 
-                // If same recommendation level, sort alphabetically by title
-                if (aOrder === bOrder) {
-                    return a.title.localeCompare(b.title);
+                // Helper function to get semester sort order
+                const getSemesterOrder = (semesterInfo) => {
+                    if (!semesterInfo) return { year: 9999, semester: 99 }; // Unplanned courses go last
+                    
+                    const semesterOrder = { 'spring': 1, 'summer': 2, 'fall': 3 };
+                    return {
+                        year: semesterInfo.year,
+                        semester: semesterOrder[semesterInfo.semester] || 99
+                    };
+                };
+                
+                const aOrder = getSemesterOrder(aSemesterInfo);
+                const bOrder = getSemesterOrder(bSemesterInfo);
+                
+                // First sort by year
+                if (aOrder.year !== bOrder.year) {
+                    return aOrder.year - bOrder.year;
                 }
                 
-                return aOrder - bOrder;
+                // Then sort by semester within the same year
+                if (aOrder.semester !== bOrder.semester) {
+                    return aOrder.semester - bOrder.semester;
+                }
+                
+                // Finally, sort by course title alphabetically
+                return a.title.localeCompare(b.title);
             });
             
             currentlyDisplayedCourses = sortedCourses;
@@ -2654,8 +2957,21 @@
             document.getElementById('workloadFilter').addEventListener('change', filterCourses);
             document.getElementById('recommendationFilter').addEventListener('change', filterCourses);
             document.getElementById('searchFilter').addEventListener('input', filterCourses);
-            document.getElementById('hideSelectedFilter').addEventListener('change', filterCourses);
-            document.getElementById('hideRemovedFilter').addEventListener('change', filterCourses);
+            
+            // Add event listeners for new status filters
+            document.getElementById('showSelectedFilter').addEventListener('change', filterCourses);
+            document.getElementById('showScheduledFilter').addEventListener('change', filterCourses);
+            document.getElementById('showRemovedFilter').addEventListener('change', filterCourses);
+            document.getElementById('showCompletedFilter').addEventListener('change', filterCourses);
+            document.getElementById('showUnselectedFilter').addEventListener('change', filterCourses);
+            
+            // Add event listeners for clickable tiles
+            document.querySelectorAll('.clickable-tile').forEach(tile => {
+                tile.addEventListener('click', function() {
+                    const filterType = this.getAttribute('data-filter-type');
+                    applyQuickFilter(filterType);
+                });
+            });
             
             // Add file input listener for import functionality
             const fileInput = document.getElementById('importFileInput');

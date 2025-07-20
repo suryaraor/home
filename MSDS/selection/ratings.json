@@ -1,0 +1,577 @@
+{
+  "analysis_metadata": {
+    "analysis_date": "2025-07-20",
+    "data_sources": [
+      "UT Austin Official Course Catalog",
+      "Student Review Blogs (modalshift.co, benrasich.com, medium.com)",
+      "Course Materials and Syllabi",
+      "Official MSDS Program Website",
+      "GitHub Student Repositories"
+    ],
+    "note": "msdshub.com was inaccessible for detailed course reviews, so ratings are based on available student testimonials and course analysis"
+  },
+  "courses": [
+    {
+      "course_code": "DSC 381",
+      "course_title": "Probability & Simulation Based Inference for Data Science",
+      "description": "Introduction to inference through simulation process. Covers probability, exponential families, conditional probabilities, Bayes theorem, Maximum Likelihood estimation, confidence intervals, and hypothesis testing with emphasis on simulation.",
+      "prerequisites": "Graduate standing",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 7,
+        "workload": 6,
+        "difficulty": 7,
+        "lectures": 7,
+        "professor": 7
+      },
+      "student_reviews": [
+        "Foundational course with strong statistical theory",
+        "Simulation-heavy approach makes concepts more intuitive",
+        "Good preparation for advanced courses",
+        "Workload is manageable but requires statistical background"
+      ],
+      "key_topics": [
+        "Probability theory",
+        "Bayesian inference",
+        "Maximum likelihood estimation",
+        "Simulation methods",
+        "Hypothesis testing"
+      ],
+      "instructor_info": "Various faculty from Statistics and Data Sciences department",
+      "pros": [
+        "Essential foundation for all advanced statistics and ML courses",
+        "Simulation-based approach makes abstract concepts more intuitive",
+        "Strong preparation for data science interviews and practical work",
+        "No prerequisites beyond graduate standing makes it accessible",
+        "Covers both frequentist and Bayesian approaches comprehensively"
+      ],
+      "cons": [
+        "Heavy statistical theory may overwhelm students without math background",
+        "Simulation focus requires comfort with programming from day one",
+        "Can feel abstract without immediate practical applications",
+        "Prerequisite for many other courses, creating bottleneck if failed",
+        "May duplicate content for students with strong statistics background"
+      ]
+    },
+    {
+      "course_code": "DSC 385",
+      "course_title": "Data Exploration, Visualization & Foundations of Unsupervised Learning",
+      "description": "Learn to visualize data sets and reason about data visualizations. Covers data quality assessment, clustering, dimension reduction, and reproducibility. Heavy R programming component.",
+      "prerequisites": "Graduate standing and DSC 388G",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 8,
+        "workload": 5,
+        "difficulty": 5,
+        "lectures": 8,
+        "professor": 9
+      },
+      "student_reviews": [
+        "Super easy but incredibly useful content - popular with students",
+        "Excellent for learning clean data visualization techniques", 
+        "All programming assignments in R",
+        "Professor Claus Wilke is highly regarded",
+        "Great practical skills for making understandable visualizations"
+      ],
+      "key_topics": [
+        "Data visualization with R and ggplot2",
+        "Clustering methods",
+        "Dimension reduction (PCA, UMAP)",
+        "Data quality assessment",
+        "Reproducible analysis"
+      ],
+      "instructor_info": "Claus O. Wilke - highly rated professor with excellent materials",
+      "pros": [
+        "Extremely practical skills immediately applicable to any data science role",
+        "Professor Claus Wilke is exceptional with top-tier teaching materials",
+        "Manageable workload allows focus on other difficult courses",
+        "R programming skills highly valued in data science industry",
+        "Beautiful visualizations improve communication with stakeholders"
+      ],
+      "cons": [
+        "May be too easy for students seeking challenging coursework",
+        "Heavy focus on R may not align with Python-focused career paths",
+        "Limited depth in unsupervised learning algorithms theory",
+        "Prerequisite DSC 388G creates scheduling dependency",
+        "Visualization focus may feel less technical compared to ML courses"
+      ]
+    },
+    {
+      "course_code": "DSC 391L",
+      "course_title": "Machine Learning",
+      "description": "Computing systems that improve performance with experience. Covers inductive classification methods including decision trees, neural networks, Bayesian methods, and computational learning theory.",
+      "prerequisites": "Graduate standing and DSC 382",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 7,
+        "workload": 7,
+        "difficulty": 7,
+        "lectures": 7,
+        "professor": 7
+      },
+      "student_reviews": [
+        "Solid foundational ML course",
+        "Theory and practical implementation balance",
+        "Programming assignments in Python",
+        "Good preparation for advanced ML courses",
+        "Covers fundamental algorithms thoroughly"
+      ],
+      "key_topics": [
+        "Decision trees and random forests",
+        "Neural networks",
+        "Bayesian methods",
+        "SVM and kernel methods",
+        "Computational learning theory"
+      ],
+      "instructor_info": "Multiple instructors including Adam Klivans and Qiang Liu",
+      "pros": [
+        "Comprehensive coverage of fundamental ML algorithms and theory",
+        "Strong foundation for advanced courses like Deep Learning and RL",
+        "Balance of theoretical understanding and practical implementation",
+        "Python programming assignments build essential coding skills",
+        "Excellent preparation for ML engineer and data scientist roles"
+      ],
+      "cons": [
+        "Requires DSC 382 prerequisite which may delay enrollment",
+        "Theory-heavy approach may feel disconnected from real applications",
+        "Fast pace covers many algorithms without deep specialization",
+        "Programming assignments can be time-intensive for coding beginners",
+        "May overlap with undergraduate ML courses for CS background students"
+      ]
+    },
+    {
+      "course_code": "DSC 382",
+      "course_title": "Foundations of Regression & Modeling",
+      "description": "Introduction to regression-based modeling. Covers simple and multiple regression, model interpretation, prediction, regularization, and generalized linear models.",
+      "prerequisites": "Graduate standing and DSC 381",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 7,
+        "workload": 6,
+        "difficulty": 6,
+        "lectures": 7,
+        "professor": 7
+      },
+      "student_reviews": [
+        "Strong foundation in regression techniques",
+        "Good balance of theory and application",
+        "Essential prerequisite for many advanced courses",
+        "Clear progression from simple to complex models"
+      ],
+      "key_topics": [
+        "Simple and multiple linear regression",
+        "Model diagnostics and validation",
+        "Regularization (Ridge, Lasso)",
+        "Generalized linear models",
+        "Prediction and inference"
+      ],
+      "instructor_info": "Stephen Walker and other SDS faculty",
+      "pros": [
+        "Essential prerequisite knowledge for most advanced MSDS courses",
+        "Strong theoretical foundation in statistical modeling approaches",
+        "Immediately applicable to most data science and analytics roles",
+        "Clear progression from simple to complex modeling techniques",
+        "Excellent preparation for understanding advanced ML algorithms"
+      ],
+      "cons": [
+        "May feel repetitive for students with prior statistics education",
+        "Heavy mathematical notation can be intimidating for beginners",
+        "Limited coverage of modern ML techniques like ensemble methods",
+        "Requires DSC 381 prerequisite potentially delaying program progress",
+        "Focus on classical methods may feel outdated compared to deep learning"
+      ]
+    },
+    {
+      "course_code": "DSC 394D",
+      "course_title": "Deep Learning",
+      "description": "Covers theory and practice of deep learning with hands-on PyTorch implementation. Includes computer vision, NLP, reinforcement learning, and generative modeling applications.",
+      "prerequisites": "DSC 381 and DSC 382",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 8,
+        "workload": 9,
+        "difficulty": 8,
+        "lectures": 8,
+        "professor": 8
+      },
+      "student_reviews": [
+        "Most difficult course in the program but very rewarding",
+        "Extensive hyperparameter tuning required for assignments",
+        "Practical projects with SuperTuxKart racing game",
+        "Learn PyTorch thoroughly",
+        "High workload but excellent learning outcomes",
+        "Course has been restructured and improved over time"
+      ],
+      "key_topics": [
+        "Deep neural network architectures",
+        "Convolutional neural networks",
+        "Sequence modeling and transformers",
+        "Generative adversarial networks",
+        "Practical PyTorch implementation"
+      ],
+      "instructor_info": "Philipp Krähenbühl and other CS faculty",
+      "pros": [
+        "Cutting-edge curriculum covering latest deep learning developments",
+        "Hands-on PyTorch experience highly valued by tech industry",
+        "SuperTuxKart project provides engaging practical application",
+        "Strong theoretical foundation combined with implementation skills",
+        "Excellent preparation for AI/ML engineer roles at top companies"
+      ],
+      "cons": [
+        "Extremely high workload requiring significant time commitment",
+        "Steep learning curve may overwhelm students without strong math background",
+        "Extensive hyperparameter tuning can be frustrating and time-consuming",
+        "Requires powerful GPU or cloud resources for assignments",
+        "Prerequisites (DSC 381 and 382) may delay enrollment for new students"
+      ]
+    },
+    {
+      "course_code": "DSC 395T",
+      "course_title": "Reinforcement Learning: Theory and Practice",
+      "description": "Theory and practice of modern reinforcement learning with emphasis on temporal difference learning algorithms. Covers model-free and model-based methods.",
+      "prerequisites": "Recommended DSC 391L prior",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 7,
+        "workload": 6,
+        "difficulty": 7,
+        "lectures": 7,
+        "professor": 8
+      },
+      "student_reviews": [
+        "Excellent timing with AI developments in 2022-2023",
+        "Strong theoretical foundation",
+        "Programming assignments implement standard RL algorithms",
+        "Professors are active RL researchers",
+        "Good for understanding modern AI agent development"
+      ],
+      "key_topics": [
+        "Markov decision processes",
+        "Temporal difference learning",
+        "Q-learning and SARSA",
+        "Policy gradient methods",
+        "Actor-critic algorithms"
+      ],
+      "instructor_info": "Peter Stone and Scott Niekum - active researchers",
+      "pros": [
+        "Taught by world-renowned RL researchers Peter Stone and Scott Niekum",
+        "Highly relevant to current AI developments and agent-based systems",
+        "Strong theoretical foundation with practical algorithm implementation",
+        "Excellent timing with recent advances in RL applications",
+        "Valuable for robotics, gaming, and autonomous systems careers"
+      ],
+      "cons": [
+        "Complex mathematical concepts may challenge students without strong background",
+        "Limited professor engagement on discussion forums reported by students",
+        "Theoretical focus may not translate immediately to practical applications",
+        "Recommended prerequisite DSC 391L creates dependency on course scheduling",
+        "Fast-evolving field means some content may become outdated quickly"
+      ]
+    },
+    {
+      "course_code": "DSC 388J",
+      "course_title": "Optimization",
+      "description": "Background on convex sets and functions, linear programming, convex programming, and iterative optimization methods.",
+      "prerequisites": "Recommended DSC 391L prior",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 6,
+        "workload": 7,
+        "difficulty": 8,
+        "lectures": 6,
+        "professor": 6
+      },
+      "student_reviews": [
+        "More theoretical and mathematical",
+        "Challenging material requiring strong math background",
+        "Important for advanced ML understanding",
+        "Linear algebra intensive",
+        "Some students find lectures feel like 'brainteasers'"
+      ],
+      "key_topics": [
+        "Convex optimization theory",
+        "Linear and quadratic programming",
+        "Gradient descent methods",
+        "Constrained optimization",
+        "Large-scale optimization algorithms"
+      ],
+      "instructor_info": "Multiple instructors from CS and mathematics departments",
+      "pros": [
+        "Essential mathematical foundation for understanding modern ML algorithms",
+        "Strong preparation for research-oriented roles and PhD programs",
+        "Deep understanding of optimization improves ML model performance",
+        "Highly valued skill set for quantitative finance and operations research",
+        "Provides theoretical basis for advanced deep learning techniques"
+      ],
+      "cons": [
+        "Very mathematical and theoretical with steep learning curve",
+        "May feel disconnected from practical data science applications",
+        "Heavy linear algebra requirements may overwhelm unprepared students",
+        "Limited immediate applicability without additional ML context",
+        "Some students report lectures feel like abstract 'brainteasers'"
+      ]
+    },
+    {
+      "course_code": "DSC 395T",
+      "course_title": "Advances in Deep Learning",
+      "description": "Advanced topics in deep learning beyond foundational course. Covers cutting-edge research and specialized applications.",
+      "prerequisites": "DSC 394D",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 7,
+        "workload": 8,
+        "difficulty": 8,
+        "lectures": 7,
+        "professor": 7
+      },
+      "student_reviews": [
+        "Recently added course splitting content from original deep learning",
+        "Focuses on latest research developments",
+        "Very current with field developments",
+        "Requires strong foundation from prerequisite courses"
+      ],
+      "key_topics": [
+        "Advanced neural architectures",
+        "Recent research developments",
+        "Specialized deep learning applications",
+        "State-of-the-art techniques",
+        "Research paper analysis"
+      ],
+      "instructor_info": "Computer Science faculty specializing in deep learning",
+      "pros": [
+        "Cutting-edge content covering latest research and developments",
+        "Perfect for students pursuing research or advanced industry roles",
+        "Builds on solid foundation from prerequisite deep learning course",
+        "Exposure to state-of-the-art techniques before they become mainstream",
+        "Strong preparation for PhD programs or research scientist positions"
+      ],
+      "cons": [
+        "Requires completion of already challenging DSC 394D prerequisite",
+        "Rapidly evolving field means course content may become outdated quickly",
+        "Very high difficulty level may overwhelm students seeking practical skills",
+        "Limited practical applications compared to foundational deep learning",
+        "May not be offered every semester due to specialized nature"
+      ]
+    },
+    {
+      "course_code": "DSC 395T",
+      "course_title": "Data Structures & Algorithms",
+      "description": "Programming skills development with fundamental data structures and algorithms concepts. Extensive Python programming assignments.",
+      "prerequisites": "Graduate standing",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 6,
+        "workload": 7,
+        "difficulty": 6,
+        "lectures": 6,
+        "professor": 6
+      },
+      "student_reviews": [
+        "Foundation course for programming skills",
+        "Six programming assignments in Python",
+        "Good for building debugging and testing skills",
+        "Essential for students without strong CS background",
+        "Clear progression in complexity"
+      ],
+      "key_topics": [
+        "Data structures (stacks, queues, trees, graphs)",
+        "Algorithm analysis and complexity",
+        "Programming methodology",
+        "Testing and debugging",
+        "Python implementation skills"
+      ],
+      "instructor_info": "Computer Science department instructors",
+      "pros": [
+        "Essential foundation for students without strong computer science background",
+        "Six programming assignments provide extensive hands-on practice",
+        "Develops crucial debugging and testing skills for data science work",
+        "Python focus aligns with most data science industry requirements",
+        "No prerequisites makes it accessible early in the program"
+      ],
+      "cons": [
+        "May be redundant for students with computer science or engineering background",
+        "Heavy programming workload can be overwhelming for beginners",
+        "Focus on classical CS topics may not feel directly relevant to data science",
+        "Time-intensive assignments may compete with other course priorities",
+        "Less exciting content compared to ML and AI focused courses"
+      ]
+    },
+    {
+      "course_code": "DSC 384",
+      "course_title": "Design Principles & Causal Inference for Data-Based Decision Making",
+      "description": "Examines design structures for big data, causal inference, and data-based decision making processes.",
+      "prerequisites": "Recommend DSC 382 prior",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 7,
+        "workload": 7,
+        "difficulty": 7,
+        "lectures": 6,
+        "professor": 6
+      },
+      "student_reviews": [
+        "Important for understanding causality vs correlation",
+        "Would benefit from live discussions in MOOC format",
+        "Practical applications in experimental design",
+        "Essential for data science decision making"
+      ],
+      "key_topics": [
+        "Causal inference methods",
+        "Experimental design",
+        "Observational studies",
+        "Decision-making frameworks",
+        "Big data design principles"
+      ],
+      "instructor_info": "Statistics and Data Sciences faculty",
+      "pros": [
+        "Critical skills for making valid inferences from observational data",
+        "Highly relevant for business analytics and policy research roles",
+        "Addresses common pitfalls in data science interpretation",
+        "Strong foundation for A/B testing and experimental design",
+        "Increasingly important as organizations rely more on data-driven decisions"
+      ],
+      "cons": [
+        "Online MOOC format limits discussion and clarification opportunities",
+        "Complex philosophical and methodological concepts may be confusing",
+        "Heavy focus on theory with limited hands-on implementation",
+        "May feel abstract without immediate practical programming applications",
+        "Requires strong statistical thinking background to fully appreciate"
+      ]
+    },
+    {
+      "course_code": "DSC 383",
+      "course_title": "Advanced Predictive Models for Complex Data",
+      "description": "Advanced regression techniques for time series, spatial data, longitudinal data, and mixed models.",
+      "prerequisites": "Recommend DSC 382 prior",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 7,
+        "workload": 7,
+        "difficulty": 8,
+        "lectures": 7,
+        "professor": 7
+      },
+      "student_reviews": [
+        "Extends foundational regression to complex scenarios",
+        "Strong focus on dependent data structures",
+        "Important for real-world applications",
+        "Mathematically demanding"
+      ],
+      "key_topics": [
+        "Time series analysis",
+        "Spatial statistics",
+        "Mixed-effects models",
+        "Longitudinal data analysis",
+        "Random Forest extensions"
+      ],
+      "instructor_info": "Advanced statistics faculty",
+      "pros": [
+        "Advanced techniques essential for real-world complex data scenarios",
+        "Extends regression foundation to sophisticated modeling approaches",
+        "Highly valuable for financial, environmental, and social science applications",
+        "Covers modern statistical methods beyond traditional linear models",
+        "Strong preparation for senior data scientist and statistician roles"
+      ],
+      "cons": [
+        "Very mathematically demanding requiring strong statistical background",
+        "Builds heavily on DSC 382 making it inaccessible to newer students",
+        "Complex methods may be difficult to implement without extensive practice",
+        "May feel too specialized for general data science career paths",
+        "Limited programming focus compared to more applied courses"
+      ]
+    },
+    {
+      "course_code": "DSC 395T",
+      "course_title": "Natural Language Processing",
+      "description": "Computational methods for syntactic and semantic analysis of natural language, including current NLP systems and discourse structures.",
+      "prerequisites": "Recommended DSC 391L prior",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 8,
+        "workload": 7,
+        "difficulty": 7,
+        "lectures": 8,
+        "professor": 8
+      },
+      "student_reviews": [
+        "Excellent timing with ChatGPT and transformer developments",
+        "Understanding transformer architecture is crucial",
+        "Covers human-in-the-loop reinforcement learning",
+        "Very relevant to current AI developments",
+        "Cutting-edge research focus"
+      ],
+      "key_topics": [
+        "Transformer architectures",
+        "Language modeling",
+        "Human feedback training",
+        "Semantic analysis",
+        "Modern NLP applications"
+      ],
+      "instructor_info": "NLP researchers including Eunsol Choi",
+      "pros": [
+        "Extremely timely with ChatGPT and large language model developments",
+        "Understanding transformer architecture essential for modern AI roles",
+        "Covers cutting-edge techniques like human feedback reinforcement learning",
+        "Taught by active researchers at forefront of NLP developments",
+        "High industry demand for NLP skills across many sectors"
+      ],
+      "cons": [
+        "Rapidly evolving field means course content may become outdated quickly",
+        "Requires strong machine learning background to fully understand concepts",
+        "Heavy computational requirements for running large language models",
+        "May be too specialized for general data science career paths",
+        "Limited hands-on coding compared to implementation-focused courses"
+      ]
+    },
+    {
+      "course_code": "DSC 395T",
+      "course_title": "Data Science in Healthcare Discovery and Innovation",
+      "description": "Statistical methods for health data science including survival analysis, observational studies, and randomized trial design.",
+      "prerequisites": "Graduate standing",
+      "credit_hours": 3,
+      "ratings": {
+        "overall_rating": 7,
+        "workload": 6,
+        "difficulty": 7,
+        "lectures": 7,
+        "professor": 7
+      },
+      "student_reviews": [
+        "Specialized application of data science methods",
+        "Important for healthcare industry applications",
+        "Covers unique statistical challenges in health data",
+        "Good for students interested in healthcare applications"
+      ],
+      "key_topics": [
+        "Survival analysis",
+        "Propensity score analysis",
+        "Clinical trial design",
+        "Longitudinal health data",
+        "Healthcare prediction models"
+      ],
+      "instructor_info": "Biostatistics and health data science faculty"
+    }
+  ],
+  "program_overview": {
+    "total_cost": "$10,000",
+    "duration": "2-6 years (flexible)",
+    "format": "Fully online, asynchronous",
+    "total_courses": 10,
+    "credit_hours": 30,
+    "key_strengths": [
+      "Affordable tuition compared to other programs",
+      "High-quality curriculum jointly offered by Statistics and Computer Science departments",
+      "Flexibility for working professionals",
+      "Strong theoretical foundation with practical applications",
+      "Access to recorded lectures from renowned faculty"
+    ],
+    "key_weaknesses": [
+      "Limited interaction with professors and peers",
+      "Few research opportunities",
+      "No capstone project option",
+      "Some courses not offered every semester",
+      "Lectures recorded in 2019-2020 may be outdated for rapidly evolving fields"
+    ],
+    "overall_program_rating": 7.5
+  }
+}
