@@ -1625,6 +1625,8 @@
         let travelPath = [];
         let pathPolyline = null;
         let highwayRoutes = new Map(); // Store highway route segments between towns
+        let fullTripRoute = null; // Store the complete trip route polyline
+        let plannedRouteCoordinates = []; // Store all planned route coordinates
         
         // State welcome system
         let visitedStates = new Set();
@@ -1935,46 +1937,98 @@
         let lastApiCall = 0;
         const API_RATE_LIMIT = 1000; // 1 second between calls
 
-        // Get highway route between two points using OpenRouteService
+        // Get highway route using multiple free routing services
         async function getHighwayRoute(fromLat, fromLng, toLat, toLng) {
-            try {
-                // Rate limiting
-                const now = Date.now();
-                const timeSinceLastCall = now - lastApiCall;
-                if (timeSinceLastCall < API_RATE_LIMIT) {
-                    await new Promise(resolve => setTimeout(resolve, API_RATE_LIMIT - timeSinceLastCall));
+            // Try multiple free routing services in order of preference
+            const routingServices = [
+                {
+                    name: 'OSRM (Free, No Limits)',
+                    url: `https://router.project-osrm.org/route/v1/driving/${fromLng},${fromLat};${toLng},${toLat}?overview=full&geometries=geojson`,
+                    parseResponse: (data) => {
+                        if (data.routes && data.routes[0] && data.routes[0].geometry) {
+                            const coordinates = data.routes[0].geometry.coordinates;
+                            return coordinates.map(coord => [coord[1], coord[0]]);
+                        }
+                        return null;
+                    }
+                },
+                {
+                    name: 'GraphHopper (2,500/day free)',
+                    url: `https://graphhopper.com/api/1/route?point=${fromLat},${fromLng}&point=${toLat},${toLng}&vehicle=car&locale=en&calc_points=true&key=YOUR_GRAPHHOPPER_KEY`,
+                    parseResponse: (data) => {
+                        if (data.paths && data.paths[0] && data.paths[0].points) {
+                            // GraphHopper uses encoded polyline, would need decoding
+                            // For now, skip this service unless you want to add polyline decoding
+                            return null;
+                        }
+                        return null;
+                    }
                 }
-                lastApiCall = Date.now();
+            ];
 
-                // Use OpenRouteService API (free, but rate limited)
-                const url = `https://api.openrouteservice.org/v2/directions/driving-car?start=${fromLng},${fromLat}&end=${toLng},${toLat}`;
-                
-                const response = await fetch(url, {
-                    headers: {
-                        'Accept': 'application/json',
-                        // Note: For production use, you should get a free API key from openrouteservice.org
-                        // 'Authorization': 'Bearer YOUR_API_KEY'
+            // Try each service
+            for (const service of routingServices) {
+                try {
+                    // Rate limiting
+                    const now = Date.now();
+                    const timeSinceLastCall = now - lastApiCall;
+                    if (timeSinceLastCall < API_RATE_LIMIT) {
+                        await new Promise(resolve => setTimeout(resolve, API_RATE_LIMIT - timeSinceLastCall));
                     }
-                });
+                    lastApiCall = Date.now();
+
+                    console.log(`🔄 Trying ${service.name}...`);
+                    const response = await fetch(service.url);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        const routeCoords = service.parseResponse(data);
+                        
+                        if (routeCoords && routeCoords.length > 0) {
+                            console.log(`✅ Got route from ${service.name}: ${routeCoords.length} points`);
+                            return routeCoords;
+                        }
+                    } else {
+                        console.log(`❌ ${service.name} returned ${response.status}`);
+                    }
+                } catch (error) {
+                    console.log(`❌ ${service.name} failed:`, error.message);
+                }
+            }
+
+            console.log('🔄 All routing services failed, using enhanced smart interpolation...');
+            
+            // Enhanced fallback with smart interpolation if all APIs fail
+            try {
+                const route = [];
+                route.push([fromLat, fromLng]);
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.features && data.features[0] && data.features[0].geometry) {
-                        const coordinates = data.features[0].geometry.coordinates;
-                        // Convert from [lng, lat] to [lat, lng] format for Leaflet
-                        const routeCoords = coordinates.map(coord => [coord[1], coord[0]]);
-                        console.log(`🛣️ Got highway route: ${routeCoords.length} points`);
-                        return routeCoords;
+                const distance = calculateDistance(fromLat, fromLng, toLat, toLng);
+                
+                if (distance > 50) {
+                    const numWaypoints = Math.min(Math.floor(distance / 30), 8);
+                    
+                    for (let i = 1; i <= numWaypoints; i++) {
+                        const fraction = i / (numWaypoints + 1);
+                        let lat = fromLat + (toLat - fromLat) * fraction;
+                        let lng = fromLng + (toLng - fromLng) * fraction;
+                        
+                        const variation = 0.01;
+                        const offset = (Math.sin(fraction * Math.PI * 2) * variation) * (distance / 100);
+                        lat += offset;
+                        lng += offset * 0.5;
+                        
+                        route.push([lat, lng]);
                     }
                 }
                 
-                console.log('Route API response not valid, using direct line');
-            } catch (error) {
-                console.log('Route service unavailable, using direct line:', error.message);
+                route.push([toLat, toLng]);
+                console.log(`🛣️ Using smart interpolation: ${route.length} waypoints for ${distance.toFixed(0)} mile trip`);
+                return route;
+            } catch (fallbackError) {
+                console.log('Fallback route generation failed, using direct line');
+                return [[fromLat, fromLng], [toLat, toLng]];
             }
-            
-            // Fallback to direct line if routing service fails
-            return [[fromLat, fromLng], [toLat, toLng]];
         }
 
         // Get cached or fetch highway route between towns
@@ -1993,6 +2047,120 @@
             highwayRoutes.set(routeKey, route);
             
             return route;
+        }
+
+        // Generate and display the complete trip route
+        async function showFullTripRoute() {
+            console.log('🗺️ Generating complete trip route...');
+            
+            // Remove existing full route
+            if (fullTripRoute) {
+                map.removeLayer(fullTripRoute);
+                fullTripRoute = null;
+            }
+            
+            // Get all towns in route order
+            const allRouteTowns = [];
+            Object.values(townsData).forEach((route, routeIndex) => {
+                route.towns.forEach((town, townIndex) => {
+                    const townCopy = { ...town };
+                    townCopy.id = `${town.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${town.state.toLowerCase()}`;
+                    townCopy.routeIndex = routeIndex;
+                    townCopy.townIndex = townIndex;
+                    allRouteTowns.push(townCopy);
+                });
+            });
+            
+            if (allRouteTowns.length < 2) {
+                console.log('Not enough towns to create route');
+                return;
+            }
+            
+            plannedRouteCoordinates = [];
+            let totalPlannedDistance = 0;
+            let completedSegments = 0;
+            
+            // Generate route segments between all consecutive towns
+            for (let i = 0; i < allRouteTowns.length - 1; i++) {
+                const fromTown = allRouteTowns[i];
+                const toTown = allRouteTowns[i + 1];
+                
+                try {
+                    const routeSegment = await getRouteSegment(fromTown, toTown);
+                    
+                    // Add route segment coordinates
+                    if (i === 0) {
+                        plannedRouteCoordinates.push(...routeSegment);
+                    } else {
+                        plannedRouteCoordinates.push(...routeSegment.slice(1));
+                    }
+                    
+                    // Calculate distance
+                    const segmentDistance = routeSegment.reduce((dist, coord, idx) => {
+                        if (idx > 0) {
+                            const prevCoord = routeSegment[idx - 1];
+                            return dist + calculateDistance(prevCoord[0], prevCoord[1], coord[0], coord[1]);
+                        }
+                        return dist;
+                    }, 0);
+                    totalPlannedDistance += segmentDistance;
+                    
+                    // Check if this segment is completed (both towns checked in)
+                    const fromChecked = checkedInTowns.has(fromTown.id);
+                    const toChecked = checkedInTowns.has(toTown.id);
+                    if (fromChecked && toChecked) {
+                        completedSegments++;
+                    }
+                    
+                } catch (error) {
+                    console.log(`Error getting route between ${fromTown.name} and ${toTown.name}:`, error);
+                    // Fallback to direct line
+                    if (i === 0) {
+                        plannedRouteCoordinates.push([fromTown.lat, fromTown.lng], [toTown.lat, toTown.lng]);
+                    } else {
+                        plannedRouteCoordinates.push([toTown.lat, toTown.lng]);
+                    }
+                    totalPlannedDistance += calculateDistance(fromTown.lat, fromTown.lng, toTown.lat, toTown.lng);
+                }
+                
+                // Show progress
+                const progress = ((i + 1) / (allRouteTowns.length - 1) * 100).toFixed(0);
+                console.log(`🛣️ Route generation progress: ${progress}% (${i + 1}/${allRouteTowns.length - 1} segments)`);
+            }
+            
+            // Create the complete route polyline
+            if (plannedRouteCoordinates.length > 0) {
+                fullTripRoute = L.polyline(plannedRouteCoordinates, {
+                    color: '#2563eb', // Blue color for planned route
+                    weight: 4,
+                    opacity: 0.7,
+                    dashArray: '8, 12', // Dashed line to distinguish from traveled path
+                    lineJoin: 'round',
+                    lineCap: 'round'
+                }).addTo(map);
+                
+                // Add popup with trip information
+                const completionPercentage = ((completedSegments / (allRouteTowns.length - 1)) * 100).toFixed(1);
+                fullTripRoute.bindPopup(`
+                    <div style="text-align: center;">
+                        <h4 style="margin: 0; color: #2563eb;">🗺️ Complete Trip Route</h4>
+                        <p style="margin: 5px 0;">Total Distance: ~${totalPlannedDistance.toFixed(0)} miles</p>
+                        <p style="margin: 5px 0;">Towns: ${allRouteTowns.length} locations</p>
+                        <p style="margin: 5px 0;">Progress: ${completionPercentage}% completed</p>
+                        <p style="margin: 5px 0; font-size: 0.8rem;">
+                            ${allRouteTowns[0].name}, ${allRouteTowns[0].state} → ${allRouteTowns[allRouteTowns.length - 1].name}, ${allRouteTowns[allRouteTowns.length - 1].state}
+                        </p>
+                        <p style="margin: 5px 0; font-size: 0.7rem; color: #666;">
+                            Blue dashed line shows planned highway route
+                        </p>
+                    </div>
+                `);
+                
+                console.log(`🗺️ Complete trip route displayed: ${allRouteTowns.length} towns, ~${totalPlannedDistance.toFixed(0)} miles, ${completionPercentage}% completed`);
+                
+                // Show notification about route generation
+                showNotification(`🗺️ Complete trip route generated: ${totalPlannedDistance.toFixed(0)} miles planned!`, 'info');
+            }
         }
 
         // Update travel path on map
@@ -3765,7 +3933,10 @@
             console.log('🛣️ Updating travel path...');
             await updateTravelPath();
             
-            console.log('💾 Starting auto-save...');
+            console.log('�️ Displaying full trip route...');
+            await showFullTripRoute();
+            
+            console.log('�💾 Starting auto-save...');
             startAutoSave();
             
             if (autoCheckinEnabled) {
