@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test</title>
+</head>
+<body>
+    <div id="debug"></div>
+    
+    <script>
+        // Simple test data
+        const townsData = {
+            "route1": {
+                name: "Test Route",
+                distance: "100 miles",
+                towns: [
+                    { name: "Test Town", state: "MO", county: "Test County", type: "city", lat: 39.0997, lng: -94.5786, population: 50000 }
+                ]
+            }
+        };
+        
+        let allTowns = [];
+        let allCounties = [];
+        
+        function initializeTownsData() {
+            console.log('Starting initialization...');
+            allTowns = [];
+            allCounties = [];
+            
+            Object.values(townsData).forEach((route, routeIndex) => {
+                route.towns.forEach((town, townIndex) => {
+                    const townCopy = { ...town };
+                    townCopy.id = town.name.toLowerCase().replace(/[^a-z0-9]/g, '') + '-' + town.state.toLowerCase();
+                    townCopy.route = route.name;
+                    allTowns.push(townCopy);
+                });
+            });
+            
+            console.log('Towns initialized:', allTowns.length);
+            document.getElementById('debug').innerHTML = 'Towns found: ' + allTowns.length + '<br>First town: ' + JSON.stringify(allTowns[0]);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            initializeTownsData();
+        });
+    </script>
+</body>
+</html>

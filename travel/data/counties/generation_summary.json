@@ -1,0 +1,21 @@
+{
+  "generated_files": [
+    "illinois_counties.geojson",
+    "indiana_counties.geojson",
+    "missouri_counties.geojson",
+    "ohio_counties.geojson",
+    "pennsylvania_counties.geojson",
+    "wisconsin_counties.geojson",
+    "west_virginia_counties.geojson"
+  ],
+  "total_counties": 70,
+  "states_included": [
+    "IL (Illinois)",
+    "IN (Indiana)",
+    "MO (Missouri)",
+    "OH (Ohio)",
+    "PA (Pennsylvania)",
+    "WI (Wisconsin)",
+    "WV (West Virginia)"
+  ]
+}

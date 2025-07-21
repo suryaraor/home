@@ -1,0 +1,395 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "039",
+        "GEOID": "54039",
+        "NAME": "Kanawha",
+        "NAMELSAD": "Kanawha County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -81.45,
+              38.25
+            ],
+            [
+              -81.14999999999999,
+              38.25
+            ],
+            [
+              -81.14999999999999,
+              38.55
+            ],
+            [
+              -81.45,
+              38.55
+            ],
+            [
+              -81.45,
+              38.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "003",
+        "GEOID": "54003",
+        "NAME": "Berkeley",
+        "NAMELSAD": "Berkeley County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -78.05000000000001,
+              39.35
+            ],
+            [
+              -77.75,
+              39.35
+            ],
+            [
+              -77.75,
+              39.65
+            ],
+            [
+              -78.05000000000001,
+              39.65
+            ],
+            [
+              -78.05000000000001,
+              39.35
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "037",
+        "GEOID": "54037",
+        "NAME": "Jefferson",
+        "NAMELSAD": "Jefferson County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -77.95,
+              39.15
+            ],
+            [
+              -77.64999999999999,
+              39.15
+            ],
+            [
+              -77.64999999999999,
+              39.449999999999996
+            ],
+            [
+              -77.95,
+              39.449999999999996
+            ],
+            [
+              -77.95,
+              39.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "107",
+        "GEOID": "54107",
+        "NAME": "Wood",
+        "NAMELSAD": "Wood County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -81.55000000000001,
+              39.15
+            ],
+            [
+              -81.25,
+              39.15
+            ],
+            [
+              -81.25,
+              39.449999999999996
+            ],
+            [
+              -81.55000000000001,
+              39.449999999999996
+            ],
+            [
+              -81.55000000000001,
+              39.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "011",
+        "GEOID": "54011",
+        "NAME": "Cabell",
+        "NAMELSAD": "Cabell County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -82.45,
+              38.25
+            ],
+            [
+              -82.14999999999999,
+              38.25
+            ],
+            [
+              -82.14999999999999,
+              38.55
+            ],
+            [
+              -82.45,
+              38.55
+            ],
+            [
+              -82.45,
+              38.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "079",
+        "GEOID": "54079",
+        "NAME": "Putnam",
+        "NAMELSAD": "Putnam County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -82.05000000000001,
+              38.35
+            ],
+            [
+              -81.75,
+              38.35
+            ],
+            [
+              -81.75,
+              38.65
+            ],
+            [
+              -82.05000000000001,
+              38.65
+            ],
+            [
+              -82.05000000000001,
+              38.35
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "081",
+        "GEOID": "54081",
+        "NAME": "Raleigh",
+        "NAMELSAD": "Raleigh County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -81.35000000000001,
+              37.65
+            ],
+            [
+              -81.05,
+              37.65
+            ],
+            [
+              -81.05,
+              37.949999999999996
+            ],
+            [
+              -81.35000000000001,
+              37.949999999999996
+            ],
+            [
+              -81.35000000000001,
+              37.65
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "037",
+        "GEOID": "54037",
+        "NAME": "Jefferson",
+        "NAMELSAD": "Jefferson County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -77.95,
+              39.15
+            ],
+            [
+              -77.64999999999999,
+              39.15
+            ],
+            [
+              -77.64999999999999,
+              39.449999999999996
+            ],
+            [
+              -77.95,
+              39.449999999999996
+            ],
+            [
+              -77.95,
+              39.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "061",
+        "GEOID": "54061",
+        "NAME": "Monongalia",
+        "NAMELSAD": "Monongalia County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.05000000000001,
+              39.45
+            ],
+            [
+              -79.75,
+              39.45
+            ],
+            [
+              -79.75,
+              39.75
+            ],
+            [
+              -80.05000000000001,
+              39.75
+            ],
+            [
+              -80.05000000000001,
+              39.45
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "54",
+        "COUNTYFP": "069",
+        "GEOID": "54069",
+        "NAME": "Ohio",
+        "NAMELSAD": "Ohio County",
+        "state_abbr": "WV",
+        "state_name": "West Virginia"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.85000000000001,
+              39.95
+            ],
+            [
+              -80.55,
+              39.95
+            ],
+            [
+              -80.55,
+              40.25
+            ],
+            [
+              -80.85000000000001,
+              40.25
+            ],
+            [
+              -80.85000000000001,
+              39.95
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

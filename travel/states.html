@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US States Check-in | Midwest Road Trip</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #2c5aa0;
+            --accent-orange: #ff6b35;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --success-green: #28a745;
+            --info-blue: #17a2b8;
+            --warning-yellow: #ffc107;
+            --purple: #6f42c1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: var(--primary-blue);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .nav-links {
+            margin-top: 15px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            background: var(--accent-orange);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .controls-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid var(--accent-orange);
+        }
+
+        .stat-card.visited {
+            border-left-color: var(--success-green);
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        }
+
+        .stat-card.progress {
+            border-left-color: var(--info-blue);
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+        }
+
+        .map-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .states-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #usMap {
+            height: 600px;
+            border-radius: 10px;
+            border: 3px solid var(--light-gray);
+        }
+
+        .states-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .state-card {
+            background: var(--light-gray);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid var(--accent-orange);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .state-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .state-card.visited {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-left-color: var(--success-green);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+        }
+
+        .state-card.not-visited {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-left-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .state-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .state-name {
+            font-weight: bold;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+        }
+
+        .state-abbr {
+            background: var(--info-blue);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .state-details {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-bottom: 10px;
+        }
+
+        .state-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-not-visited {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-visited {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .checkin-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .checkin-btn:hover {
+            background: #1e3a5f;
+        }
+
+        .checkin-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .states-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark-gray);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .save-status.show {
+            opacity: 1;
+        }
+
+        .save-status.saving {
+            background: var(--warning-yellow);
+            color: var(--dark-gray);
+        }
+
+        .save-status.saved {
+            background: var(--success-green);
+        }
+
+        .save-status.error {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-flag-usa"></i>
+                US States Check-in
+            </h1>
+            <p>Track your journey across the United States</p>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-route"></i> Main Trip View
+                </a>
+                <a href="towns.html" class="nav-link">
+                    <i class="fas fa-map-marker-alt"></i> Towns & Cities
+                </a>
+                <a href="#" class="nav-link" onclick="clearAllStateData()">
+                    <i class="fas fa-trash"></i> Clear All Data
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="controls-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalStates">8</div>
+                    <div class="stat-label">Trip States</div>
+                </div>
+                <div class="stat-card visited">
+                    <div class="stat-number" id="visitedStates">0</div>
+                    <div class="stat-label">States Visited</div>
+                </div>
+                <div class="stat-card progress">
+                    <div class="stat-number" id="progressPercentage">0%</div>
+                    <div class="stat-label">Progress</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="remainingStates">8</div>
+                    <div class="stat-label">Remaining</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Map Section -->
+            <div class="map-section">
+                <h2 class="section-title">
+                    <i class="fas fa-map"></i>
+                    United States Map
+                </h2>
+                <div id="usMap"></div>
+                
+                <div style="margin-top: 15px; padding: 15px; background: var(--light-gray); border-radius: 8px;">
+                    <h4 style="margin: 0 0 10px 0; color: var(--primary-blue);">Map Legend</h4>
+                    <div style="display: flex; flex-direction: column; gap: 5px; font-size: 0.9rem;">
+                        <div><span style="color: #28a745;">●</span> States Visited</div>
+                        <div><span style="color: #6c757d;">●</span> States Not Visited Yet</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- States List -->
+            <div class="states-section">
+                <h2 class="section-title">
+                    <i class="fas fa-list"></i>
+                    States on Your Route
+                </h2>
+                
+                <div id="statesContainer" class="states-grid">
+                    <!-- States will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Status Indicator -->
+    <div id="saveStatus" class="save-status">
+        <i class="fas fa-save"></i>
+        <span>Auto-saving...</span>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // US States data for the trip route
+        const tripStates = [
+            {
+                name: "Missouri",
+                abbr: "MO",
+                capital: "Jefferson City",
+                population: "6.2M",
+                nickname: "Show-Me State",
+                lat: 38.5767,
+                lng: -92.6890
+            },
+            {
+                name: "Iowa",
+                abbr: "IA",
+                capital: "Des Moines",
+                population: "3.2M",
+                nickname: "Hawkeye State",
+                lat: 42.0115,
+                lng: -93.2105
+            },
+            {
+                name: "Wisconsin",
+                abbr: "WI",
+                capital: "Madison",
+                population: "5.9M",
+                nickname: "Badger State",
+                lat: 44.2619,
+                lng: -89.6165
+            },
+            {
+                name: "Illinois",
+                abbr: "IL",
+                capital: "Springfield",
+                population: "12.6M",
+                nickname: "Prairie State",
+                lat: 40.3495,
+                lng: -88.9861
+            },
+            {
+                name: "Indiana",
+                abbr: "IN",
+                capital: "Indianapolis",
+                population: "6.8M",
+                nickname: "Hoosier State",
+                lat: 39.8494,
+                lng: -86.2583
+            },
+            {
+                name: "Ohio",
+                abbr: "OH",
+                capital: "Columbus",
+                population: "11.8M",
+                nickname: "Buckeye State",
+                lat: 40.3888,
+                lng: -82.7649
+            },
+            {
+                name: "West Virginia",
+                abbr: "WV",
+                capital: "Charleston",
+                population: "1.8M",
+                nickname: "Mountain State",
+                lat: 38.4912,
+                lng: -80.9540
+            },
+            {
+                name: "Pennsylvania",
+                abbr: "PA",
+                capital: "Harrisburg",
+                population: "13.0M",
+                nickname: "Keystone State",
+                lat: 40.5908,
+                lng: -77.2098
+            }
+        ];
+
+        // Application state
+        let visitedStates = new Set();
+        let checkinHistory = [];
+
+        // Storage configuration
+        const STORAGE_KEY = 'statesTravelData';
+        const TOWNS_STORAGE_KEY = 'townsTravelState';
+        const AUTO_SAVE_INTERVAL = 10000;
+
+        // Initialize map
+        const map = L.map('usMap').setView([39.8283, -89.6965], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Load state from localStorage
+        function loadStatesState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    visitedStates = new Set(data.visited || []);
+                    checkinHistory = data.history || [];
+                    console.log('✅ States data loaded successfully');
+                    return true;
+                }
+            } catch (error) {
+                console.error('❌ Error loading states data:', error);
+            }
+            return false;
+        }
+
+        // Check for auto check-ins from town visits
+        function checkAutoStateVisits() {
+            try {
+                const townData = localStorage.getItem(TOWNS_STORAGE_KEY);
+                if (townData) {
+                    const data = JSON.parse(townData);
+                    const checkedInTowns = new Set(data.checkedIn || []);
+                    
+                    // Map of town IDs to states (from the towns data)
+                    const stateMapping = {
+                        'MO': ['kansascity-mo', 'liberty-mo', 'lawson-mo', 'cameron-mo', 'gallatin-mo', 'trenton-mo', 'spickard-mo', 'stlouis-mo', 'wentzville-mo', 'columbia-mo', 'boonville-mo', 'marshall-mo', 'sedalia-mo', 'warrensburg-mo', 'harrisonville-mo', 'raymore-mo'],
+                        'IA': ['grundycenter-ia', 'reinbeck-ia', 'waterloo-ia', 'cedarfalls-ia', 'waverly-ia', 'sumner-ia', 'fayette-ia'],
+                        'WI': ['prairieduchien-wi', 'fennimore-wi', 'platteville-wi', 'dodgeville-wi', 'mounthoreb-wi', 'middleton-wi', 'madison-wi', 'sunprairie-wi', 'watertown-wi', 'oconomowoc-wi', 'waukesha-wi', 'milwaukee-wi', 'racine-wi', 'kenosha-wi'],
+                        'IL': ['waukegan-il', 'highlandpark-il', 'evanston-il', 'chicago-il', 'robinson-il', 'lawrenceville-il', 'mountcarmel-il', 'fairfield-il', 'flora-il', 'effingham-il', 'vandalia-il', 'greenville-il', 'highland-il'],
+                        'IN': ['gary-in', 'portage-in', 'valparaiso-in', 'plymouth-in', 'warsaw-in', 'fortwayne-in', 'decatur-in', 'richmond-in', 'newcastle-in', 'anderson-in', 'noblesville-in', 'fishers-in', 'indianapolis-in', 'plainfield-in', 'greencastle-in', 'terrehaute-in', 'vincennes-in'],
+                        'OH': ['vanwert-oh', 'lima-oh', 'bellefontaine-oh', 'marysville-oh', 'delaware-oh', 'sunbury-oh', 'westerville-oh', 'columbus-oh', 'reynoldsburg-oh', 'newark-oh', 'zanesville-oh', 'cambridge-oh', 'stclairsville-oh', 'bridgeport-oh', 'eastliverpool-oh', 'salem-oh', 'alliance-oh', 'canton-oh', 'massillon-oh', 'wooster-oh', 'mansfield-oh', 'marion-oh', 'dublin-oh'],
+                        'WV': ['wheeling-wv', 'triadelphia-wv'],
+                        'PA': ['washington-pa', 'canonsburg-pa', 'peterstownship-pa', 'bethelpark-pa', 'pittsburgh-pa', 'sewickley-pa', 'beaver-pa']
+                    };
+                    
+                    // Check if any towns in each state have been visited
+                    Object.keys(stateMapping).forEach(state => {
+                        const stateTowns = stateMapping[state];
+                        const hasVisitedTown = stateTowns.some(townId => checkedInTowns.has(townId));
+                        
+                        if (hasVisitedTown && !visitedStates.has(state)) {
+                            visitedStates.add(state);
+                            const stateInfo = tripStates.find(s => s.abbr === state);
+                            if (stateInfo) {
+                                checkinHistory.unshift({
+                                    state: state,
+                                    stateName: stateInfo.name,
+                                    time: new Date().toLocaleString(),
+                                    type: 'auto'
+                                });
+                                
+                                showNotification(`Auto checked-in to ${stateInfo.name}!`, 'auto');
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error checking auto state visits:', error);
+            }
+        }
+
+        // Save state to localStorage
+        function saveStatesState() {
+            showSaveStatus('saving');
+            
+            try {
+                const data = {
+                    visited: Array.from(visitedStates),
+                    history: checkinHistory,
+                    lastSaveTime: new Date().toISOString(),
+                    version: '1.0'
+                };
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                showSaveStatus('saved');
+                return true;
+            } catch (error) {
+                console.error('❌ Error saving states data:', error);
+                showSaveStatus('error');
+                return false;
+            }
+        }
+
+        // Perform state check-in
+        function performStateCheckin(stateAbbr, isAuto = false) {
+            if (visitedStates.has(stateAbbr)) return;
+
+            const stateInfo = tripStates.find(s => s.abbr === stateAbbr);
+            if (!stateInfo) return;
+
+            visitedStates.add(stateAbbr);
+            
+            const checkinTime = new Date();
+            checkinHistory.unshift({
+                state: stateAbbr,
+                stateName: stateInfo.name,
+                time: checkinTime.toLocaleString(),
+                type: isAuto ? 'auto' : 'manual'
+            });
+
+            // Keep only last 50 check-ins
+            if (checkinHistory.length > 50) {
+                checkinHistory = checkinHistory.slice(0, 50);
+            }
+
+            saveStatesState();
+            updateStats();
+            updateStatesDisplay();
+            updateMap();
+
+            showNotification(`Checked in to ${stateInfo.name}!`, isAuto ? 'auto' : 'manual');
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalStates = tripStates.length;
+            const visitedCount = visitedStates.size;
+            const progressPercentage = Math.round((visitedCount / totalStates) * 100);
+            const remainingCount = totalStates - visitedCount;
+
+            document.getElementById('totalStates').textContent = totalStates;
+            document.getElementById('visitedStates').textContent = visitedCount;
+            document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
+            document.getElementById('remainingStates').textContent = remainingCount;
+        }
+
+        // Update states display
+        function updateStatesDisplay() {
+            const container = document.getElementById('statesContainer');
+            container.innerHTML = '';
+
+            tripStates.forEach(state => {
+                const isVisited = visitedStates.has(state.abbr);
+                
+                const stateCard = document.createElement('div');
+                stateCard.className = `state-card ${isVisited ? 'visited' : 'not-visited'}`;
+                
+                stateCard.innerHTML = `
+                    <div class="state-header">
+                        <div class="state-name">${state.name}</div>
+                        <div class="state-abbr">${state.abbr}</div>
+                    </div>
+                    <div class="state-details">
+                        Capital: ${state.capital}<br>
+                        Population: ${state.population}<br>
+                        "${state.nickname}"
+                    </div>
+                    <div class="state-status">
+                        <div class="status-badge ${isVisited ? 'status-visited' : 'status-not-visited'}">
+                            ${isVisited ? '✓ Visited' : 'Not Visited'}
+                        </div>
+                        <button class="checkin-btn" onclick="event.stopPropagation(); performStateCheckin('${state.abbr}')" 
+                                ${isVisited ? 'disabled' : ''}>
+                            ${isVisited ? 'Visited' : 'Check In'}
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(stateCard);
+            });
+        }
+
+        // Update map with state markers
+        function updateMap() {
+            // Clear existing markers
+            map.eachLayer(layer => {
+                if (layer instanceof L.CircleMarker) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            // Add state markers
+            tripStates.forEach(state => {
+                const isVisited = visitedStates.has(state.abbr);
+                
+                const color = isVisited ? '#28a745' : '#6c757d';
+                const size = isVisited ? 10 : 8;
+                
+                const marker = L.circleMarker([state.lat, state.lng], {
+                    radius: size,
+                    fillColor: color,
+                    color: 'white',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+                
+                marker.bindPopup(`
+                    <div style="text-align: center;">
+                        <h4 style="margin: 0; color: ${color};">${state.name} (${state.abbr})</h4>
+                        <p style="margin: 5px 0; font-size: 0.9rem;">Capital: ${state.capital}</p>
+                        <p style="margin: 5px 0; font-size: 0.9rem;">Population: ${state.population}</p>
+                        <p style="margin: 5px 0; font-style: italic;">"${state.nickname}"</p>
+                        ${isVisited ? '<p style="color: #28a745; margin: 5px 0 0 0; font-weight: bold;">✓ Visited</p>' : ''}
+                    </div>
+                `);
+                
+                marker.on('click', () => {
+                    if (!isVisited) {
+                        performStateCheckin(state.abbr);
+                    }
+                });
+            });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            
+            let bgColor, icon;
+            switch(type) {
+                case 'auto':
+                    bgColor = 'var(--success-green)';
+                    icon = 'fa-location-arrow';
+                    break;
+                case 'manual':
+                    bgColor = 'var(--primary-blue)';
+                    icon = 'fa-check';
+                    break;
+                case 'info':
+                    bgColor = 'var(--info-blue)';
+                    icon = 'fa-info-circle';
+                    break;
+                default:
+                    bgColor = 'var(--success-green)';
+                    icon = 'fa-check';
+            }
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                font-weight: bold;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                animation: slideIn 0.5s ease;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            notification.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Show save status
+        function showSaveStatus(status, message) {
+            const statusEl = document.getElementById('saveStatus');
+            const iconEl = statusEl.querySelector('i');
+            const textEl = statusEl.querySelector('span');
+            
+            statusEl.classList.remove('saving', 'saved', 'error');
+            
+            switch(status) {
+                case 'saving':
+                    statusEl.classList.add('saving', 'show');
+                    iconEl.className = 'fas fa-spinner fa-spin';
+                    textEl.textContent = message || 'Saving...';
+                    break;
+                case 'saved':
+                    statusEl.classList.add('saved', 'show');
+                    iconEl.className = 'fas fa-check';
+                    textEl.textContent = message || 'Saved!';
+                    setTimeout(() => statusEl.classList.remove('show'), 2000);
+                    break;
+                case 'error':
+                    statusEl.classList.add('error', 'show');
+                    iconEl.className = 'fas fa-exclamation-triangle';
+                    textEl.textContent = message || 'Save failed';
+                    setTimeout(() => statusEl.classList.remove('show'), 3000);
+                    break;
+            }
+        }
+
+        // Clear all data
+        function clearAllStateData() {
+            if (confirm('Are you sure you want to clear all your state check-in data? This cannot be undone.')) {
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                    
+                    visitedStates = new Set();
+                    checkinHistory = [];
+                    
+                    updateStats();
+                    updateStatesDisplay();
+                    updateMap();
+                    
+                    showNotification('All state data cleared successfully!', 'info');
+                } catch (error) {
+                    showNotification('Failed to clear data. Please try again.', 'error');
+                }
+            }
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Auto-save functionality
+        function startAutoSave() {
+            setInterval(() => {
+                saveStatesState();
+            }, AUTO_SAVE_INTERVAL);
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatesState();
+            checkAutoStateVisits(); // Check for auto check-ins from town visits
+            updateStats();
+            updateStatesDisplay();
+            updateMap();
+            startAutoSave();
+            
+            // Save state before page unload
+            window.addEventListener('beforeunload', () => {
+                saveStatesState();
+            });
+
+            // Check for auto state visits every 30 seconds
+            setInterval(checkAutoStateVisits, 30000);
+        });
+    </script>
+</body>
+</html>

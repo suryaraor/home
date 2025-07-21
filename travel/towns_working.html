@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Towns & Cities Check-in | Midwest Road Trip</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #2c5aa0;
+            --accent-orange: #ff6b35;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --success-green: #28a745;
+            --info-blue: #17a2b8;
+            --warning-yellow: #ffc107;
+            --purple: #6f42c1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: var(--primary-blue);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .nav-links {
+            margin-top: 15px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            background: var(--accent-orange);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .controls-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-label {
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success-green);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid var(--light-gray);
+            border-radius: 5px;
+            background: white;
+            color: var(--dark-gray);
+            font-size: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid var(--accent-orange);
+        }
+
+        .stat-card.points {
+            border-left-color: var(--warning-yellow);
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        }
+
+        .stat-card.county {
+            border-left-color: var(--accent-orange);
+            background: linear-gradient(135deg, #ffe5cc, #ffb74d);
+        }
+
+        .stat-card.score {
+            border-left-color: var(--purple);
+            background: linear-gradient(135deg, #e8d5ff, #d1c4e9);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+        }
+
+        .towns-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .map-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #townsMap {
+            height: 400px;
+            border-radius: 10px;
+            border: 3px solid var(--light-gray);
+        }
+
+        .route-section {
+            margin-bottom: 30px;
+        }
+
+        .route-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--info-blue));
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .route-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .route-distance {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .towns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .town-card {
+            background: var(--light-gray);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid var(--accent-orange);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .town-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .town-card.checked-in {
+            background: #d4edda;
+            border-left-color: var(--success-green);
+        }
+
+        .town-card.nearby {
+            background: #fff3cd;
+            border-left-color: var(--warning-yellow);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 193, 7, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+        }
+
+        .town-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .town-number {
+            background: var(--accent-orange);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: bold;
+            min-width: 24px;
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .town-name {
+            font-weight: bold;
+            color: var(--primary-blue);
+            font-size: 1rem;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .points-indicator {
+            background: var(--warning-yellow);
+            color: var(--dark-gray);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .points-earned {
+            animation: pointsEarned 1s ease;
+        }
+
+        @keyframes pointsEarned {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); background: var(--success-green); color: white; }
+            100% { transform: scale(1); }
+        }
+
+        .town-type {
+            background: var(--info-blue);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .town-details {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-bottom: 10px;
+        }
+
+        .town-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-not-visited {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-checked-in {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-nearby {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .distance-info {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+        }
+
+        .checkin-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .checkin-btn:hover {
+            background: #1e3a5f;
+        }
+
+        .checkin-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .uncheck-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .uncheck-btn:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-section {
+                position: static;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark-gray);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .save-status.show {
+            opacity: 1;
+        }
+
+        .save-status.saving {
+            background: var(--warning-yellow);
+            color: var(--dark-gray);
+        }
+
+        .save-status.saved {
+            background: var(--success-green);
+        }
+
+        .save-status.error {
+            background: #dc3545;
+        }
+
+        /* Modal styles for town details */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+            padding: 5px;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--light-gray);
+            color: var(--primary-blue);
+        }
+
+        .town-info {
+            margin-bottom: 20px;
+        }
+
+        .town-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            background: var(--light-gray);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .things-to-know {
+            margin-top: 20px;
+        }
+
+        .things-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fact-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-left: 4px solid var(--accent-orange);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .fact-number {
+            background: var(--accent-orange);
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .fact-text {
+            display: inline;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-map-marker-alt"></i>
+                Small Towns & Cities Check-in
+            </h1>
+            <p>Discover and check-in to every town and city along your Midwest adventure</p>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-route"></i> Main Trip View
+                </a>
+                <a href="states.html" class="nav-link">
+                    <i class="fas fa-flag-usa"></i> US States Map
+                </a>
+                <a href="#" class="nav-link" onclick="clearAllTownData()">
+                    <i class="fas fa-trash"></i> Clear All Data
+                </a>
+            </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="controls-section">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label class="control-label">Auto Check-in</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoCheckinToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <small>Auto check-in within 2 miles</small>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">Route Auto Check-in</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="routeCheckinToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <small>Auto check-in towns along route</small>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">Filter by State</label>
+                    <select class="filter-select" id="stateFilter">
+                        <option value="all">All States</option>
+                        <option value="MO">Missouri</option>
+                        <option value="IA">Iowa</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IN">Indiana</option>
+                        <option value="OH">Ohio</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="PA">Pennsylvania</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">Filter by Type</label>
+                    <select class="filter-select" id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="city">Cities</option>
+                        <option value="town">Towns</option>
+                        <option value="village">Villages</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">Filter by Status</label>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Locations</option>
+                        <option value="checked-in">Checked In</option>
+                        <option value="nearby">Nearby</option>
+                        <option value="not-visited">Not Visited</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTowns">0</div>
+                    <div class="stat-label">Total Places</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="checkedInTowns">0</div>
+                    <div class="stat-label">Checked In</div>
+                </div>
+                <div class="stat-card county">
+                    <div class="stat-number" id="totalCounties">0</div>
+                    <div class="stat-label">Counties Visited</div>
+                </div>
+                <div class="stat-card points">
+                    <div class="stat-number" id="totalPoints">0</div>
+                    <div class="stat-label">Total Points</div>
+                </div>
+                <div class="stat-card score">
+                    <div class="stat-number" id="averageScore">0</div>
+                    <div class="stat-label">Avg Points/Place</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="nearbyTowns">0</div>
+                    <div class="stat-label">Nearby</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="progressPercentage">0%</div>
+                    <div class="stat-label">Progress</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Towns List -->
+            <div class="towns-section">
+                <h2 class="section-title">
+                    <i class="fas fa-list"></i>
+                    Towns & Cities Along Your Route
+                </h2>
+                
+                <div id="townsContainer">
+                    <!-- Towns will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Map Section -->
+            <div class="map-section">
+                <h2 class="section-title">
+                    <i class="fas fa-map"></i>
+                    Towns Map
+                </h2>
+                <div id="townsMap"></div>
+                
+                <div style="margin-top: 15px; padding: 15px; background: var(--light-gray); border-radius: 8px;">
+                    <h4 style="margin: 0 0 10px 0; color: var(--primary-blue);">Map Legend</h4>
+                    <div style="display: flex; flex-direction: column; gap: 5px; font-size: 0.9rem;">
+                        <div><span style="color: #28a745;">●</span> Checked In</div>
+                        <div><span style="color: #ffc107;">●</span> Nearby (2 miles)</div>
+                        <div><span style="color: #2c5aa0;">●</span> Cities</div>
+                        <div><span style="color: #17a2b8;">●</span> Towns</div>
+                        <div><span style="color: #6f42c1;">●</span> Villages</div>
+                        <div><span style="color: #ff0000;">●</span> Your Location</div>
+                        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6;">
+                            <div><span style="color: #28a745;">⭕</span> Town Boundaries (Checked In)</div>
+                            <small style="color: #6c757d; margin-left: 20px;">Green circles show claimed territory</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Status Indicator -->
+    <div id="saveStatus" class="save-status">
+        <i class="fas fa-save"></i>
+        <span>Auto-saving...</span>
+    </div>
+
+    <!-- Town Details Modal -->
+    <div id="townModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" class="modal-title">Town Details</h2>
+                <button class="modal-close" onclick="closeTownModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="town-info">
+                <div class="town-meta" id="townMeta">
+                    <!-- Meta information will be populated here -->
+                </div>
+                
+                <div class="things-to-know">
+                    <h3 class="things-title">
+                        <i class="fas fa-lightbulb"></i>
+                        Top 3 Things to Know
+                    </h3>
+                    <div id="townFacts">
+                        <!-- Facts will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Towns and cities data along the route
+        const townsData = {
+            "route1": {
+                name: "Kansas City, MO → Milwaukee, WI",
+                distance: "460 miles",
+                towns: [
+                    { name: "Kansas City", state: "MO", county: "Jackson County", type: "city", lat: 39.0997, lng: -94.5786, population: 508000 },
+                    { name: "Liberty", state: "MO", county: "Clay County", type: "city", lat: 39.2461, lng: -94.4191, population: 31000 },
+                    { name: "Lawson", state: "MO", county: "Ray County", type: "town", lat: 39.4394, lng: -94.2019, population: 2500 },
+                    { name: "Cameron", state: "MO", county: "DeKalb County", type: "city", lat: 39.7394, lng: -94.2413, population: 10000 },
+                    { name: "Gallatin", state: "MO", county: "Daviess County", type: "town", lat: 39.9139, lng: -93.9619, population: 1800 },
+                    { name: "Trenton", state: "MO", county: "Grundy County", type: "city", lat: 40.0764, lng: -93.6166, population: 6000 },
+                    { name: "Spickard", state: "MO", county: "Grundy County", type: "village", lat: 40.2428, lng: -93.4285, population: 300 },
+                    { name: "Grundy Center", state: "IA", county: "Grundy County", type: "city", lat: 42.3608, lng: -92.7685, population: 2700 },
+                    { name: "Reinbeck", state: "IA", county: "Grundy County", type: "town", lat: 42.3236, lng: -92.5996, population: 1750 },
+                    { name: "Waterloo", state: "IA", type: "city", lat: 42.4928, lng: -92.3426, population: 68000 },
+                    { name: "Cedar Falls", state: "IA", type: "city", lat: 42.5348, lng: -92.4453, population: 40000 },
+                    { name: "Waverly", state: "IA", type: "city", lat: 42.7266, lng: -92.4732, population: 10000 },
+                    { name: "Sumner", state: "IA", type: "town", lat: 42.8472, lng: -92.0868, population: 2000 },
+                    { name: "Fayette", state: "IA", type: "town", lat: 42.8403, lng: -91.8021, population: 1300 },
+                    { name: "Prairie du Chien", state: "WI", type: "city", lat: 43.0519, lng: -91.0993, population: 5800 },
+                    { name: "Fennimore", state: "WI", type: "city", lat: 42.9842, lng: -90.6551, population: 2500 },
+                    { name: "Platteville", state: "WI", type: "city", lat: 42.7341, lng: -90.4787, population: 12000 },
+                    { name: "Dodgeville", state: "WI", type: "city", lat: 42.9603, lng: -90.1301, population: 5000 },
+                    { name: "Mount Horeb", state: "WI", type: "village", lat: 43.0069, lng: -89.7368, population: 7500 },
+                    { name: "Middleton", state: "WI", type: "city", lat: 43.0972, lng: -89.5043, population: 20000 },
+                    { name: "Madison", state: "WI", type: "city", lat: 43.0731, lng: -89.4012, population: 270000 },
+                    { name: "Sun Prairie", state: "WI", type: "city", lat: 43.1836, lng: -89.2137, population: 35000 },
+                    { name: "Watertown", state: "WI", type: "city", lat: 43.1947, lng: -88.7290, population: 24000 },
+                    { name: "Oconomowoc", state: "WI", type: "city", lat: 43.1039, lng: -88.4993, population: 17000 },
+                    { name: "Waukesha", state: "WI", type: "city", lat: 43.0117, lng: -88.2315, population: 72000 },
+                    { name: "Milwaukee", state: "WI", type: "city", lat: 43.0389, lng: -87.9065, population: 590000 }
+                ]
+            },
+            "route2": {
+                name: "Milwaukee, WI → Columbus, OH",
+                distance: "355 miles",
+                towns: [
+                    { name: "Milwaukee", state: "WI", county: "Milwaukee County", type: "city", lat: 43.0389, lng: -87.9065, population: 590000 },
+                    { name: "Racine", state: "WI", county: "Racine County", type: "city", lat: 42.7261, lng: -87.7829, population: 78000 },
+                    { name: "Kenosha", state: "WI", county: "Kenosha County", type: "city", lat: 42.5847, lng: -87.8212, population: 100000 },
+                    { name: "Waukegan", state: "IL", county: "Lake County", type: "city", lat: 42.3636, lng: -87.8448, population: 87000 },
+                    { name: "Highland Park", state: "IL", county: "Lake County", type: "city", lat: 42.1817, lng: -87.8006, population: 30000 },
+                    { name: "Evanston", state: "IL", county: "Cook County", type: "city", lat: 42.0451, lng: -87.6877, population: 75000 },
+                    { name: "Chicago", state: "IL", county: "Cook County", type: "city", lat: 41.8781, lng: -87.6298, population: 2700000 },
+                    { name: "Gary", state: "IN", county: "Lake County", type: "city", lat: 41.5934, lng: -87.3464, population: 75000 },
+                    { name: "Portage", state: "IN", county: "Porter County", type: "city", lat: 41.5759, lng: -87.1762, population: 37000 },
+                    { name: "Valparaiso", state: "IN", county: "Porter County", type: "city", lat: 41.4731, lng: -87.0611, population: 35000 },
+                    { name: "Plymouth", state: "IN", county: "Marshall County", type: "city", lat: 41.3436, lng: -86.3100, population: 10000 },
+                    { name: "Warsaw", state: "IN", county: "Kosciusko County", type: "city", lat: 41.2381, lng: -85.8530, population: 15000 },
+                    { name: "Fort Wayne", state: "IN", county: "Allen County", type: "city", lat: 41.0793, lng: -85.1394, population: 270000 },
+                    { name: "Decatur", state: "IN", county: "Adams County", type: "city", lat: 40.8306, lng: -84.9291, population: 9500 },
+                    { name: "Van Wert", state: "OH", county: "Van Wert County", type: "city", lat: 40.8695, lng: -84.5844, population: 10500 },
+                    { name: "Lima", state: "OH", county: "Allen County", type: "city", lat: 40.7425, lng: -84.1052, population: 36000 },
+                    { name: "Bellefontaine", state: "OH", county: "Logan County", type: "city", lat: 40.3614, lng: -83.7596, population: 14000 },
+                    { name: "Marysville", state: "OH", county: "Union County", type: "city", lat: 40.2364, lng: -83.3677, population: 25000 },
+                    { name: "Delaware", state: "OH", county: "Delaware County", type: "city", lat: 40.2987, lng: -83.0679, population: 40000 },
+                    { name: "Sunbury", state: "OH", county: "Delaware County", type: "village", lat: 40.2431, lng: -82.8590, population: 5000 },
+                    { name: "Westerville", state: "OH", county: "Delaware County", type: "city", lat: 40.1262, lng: -82.9291, population: 39000 },
+                    { name: "Columbus", state: "OH", county: "Franklin County", type: "city", lat: 39.9612, lng: -82.9988, population: 900000 }
+                ]
+            },
+            "route3": {
+                name: "Columbus, OH → Pittsburgh, PA",
+                distance: "185 miles",
+                towns: [
+                    { name: "Columbus", state: "OH", county: "Franklin County", type: "city", lat: 39.9612, lng: -82.9988, population: 900000 },
+                    { name: "Reynoldsburg", state: "OH", county: "Franklin County", type: "city", lat: 39.9548, lng: -82.8121, population: 37000 },
+                    { name: "Newark", state: "OH", county: "Licking County", type: "city", lat: 40.0581, lng: -82.4013, population: 49000 },
+                    { name: "Zanesville", state: "OH", county: "Muskingum County", type: "city", lat: 39.9403, lng: -82.0132, population: 25000 },
+                    { name: "Cambridge", state: "OH", county: "Guernsey County", type: "city", lat: 40.0312, lng: -81.5882, population: 11000 },
+                    { name: "St. Clairsville", state: "OH", county: "Belmont County", type: "city", lat: 40.0806, lng: -80.9009, population: 5000 },
+                    { name: "Bridgeport", state: "OH", county: "Belmont County", type: "village", lat: 40.1089, lng: -80.7545, population: 1800 },
+                    { name: "Wheeling", state: "WV", county: "Ohio County", type: "city", lat: 40.0687, lng: -80.7209, population: 27000 },
+                    { name: "Triadelphia", state: "WV", county: "Ohio County", type: "town", lat: 40.0634, lng: -80.6309, population: 800 },
+                    { name: "Washington", state: "PA", county: "Washington County", type: "city", lat: 40.1740, lng: -80.2462, population: 13000 },
+                    { name: "Canonsburg", state: "PA", county: "Washington County", type: "city", lat: 40.2620, lng: -80.1878, population: 9000 },
+                    { name: "Peters Township", state: "PA", county: "Washington County", type: "town", lat: 40.3351, lng: -80.0809, population: 21000 },
+                    { name: "Bethel Park", state: "PA", county: "Allegheny County", type: "city", lat: 40.3276, lng: -80.0387, population: 32000 },
+                    { name: "Pittsburgh", state: "PA", county: "Allegheny County", type: "city", lat: 40.4406, lng: -79.9959, population: 300000 }
+                ]
+            },
+            "route4": {
+                name: "Pittsburgh, PA → Indianapolis, IN",
+                distance: "360 miles",
+                towns: [
+                    { name: "Pittsburgh", state: "PA", county: "Allegheny County", type: "city", lat: 40.4406, lng: -79.9959, population: 300000 },
+                    { name: "Sewickley", state: "PA", county: "Allegheny County", type: "town", lat: 40.5356, lng: -80.1848, population: 4000 },
+                    { name: "Beaver", state: "PA", county: "Beaver County", type: "city", lat: 40.6956, lng: -80.3048, population: 4300 },
+                    { name: "East Liverpool", state: "OH", county: "Columbiana County", type: "city", lat: 40.6187, lng: -80.5773, population: 10000 },
+                    { name: "Salem", state: "OH", county: "Columbiana County", type: "city", lat: 40.9009, lng: -80.8567, population: 12000 },
+                    { name: "Alliance", state: "OH", county: "Stark County", type: "city", lat: 40.9153, lng: -81.1059, population: 22000 },
+                    { name: "Canton", state: "OH", county: "Stark County", type: "city", lat: 40.7989, lng: -81.3784, population: 71000 },
+                    { name: "Massillon", state: "OH", county: "Stark County", type: "city", lat: 40.7967, lng: -81.5215, population: 32000 },
+                    { name: "Wooster", state: "OH", county: "Wayne County", type: "city", lat: 40.8051, lng: -81.9351, population: 27000 },
+                    { name: "Mansfield", state: "OH", county: "Richland County", type: "city", lat: 40.7584, lng: -82.5154, population: 47000 },
+                    { name: "Marion", state: "OH", county: "Marion County", type: "city", lat: 40.5887, lng: -83.1285, population: 36000 },
+                    { name: "Delaware", state: "OH", county: "Delaware County", type: "city", lat: 40.2987, lng: -83.0679, population: 40000 },
+                    { name: "Dublin", state: "OH", county: "Franklin County", type: "city", lat: 40.0992, lng: -83.1141, population: 47000 },
+                    { name: "Richmond", state: "IN", county: "Wayne County", type: "city", lat: 39.8289, lng: -84.8903, population: 36000 },
+                    { name: "New Castle", state: "IN", county: "Henry County", type: "city", lat: 39.9289, lng: -85.3703, population: 18000 },
+                    { name: "Anderson", state: "IN", county: "Madison County", type: "city", lat: 40.1053, lng: -85.6803, population: 56000 },
+                    { name: "Noblesville", state: "IN", county: "Hamilton County", type: "city", lat: 40.0456, lng: -86.0086, population: 65000 },
+                    { name: "Fishers", state: "IN", county: "Hamilton County", type: "city", lat: 39.9568, lng: -85.9685, population: 95000 },
+                    { name: "Indianapolis", state: "IN", county: "Marion County", type: "city", lat: 39.7684, lng: -86.1581, population: 880000 }
+                ]
+            },
+            "route5": {
+                name: "Indianapolis, IN → Kansas City, MO",
+                distance: "290 miles",
+                towns: [
+                    { name: "Indianapolis", state: "IN", county: "Marion County", type: "city", lat: 39.7684, lng: -86.1581, population: 880000 },
+                    { name: "Plainfield", state: "IN", county: "Hendricks County", type: "town", lat: 39.7042, lng: -86.3994, population: 34000 },
+                    { name: "Greencastle", state: "IN", county: "Putnam County", type: "city", lat: 39.6439, lng: -86.8647, population: 10000 },
+                    { name: "Terre Haute", state: "IN", county: "Vigo County", type: "city", lat: 39.4667, lng: -87.4139, population: 61000 },
+                    { name: "Robinson", state: "IL", county: "Crawford County", type: "city", lat: 39.0053, lng: -87.7392, population: 7500 },
+                    { name: "Lawrenceville", state: "IL", county: "Lawrence County", type: "city", lat: 38.7297, lng: -87.6819, population: 4300 },
+                    { name: "Vincennes", state: "IN", county: "Knox County", type: "city", lat: 38.6772, lng: -87.5286, population: 17000 },
+                    { name: "Mount Carmel", state: "IL", county: "Wabash County", type: "city", lat: 38.4106, lng: -87.7614, population: 7200 },
+                    { name: "Fairfield", state: "IL", county: "Wayne County", type: "city", lat: 38.3789, lng: -88.3598, population: 5000 },
+                    { name: "Flora", state: "IL", county: "Clay County", type: "city", lat: 38.6689, lng: -88.4856, population: 5000 },
+                    { name: "Effingham", state: "IL", county: "Effingham County", type: "city", lat: 39.1200, lng: -88.5434, population: 12500 },
+                    { name: "Vandalia", state: "IL", county: "Fayette County", type: "city", lat: 38.9606, lng: -89.0937, population: 7000 },
+                    { name: "Greenville", state: "IL", county: "Bond County", type: "city", lat: 38.8923, lng: -89.4131, population: 7000 },
+                    { name: "Highland", state: "IL", county: "Madison County", type: "city", lat: 38.7392, lng: -89.6712, population: 10000 },
+                    { name: "St. Louis", state: "MO", county: "St. Louis City", type: "city", lat: 38.6270, lng: -90.1994, population: 300000 },
+                    { name: "Wentzville", state: "MO", county: "St. Charles County", type: "city", lat: 38.8114, lng: -90.8526, population: 40000 },
+                    { name: "Columbia", state: "MO", county: "Boone County", type: "city", lat: 38.9517, lng: -92.3341, population: 125000 },
+                    { name: "Boonville", state: "MO", county: "Cooper County", type: "city", lat: 38.9736, lng: -92.7432, population: 8300 },
+                    { name: "Marshall", state: "MO", county: "Saline County", type: "city", lat: 39.1231, lng: -93.1971, population: 13000 },
+                    { name: "Sedalia", state: "MO", county: "Pettis County", type: "city", lat: 38.7047, lng: -93.2283, population: 21000 },
+                    { name: "Warrensburg", state: "MO", county: "Johnson County", type: "city", lat: 38.7628, lng: -93.7360, population: 20000 },
+                    { name: "Harrisonville", state: "MO", county: "Cass County", type: "city", lat: 38.6531, lng: -94.3488, population: 10000 },
+                    { name: "Raymore", state: "MO", county: "Cass County", type: "city", lat: 38.8022, lng: -94.4497, population: 22000 },
+                    { name: "Kansas City", state: "MO", county: "Jackson County", type: "city", lat: 39.0997, lng: -94.5786, population: 508000 }
+                ]
+            }
+        };
+
+        // Town facts database - interesting information about each place
+        const townFacts = {
+            "kansascity-mo": [
+                "Known as the 'City of Fountains' with over 200 fountains throughout the city",
+                "Home to the world's largest barbecue sauce producer and famous for Kansas City-style BBQ",
+                "The National World War I Museum and Memorial is located here with the world's most comprehensive collection"
+            ],
+            "liberty-mo": [
+                "Historic courthouse square where Jesse James and his gang once hid from authorities",
+                "Home to William Jewell College, founded in 1849",
+                "The historic Liberty Jail where Mormon prophet Joseph Smith was imprisoned in 1838-39"
+            ],
+            "lawson-mo": [
+                "Known for its annual Lawson Liberty Days celebration featuring a parade and community events",
+                "Home to historic Ray County Courthouse built in the 1850s",
+                "Located along the historic Missouri River trading route"
+            ],
+            "cameron-mo": [
+                "Features the historic Depot Museum showcasing railroad heritage",
+                "Home to the annual Cameron Veterans Memorial Golf Tournament",
+                "Known for its antique shops and historic downtown square"
+            ],
+            "gallatin-mo": [
+                "County seat of Daviess County with a beautiful historic courthouse",
+                "Known for excellent hunting and fishing opportunities in the nearby countryside",
+                "Features several historic buildings dating back to the 1800s"
+            ],
+            "trenton-mo": [
+                "Home to Trenton High School's championship-winning athletic programs",
+                "Features beautiful Crown Hill Cemetery with historic monuments",
+                "Known for its annual Maple Festival celebrating the area's maple syrup production"
+            ],
+            "spickard-mo": [
+                "One of Missouri's smallest incorporated communities",
+                "Named after early settler John Spickard who established a general store",
+                "Known for its tight-knit community and rural farming heritage"
+            ],
+            "grundycenter-ia": [
+                "Home to the Heritage Village museum showcasing 19th-century life",
+                "Known for excellent fishing at Grundy Center Lake",
+                "Features historic downtown with well-preserved early 20th-century architecture"
+            ],
+            "reinbeck-ia": [
+                "Small farming community known for its friendly residents",
+                "Features beautiful countryside perfect for scenic drives",
+                "Home to the annual Corn Days festival celebrating agricultural heritage"
+            ],
+            "waterloo-ia": [
+                "Birthplace of John Deere tractors and major manufacturing center",
+                "Home to the Grout Museum District with multiple museums and planetarium",
+                "Features the beautiful Cedar Valley Lakes area for recreation"
+            ],
+            "cedarfalls-ia": [
+                "Home to the University of Northern Iowa and its beautiful campus",
+                "Features the historic downtown Main Street district",
+                "Known for the Ice House Museum and Hearst Center for the Arts"
+            ],
+            "waverly-ia": [
+                "Home to Wartburg College, a beautiful liberal arts institution",
+                "Features the historic Waverly Historic District",
+                "Known for excellent recreational opportunities along the Cedar River"
+            ],
+            "sumner-ia": [
+                "Known for its historic downtown and antique shopping",
+                "Features the beautiful Sumner City Park with recreational facilities",
+                "Home to the annual Sumner Fun Days community celebration"
+            ],
+            "fayette-ia": [
+                "Home to Upper Iowa University founded in 1857",
+                "Features the beautiful Volga River State Recreation Area nearby",
+                "Known for its historic limestone buildings and architecture"
+            ],
+            "prairieduchien-wi": [
+                "One of Wisconsin's oldest settlements dating to 1673",
+                "Home to Villa Louis, a historic Victorian mansion museum",
+                "Located where the Wisconsin River meets the Mississippi River"
+            ],
+            "fennimore-wi": [
+                "Known as the 'Toy Train Capital' with a historic railroad museum",
+                "Home to the Fennimore Doll and Toy Museum",
+                "Features beautiful countryside in the Driftless Area"
+            ],
+            "platteville-wi": [
+                "Home to the University of Wisconsin-Platteville",
+                "Known for the Mining Museum showcasing lead mining heritage",
+                "Features the World's Largest 'M' on a hillside visible from miles away"
+            ],
+            "dodgeville-wi": [
+                "County seat of Iowa County with historic courthouse square",
+                "Gateway to Governor Dodge State Park with excellent hiking",
+                "Known for its role in the lead mining boom of the 1800s"
+            ],
+            "mounthoreb-wi": [
+                "Known as the 'Troll Capital of the World' with carved trolls throughout town",
+                "Features the scenic Military Ridge State Trail for biking",
+                "Home to the annual Syttende Mai Norwegian independence celebration"
+            ],
+            "middleton-wi": [
+                "Known as the 'Good Neighbor City' for its community spirit",
+                "Home to the National Mustard Museum with 6,000+ mustards",
+                "Features beautiful Lake Mendota shoreline and parks"
+            ],
+            "madison-wi": [
+                "Wisconsin's capital city built on an isthmus between two lakes",
+                "Home to the University of Wisconsin-Madison and its famous campus",
+                "Known for the beautiful State Capitol building with its distinctive dome"
+            ],
+            "sunprairie-wi": [
+                "Known as 'Wisconsin's Groundhog Capital' with annual Groundhog Day celebration",
+                "Home to the Georgia O'Keeffe Museum showcasing the famous artist's early work",
+                "Features beautiful countryside and corn fields that inspired O'Keeffe's art"
+            ],
+            "watertown-wi": [
+                "Home to the first kindergarten in America, established in 1856",
+                "Features the beautiful Rock River running through downtown",
+                "Known for the Octagon House, a unique 8-sided historic home"
+            ],
+            "oconomowoc-wi": [
+                "Known as a historic resort destination on beautiful Fowler Lake",
+                "Features stunning Victorian-era mansions and estates",
+                "Home to excellent fishing, boating, and water sports"
+            ],
+            "waukesha-wi": [
+                "Known as 'Spring City' for its natural spring water",
+                "Home to Carroll University, Wisconsin's first four-year college",
+                "Features the historic downtown with beautiful architecture and shopping"
+            ],
+            "milwaukee-wi": [
+                "Known as 'Brew City' for its famous beer brewing heritage",
+                "Home to Harley-Davidson motorcycles and the Harley Museum",
+                "Features beautiful Lake Michigan shoreline and the Historic Third Ward"
+            ],
+            "racine-wi": [
+                "Known for Danish pastries called 'kringle' - the official state pastry",
+                "Home to the beautiful Wind Point Lighthouse on Lake Michigan",
+                "Features the historic downtown with Frank Lloyd Wright architecture"
+            ],
+            "kenosha-wi": [
+                "Home to the Kenosha Public Museum with impressive dinosaur exhibits",
+                "Features beautiful Lake Michigan beaches and parks",
+                "Known for the historic streetcar system and Civil War Museum"
+            ],
+            "waukegan-il": [
+                "Birthplace of famous comedian Jack Benny",
+                "Home to the Genesee Theatre, a beautiful historic venue",
+                "Features Waukegan Harbor on Lake Michigan with marina and beaches"
+            ],
+            "highlandpark-il": [
+                "Known for its beautiful lakefront and upscale neighborhoods",
+                "Home to the Ravinia Festival, America's oldest outdoor music festival",
+                "Features stunning architecture and tree-lined streets"
+            ],
+            "evanston-il": [
+                "Home to Northwestern University and its beautiful lakefront campus",
+                "Birthplace of Tinkertoys and headquarters of the Women's Christian Temperance Union",
+                "Features beautiful beaches along Lake Michigan and historic downtown"
+            ],
+            "chicago-il": [
+                "Known as the 'Windy City' and famous for deep-dish pizza",
+                "Home to stunning architecture including the Willis Tower (formerly Sears Tower)",
+                "Features world-class museums, Millennium Park, and beautiful lakefront"
+            ],
+            "gary-in": [
+                "Birthplace of Michael Jackson and the Jackson 5",
+                "Home to the Indiana Dunes National Park with beautiful beaches",
+                "Known for its steel industry heritage and historic Union Station"
+            ],
+            "portage-in": [
+                "Gateway to Indiana Dunes State Park with pristine Lake Michigan beaches",
+                "Known for excellent fishing and boating opportunities",
+                "Features beautiful countryside and recreational trails"
+            ],
+            "valparaiso-in": [
+                "Home to Valparaiso University and its beautiful campus",
+                "Known as 'Popcorn Capital of the World' for Orville Redenbacher",
+                "Features the historic downtown with unique shops and restaurants"
+            ],
+            "plymouth-in": [
+                "Known for the beautiful Lake Maxinkuckee recreational area",
+                "Home to the Marshall County Historical Museum",
+                "Features excellent fishing, boating, and outdoor recreation"
+            ],
+            "warsaw-in": [
+                "Known as the 'Orthopedic Capital of the World' for medical device manufacturing",
+                "Features beautiful chain of lakes for recreation and fishing",
+                "Home to the Warsaw Biblical Gardens showcasing plants from the Holy Land"
+            ],
+            "fortwayne-in": [
+                "Indiana's second-largest city known for its parks and trails",
+                "Home to the Fort Wayne Children's Zoo, consistently rated among America's best",
+                "Features the beautiful riverfront and historic Old Fort"
+            ],
+            "decatur-in": [
+                "Known for its beautiful courthouse square and historic downtown",
+                "Home to Adams Memorial Hospital and strong healthcare heritage",
+                "Features excellent hunting and fishing in the surrounding countryside"
+            ],
+            "vanwert-oh": [
+                "Known for the beautiful Van Wert County Courthouse with distinctive architecture",
+                "Home to the historic Wassenberg Art Center",
+                "Features excellent outdoor recreation at Van Wert City Park"
+            ],
+            "lima-oh": [
+                "Known for its locomotive heritage and railroad history",
+                "Home to the Allen County Museum with impressive collections",
+                "Features beautiful parks including Schoonover Park with lake and trails"
+            ],
+            "bellefontaine-oh": [
+                "Home to the highest point in Ohio at Campbell Hill",
+                "Known for the beautiful Logan County Courthouse",
+                "Features excellent outdoor recreation at Huntsville Lake"
+            ],
+            "marysville-oh": [
+                "Home to Honda's major manufacturing operations",
+                "Known for the beautiful Union County Courthouse",
+                "Features excellent parks and recreational facilities"
+            ],
+            "delaware-oh": [
+                "Home to Ohio Wesleyan University and its beautiful campus",
+                "Known for the Delaware State Park with excellent fishing",
+                "Features the historic downtown with unique shops and dining"
+            ],
+            "sunbury-oh": [
+                "Known for its small-town charm and friendly community",
+                "Home to beautiful countryside and outdoor recreation",
+                "Features historic architecture and annual community events"
+            ],
+            "westerville-oh": [
+                "Known as 'Dry Capital of the World' for its prohibition history",
+                "Home to Otterbein University and its beautiful campus",
+                "Features the historic Uptown district with shops and restaurants"
+            ],
+            "columbus-oh": [
+                "Ohio's capital and largest city known for its diverse neighborhoods",
+                "Home to The Ohio State University and its massive campus",
+                "Features world-class zoo, science museum, and beautiful park system"
+            ],
+            "reynoldsburg-oh": [
+                "Known as the 'Birthplace of the Tomato' with annual Tomato Festival",
+                "Home to beautiful parks and recreational facilities",
+                "Features historic downtown and close proximity to Columbus attractions"
+            ],
+            "newark-oh": [
+                "Home to the famous Longaberger Basket Building",
+                "Known for the Newark Earthworks, ancient Native American ceremonial sites",
+                "Features beautiful Dawes Arboretum with extensive gardens and trails"
+            ],
+            "zanesville-oh": [
+                "Known for its unique Y-Bridge spanning the Muskingum River",
+                "Home to beautiful pottery and ceramic arts heritage",
+                "Features the National Road-Zane Grey Museum"
+            ],
+            "cambridge-oh": [
+                "Known for its beautiful glassmaking heritage and Mosser Glass",
+                "Home to the National Museum of Cambridge Glass",
+                "Features scenic countryside in southeastern Ohio"
+            ],
+            "stclairsville-oh": [
+                "Known for its beautiful historic courthouse and downtown",
+                "Home to excellent outdoor recreation at Barkcamp State Park",
+                "Features coal mining heritage and historic architecture"
+            ],
+            "bridgeport-oh": [
+                "Small historic town along the Ohio River",
+                "Known for its beautiful river views and peaceful atmosphere",
+                "Features historic architecture and river recreational opportunities"
+            ],
+            "wheeling-wv": [
+                "Known for its beautiful Victorian architecture in historic districts",
+                "Home to the Capitol Theatre and vibrant arts scene",
+                "Features stunning views of the Ohio River and surrounding hills"
+            ],
+            "triadelphia-wv": [
+                "Small community known for its rural charm and peaceful setting",
+                "Features beautiful countryside and outdoor recreation",
+                "Close to both Wheeling attractions and natural areas"
+            ],
+            "washington-pa": [
+                "Home to Washington & Jefferson College founded in 1781",
+                "Known for its historic courthouse and downtown district",
+                "Features beautiful rolling hills and countryside of southwestern Pennsylvania"
+            ],
+            "canonsburg-pa": [
+                "Birthplace of singer Perry Como and known for its musical heritage",
+                "Home to the historic downtown with unique shops and restaurants",
+                "Features beautiful parks and close proximity to Pittsburgh"
+            ],
+            "peterstownship-pa": [
+                "Known for excellent schools and family-friendly neighborhoods",
+                "Features beautiful parks and recreational facilities",
+                "Close to Pittsburgh with suburban charm and amenities"
+            ],
+            "bethelpark-pa": [
+                "Known for its excellent community services and parks",
+                "Features beautiful neighborhoods and tree-lined streets",
+                "Close to Pittsburgh with great shopping and dining options"
+            ],
+            "pittsburgh-pa": [
+                "Known as the 'Steel City' for its industrial heritage",
+                "Home to famous sports teams: Steelers, Penguins, and Pirates",
+                "Features beautiful bridges, rivers, and unique neighborhoods like the Strip District"
+            ],
+            "sewickley-pa": [
+                "Known for its beautiful Victorian homes and tree-lined streets",
+                "Features charming downtown with boutique shops and restaurants",
+                "Home to historic estates and beautiful Ohio River views"
+            ],
+            "beaver-pa": [
+                "Historic town with beautiful architecture and courthouse square",
+                "Known for its location at the confluence of rivers",
+                "Features the historic Beaver County Courthouse and downtown district"
+            ],
+            "eastliverpool-oh": [
+                "Known as the 'Pottery Capital of America' for its ceramic heritage",
+                "Home to the Museum of Ceramics showcasing pottery history",
+                "Features beautiful Ohio River location and historic downtown"
+            ],
+            "salem-oh": [
+                "Known for its historic Quaker heritage and Underground Railroad history",
+                "Home to beautiful Salem Historical Society Museum",
+                "Features excellent parks and outdoor recreation"
+            ],
+            "alliance-oh": [
+                "Home to the University of Mount Union and championship football",
+                "Known for the beautiful Glamorgan Castle and grounds",
+                "Features excellent parks and recreational facilities"
+            ],
+            "canton-oh": [
+                "Home to the Pro Football Hall of Fame",
+                "Known for President William McKinley National Memorial",
+                "Features beautiful parks and the Canton Classic Car Museum"
+            ],
+            "massillon-oh": [
+                "Known for its championship high school football tradition",
+                "Home to the Massillon Museum with local history exhibits",
+                "Features beautiful parks along the Tuscarawas River"
+            ],
+            "wooster-oh": [
+                "Home to The College of Wooster and its beautiful campus",
+                "Known for the Ohio Agricultural Research and Development Center",
+                "Features excellent outdoor recreation at Christmas Run Park"
+            ],
+            "mansfield-oh": [
+                "Home to the historic Ohio State Reformatory (Shawshank Redemption filming location)",
+                "Known for beautiful Richland Carrousel Park with hand-carved horses",
+                "Features excellent outdoor recreation at Mohican State Park nearby"
+            ],
+            "marion-oh": [
+                "Home of President Warren G. Harding and his memorial",
+                "Known for the beautiful Palace Theatre and downtown district",
+                "Features excellent parks and the historic Union Station"
+            ],
+            "dublin-oh": [
+                "Known for hosting the Memorial Tournament golf championship",
+                "Home to beautiful Riverside Green Park and Historic Dublin",
+                "Features excellent schools and family-friendly amenities"
+            ],
+            "richmond-in": [
+                "Known as the 'Cradle of Recorded Jazz' for early recording studios",
+                "Home to beautiful Glen Miller Park with rose garden",
+                "Features the historic downtown and Wayne County Historical Museum"
+            ],
+            "newcastle-in": [
+                "Known as the 'Basketball Capital of the World' for its gym and tradition",
+                "Home to beautiful Baker Park with recreational facilities",
+                "Features historic downtown and strong basketball heritage"
+            ],
+            "anderson-in": [
+                "Known for its automotive heritage and manufacturing",
+                "Home to beautiful Shadyside Park and lake recreation",
+                "Features the historic downtown and Anderson University"
+            ],
+            "noblesville-in": [
+                "Known for the beautiful historic courthouse square",
+                "Home to excellent recreational facilities at Forest Park",
+                "Features charming downtown with shops, restaurants, and events"
+            ],
+            "fishers-in": [
+                "Known as one of America's best places to live",
+                "Home to excellent schools and family amenities",
+                "Features beautiful parks, trails, and recreational facilities"
+            ],
+            "indianapolis-in": [
+                "Known for the Indianapolis 500 and Motor Speedway",
+                "Home to beautiful Monument Circle and downtown canal",
+                "Features world-class museums, parks, and sports venues"
+            ],
+            "plainfield-in": [
+                "Known for excellent shopping at The Shops at Perry Crossing",
+                "Home to beautiful parks and recreational facilities",
+                "Features close proximity to Indianapolis with suburban charm"
+            ],
+            "greencastle-in": [
+                "Home to DePauw University and its beautiful campus",
+                "Known for the historic courthouse square and downtown",
+                "Features beautiful countryside and outdoor recreation"
+            ],
+            "terrehaute-in": [
+                "Home to Indiana State University and its campus",
+                "Known for the Terre Haute Action Track racing",
+                "Features the beautiful Wabash River and recreational opportunities"
+            ],
+            "robinson-il": [
+                "Known for its beautiful courthouse square and historic downtown",
+                "Home to excellent outdoor recreation at Lincoln Trail State Park",
+                "Features oil heritage and annual community celebrations"
+            ],
+            "lawrenceville-il": [
+                "Known for its historic courthouse and downtown district",
+                "Home to beautiful parks and recreational facilities",
+                "Features close proximity to Vincennes and outdoor recreation"
+            ],
+            "vincennes-in": [
+                "Known as Indiana's oldest city with rich French heritage",
+                "Home to Vincennes University, Indiana's oldest college",
+                "Features the historic Old Cathedral and beautiful Wabash River"
+            ],
+            "mountcarmel-il": [
+                "Known for its beautiful Wabash River location",
+                "Home to excellent fishing and outdoor recreation",
+                "Features historic downtown and small-town charm"
+            ],
+            "fairfield-il": [
+                "Known for excellent hunting and fishing opportunities",
+                "Home to beautiful countryside and outdoor recreation",
+                "Features historic downtown and annual community events"
+            ],
+            "flora-il": [
+                "Known for its friendly small-town atmosphere",
+                "Home to beautiful parks and recreational facilities",
+                "Features historic downtown and agricultural heritage"
+            ],
+            "effingham-il": [
+                "Known for the giant cross monument visible from Interstate 70",
+                "Home to beautiful Lake Sara recreational area",
+                "Features historic downtown and excellent dining options"
+            ],
+            "vandalia-il": [
+                "Former capital of Illinois with historic statehouse",
+                "Known for the historic Vandalia Statehouse State Historic Site",
+                "Features beautiful countryside and outdoor recreation"
+            ],
+            "greenville-il": [
+                "Known for its beautiful courthouse square and historic downtown",
+                "Home to Greenville University and its campus",
+                "Features excellent parks and recreational facilities"
+            ],
+            "highland-il": [
+                "Known for its strong Swiss heritage and annual Schweizer Fest",
+                "Home to beautiful parks and recreational facilities",
+                "Features historic downtown with Swiss-influenced architecture"
+            ],
+            "stlouis-mo": [
+                "Known for the iconic Gateway Arch and riverfront",
+                "Home to world-class attractions like the Saint Louis Zoo and Art Museum",
+                "Features beautiful Forest Park, one of America's largest urban parks"
+            ],
+            "wentzville-mo": [
+                "Known for excellent family amenities and community events",
+                "Home to beautiful parks and recreational facilities",
+                "Features historic downtown and close proximity to St. Louis"
+            ],
+            "columbia-mo": [
+                "Home to the University of Missouri and its beautiful campus",
+                "Known for excellent healthcare facilities and research",
+                "Features beautiful parks, trails, and cultural attractions"
+            ],
+            "boonville-mo": [
+                "Known for its historic role in the Civil War and Missouri River heritage",
+                "Home to beautiful Katy Trail State Park for biking and walking",
+                "Features historic downtown and annual community celebrations"
+            ],
+            "marshall-mo": [
+                "Known for its beautiful courthouse square and historic downtown",
+                "Home to Missouri Valley College and its campus",
+                "Features excellent parks and recreational facilities"
+            ],
+            "sedalia-mo": [
+                "Known for the Missouri State Fair held annually",
+                "Home to beautiful Liberty Park and recreational facilities",
+                "Features historic downtown and ragtime music heritage"
+            ],
+            "warrensburg-mo": [
+                "Home to the University of Central Missouri",
+                "Known for the historic courthouse square and downtown",
+                "Features beautiful parks and close proximity to outdoor recreation"
+            ],
+            "harrisonville-mo": [
+                "Known for its beautiful courthouse square and historic downtown",
+                "Home to excellent parks and recreational facilities",
+                "Features small-town charm with close proximity to Kansas City"
+            ],
+            "raymore-mo": [
+                "Known for excellent family amenities and community services",
+                "Home to beautiful parks and recreational facilities",
+                "Features close proximity to Kansas City with suburban charm"
+            ]
+        };
+
+        // Application state
+        let autoCheckinEnabled = false;
+        let routeCheckinEnabled = true; // Default to enabled
+        let currentPosition = null;
+        let userLocationMarker = null;
+        let checkedInTowns = new Set();
+        let checkedInCounties = new Set(); // Track visited counties
+        let checkinHistory = [];
+        let countyHistory = []; // Track county check-in history
+        let filteredTowns = [];
+        let allTowns = [];
+        let allCounties = []; // List of all unique counties
+        
+        // Boundary system
+        let boundariesData = new Map();
+        let boundaryLayers = new Map();
+        let boundariesLoaded = false;
+
+        // Storage configuration
+        const STORAGE_KEY = 'townsTravelState';
+        const AUTO_SAVE_INTERVAL = 10000;
+        const CHECKIN_RADIUS = 2; // miles
+
+        // Initialize map
+        const map = L.map('townsMap').setView([40.5, -88], 6);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Load town boundaries data
+        async function loadTownBoundaries() {
+            if (boundariesLoaded) return;
+            
+            console.log('🔄 Loading town boundaries data...');
+            const states = ['il', 'in', 'mo', 'oh', 'pa', 'wi']; // Your route states
+            
+            try {
+                for (const state of states) {
+                    const response = await fetch(`data/chunks/${state}_towns.geojson`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.features) {
+                            data.features.forEach(feature => {
+                                const name = feature.properties.NAME;
+                                const stateAbbr = feature.properties.state_abbr;
+                                const id = `${name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${stateAbbr.toLowerCase()}`;
+                                
+                                boundariesData.set(id, {
+                                    id: id,
+                                    name: name,
+                                    state: stateAbbr,
+                                    geometry: feature.geometry,
+                                    properties: feature.properties
+                                });
+                            });
+                            console.log(`✅ Loaded ${data.features.length} boundaries for ${state.toUpperCase()}`);
+                        }
+                    } else {
+                        console.warn(`⚠️ Failed to load boundaries for ${state.toUpperCase()}`);
+                    }
+                }
+                boundariesLoaded = true;
+                console.log(`✅ Total boundaries loaded: ${boundariesData.size}`);
+            } catch (error) {
+                console.error('❌ Error loading boundaries:', error);
+            }
+        }
+
+        // Get boundary radius based on population
+        function getBoundaryRadius(population) {
+            if (population >= 500000) return 15000; // Major cities - 15km
+            if (population >= 100000) return 8000;  // Large cities - 8km
+            if (population >= 50000) return 5000;   // Medium cities - 5km
+            if (population >= 25000) return 3000;   // Small cities - 3km
+            if (population >= 10000) return 2000;   // Large towns - 2km
+            if (population >= 5000) return 1500;    // Medium towns - 1.5km
+            return 1000; // Small towns - 1km
+        }
+
+        // Find matching boundary for a town
+        function findTownBoundary(town) {
+            // Try exact match first
+            let boundary = boundariesData.get(town.id);
+            if (boundary) return boundary;
+            
+            // Try variations of the name
+            const variations = [
+                `${town.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${town.state.toLowerCase()}`,
+                `${town.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '')}-${town.state.toLowerCase()}`,
+                `${town.name.toLowerCase().split(' ')[0]}-${town.state.toLowerCase()}`
+            ];
+            
+            for (const variation of variations) {
+                boundary = boundariesData.get(variation);
+                if (boundary) return boundary;
+            }
+            
+            // Try searching by name similarity
+            for (const [id, boundaryData] of boundariesData) {
+                if (boundaryData.state === town.state && 
+                    (boundaryData.name.toLowerCase().includes(town.name.toLowerCase().split(' ')[0]) ||
+                    town.name.toLowerCase().includes(boundaryData.name.toLowerCase().split(' ')[0]))) {
+                    return boundaryData;
+                }
+            }
+            
+            return null;
+        }
+
+        // Add boundary to map
+        function addTownBoundary(townId, isCheckedIn = false) {
+            const town = allTowns.find(t => t.id === townId);
+            if (!town) return;
+
+            // Remove existing boundary
+            removeTownBoundary(townId);
+
+            const boundary = findTownBoundary(town);
+            let layer = null;
+
+            if (boundary && boundary.geometry) {
+                // Use actual boundary from GeoJSON
+                layer = L.geoJSON(boundary.geometry, {
+                    style: {
+                        color: isCheckedIn ? '#28a745' : '#007bff',
+                        weight: isCheckedIn ? 3 : 2,
+                        opacity: 0.8,
+                        fillColor: isCheckedIn ? '#28a745' : '#007bff',
+                        fillOpacity: isCheckedIn ? 0.2 : 0.1
+                    }
+                }).bindPopup(`
+                    <strong>${town.name}, ${town.state}</strong><br>
+                    Population: ${town.population.toLocaleString()}<br>
+                    Type: ${town.type}<br>
+                    Status: ${isCheckedIn ? 'Checked In' : 'Available'}
+                `);
+            } else {
+                // Fallback to circular boundary
+                const radius = getBoundaryRadius(town.population);
+                layer = L.circle([town.lat, town.lng], {
+                    radius: radius,
+                    color: isCheckedIn ? '#28a745' : '#007bff',
+                    weight: isCheckedIn ? 3 : 2,
+                    opacity: 0.8,
+                    fillColor: isCheckedIn ? '#28a745' : '#007bff',
+                    fillOpacity: isCheckedIn ? 0.2 : 0.1
+                }).bindPopup(`
+                    <strong>${town.name}, ${town.state}</strong><br>
+                    Population: ${town.population.toLocaleString()}<br>
+                    Type: ${town.type}<br>
+                    Boundary: Generated (${(radius/1000).toFixed(1)}km radius)<br>
+                    Status: ${isCheckedIn ? 'Checked In' : 'Available'}
+                `);
+            }
+
+            if (layer) {
+                layer.addTo(map);
+                boundaryLayers.set(townId, layer);
+            }
+        }
+
+        // Remove boundary from map
+        function removeTownBoundary(townId) {
+            const layer = boundaryLayers.get(townId);
+            if (layer) {
+                map.removeLayer(layer);
+                boundaryLayers.delete(townId);
+            }
+        }
+
+        // Clear all boundaries
+        function clearAllBoundaries() {
+            boundaryLayers.forEach((layer, townId) => {
+                map.removeLayer(layer);
+            });
+            boundaryLayers.clear();
+        }
+
+        // Flatten all towns into a single array
+        function initializeTownsData() {
+            allTowns = [];
+            allCounties = [];
+            const countiesSet = new Set();
+            
+            Object.values(townsData).forEach((route, routeIndex) => {
+                route.towns.forEach((town, townIndex) => {
+                    const townCopy = { ...town }; // Create a copy to avoid reference issues
+                    townCopy.id = `${town.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${town.state.toLowerCase()}`;
+                    townCopy.route = route.name;
+                    townCopy.routeDistance = route.distance;
+                    townCopy.routeIndex = routeIndex; // Add route index
+                    townCopy.townIndex = townIndex;   // Add position within route
+                    allTowns.push(townCopy);
+                    
+                    // Collect unique counties
+                    if (town.county) {
+                        const countyKey = `${town.county}-${town.state}`;
+                        if (!countiesSet.has(countyKey)) {
+                            countiesSet.add(countyKey);
+                            allCounties.push({
+                                name: town.county,
+                                state: town.state,
+                                id: countyKey.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                                towns: []
+                            });
+                        }
+                        
+                        // Add town to county
+                        const county = allCounties.find(c => c.id === countyKey.toLowerCase().replace(/[^a-z0-9]/g, ''));
+                        if (county) {
+                            county.towns.push(townCopy);
+                        }
+                    }
+                });
+            });
+            
+            // Remove duplicates (some towns appear on multiple routes) - keep the first occurrence
+            const uniqueTowns = [];
+            const seen = new Set();
+            allTowns.forEach(town => {
+                if (!seen.has(town.id)) {
+                    seen.add(town.id);
+                    uniqueTowns.push(town);
+                }
+            });
+            allTowns = uniqueTowns;
+            filteredTowns = [...allTowns];
+            
+            console.log(`✅ Initialized ${allTowns.length} towns across ${allCounties.length} counties`);
+            
+            // Load boundaries data
+            loadTownBoundaries();
+        }
+
+        // Load state from localStorage
+        function loadTownsState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    checkedInTowns = new Set(data.checkedIn || []);
+                    checkedInCounties = new Set(data.checkedInCounties || []);
+                    checkinHistory = data.history || [];
+                    countyHistory = data.countyHistory || [];
+                    autoCheckinEnabled = data.autoCheckin || false;
+                    routeCheckinEnabled = data.routeCheckin !== undefined ? data.routeCheckin : true;
+                    
+                    if (data.lastPosition) {
+                        currentPosition = data.lastPosition;
+                    }
+                    
+                    document.getElementById('autoCheckinToggle').checked = autoCheckinEnabled;
+                    document.getElementById('routeCheckinToggle').checked = routeCheckinEnabled;
+                    
+                    console.log('✅ Towns state loaded successfully');
+                    return true;
+                }
+            } catch (error) {
+                console.error('❌ Error loading towns state:', error);
+            }
+            return false;
+        }
+
+        // Save state to localStorage
+        function saveTownsState() {
+            showSaveStatus('saving');
+            
+            try {
+                const data = {
+                    checkedIn: Array.from(checkedInTowns),
+                    checkedInCounties: Array.from(checkedInCounties),
+                    history: checkinHistory,
+                    countyHistory: countyHistory,
+                    autoCheckin: autoCheckinEnabled,
+                    routeCheckin: routeCheckinEnabled,
+                    lastPosition: currentPosition,
+                    lastSaveTime: new Date().toISOString(),
+                    version: '1.0'
+                };
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                showSaveStatus('saved');
+                return true;
+            } catch (error) {
+                console.error('❌ Error saving towns state:', error);
+                showSaveStatus('error');
+                return false;
+            }
+        }
+
+        // Calculate distance between two points
+        function calculateDistance(lat1, lng1, lat2, lng2) {
+            const R = 3959; // Earth's radius in miles
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLng/2) * Math.sin(dLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Check for nearby towns and auto check-in
+        function checkNearbyTowns() {
+            if (!currentPosition) return;
+
+            let nearbyCount = 0;
+            allTowns.forEach(town => {
+                const distance = calculateDistance(
+                    currentPosition.lat, currentPosition.lng,
+                    town.lat, town.lng
+                );
+                
+                town.distance = distance;
+                town.isNearby = distance <= CHECKIN_RADIUS;
+                
+                if (town.isNearby) {
+                    nearbyCount++;
+                    if (autoCheckinEnabled && !checkedInTowns.has(town.id)) {
+                        performCheckin(town.id, true);
+                    }
+                }
+            });
+
+            updateStats();
+            updateTownsDisplay();
+            updateMap();
+        }
+
+        // Get the last checked-in town
+        function getLastCheckedInTown() {
+            if (checkinHistory.length === 0) return null;
+            const lastCheckinId = checkinHistory[0].townId;
+            return allTowns.find(t => t.id === lastCheckinId);
+        }
+
+        // Find towns along the route between two towns
+        function getTownsAlongRoute(fromTown, toTown) {
+            if (!fromTown || !toTown) return [];
+            
+            const townsToCheckIn = [];
+            
+            // Check if towns are on the same route
+            if (fromTown.routeIndex === toTown.routeIndex) {
+                // Same route - get all towns between them
+                const routeKey = Object.keys(townsData)[fromTown.routeIndex];
+                const routeTowns = townsData[routeKey].towns;
+                
+                const fromIndex = fromTown.townIndex;
+                const toIndex = toTown.townIndex;
+                
+                // Determine direction (forward or backward along route)
+                const start = Math.min(fromIndex, toIndex);
+                const end = Math.max(fromIndex, toIndex);
+                
+                for (let i = start + 1; i < end; i++) {
+                    const intermediateTown = routeTowns[i];
+                    const townId = `${intermediateTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${intermediateTown.state.toLowerCase()}`;
+                    if (!checkedInTowns.has(townId)) {
+                        townsToCheckIn.push(intermediateTown);
+                    }
+                }
+            } else {
+                // Different routes - find connecting path
+                const routeKeys = Object.keys(townsData);
+                const fromRouteIndex = fromTown.routeIndex;
+                const toRouteIndex = toTown.routeIndex;
+                
+                // If routes are adjacent, find connecting towns
+                if (Math.abs(fromRouteIndex - toRouteIndex) === 1) {
+                    // Check remaining towns on from-route
+                    const fromRouteKey = routeKeys[fromRouteIndex];
+                    const fromRouteTowns = townsData[fromRouteKey].towns;
+                    
+                    for (let i = fromTown.townIndex + 1; i < fromRouteTowns.length; i++) {
+                        const town = fromRouteTowns[i];
+                        const townId = `${town.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${town.state.toLowerCase()}`;
+                        if (!checkedInTowns.has(townId)) {
+                            townsToCheckIn.push(town);
+                        }
+                    }
+                    
+                    // Check towns on to-route up to destination
+                    const toRouteKey = routeKeys[toRouteIndex];
+                    const toRouteTowns = townsData[toRouteKey].towns;
+                    
+                    for (let i = 0; i < toTown.townIndex; i++) {
+                        const town = toRouteTowns[i];
+                        const townId = `${town.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${town.state.toLowerCase()}`;
+                        if (!checkedInTowns.has(townId)) {
+                            townsToCheckIn.push(town);
+                        }
+                    }
+                }
+            }
+            
+            return townsToCheckIn;
+        }
+
+        // Perform check-in
+        // Perform check-in
+        function performCheckin(townId, isAuto = false, skipRouteCheckin = false) {
+            if (checkedInTowns.has(townId)) return;
+
+            const town = allTowns.find(t => t.id === townId);
+            if (!town) return;
+
+            // Auto check-in intermediate towns along the route (unless this is already an auto check-in)
+            if (!skipRouteCheckin && !isAuto && routeCheckinEnabled) {
+                const lastTown = getLastCheckedInTown();
+                if (lastTown) {
+                    const intermediateTowns = getTownsAlongRoute(lastTown, town);
+                    
+                    if (intermediateTowns.length > 0) {
+                        console.log(`🛣️ Auto-checking in ${intermediateTowns.length} towns along route from ${lastTown.name} to ${town.name}`);
+                        
+                        // Check in intermediate towns first
+                        intermediateTowns.forEach(intermediateTown => {
+                            const intermediateId = `${intermediateTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${intermediateTown.state.toLowerCase()}`;
+                            performCheckin(intermediateId, true, true); // Auto check-in, skip route logic
+                        });
+                        
+                        showNotification(`🛣️ Auto-checked in ${intermediateTowns.length} towns along your route!`, 'route');
+                    }
+                }
+            }
+
+            checkedInTowns.add(townId);
+            
+            // Auto check-in county
+            if (town.county) {
+                const countyId = `${town.county}-${town.state}`.toLowerCase().replace(/[^a-z0-9]/g, '');
+                if (!checkedInCounties.has(countyId)) {
+                    checkedInCounties.add(countyId);
+                    
+                    const countyCheckinTime = new Date();
+                    countyHistory.unshift({
+                        countyId: countyId,
+                        countyName: `${town.county}, ${town.state}`,
+                        time: countyCheckinTime.toLocaleString(),
+                        triggeredBy: `${town.name}, ${town.state}`,
+                        type: 'auto'
+                    });
+                    
+                    // Keep only last 50 county check-ins
+                    if (countyHistory.length > 50) {
+                        countyHistory = countyHistory.slice(0, 50);
+                    }
+                    
+                    showNotification(`🏛️ New County: ${town.county}, ${town.state}!`, 'county');
+                }
+            }
+            
+            const checkinTime = new Date();
+            checkinHistory.unshift({
+                townId: townId,
+                townName: `${town.name}, ${town.state}`,
+                time: checkinTime.toLocaleString(),
+                type: isAuto ? 'auto' : 'manual',
+                points: town.points || 0
+            });
+
+            // Keep only last 50 check-ins
+            if (checkinHistory.length > 50) {
+                checkinHistory = checkinHistory.slice(0, 50);
+            }
+
+            saveTownsState();
+            updateStats();
+            updateTownsDisplay();
+            updateMap();
+
+            // Add town boundary when checked in
+            if (boundariesLoaded) {
+                addTownBoundary(townId, true);
+            }
+
+            // Show points earned animation (only for manual check-ins to avoid spam)
+            if (!isAuto) {
+                showPointsEarned(town.points);
+            }
+            
+            showNotification(`Checked in at ${town.name}, ${town.state}! +${town.points} points`, isAuto ? 'auto' : 'manual');
+        }
+
+        // Perform uncheck-in
+        function performUncheck(townId) {
+            if (!checkedInTowns.has(townId)) return;
+
+            const town = allTowns.find(t => t.id === townId);
+            if (!town) return;
+
+            checkedInTowns.delete(townId);
+            
+            // Remove from check-in history
+            checkinHistory = checkinHistory.filter(entry => entry.townId !== townId);
+
+            saveTownsState();
+            updateStats();
+            updateTownsDisplay();
+            updateMap();
+
+            // Remove town boundary when unchecked
+            removeTownBoundary(townId);
+
+            showNotification(`Unchecked from ${town.name}, ${town.state}!`, 'uncheck');
+        }
+
+        // Show points earned animation
+        function showPointsEarned(points) {
+            const pointsElement = document.createElement('div');
+            pointsElement.className = 'points-earned';
+            pointsElement.textContent = `+${points} points!`;
+            pointsElement.style.position = 'fixed';
+            pointsElement.style.top = '50%';
+            pointsElement.style.left = '50%';
+            pointsElement.style.transform = 'translate(-50%, -50%)';
+            pointsElement.style.zIndex = '10000';
+            
+            document.body.appendChild(pointsElement);
+            
+            // Trigger animation
+            setTimeout(() => {
+                pointsElement.style.animation = 'pointsEarned 2s ease-out forwards';
+            }, 100);
+            
+            // Remove element after animation
+            setTimeout(() => {
+                if (pointsElement.parentNode) {
+                    pointsElement.parentNode.removeChild(pointsElement);
+                }
+            }, 2200);
+        }
+
+        // Show town details modal
+        function showTownDetails(townId) {
+            const town = allTowns.find(t => t.id === townId);
+            if (!town) return;
+
+            const modal = document.getElementById('townModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const townMeta = document.getElementById('townMeta');
+            const townFacts = document.getElementById('townFacts');
+
+            // Set title
+            modalTitle.textContent = `${town.name}, ${town.state}`;
+
+            // Populate meta information
+            const isCheckedIn = checkedInTowns.has(townId);
+            const statusText = isCheckedIn ? 'Checked In' : (town.isNearby ? 'Nearby' : 'Not Visited');
+            const statusColor = isCheckedIn ? '#28a745' : (town.isNearby ? '#ffc107' : '#6c757d');
+
+            townMeta.innerHTML = `
+                <div class="meta-item">
+                    <div class="meta-label">Type</div>
+                    <div class="meta-value">${town.type.toUpperCase()}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Population</div>
+                    <div class="meta-value">${town.population.toLocaleString()}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Points</div>
+                    <div class="meta-value">${town.points} pts</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Number</div>
+                    <div class="meta-value">#${town.number}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Status</div>
+                    <div class="meta-value" style="color: ${statusColor}">${statusText}</div>
+                </div>
+                ${town.distance ? `
+                <div class="meta-item">
+                    <div class="meta-label">Distance</div>
+                    <div class="meta-value">${town.distance.toFixed(1)} mi</div>
+                </div>
+                ` : ''}
+            `;
+
+            // Populate facts
+            const facts = townFacts[townId] || [
+                "This charming location offers a peaceful small-town atmosphere",
+                "Rich in local history and community traditions",
+                "Great stopping point for travelers exploring the Midwest"
+            ];
+
+            townFacts.innerHTML = facts.map((fact, index) => `
+                <div class="fact-item">
+                    <span class="fact-number">${index + 1}</span>
+                    <span class="fact-text">${fact}</span>
+                </div>
+            `).join('');
+
+            // Show modal
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close town details modal
+        function closeTownModal() {
+            const modal = document.getElementById('townModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('townModal');
+            if (e.target === modal) {
+                closeTownModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeTownModal();
+            }
+        });
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            
+            let bgColor, icon;
+            switch(type) {
+                case 'auto':
+                    bgColor = 'var(--success-green)';
+                    icon = 'fa-location-arrow';
+                    break;
+                case 'route':
+                    bgColor = '#6f42c1'; // Purple for route auto-checkins
+                    icon = 'fa-route';
+                    break;
+                case 'county':
+                    bgColor = '#fd7e14'; // Orange for county check-ins
+                    icon = 'fa-landmark';
+                    break;
+                case 'manual':
+                    bgColor = 'var(--primary-blue)';
+                    icon = 'fa-check';
+                    break;
+                case 'uncheck':
+                    bgColor = '#dc3545';
+                    icon = 'fa-times';
+                    break;
+                case 'info':
+                    bgColor = 'var(--info-blue)';
+                    icon = 'fa-info-circle';
+                    break;
+                case 'warning':
+                    bgColor = 'var(--warning-yellow)';
+                    icon = 'fa-exclamation-triangle';
+                    break;
+                case 'error':
+                    bgColor = '#dc3545';
+                    icon = 'fa-exclamation-circle';
+                    break;
+                default:
+                    bgColor = 'var(--success-green)';
+                    icon = 'fa-check';
+            }
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                font-weight: bold;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                animation: slideIn 0.5s ease;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            notification.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Show save status
+        function showSaveStatus(status, message) {
+            const statusEl = document.getElementById('saveStatus');
+            const iconEl = statusEl.querySelector('i');
+            const textEl = statusEl.querySelector('span');
+            
+            statusEl.classList.remove('saving', 'saved', 'error');
+            
+            switch(status) {
+                case 'saving':
+                    statusEl.classList.add('saving', 'show');
+                    iconEl.className = 'fas fa-spinner fa-spin';
+                    textEl.textContent = message || 'Saving...';
+                    break;
+                case 'saved':
+                    statusEl.classList.add('saved', 'show');
+                    iconEl.className = 'fas fa-check';
+                    textEl.textContent = message || 'Saved!';
+                    setTimeout(() => statusEl.classList.remove('show'), 2000);
+                    break;
+                case 'error':
+                    statusEl.classList.add('error', 'show');
+                    iconEl.className = 'fas fa-exclamation-triangle';
+                    textEl.textContent = message || 'Save failed';
+                    setTimeout(() => statusEl.classList.remove('show'), 3000);
+                    break;
+            }
+        }
+
+        // Filter towns based on criteria
+        function filterTowns() {
+            const stateFilter = document.getElementById('stateFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            filteredTowns = allTowns.filter(town => {
+                // State filter
+                if (stateFilter !== 'all' && town.state !== stateFilter) return false;
+                
+                // Type filter
+                if (typeFilter !== 'all' && town.type !== typeFilter) return false;
+                
+                // Status filter
+                if (statusFilter !== 'all') {
+                    const isCheckedIn = checkedInTowns.has(town.id);
+                    const isNearby = town.isNearby || false;
+                    
+                    if (statusFilter === 'checked-in' && !isCheckedIn) return false;
+                    if (statusFilter === 'nearby' && !isNearby) return false;
+                    if (statusFilter === 'not-visited' && (isCheckedIn || isNearby)) return false;
+                }
+                
+                return true;
+            });
+
+            updateTownsDisplay();
+            updateStats();
+        }
+
+        // Update statistics
+        // Calculate points based on population
+        function calculatePoints(population) {
+            if (population >= 100000) return 5;
+            if (population >= 50000) return 10;
+            if (population >= 25000) return 15;
+            if (population >= 10000) return 25;
+            if (population >= 5000) return 35;
+            if (population >= 1000) return 50;
+            return 100; // Small towns under 1000 people
+        }
+
+        // Add numbering to towns and calculate points
+        function initializeTownsWithNumbers() {
+            let townNumber = 1;
+            Object.values(townsData).forEach(route => {
+                route.towns.forEach(town => {
+                    town.number = townNumber++;
+                    town.points = calculatePoints(town.population);
+                });
+            });
+        }
+
+        function updateStats() {
+            const totalTowns = allTowns.length;
+            const checkedInCount = checkedInTowns.size;
+            const nearbyCount = allTowns.filter(town => town.isNearby).length;
+            const progressPercentage = Math.round((checkedInCount / totalTowns) * 100);
+            
+            // Calculate total points and average score
+            let totalPoints = 0;
+            checkedInTowns.forEach(townId => {
+                const town = allTowns.find(t => t.id === townId);
+                if (town && town.points) {
+                    totalPoints += town.points;
+                }
+            });
+            const averageScore = checkedInCount > 0 ? Math.round(totalPoints / checkedInCount) : 0;
+
+            // Calculate county statistics
+            const totalCounties = allCounties.length;
+            const checkedInCountiesCount = checkedInCounties.size;
+
+            document.getElementById('totalTowns').textContent = totalTowns;
+            document.getElementById('checkedInTowns').textContent = checkedInCount;
+            document.getElementById('totalCounties').textContent = `${checkedInCountiesCount}/${totalCounties}`;
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('averageScore').textContent = averageScore;
+            document.getElementById('nearbyTowns').textContent = nearbyCount;
+            document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
+        }
+
+        // Update towns display
+        function updateTownsDisplay() {
+            console.log('🏘️ Starting updateTownsDisplay...');
+            console.log(`📊 filteredTowns.length: ${filteredTowns.length}`);
+            
+            const container = document.getElementById('townsContainer');
+            container.innerHTML = '';
+
+            // Group towns by route
+            const townsByRoute = {};
+            filteredTowns.forEach(town => {
+                if (!townsByRoute[town.route]) {
+                    townsByRoute[town.route] = [];
+                }
+                townsByRoute[town.route].push(town);
+            });
+
+            console.log(`🛣️ Routes found: ${Object.keys(townsByRoute).length}`);
+            Object.keys(townsByRoute).forEach(route => {
+                console.log(`  - ${route}: ${townsByRoute[route].length} towns`);
+            });
+
+            Object.entries(townsByRoute).forEach(([routeName, towns]) => {
+                const routeSection = document.createElement('div');
+                routeSection.className = 'route-section';
+                
+                const routeHeader = document.createElement('div');
+                routeHeader.className = 'route-header';
+                routeHeader.innerHTML = `
+                    <div class="route-title">${routeName}</div>
+                    <div class="route-distance">${towns[0].routeDistance}</div>
+                `;
+                
+                const townsGrid = document.createElement('div');
+                townsGrid.className = 'towns-grid';
+                
+                towns.forEach(town => {
+                    const isCheckedIn = checkedInTowns.has(town.id);
+                    const isNearby = town.isNearby || false;
+                    
+                    let cardClass = 'town-card';
+                    let statusText = 'Not Visited';
+                    let statusClass = 'status-not-visited';
+                    
+                    if (isCheckedIn) {
+                        cardClass += ' checked-in';
+                        statusText = '✓ Checked In';
+                        statusClass = 'status-checked-in';
+                    } else if (isNearby) {
+                        cardClass += ' nearby';
+                        statusText = '📍 Nearby';
+                        statusClass = 'status-nearby';
+                    }
+                    
+                    const distanceText = town.distance ? `${town.distance.toFixed(1)} miles away` : '';
+                    
+                    const townCard = document.createElement('div');
+                    townCard.className = cardClass;
+                    
+                    townCard.innerHTML = `
+                        <div class="town-header">
+                            <div class="town-number">${town.number}</div>
+                            <div class="town-name">${town.name}</div>
+                            <div class="town-type">${town.type}</div>
+                            <div class="points-indicator">${town.points} pts</div>
+                        </div>
+                        <div class="town-details">
+                            ${town.state} • Pop: ${town.population.toLocaleString()}
+                            ${distanceText ? `<br><div class="distance-info">${distanceText}</div>` : ''}
+                        </div>
+                        <div class="town-status">
+                            <div class="status-badge ${statusClass}">${statusText}</div>
+                            ${isCheckedIn ? 
+                                `<button class="uncheck-btn" onclick="event.stopPropagation(); performUncheck('${town.id}')">
+                                    Uncheck
+                                </button>` :
+                                `<button class="checkin-btn" onclick="event.stopPropagation(); performCheckin('${town.id}')">
+                                    Check In
+                                </button>`
+                            }
+                        </div>
+                    `;
+
+                    // Add click event to show town details (excluding the button area)
+                    townCard.addEventListener('click', function(e) {
+                        if (!e.target.classList.contains('checkin-btn') && !e.target.classList.contains('uncheck-btn')) {
+                            showTownDetails(town.id);
+                        }
+                    });
+
+                    // Add hover effect cursor
+                    townCard.style.cursor = 'pointer';
+                    
+                    townsGrid.appendChild(townCard);
+                });
+                
+                routeSection.appendChild(routeHeader);
+                routeSection.appendChild(townsGrid);
+                container.appendChild(routeSection);
+            });
+        }
+
+        // Update map with all towns
+        function updateMap() {
+            // Clear existing markers except user location and boundaries
+            map.eachLayer(layer => {
+                if (layer instanceof L.CircleMarker && layer !== userLocationMarker) {
+                    map.removeLayer(layer);
+                }
+                // Remove old circle boundaries (we'll use new boundary system)
+                if (layer instanceof L.Circle) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            // Add town markers and boundaries
+            allTowns.forEach(town => {
+                const isCheckedIn = checkedInTowns.has(town.id);
+                const isNearby = town.isNearby || false;
+                
+                let color, size;
+                
+                if (isCheckedIn) {
+                    color = '#28a745'; // Green for checked in
+                    size = 8;
+                } else if (isNearby) {
+                    color = '#ffc107'; // Yellow for nearby
+                    size = 7;
+                } else {
+                    // Color by type
+                    switch(town.type) {
+                        case 'city':
+                            color = '#2c5aa0'; // Blue
+                            size = 6;
+                            break;
+                        case 'town':
+                            color = '#17a2b8'; // Teal
+                            size = 5;
+                            break;
+                        case 'village':
+                            color = '#6f42c1'; // Purple
+                            size = 4;
+                            break;
+                        default:
+                            color = '#6c757d'; // Gray
+                            size = 4;
+                    }
+                }
+                
+                // Add town center marker
+                const marker = L.circleMarker([town.lat, town.lng], {
+                    radius: size,
+                    fillColor: color,
+                    color: 'white',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+                
+                marker.bindPopup(`
+                    <div style="text-align: center;">
+                        <h4 style="margin: 0; color: ${color};">${town.name}, ${town.state}</h4>
+                        <p style="margin: 5px 0; font-size: 0.9rem;">${town.type.toUpperCase()} • Pop: ${town.population.toLocaleString()}</p>
+                        ${isCheckedIn ? '<p style="color: #28a745; margin: 5px 0 0 0; font-weight: bold;">✓ Checked In</p>' : ''}
+                        ${isNearby && !isCheckedIn ? '<p style="color: #ffc107; margin: 5px 0 0 0; font-weight: bold;">📍 Nearby</p>' : ''}
+                    </div>
+                `);
+                
+                marker.on('click', () => {
+                    if (!isCheckedIn) {
+                        performCheckin(town.id);
+                    }
+                });
+                
+                // Add boundary for checked-in towns
+                if (isCheckedIn && boundariesLoaded) {
+                    addTownBoundary(town.id, true);
+                }
+            });
+        }
+
+        // Get current location
+        function getCurrentLocation() {
+            if (!navigator.geolocation) {
+                showNotification('Geolocation is not supported by this browser.', 'error');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    currentPosition = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Update/add user location marker
+                    if (userLocationMarker) {
+                        map.removeLayer(userLocationMarker);
+                    }
+
+                    userLocationMarker = L.circleMarker([currentPosition.lat, currentPosition.lng], {
+                        radius: 8,
+                        fillColor: '#ff0000',
+                        color: 'white',
+                        weight: 3,
+                        opacity: 1,
+                        fillOpacity: 1
+                    }).addTo(map);
+
+                    userLocationMarker.bindPopup('<div style="text-align: center;"><h4 style="margin: 0; color: #ff0000;">📍 Your Current Location</h4></div>');
+
+                    checkNearbyTowns();
+                    saveTownsState();
+                },
+                (error) => {
+                    let errorMessage = 'Unable to get your location.';
+                    showNotification(errorMessage, 'error');
+                }
+            );
+        }
+
+        // Clear all data
+        function clearAllTownData() {
+            if (confirm('Are you sure you want to clear all your town check-in data? This cannot be undone.')) {
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                    
+                    checkedInTowns = new Set();
+                    checkinHistory = [];
+                    autoCheckinEnabled = false;
+                    currentPosition = null;
+                    
+                    document.getElementById('autoCheckinToggle').checked = false;
+                    
+                    if (userLocationMarker) {
+                        map.removeLayer(userLocationMarker);
+                        userLocationMarker = null;
+                    }
+                    
+                    allTowns.forEach(town => {
+                        town.distance = null;
+                        town.isNearby = false;
+                    });
+                    
+                    updateStats();
+                    updateTownsDisplay();
+                    updateMap();
+                    
+                    showNotification('All town data cleared successfully!', 'info');
+                } catch (error) {
+                    showNotification('Failed to clear data. Please try again.', 'error');
+                }
+            }
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Event listeners
+        document.getElementById('autoCheckinToggle').addEventListener('change', function() {
+            autoCheckinEnabled = this.checked;
+            saveTownsState();
+            
+            if (autoCheckinEnabled) {
+                getCurrentLocation();
+                showNotification('Auto check-in enabled for towns within 2 miles!', 'info');
+                setInterval(() => {
+                    if (autoCheckinEnabled) {
+                        getCurrentLocation();
+                    }
+                }, 30000);
+            } else {
+                showNotification('Auto check-in disabled for towns.', 'info');
+            }
+        });
+
+        document.getElementById('routeCheckinToggle').addEventListener('change', function() {
+            routeCheckinEnabled = this.checked;
+            saveTownsState();
+            
+            if (routeCheckinEnabled) {
+                showNotification('🛣️ Route auto check-in enabled! Intermediate towns will be automatically checked in.', 'info');
+            } else {
+                showNotification('🛣️ Route auto check-in disabled.', 'info');
+            }
+        });
+
+        document.getElementById('stateFilter').addEventListener('change', filterTowns);
+        document.getElementById('typeFilter').addEventListener('change', filterTowns);
+        document.getElementById('statusFilter').addEventListener('change', filterTowns);
+
+        // Auto-save functionality
+        function startAutoSave() {
+            setInterval(() => {
+                saveTownsState();
+            }, AUTO_SAVE_INTERVAL);
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Starting application initialization...');
+            console.log('📝 townsData keys:', Object.keys(townsData));
+            console.log('� townsData.route1:', townsData.route1);
+            
+            console.log('�📊 Initializing towns with numbers...');
+            initializeTownsWithNumbers();
+            
+            console.log('🗺️ Initializing towns data...');
+            initializeTownsData();
+            
+            console.log('📝 allTowns.length after init:', allTowns.length);
+            console.log('📝 allCounties.length after init:', allCounties.length);
+            
+            console.log('💾 Loading towns state...');
+            loadTownsState();
+            
+            console.log('📈 Updating stats...');
+            updateStats();
+            
+            console.log('🏘️ Updating towns display...');
+            updateTownsDisplay();
+            
+            console.log('🗺️ Updating map...');
+            updateMap();
+            
+            console.log('💾 Starting auto-save...');
+            startAutoSave();
+            
+            if (autoCheckinEnabled) {
+                console.log('📍 Getting current location...');
+                getCurrentLocation();
+            }
+            
+            // Save state before page unload
+            window.addEventListener('beforeunload', () => {
+                saveTownsState();
+            });
+            
+            console.log('✅ Application initialization complete!');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "031",
+        "GEOID": "17031",
+        "NAME": "Cook",
+        "NAMELSAD": "Cook County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -87.85000000000001,
+              41.65
+            ],
+            [
+              -87.55,
+              41.65
+            ],
+            [
+              -87.55,
+              41.949999999999996
+            ],
+            [
+              -87.85000000000001,
+              41.949999999999996
+            ],
+            [
+              -87.85000000000001,
+              41.65
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "043",
+        "GEOID": "17043",
+        "NAME": "DuPage",
+        "NAMELSAD": "DuPage County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -88.25,
+              41.65
+            ],
+            [
+              -87.94999999999999,
+              41.65
+            ],
+            [
+              -87.94999999999999,
+              41.949999999999996
+            ],
+            [
+              -88.25,
+              41.949999999999996
+            ],
+            [
+              -88.25,
+              41.65
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "089",
+        "GEOID": "17089",
+        "NAME": "Kane",
+        "NAMELSAD": "Kane County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -88.55000000000001,
+              41.75
+            ],
+            [
+              -88.25,
+              41.75
+            ],
+            [
+              -88.25,
+              42.05
+            ],
+            [
+              -88.55000000000001,
+              42.05
+            ],
+            [
+              -88.55000000000001,
+              41.75
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "097",
+        "GEOID": "17097",
+        "NAME": "Lake",
+        "NAMELSAD": "Lake County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -88.05000000000001,
+              42.15
+            ],
+            [
+              -87.75,
+              42.15
+            ],
+            [
+              -87.75,
+              42.449999999999996
+            ],
+            [
+              -88.05000000000001,
+              42.449999999999996
+            ],
+            [
+              -88.05000000000001,
+              42.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "197",
+        "GEOID": "17197",
+        "NAME": "Will",
+        "NAMELSAD": "Will County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -88.05000000000001,
+              41.35
+            ],
+            [
+              -87.75,
+              41.35
+            ],
+            [
+              -87.75,
+              41.65
+            ],
+            [
+              -88.05000000000001,
+              41.65
+            ],
+            [
+              -88.05000000000001,
+              41.35
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "111",
+        "GEOID": "17111",
+        "NAME": "McHenry",
+        "NAMELSAD": "McHenry County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -88.55000000000001,
+              42.15
+            ],
+            [
+              -88.25,
+              42.15
+            ],
+            [
+              -88.25,
+              42.449999999999996
+            ],
+            [
+              -88.55000000000001,
+              42.449999999999996
+            ],
+            [
+              -88.55000000000001,
+              42.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "093",
+        "GEOID": "17093",
+        "NAME": "Kendall",
+        "NAMELSAD": "Kendall County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -88.55000000000001,
+              41.45
+            ],
+            [
+              -88.25,
+              41.45
+            ],
+            [
+              -88.25,
+              41.75
+            ],
+            [
+              -88.55000000000001,
+              41.75
+            ],
+            [
+              -88.55000000000001,
+              41.45
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "037",
+        "GEOID": "17037",
+        "NAME": "DeKalb",
+        "NAMELSAD": "DeKalb County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -88.95,
+              41.75
+            ],
+            [
+              -88.64999999999999,
+              41.75
+            ],
+            [
+              -88.64999999999999,
+              42.05
+            ],
+            [
+              -88.95,
+              42.05
+            ],
+            [
+              -88.95,
+              41.75
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "099",
+        "GEOID": "17099",
+        "NAME": "LaSalle",
+        "NAMELSAD": "LaSalle County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -89.15,
+              41.15
+            ],
+            [
+              -88.85,
+              41.15
+            ],
+            [
+              -88.85,
+              41.449999999999996
+            ],
+            [
+              -89.15,
+              41.449999999999996
+            ],
+            [
+              -89.15,
+              41.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "17",
+        "COUNTYFP": "103",
+        "GEOID": "17103",
+        "NAME": "Lee",
+        "NAMELSAD": "Lee County",
+        "state_abbr": "IL",
+        "state_name": "Illinois"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -89.55000000000001,
+              41.65
+            ],
+            [
+              -89.25,
+              41.65
+            ],
+            [
+              -89.25,
+              41.949999999999996
+            ],
+            [
+              -89.55000000000001,
+              41.949999999999996
+            ],
+            [
+              -89.55000000000001,
+              41.65
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

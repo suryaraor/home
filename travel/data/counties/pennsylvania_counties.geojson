@@ -1,0 +1,395 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "101",
+        "GEOID": "42101",
+        "NAME": "Philadelphia",
+        "NAMELSAD": "Philadelphia County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.25,
+              39.85
+            ],
+            [
+              -74.94999999999999,
+              39.85
+            ],
+            [
+              -74.94999999999999,
+              40.15
+            ],
+            [
+              -75.25,
+              40.15
+            ],
+            [
+              -75.25,
+              39.85
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "003",
+        "GEOID": "42003",
+        "NAME": "Allegheny",
+        "NAMELSAD": "Allegheny County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.15,
+              40.35
+            ],
+            [
+              -79.85,
+              40.35
+            ],
+            [
+              -79.85,
+              40.65
+            ],
+            [
+              -80.15,
+              40.65
+            ],
+            [
+              -80.15,
+              40.35
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "091",
+        "GEOID": "42091",
+        "NAME": "Montgomery",
+        "NAMELSAD": "Montgomery County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55000000000001,
+              40.050000000000004
+            ],
+            [
+              -75.25,
+              40.050000000000004
+            ],
+            [
+              -75.25,
+              40.35
+            ],
+            [
+              -75.55000000000001,
+              40.35
+            ],
+            [
+              -75.55000000000001,
+              40.050000000000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "017",
+        "GEOID": "42017",
+        "NAME": "Bucks",
+        "NAMELSAD": "Bucks County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.25,
+              40.15
+            ],
+            [
+              -74.94999999999999,
+              40.15
+            ],
+            [
+              -74.94999999999999,
+              40.449999999999996
+            ],
+            [
+              -75.25,
+              40.449999999999996
+            ],
+            [
+              -75.25,
+              40.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "029",
+        "GEOID": "42029",
+        "NAME": "Chester",
+        "NAMELSAD": "Chester County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.85000000000001,
+              39.85
+            ],
+            [
+              -75.55,
+              39.85
+            ],
+            [
+              -75.55,
+              40.15
+            ],
+            [
+              -75.85000000000001,
+              40.15
+            ],
+            [
+              -75.85000000000001,
+              39.85
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "045",
+        "GEOID": "42045",
+        "NAME": "Delaware",
+        "NAMELSAD": "Delaware County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55000000000001,
+              39.75
+            ],
+            [
+              -75.25,
+              39.75
+            ],
+            [
+              -75.25,
+              40.05
+            ],
+            [
+              -75.55000000000001,
+              40.05
+            ],
+            [
+              -75.55000000000001,
+              39.75
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "071",
+        "GEOID": "42071",
+        "NAME": "Lancaster",
+        "NAMELSAD": "Lancaster County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.45,
+              39.85
+            ],
+            [
+              -76.14999999999999,
+              39.85
+            ],
+            [
+              -76.14999999999999,
+              40.15
+            ],
+            [
+              -76.45,
+              40.15
+            ],
+            [
+              -76.45,
+              39.85
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "133",
+        "GEOID": "42133",
+        "NAME": "York",
+        "NAMELSAD": "York County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.85000000000001,
+              39.85
+            ],
+            [
+              -76.55,
+              39.85
+            ],
+            [
+              -76.55,
+              40.15
+            ],
+            [
+              -76.85000000000001,
+              40.15
+            ],
+            [
+              -76.85000000000001,
+              39.85
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "011",
+        "GEOID": "42011",
+        "NAME": "Berks",
+        "NAMELSAD": "Berks County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -76.05000000000001,
+              40.25
+            ],
+            [
+              -75.75,
+              40.25
+            ],
+            [
+              -75.75,
+              40.55
+            ],
+            [
+              -76.05000000000001,
+              40.55
+            ],
+            [
+              -76.05000000000001,
+              40.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "42",
+        "COUNTYFP": "129",
+        "GEOID": "42129",
+        "NAME": "Westmoreland",
+        "NAMELSAD": "Westmoreland County",
+        "state_abbr": "PA",
+        "state_name": "Pennsylvania"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.65,
+              40.15
+            ],
+            [
+              -79.35,
+              40.15
+            ],
+            [
+              -79.35,
+              40.449999999999996
+            ],
+            [
+              -79.65,
+              40.449999999999996
+            ],
+            [
+              -79.65,
+              40.15
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

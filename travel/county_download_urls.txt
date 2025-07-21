@@ -1,0 +1,10 @@
+# County Boundary Download URLs
+# US Census Bureau TIGER/Line Files 2022
+
+IL (illinois    ) - FIPS 17: https://www2.census.gov/geo/tiger/TIGER2023/COUNTY/cb_2022_17_county_500k.zip
+IN (indiana     ) - FIPS 18: https://www2.census.gov/geo/tiger/TIGER2023/COUNTY/cb_2022_18_county_500k.zip
+MO (missouri    ) - FIPS 29: https://www2.census.gov/geo/tiger/TIGER2023/COUNTY/cb_2022_29_county_500k.zip
+OH (ohio        ) - FIPS 39: https://www2.census.gov/geo/tiger/TIGER2023/COUNTY/cb_2022_39_county_500k.zip
+PA (pennsylvania) - FIPS 42: https://www2.census.gov/geo/tiger/TIGER2023/COUNTY/cb_2022_42_county_500k.zip
+WI (wisconsin   ) - FIPS 55: https://www2.census.gov/geo/tiger/TIGER2023/COUNTY/cb_2022_55_county_500k.zip
+WV (west_virginia) - FIPS 54: https://www2.census.gov/geo/tiger/TIGER2023/COUNTY/cb_2022_54_county_500k.zip

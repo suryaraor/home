@@ -1,0 +1,395 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "035",
+        "GEOID": "39035",
+        "NAME": "Cuyahoga",
+        "NAMELSAD": "Cuyahoga County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -81.85000000000001,
+              41.25
+            ],
+            [
+              -81.55,
+              41.25
+            ],
+            [
+              -81.55,
+              41.55
+            ],
+            [
+              -81.85000000000001,
+              41.55
+            ],
+            [
+              -81.85000000000001,
+              41.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "061",
+        "GEOID": "39061",
+        "NAME": "Hamilton",
+        "NAMELSAD": "Hamilton County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -84.75,
+              39.050000000000004
+            ],
+            [
+              -84.44999999999999,
+              39.050000000000004
+            ],
+            [
+              -84.44999999999999,
+              39.35
+            ],
+            [
+              -84.75,
+              39.35
+            ],
+            [
+              -84.75,
+              39.050000000000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "049",
+        "GEOID": "39049",
+        "NAME": "Franklin",
+        "NAMELSAD": "Franklin County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -83.15,
+              39.75
+            ],
+            [
+              -82.85,
+              39.75
+            ],
+            [
+              -82.85,
+              40.05
+            ],
+            [
+              -83.15,
+              40.05
+            ],
+            [
+              -83.15,
+              39.75
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "113",
+        "GEOID": "39113",
+        "NAME": "Montgomery",
+        "NAMELSAD": "Montgomery County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -84.35000000000001,
+              39.65
+            ],
+            [
+              -84.05,
+              39.65
+            ],
+            [
+              -84.05,
+              39.949999999999996
+            ],
+            [
+              -84.35000000000001,
+              39.949999999999996
+            ],
+            [
+              -84.35000000000001,
+              39.65
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "153",
+        "GEOID": "39153",
+        "NAME": "Summit",
+        "NAMELSAD": "Summit County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -81.65,
+              40.95
+            ],
+            [
+              -81.35,
+              40.95
+            ],
+            [
+              -81.35,
+              41.25
+            ],
+            [
+              -81.65,
+              41.25
+            ],
+            [
+              -81.65,
+              40.95
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "095",
+        "GEOID": "39095",
+        "NAME": "Lucas",
+        "NAMELSAD": "Lucas County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -83.75,
+              41.550000000000004
+            ],
+            [
+              -83.44999999999999,
+              41.550000000000004
+            ],
+            [
+              -83.44999999999999,
+              41.85
+            ],
+            [
+              -83.75,
+              41.85
+            ],
+            [
+              -83.75,
+              41.550000000000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "151",
+        "GEOID": "39151",
+        "NAME": "Stark",
+        "NAMELSAD": "Stark County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -81.55000000000001,
+              40.65
+            ],
+            [
+              -81.25,
+              40.65
+            ],
+            [
+              -81.25,
+              40.949999999999996
+            ],
+            [
+              -81.55000000000001,
+              40.949999999999996
+            ],
+            [
+              -81.55000000000001,
+              40.65
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "017",
+        "GEOID": "39017",
+        "NAME": "Butler",
+        "NAMELSAD": "Butler County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -84.65,
+              39.35
+            ],
+            [
+              -84.35,
+              39.35
+            ],
+            [
+              -84.35,
+              39.65
+            ],
+            [
+              -84.65,
+              39.65
+            ],
+            [
+              -84.65,
+              39.35
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "093",
+        "GEOID": "39093",
+        "NAME": "Lorain",
+        "NAMELSAD": "Lorain County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -82.35000000000001,
+              41.25
+            ],
+            [
+              -82.05,
+              41.25
+            ],
+            [
+              -82.05,
+              41.55
+            ],
+            [
+              -82.35000000000001,
+              41.55
+            ],
+            [
+              -82.35000000000001,
+              41.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "STATEFP": "39",
+        "COUNTYFP": "099",
+        "GEOID": "39099",
+        "NAME": "Mahoning",
+        "NAMELSAD": "Mahoning County",
+        "state_abbr": "OH",
+        "state_name": "Ohio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.95,
+              40.85
+            ],
+            [
+              -80.64999999999999,
+              40.85
+            ],
+            [
+              -80.64999999999999,
+              41.15
+            ],
+            [
+              -80.95,
+              41.15
+            ],
+            [
+              -80.95,
+              40.85
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

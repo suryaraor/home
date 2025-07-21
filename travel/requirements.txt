@@ -1,0 +1,19 @@
+# Requirements for US Town Boundaries Downloader
+# Install with: pip install -r requirements.txt
+
+# Core data processing
+geopandas>=0.13.0
+pandas>=1.5.0
+shapely>=2.0.0
+
+# HTTP requests
+requests>=2.28.0
+
+# Optional: For better performance and additional formats
+# fiona>=1.9.0
+# pyproj>=3.4.0
+# rtree>=1.0.0
+
+# For visualization (optional)
+# folium>=0.14.0
+# matplotlib>=3.6.0

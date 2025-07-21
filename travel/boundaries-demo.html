@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Town Boundaries Data - Demo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .btn.success {
+            background: #28a745;
+        }
+        
+        .btn.success:hover {
+            background: #1e7e34;
+        }
+        
+        .btn.danger {
+            background: #dc3545;
+        }
+        
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        
+        select {
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .status {
+            padding: 15px 20px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: #e8f5e8;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .map-container {
+            position: relative;
+            height: 600px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        
+        .stats {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .download-section {
+            padding: 20px;
+            background: #e9ecef;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .download-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .download-card h3 {
+            margin: 0 0 10px 0;
+            color: #495057;
+        }
+        
+        .download-card p {
+            margin: 0 0 15px 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .file-info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗺️ US Town Boundaries</h1>
+            <p>Geographic boundary data for small towns and cities across the United States</p>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="loadBoundaries()">
+                <span id="loadText">Load Boundaries</span>
+            </button>
+            <button class="btn success" onclick="exportData()" id="exportBtn" disabled>
+                Export GeoJSON
+            </button>
+            <button class="btn danger" onclick="clearCache()">
+                Clear Cache
+            </button>
+            
+            <select id="stateSelect" onchange="showStateOnMap()" disabled>
+                <option value="">Select a state...</option>
+            </select>
+            
+            <select id="townSelect" onchange="showTownOnMap()" disabled>
+                <option value="">Select a town...</option>
+            </select>
+        </div>
+        
+        <div class="status" id="status">
+            Click "Load Boundaries" to download and cache town boundary data
+        </div>
+        
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+        
+        <div class="stats">
+            <h3>Boundary Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalBoundaries">0</div>
+                    <div class="stat-label">Total Boundaries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statesCount">0</div>
+                    <div class="stat-label">States Covered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="cacheSize">0 KB</div>
+                    <div class="stat-label">Cache Size</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="lastUpdated">Never</div>
+                    <div class="stat-label">Last Updated</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <h3>Download Options</h3>
+            <div class="download-grid">
+                <div class="download-card">
+                    <h3>🐍 Python Downloader</h3>
+                    <p>Complete Python script to download official US Census TIGER/Line shapefiles and convert to web-ready formats.</p>
+                    <div class="file-info">download_town_boundaries.py</div>
+                    <a href="download_town_boundaries.py" class="btn" download>Download Python Script</a>
+                </div>
+                
+                <div class="download-card">
+                    <h3>📦 Requirements</h3>
+                    <p>Python dependencies needed to run the downloader script.</p>
+                    <div class="file-info">requirements.txt</div>
+                    <a href="requirements.txt" class="btn" download>Download Requirements</a>
+                </div>
+                
+                <div class="download-card">
+                    <h3>🌐 JavaScript Manager</h3>
+                    <p>Client-side boundary manager for web applications with caching and fallback data.</p>
+                    <div class="file-info">town-boundaries-manager.js</div>
+                    <a href="town-boundaries-manager.js" class="btn" download>Download JS Manager</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="town-boundaries-manager.js"></script>
+    <script>
+        let map;
+        let boundaryLayers = [];
+        let boundariesLoaded = false;
+        
+        // Initialize map
+        function initMap() {
+            map = L.map('map').setView([39.8283, -98.5795], 4); // Center of US
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        }
+        
+        // Load boundaries
+        async function loadBoundaries() {
+            const loadBtn = document.querySelector('button[onclick="loadBoundaries()"]');
+            const loadText = document.getElementById('loadText');
+            const status = document.getElementById('status');
+            
+            // Show loading state
+            loadBtn.disabled = true;
+            loadText.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+            status.className = 'status';
+            status.textContent = 'Loading town boundaries data...';
+            
+            try {
+                await townBoundariesManager.loadBoundaries();
+                
+                // Success
+                loadText.textContent = 'Reload Boundaries';
+                loadBtn.disabled = false;
+                status.className = 'status success';
+                status.textContent = 'Town boundaries loaded successfully!';
+                
+                boundariesLoaded = true;
+                populateStateSelect();
+                updateStats();
+                document.getElementById('exportBtn').disabled = false;
+                
+            } catch (error) {
+                // Error
+                loadText.textContent = 'Retry Loading';
+                loadBtn.disabled = false;
+                status.className = 'status error';
+                status.textContent = `Error loading boundaries: ${error.message}`;
+                console.error('Error:', error);
+            }
+        }
+        
+        // Populate state select
+        function populateStateSelect() {
+            const stateSelect = document.getElementById('stateSelect');
+            const stats = townBoundariesManager.getStats();
+            
+            // Clear existing options
+            stateSelect.innerHTML = '<option value="">Select a state...</option>';
+            
+            // Add states that have boundaries
+            Object.keys(stats.byState).sort().forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = `${state} (${stats.byState[state]} towns)`;
+                stateSelect.appendChild(option);
+            });
+            
+            stateSelect.disabled = false;
+        }
+        
+        // Show state on map
+        function showStateOnMap() {
+            const stateSelect = document.getElementById('stateSelect');
+            const townSelect = document.getElementById('townSelect');
+            const selectedState = stateSelect.value;
+            
+            // Clear previous layers
+            clearBoundaryLayers();
+            
+            // Clear town select
+            townSelect.innerHTML = '<option value="">Select a town...</option>';
+            townSelect.disabled = true;
+            
+            if (!selectedState) return;
+            
+            // Get boundaries for this state
+            const stateBoundaries = townBoundariesManager.getBoundariesByState(selectedState);
+            
+            if (stateBoundaries.size === 0) {
+                alert('No boundaries found for this state');
+                return;
+            }
+            
+            // Add town options
+            const towns = Array.from(stateBoundaries.values()).sort((a, b) => a.name.localeCompare(b.name));
+            towns.forEach(town => {
+                const option = document.createElement('option');
+                option.value = town.id;
+                option.textContent = town.name;
+                townSelect.appendChild(option);
+            });
+            townSelect.disabled = false;
+            
+            // Show all boundaries for this state
+            const bounds = [];
+            stateBoundaries.forEach(boundary => {
+                if (boundary.boundary && boundary.boundary.coordinates) {
+                    const layer = L.geoJSON(boundary.boundary, {
+                        style: {
+                            color: '#007bff',
+                            weight: 2,
+                            opacity: 0.8,
+                            fillColor: '#007bff',
+                            fillOpacity: 0.1
+                        }
+                    }).bindPopup(`<strong>${boundary.name}</strong><br>State: ${boundary.state}`);
+                    
+                    layer.addTo(map);
+                    boundaryLayers.push(layer);
+                    
+                    // Add to bounds
+                    const layerBounds = layer.getBounds();
+                    if (layerBounds.isValid()) {
+                        bounds.push(layerBounds);
+                    }
+                }
+            });
+            
+            // Fit map to show all boundaries
+            if (bounds.length > 0) {
+                const group = new L.featureGroup(boundaryLayers);
+                map.fitBounds(group.getBounds(), { padding: [20, 20] });
+            }
+        }
+        
+        // Show specific town on map
+        function showTownOnMap() {
+            const townSelect = document.getElementById('townSelect');
+            const selectedTownId = townSelect.value;
+            
+            if (!selectedTownId) return;
+            
+            const boundary = townBoundariesManager.getBoundary(selectedTownId);
+            if (!boundary) return;
+            
+            // Clear previous layers
+            clearBoundaryLayers();
+            
+            // Show this town's boundary
+            if (boundary.boundary && boundary.boundary.coordinates) {
+                const layer = L.geoJSON(boundary.boundary, {
+                    style: {
+                        color: '#28a745',
+                        weight: 3,
+                        opacity: 1,
+                        fillColor: '#28a745',
+                        fillOpacity: 0.2
+                    }
+                }).bindPopup(`
+                    <strong>${boundary.name}, ${boundary.state}</strong><br>
+                    ${boundary.population ? `Population: ${boundary.population.toLocaleString()}<br>` : ''}
+                    Radius: ${boundary.radius.toFixed(1)} km
+                `);
+                
+                layer.addTo(map);
+                boundaryLayers.push(layer);
+                
+                // Fit map to this boundary
+                const layerBounds = layer.getBounds();
+                if (layerBounds.isValid()) {
+                    map.fitBounds(layerBounds, { padding: [50, 50] });
+                }
+            }
+        }
+        
+        // Clear boundary layers
+        function clearBoundaryLayers() {
+            boundaryLayers.forEach(layer => {
+                map.removeLayer(layer);
+            });
+            boundaryLayers = [];
+        }
+        
+        // Export data
+        function exportData() {
+            if (!boundariesLoaded) {
+                alert('Please load boundaries first');
+                return;
+            }
+            
+            const geoJson = townBoundariesManager.exportAsGeoJSON();
+            const blob = new Blob([JSON.stringify(geoJson, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'us_town_boundaries.geojson';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Clear cache
+        function clearCache() {
+            if (confirm('This will clear all cached boundary data. Continue?')) {
+                townBoundariesManager.clearCache();
+                
+                // Reset UI
+                boundariesLoaded = false;
+                document.getElementById('stateSelect').disabled = true;
+                document.getElementById('townSelect').disabled = true;
+                document.getElementById('exportBtn').disabled = true;
+                
+                const status = document.getElementById('status');
+                status.className = 'status';
+                status.textContent = 'Cache cleared. Click "Load Boundaries" to reload data.';
+                
+                clearBoundaryLayers();
+                updateStats();
+            }
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const stats = townBoundariesManager.getStats();
+            
+            document.getElementById('totalBoundaries').textContent = stats.total.toLocaleString();
+            document.getElementById('statesCount').textContent = Object.keys(stats.byState).length;
+            
+            // Calculate cache size
+            try {
+                const cached = localStorage.getItem('usTownBoundaries');
+                const sizeKB = cached ? Math.round(cached.length / 1024) : 0;
+                document.getElementById('cacheSize').textContent = `${sizeKB.toLocaleString()} KB`;
+            } catch (e) {
+                document.getElementById('cacheSize').textContent = 'Unknown';
+            }
+            
+            // Last updated
+            try {
+                const cached = localStorage.getItem('usTownBoundaries');
+                if (cached) {
+                    const data = JSON.parse(cached);
+                    const date = new Date(data.timestamp);
+                    document.getElementById('lastUpdated').textContent = date.toLocaleDateString();
+                } else {
+                    document.getElementById('lastUpdated').textContent = 'Never';
+                }
+            } catch (e) {
+                document.getElementById('lastUpdated').textContent = 'Unknown';
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+            updateStats();
+        });
+    </script>
+</body>
+</html>

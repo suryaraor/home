@@ -1,0 +1,31 @@
+{
+  "title": "US Small Towns Boundaries Dataset",
+  "description": "Geographic boundaries for small towns and cities across the United States",
+  "source": "US Census Bureau TIGER/Line Shapefiles 2023",
+  "created_date": "2025-07-20 23:52:17",
+  "files": {
+    "complete_dataset": {
+      "filename": "us_small_towns_boundaries.geojson",
+      "description": "Complete dataset with all small towns",
+      "format": "GeoJSON"
+    },
+    "simplified_dataset": {
+      "filename": "us_small_towns_simplified.geojson",
+      "description": "Simplified version for web use",
+      "format": "GeoJSON"
+    },
+    "state_chunks": {
+      "directory": "chunks/",
+      "description": "Individual state files for efficient loading",
+      "format": "GeoJSON",
+      "pattern": "{state_code}_towns.geojson"
+    }
+  },
+  "usage": {
+    "web_application": "Load individual state chunks as needed",
+    "gis_analysis": "Use complete dataset for comprehensive analysis",
+    "mobile_apps": "Use simplified dataset for better performance"
+  },
+  "coordinate_system": "WGS84 (EPSG:4326)",
+  "data_filter": "Places with population < 50,000 (where available)"
+}
