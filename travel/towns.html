@@ -1997,8 +1997,6 @@
 
         // Update travel path on map
         async function updateTravelPath() {
-        // Update travel path on map
-        async function updateTravelPath() {
             // Remove existing path
             if (pathPolyline) {
                 map.removeLayer(pathPolyline);
@@ -2790,7 +2788,7 @@
                 // Show next town overlay with facts (only for manual check-ins)
                 setTimeout(() => {
                     showNextTownOverlay();
-                }, 2000); // Delay to let other animations complete first
+                }, 30000); // Wait 30 seconds after check-in before showing next town
             }
         }
 
@@ -3450,10 +3448,10 @@
                         <div class="town-status">
                             <div class="status-badge ${statusClass}">${statusText}</div>
                             ${isCheckedIn ? 
-                                `<button class="uncheck-btn" onclick="event.stopPropagation(); performUncheck('${town.id}').catch(e => console.error('Uncheck error:', e))">>
+                                `<button class="uncheck-btn" onclick="event.stopPropagation(); performUncheck('${town.id}').catch(e => console.error('Uncheck error:', e))">
                                     Uncheck
                                 </button>` :
-                                `<button class="checkin-btn" onclick="event.stopPropagation(); performCheckin('${town.id}').catch(e => console.error('Checkin error:', e))">>
+                                `<button class="checkin-btn" onclick="event.stopPropagation(); performCheckin('${town.id}').catch(e => console.error('Checkin error:', e))">
                                     Check In
                                 </button>`
                             }
