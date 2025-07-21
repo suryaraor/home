@@ -1624,12 +1624,13 @@
         // Travel path system
         let travelPath = [];
         let pathPolyline = null;
+        let highwayRoutes = new Map(); // Store highway route segments between towns
         
         // State welcome system
         let visitedStates = new Set();
         let stateBoundaries = new Map();
         let stateLayers = new Map();
-        let townMarkers = new Map(); // Store town markers for pulse animation
+        let townMarkers = new Map(); // Store town markers for map management
 
         // Storage configuration
         const STORAGE_KEY = 'townsTravelState';
@@ -1930,8 +1931,74 @@
             }
         }
 
+        // Rate limiting for API calls
+        let lastApiCall = 0;
+        const API_RATE_LIMIT = 1000; // 1 second between calls
+
+        // Get highway route between two points using OpenRouteService
+        async function getHighwayRoute(fromLat, fromLng, toLat, toLng) {
+            try {
+                // Rate limiting
+                const now = Date.now();
+                const timeSinceLastCall = now - lastApiCall;
+                if (timeSinceLastCall < API_RATE_LIMIT) {
+                    await new Promise(resolve => setTimeout(resolve, API_RATE_LIMIT - timeSinceLastCall));
+                }
+                lastApiCall = Date.now();
+
+                // Use OpenRouteService API (free, but rate limited)
+                const url = `https://api.openrouteservice.org/v2/directions/driving-car?start=${fromLng},${fromLat}&end=${toLng},${toLat}`;
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Accept': 'application/json',
+                        // Note: For production use, you should get a free API key from openrouteservice.org
+                        // 'Authorization': 'Bearer YOUR_API_KEY'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.features && data.features[0] && data.features[0].geometry) {
+                        const coordinates = data.features[0].geometry.coordinates;
+                        // Convert from [lng, lat] to [lat, lng] format for Leaflet
+                        const routeCoords = coordinates.map(coord => [coord[1], coord[0]]);
+                        console.log(`🛣️ Got highway route: ${routeCoords.length} points`);
+                        return routeCoords;
+                    }
+                }
+                
+                console.log('Route API response not valid, using direct line');
+            } catch (error) {
+                console.log('Route service unavailable, using direct line:', error.message);
+            }
+            
+            // Fallback to direct line if routing service fails
+            return [[fromLat, fromLng], [toLat, toLng]];
+        }
+
+        // Get cached or fetch highway route between towns
+        async function getRouteSegment(fromTown, toTown) {
+            const routeKey = `${fromTown.id}->${toTown.id}`;
+            
+            // Check if we already have this route cached
+            if (highwayRoutes.has(routeKey)) {
+                return highwayRoutes.get(routeKey);
+            }
+            
+            // Fetch new route
+            const route = await getHighwayRoute(fromTown.lat, fromTown.lng, toTown.lat, toTown.lng);
+            
+            // Cache the route for future use
+            highwayRoutes.set(routeKey, route);
+            
+            return route;
+        }
+
         // Update travel path on map
-        function updateTravelPath() {
+        async function updateTravelPath() {
+        // Update travel path on map
+        async function updateTravelPath() {
             // Remove existing path
             if (pathPolyline) {
                 map.removeLayer(pathPolyline);
@@ -1940,27 +2007,74 @@
             
             // Draw new path if we have at least 2 points
             if (travelPath.length >= 2) {
-                const coordinates = travelPath.map(point => [point.lat, point.lng]);
+                const allRouteCoordinates = [];
+                let totalDistance = 0;
                 
-                pathPolyline = L.polyline(coordinates, {
-                    color: '#ff6b35',
-                    weight: 4,
-                    opacity: 0.8,
-                    dashArray: '10, 5',
-                    lineJoin: 'round',
-                    lineCap: 'round'
-                }).addTo(map);
+                // Get highway routes between consecutive towns
+                for (let i = 0; i < travelPath.length - 1; i++) {
+                    const fromTown = travelPath[i];
+                    const toTown = travelPath[i + 1];
+                    
+                    try {
+                        const routeSegment = await getRouteSegment(fromTown, toTown);
+                        
+                        // Add route segment coordinates (skip first point of subsequent segments to avoid duplication)
+                        if (i === 0) {
+                            allRouteCoordinates.push(...routeSegment);
+                        } else {
+                            allRouteCoordinates.push(...routeSegment.slice(1));
+                        }
+                        
+                        // Calculate segment distance for popup info
+                        const segmentDistance = routeSegment.reduce((dist, coord, idx) => {
+                            if (idx > 0) {
+                                const prevCoord = routeSegment[idx - 1];
+                                return dist + calculateDistance(prevCoord[0], prevCoord[1], coord[0], coord[1]);
+                            }
+                            return dist;
+                        }, 0);
+                        totalDistance += segmentDistance;
+                        
+                    } catch (error) {
+                        console.log(`Error getting route between ${fromTown.name} and ${toTown.name}:`, error);
+                        // Fallback to direct line for this segment
+                        if (i === 0) {
+                            allRouteCoordinates.push([fromTown.lat, fromTown.lng], [toTown.lat, toTown.lng]);
+                        } else {
+                            allRouteCoordinates.push([toTown.lat, toTown.lng]);
+                        }
+                        totalDistance += calculateDistance(fromTown.lat, fromTown.lng, toTown.lat, toTown.lng);
+                    }
+                }
                 
-                // Add popup to show travel path info
-                pathPolyline.bindPopup(`
-                    <div style="text-align: center;">
-                        <h4 style="margin: 0; color: #ff6b35;">🛣️ Travel Path</h4>
-                        <p style="margin: 5px 0;">${travelPath.length} locations visited</p>
-                        <p style="margin: 5px 0; font-size: 0.8rem;">
-                            ${travelPath[0].name} → ${travelPath[travelPath.length - 1].name}
-                        </p>
-                    </div>
-                `);
+                // Create the polyline with highway route coordinates
+                if (allRouteCoordinates.length > 0) {
+                    pathPolyline = L.polyline(allRouteCoordinates, {
+                        color: '#ff6b35',
+                        weight: 5,
+                        opacity: 0.9,
+                        dashArray: '12, 8',
+                        lineJoin: 'round',
+                        lineCap: 'round'
+                    }).addTo(map);
+                    
+                    // Add popup to show travel path info
+                    pathPolyline.bindPopup(`
+                        <div style="text-align: center;">
+                            <h4 style="margin: 0; color: #ff6b35;">🛣️ Highway Travel Path</h4>
+                            <p style="margin: 5px 0;">${travelPath.length} locations visited</p>
+                            <p style="margin: 5px 0;">~${totalDistance.toFixed(0)} miles driven</p>
+                            <p style="margin: 5px 0; font-size: 0.8rem;">
+                                ${travelPath[0].name} → ${travelPath[travelPath.length - 1].name}
+                            </p>
+                            <p style="margin: 5px 0; font-size: 0.7rem; color: #666;">
+                                Following actual highway routes
+                            </p>
+                        </div>
+                    `);
+                    
+                    console.log(`🛣️ Updated highway travel path: ${travelPath.length} towns, ~${totalDistance.toFixed(0)} miles`);
+                }
             }
         }
 
@@ -2011,6 +2125,12 @@
                     autoCheckinEnabled = data.autoCheckin || false;
                     routeCheckinEnabled = data.routeCheckin !== undefined ? data.routeCheckin : true;
                     
+                    // Restore cached highway routes
+                    if (data.highwayRoutes) {
+                        highwayRoutes = new Map(Object.entries(data.highwayRoutes));
+                        console.log(`🛣️ Restored ${highwayRoutes.size} cached highway routes`);
+                    }
+                    
                     if (data.lastPosition) {
                         currentPosition = data.lastPosition;
                     }
@@ -2047,8 +2167,9 @@
                     autoCheckin: autoCheckinEnabled,
                     routeCheckin: routeCheckinEnabled,
                     lastPosition: currentPosition,
+                    highwayRoutes: Object.fromEntries(highwayRoutes), // Save cached routes
                     lastSaveTime: new Date().toISOString(),
-                    version: '1.0'
+                    version: '1.1'
                 };
                 
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -2079,14 +2200,6 @@
             
             if (!lastTown || !nextTown) return;
             
-            // Remove any existing next town animation
-            townMarkers.forEach((marker, townId) => {
-                const markerElement = marker._path || marker._container;
-                if (markerElement && markerElement.classList.contains('next-town-marker')) {
-                    markerElement.classList.remove('next-town-marker');
-                }
-            });
-            
             // Calculate bounds that include both towns
             const bounds = L.latLngBounds([
                 [lastTown.lat, lastTown.lng],
@@ -2101,35 +2214,53 @@
                 animate: true,
                 duration: 1.5
             });
-            
-            // Find the next town marker and add pulse animation
-            setTimeout(() => {
-                const nextTownId = `${nextTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${nextTown.state.toLowerCase()}`;
-                const nextTownMarker = townMarkers.get(nextTownId);
-                if (nextTownMarker) {
-                    // For CircleMarkers, we need to access the DOM element differently
-                    const markerElement = nextTownMarker._path || nextTownMarker._container;
-                    if (markerElement) {
-                        markerElement.classList.add('next-town-marker');
-                        console.log(`Added pulse animation to ${nextTown.name}`);
-                    } else {
-                        console.log(`Could not find marker element for ${nextTown.name}`);
-                    }
-                } else {
-                    console.log(`Could not find marker for ${nextTown.name} (ID: ${nextTownId})`);
-                }
-            }, 100);
         }
 
         // Enhanced function to get town facts from multiple sources
         async function getEnhancedTownFacts(townName, state) {
             // First, check local database
             const townId = `${townName.toLowerCase().replace(/[^a-z0-9]/g, '')}-${state.toLowerCase()}`;
-            const localFacts = townFacts[townId] || [];
             
-            // For now, return local facts
-            // TODO: Add API integration for additional facts
-            return localFacts;
+            // Try to load from external database if available (OpenAI-enhanced version)
+            try {
+                if (!window.townDatabase) {
+                    const response = await fetch('./scripts/data/towns-database-openai-enhanced.json');
+                    if (response.ok) {
+                        window.townDatabase = await response.json();
+                        console.log('🤖 Loaded OpenAI-enhanced town database with professional insights');
+                    }
+                }
+                
+                if (window.townDatabase && window.townDatabase.towns[townId]) {
+                    const townData = window.townDatabase.towns[townId];
+                    return {
+                        facts: townData.facts || [],
+                        attractions: townData.attractions || [],
+                        founded: townData.founded,
+                        county: townData.county,
+                        notableFacts: townData.notableFacts || [],
+                        researchNotes: townData.researchNotes || [],
+                        openaiInsights: townData.openaiInsights || []
+                    };
+                }
+            } catch (error) {
+                console.log('Could not load external database, using local facts:', error.message);
+            }
+            
+            // Fallback to generic facts if database not available
+            return {
+                facts: [
+                    "This charming location offers a peaceful small-town atmosphere",
+                    "Rich in local history and community traditions",
+                    "Great stopping point for travelers exploring the region"
+                ],
+                attractions: [],
+                founded: null,
+                county: null,
+                notableFacts: [],
+                researchNotes: [],
+                openaiInsights: []
+            };
         }
 
         // Function to add facts from research
@@ -2138,6 +2269,269 @@
                 townFacts[townId] = [];
             }
             townFacts[townId] = [...townFacts[townId], ...facts];
+        }
+
+        // Show next town overlay with facts and information
+        async function showNextTownOverlay() {
+            const nextTown = getNextTown();
+            if (!nextTown) {
+                console.log('No next town to show overlay for');
+                return;
+            }
+
+            // Get enhanced facts from database
+            const townData = await getEnhancedTownFacts(nextTown.name, nextTown.state);
+            
+            // Create overlay modal
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.5s ease;
+            `;
+            
+            const factsHtml = townData.facts && townData.facts.length > 0 
+                ? townData.facts.map((fact, index) => `
+                    <div style="
+                        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                        border-left: 4px solid #17a2b8;
+                        padding: 12px 15px;
+                        margin: 8px 0;
+                        border-radius: 6px;
+                        font-size: 0.95rem;
+                        line-height: 1.4;
+                    ">
+                        <span style="
+                            background: #17a2b8;
+                            color: white;
+                            border-radius: 50%;
+                            width: 20px;
+                            height: 20px;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 0.75rem;
+                            font-weight: bold;
+                            margin-right: 10px;
+                        ">${index + 1}</span>
+                        ${fact}
+                    </div>
+                `).join('')
+                : '<p style="color: #666; font-style: italic;">No facts available yet. Check back after we research this town!</p>';
+
+            const attractionsHtml = townData.attractions && townData.attractions.length > 0
+                ? `
+                    <div style="margin-top: 20px;">
+                        <h4 style="color: #17a2b8; margin: 0 0 10px 0; font-size: 1.1rem;">
+                            🎯 Things to See
+                        </h4>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            ${townData.attractions.map(attraction => `<li style="margin: 5px 0;">${attraction}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : '';
+
+            const metaInfo = [];
+            if (townData.founded) metaInfo.push(`Founded: ${townData.founded}`);
+            if (townData.county) metaInfo.push(`County: ${townData.county}`);
+            if (nextTown.population) metaInfo.push(`Population: ${nextTown.population.toLocaleString()}`);
+            
+            const metaHtml = metaInfo.length > 0 
+                ? `
+                    <div style="
+                        background: #f8f9fa;
+                        border-radius: 8px;
+                        padding: 15px;
+                        margin: 15px 0;
+                        display: flex;
+                        gap: 20px;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                    ">
+                        ${metaInfo.map(info => `
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">${info.split(':')[0]}</div>
+                                <div style="font-weight: bold; color: #17a2b8;">${info.split(':')[1]}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '';
+            
+            overlay.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 15px;
+                    padding: 30px;
+                    max-width: 600px;
+                    max-height: 80vh;
+                    margin: 20px;
+                    text-align: center;
+                    animation: slideIn 0.5s ease;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    overflow-y: auto;
+                ">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🎯</div>
+                    <h2 style="color: #28a745; margin: 0 0 10px 0; font-size: 1.8rem;">
+                        Next Destination
+                    </h2>
+                    <h3 style="color: #17a2b8; margin: 0 0 15px 0; font-size: 1.4rem;">
+                        ${nextTown.name}, ${nextTown.state}
+                    </h3>
+                    
+                    ${metaHtml}
+                    
+                    <div style="text-align: left; margin: 20px 0;">
+                        <h4 style="color: #17a2b8; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
+                            📚 Interesting Facts
+                        </h4>
+                        ${factsHtml}
+                    </div>
+                    
+                    ${attractionsHtml}
+                    
+                    <!-- OpenAI Professional Insights Section (Priority) -->
+                    ${townData.openaiInsights && townData.openaiInsights.length > 0 
+                        ? `
+                        <div style="text-align: left; margin: 20px 0;">
+                            <h4 style="color: #e74c3c; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
+                                🤖 Professional Travel Insights
+                            </h4>
+                            <div style="max-height: 250px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 8px; padding: 12px; background: linear-gradient(135deg, #fff5f5, #ffeaea);">
+                                ${townData.openaiInsights.map((insight, index) => `
+                                    <div style="
+                                        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+                                        border-left: 4px solid #e74c3c;
+                                        padding: 12px 15px;
+                                        margin: 8px 0;
+                                        border-radius: 6px;
+                                        font-size: 0.95rem;
+                                        line-height: 1.4;
+                                        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                                    ">
+                                        ${insight}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : 
+                        // Fallback to Enhanced Research Notes if no OpenAI insights
+                        townData.researchNotes && townData.researchNotes.length > 0 
+                        ? `
+                        <div style="text-align: left; margin: 20px 0;">
+                            <h4 style="color: #6f42c1; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
+                                🔬 AI Research Insights
+                            </h4>
+                            <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 8px; padding: 10px;">
+                                ${townData.researchNotes.map((note, index) => `
+                                    <div style="
+                                        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+                                        border-left: 4px solid #6f42c1;
+                                        padding: 10px 12px;
+                                        margin: 6px 0;
+                                        border-radius: 5px;
+                                        font-size: 0.9rem;
+                                        line-height: 1.3;
+                                    ">
+                                        ${note}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    
+                    <div style="margin-top: 25px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';" 
+                            style="
+                                background: #28a745;
+                                color: white;
+                                border: none;
+                                padding: 12px 25px;
+                                border-radius: 25px;
+                                font-size: 1rem;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                            "
+                            onmouseover="this.style.background='#218838'"
+                            onmouseout="this.style.background='#28a745'">
+                            🚗 Let's Go!
+                        </button>
+                        <button onclick="
+                            const townId = '${nextTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${nextTown.state.toLowerCase()}';
+                            performCheckin(townId, false, false).catch(e => console.error('Checkin error:', e));
+                            this.parentElement.parentElement.parentElement.remove();
+                            document.body.style.overflow = 'auto';
+                            showNotification('Manually checked in at ${nextTown.name}, ${nextTown.state}!', 'manual');
+                        " 
+                            style="
+                                background: #dc3545;
+                                color: white;
+                                border: none;
+                                padding: 12px 25px;
+                                border-radius: 25px;
+                                font-size: 1rem;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                            "
+                            onmouseover="this.style.background='#c82333'"
+                            onmouseout="this.style.background='#dc3545'">
+                            ✅ Check In Now
+                        </button>
+                        <button onclick="showTownDetails('${nextTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${nextTown.state.toLowerCase()}')" 
+                            style="
+                                background: #17a2b8;
+                                color: white;
+                                border: none;
+                                padding: 12px 25px;
+                                border-radius: 25px;
+                                font-size: 1rem;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                            "
+                            onmouseover="this.style.background='#138496'"
+                            onmouseout="this.style.background='#17a2b8'">
+                            📖 More Details
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add animations if not already present
+            if (!document.querySelector('#overlay-animations')) {
+                const style = document.createElement('style');
+                style.id = 'overlay-animations';
+                style.textContent = `
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    @keyframes slideIn {
+                        from { transform: translateY(-50px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+            
+            console.log(`🎯 Showing next town overlay for ${nextTown.name}, ${nextTown.state}`);
+            
+            // Auto-remove after 15 seconds if user doesn't interact
+            setTimeout(() => {
+                if (overlay.parentNode) {
+                    overlay.remove();
+                    document.body.style.overflow = 'auto';
+                }
+            }, 15000);
         }
 
         function scrollToNextTownTile() {
@@ -2179,7 +2573,7 @@
                 if (town.isNearby) {
                     nearbyCount++;
                     if (autoCheckinEnabled && !checkedInTowns.has(town.id)) {
-                        performCheckin(town.id, true);
+                        performCheckin(town.id, true).catch(e => console.error('Auto checkin error:', e));
                     }
                 }
             });
@@ -2294,7 +2688,7 @@
         }
 
         // Perform check-in
-        function performCheckin(townId, isAuto = false, skipRouteCheckin = false) {
+        async function performCheckin(townId, isAuto = false, skipRouteCheckin = false) {
             if (checkedInTowns.has(townId)) return;
 
             const town = allTowns.find(t => t.id === townId);
@@ -2312,7 +2706,7 @@
                         // Check in intermediate towns first
                         intermediateTowns.forEach(intermediateTown => {
                             const intermediateId = `${intermediateTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${intermediateTown.state.toLowerCase()}`;
-                            performCheckin(intermediateId, true, true); // Auto check-in, skip route logic
+                            performCheckin(intermediateId, true, true).catch(e => console.error('Route checkin error:', e)); // Auto check-in, skip route logic
                         });
                         
                         showNotification(`🛣️ Auto-checked in ${intermediateTowns.length} towns along your route!`, 'route');
@@ -2368,7 +2762,7 @@
             updateMap();
 
             // Update travel path with connecting lines
-            updateTravelPath();
+            await updateTravelPath();
 
             // Add town boundary when checked in
             if (boundariesLoaded) {
@@ -2392,11 +2786,16 @@
                 setTimeout(() => {
                     highlightNextTownTile();
                 }, 1500); // Delay to let display update
+                
+                // Show next town overlay with facts (only for manual check-ins)
+                setTimeout(() => {
+                    showNextTownOverlay();
+                }, 2000); // Delay to let other animations complete first
             }
         }
 
         // Perform uncheck-in
-        function performUncheck(townId) {
+        async function performUncheck(townId) {
             if (!checkedInTowns.has(townId)) return;
 
             const town = allTowns.find(t => t.id === townId);
@@ -2417,7 +2816,7 @@
             updateMap();
 
             // Update travel path after removal
-            updateTravelPath();
+            await updateTravelPath();
 
             // Remove town boundary when unchecked
             removeTownBoundary(townId);
@@ -2451,70 +2850,319 @@
             }, 2200);
         }
 
-        // Show town details modal
-        function showTownDetails(townId) {
+        // Show town details overlay with facts and information
+        async function showTownDetails(townId) {
             const town = allTowns.find(t => t.id === townId);
-            if (!town) return;
+            if (!town) {
+                console.log('Town not found:', townId);
+                return;
+            }
 
-            const modal = document.getElementById('townModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const townMeta = document.getElementById('townMeta');
-            const townFacts = document.getElementById('townFacts');
-
-            // Set title
-            modalTitle.textContent = `${town.name}, ${town.state}`;
-
-            // Populate meta information
+            // Get enhanced facts from database
+            const townData = await getEnhancedTownFacts(town.name, town.state);
+            
+            // Check if this town is checked in
             const isCheckedIn = checkedInTowns.has(townId);
-            const statusText = isCheckedIn ? 'Checked In' : (town.isNearby ? 'Nearby' : 'Not Visited');
-            const statusColor = isCheckedIn ? '#28a745' : (town.isNearby ? '#ffc107' : '#6c757d');
-
-            townMeta.innerHTML = `
-                <div class="meta-item">
-                    <div class="meta-label">Type</div>
-                    <div class="meta-value">${town.type.toUpperCase()}</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-label">Population</div>
-                    <div class="meta-value">${town.population.toLocaleString()}</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-label">Points</div>
-                    <div class="meta-value">${town.points} pts</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-label">Number</div>
-                    <div class="meta-value">#${town.number}</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-label">Status</div>
-                    <div class="meta-value" style="color: ${statusColor}">${statusText}</div>
-                </div>
-                ${town.distance ? `
-                <div class="meta-item">
-                    <div class="meta-label">Distance</div>
-                    <div class="meta-value">${town.distance.toFixed(1)} mi</div>
-                </div>
-                ` : ''}
+            
+            // Determine if this is the next town
+            const nextTown = getNextTown();
+            const isNextTown = nextTown && 
+                nextTown.name === town.name && 
+                nextTown.state === town.state && 
+                !isCheckedIn;
+            
+            // Create overlay modal
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.5s ease;
             `;
+            
+            const factsHtml = townData.facts && townData.facts.length > 0 
+                ? townData.facts.map((fact, index) => `
+                    <div style="
+                        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                        border-left: 4px solid #17a2b8;
+                        padding: 12px 15px;
+                        margin: 8px 0;
+                        border-radius: 6px;
+                        font-size: 0.95rem;
+                        line-height: 1.4;
+                    ">
+                        <span style="
+                            background: #17a2b8;
+                            color: white;
+                            border-radius: 50%;
+                            width: 20px;
+                            height: 20px;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 0.75rem;
+                            font-weight: bold;
+                            margin-right: 10px;
+                        ">${index + 1}</span>
+                        ${fact}
+                    </div>
+                `).join('')
+                : '<p style="color: #666; font-style: italic;">No facts available yet. Check back after we research this town!</p>';
 
-            // Populate facts
-            const facts = townFacts[townId] || [
-                "This charming location offers a peaceful small-town atmosphere",
-                "Rich in local history and community traditions",
-                "Great stopping point for travelers exploring the Midwest"
-            ];
+            const attractionsHtml = townData.attractions && townData.attractions.length > 0
+                ? `
+                    <div style="margin-top: 20px;">
+                        <h4 style="color: #17a2b8; margin: 0 0 10px 0; font-size: 1.1rem;">
+                            🎯 Things to See
+                        </h4>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            ${townData.attractions.map(attraction => `<li style="margin: 5px 0;">${attraction}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : '';
 
-            townFacts.innerHTML = facts.map((fact, index) => `
-                <div class="fact-item">
-                    <span class="fact-number">${index + 1}</span>
-                    <span class="fact-text">${fact}</span>
+            const metaInfo = [];
+            if (townData.founded) metaInfo.push(`Founded: ${townData.founded}`);
+            if (townData.county) metaInfo.push(`County: ${townData.county}`);
+            if (town.population) metaInfo.push(`Population: ${town.population.toLocaleString()}`);
+            if (town.points) metaInfo.push(`Points: ${town.points}`);
+            
+            const metaHtml = metaInfo.length > 0 
+                ? `
+                    <div style="
+                        background: #f8f9fa;
+                        border-radius: 8px;
+                        padding: 15px;
+                        margin: 15px 0;
+                        display: flex;
+                        gap: 20px;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                    ">
+                        ${metaInfo.map(info => `
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">${info.split(':')[0]}</div>
+                                <div style="font-weight: bold; color: #17a2b8;">${info.split(':')[1]}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '';
+
+            // Determine title and icon based on town status
+            let titleIcon = '🏘️';
+            let titleText = 'Town Details';
+            let titleColor = '#17a2b8';
+            
+            if (isNextTown) {
+                titleIcon = '🎯';
+                titleText = 'Next Destination';
+                titleColor = '#28a745';
+            } else if (isCheckedIn) {
+                titleIcon = '✅';
+                titleText = 'Visited Town';
+                titleColor = '#28a745';
+            }
+            
+            overlay.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 15px;
+                    padding: 30px;
+                    max-width: 600px;
+                    max-height: 80vh;
+                    margin: 20px;
+                    text-align: center;
+                    animation: slideIn 0.5s ease;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    overflow-y: auto;
+                ">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">${titleIcon}</div>
+                    <h2 style="color: ${titleColor}; margin: 0 0 10px 0; font-size: 1.8rem;">
+                        ${titleText}
+                    </h2>
+                    <h3 style="color: #17a2b8; margin: 0 0 15px 0; font-size: 1.4rem;">
+                        ${town.name}, ${town.state}
+                    </h3>
+                    
+                    ${metaHtml}
+                    
+                    <div style="text-align: left; margin: 20px 0;">
+                        <h4 style="color: #17a2b8; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
+                            📚 Interesting Facts
+                        </h4>
+                        ${factsHtml}
+                    </div>
+                    
+                    ${attractionsHtml}
+                    
+                    <!-- OpenAI Professional Insights Section (Priority) -->
+                    ${townData.openaiInsights && townData.openaiInsights.length > 0 
+                        ? `
+                        <div style="text-align: left; margin: 20px 0;">
+                            <h4 style="color: #e74c3c; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
+                                🤖 Professional Travel Insights
+                            </h4>
+                            <div style="max-height: 250px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 8px; padding: 12px; background: linear-gradient(135deg, #fff5f5, #ffeaea);">
+                                ${townData.openaiInsights.map((insight, index) => `
+                                    <div style="
+                                        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+                                        border-left: 4px solid #e74c3c;
+                                        padding: 12px 15px;
+                                        margin: 8px 0;
+                                        border-radius: 6px;
+                                        font-size: 0.95rem;
+                                        line-height: 1.4;
+                                        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                                    ">
+                                        ${insight}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : 
+                        // Fallback to Enhanced Research Notes if no OpenAI insights
+                        townData.researchNotes && townData.researchNotes.length > 0 
+                        ? `
+                        <div style="text-align: left; margin: 20px 0;">
+                            <h4 style="color: #6f42c1; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
+                                🔬 AI Research Insights
+                            </h4>
+                            <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 8px; padding: 10px;">
+                                ${townData.researchNotes.map((note, index) => `
+                                    <div style="
+                                        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+                                        border-left: 4px solid #6f42c1;
+                                        padding: 10px 12px;
+                                        margin: 6px 0;
+                                        border-radius: 5px;
+                                        font-size: 0.9rem;
+                                        line-height: 1.3;
+                                    ">
+                                        ${note}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    
+                    <div style="margin-top: 25px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove(); document.body.style.overflow = 'auto';" 
+                            style="
+                                background: #6c757d;
+                                color: white;
+                                border: none;
+                                padding: 12px 25px;
+                                border-radius: 25px;
+                                font-size: 1rem;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                            "
+                            onmouseover="this.style.background='#5a6268'"
+                            onmouseout="this.style.background='#6c757d'">
+                            ❌ Close
+                        </button>
+                        ${!isCheckedIn ? `
+                        <button onclick="
+                            performCheckin('${townId}', false, false).catch(e => console.error('Checkin error:', e));
+                            this.parentElement.parentElement.parentElement.remove();
+                            document.body.style.overflow = 'auto';
+                            showNotification('Manually checked in at ${town.name}, ${town.state}!', 'manual');
+                        " 
+                            style="
+                                background: #dc3545;
+                                color: white;
+                                border: none;
+                                padding: 12px 25px;
+                                border-radius: 25px;
+                                font-size: 1rem;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                            "
+                            onmouseover="this.style.background='#c82333'"
+                            onmouseout="this.style.background='#dc3545'">
+                            ✅ Check In Now
+                        </button>
+                        ` : `
+                        <button onclick="
+                            performUncheck('${townId}').catch(e => console.error('Uncheck error:', e));
+                            this.parentElement.parentElement.parentElement.remove();
+                            document.body.style.overflow = 'auto';
+                            showNotification('Unchecked from ${town.name}, ${town.state}!', 'uncheck');
+                        " 
+                            style="
+                                background: #ffc107;
+                                color: black;
+                                border: none;
+                                padding: 12px 25px;
+                                border-radius: 25px;
+                                font-size: 1rem;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                            "
+                            onmouseover="this.style.background='#e0a800'"
+                            onmouseout="this.style.background='#ffc107'">
+                            ↩️ Uncheck
+                        </button>
+                        `}
+                    </div>
                 </div>
-            `).join('');
-
-            // Show modal
-            modal.classList.add('show');
+            `;
+            
+            // Add animations if not already present
+            if (!document.querySelector('#overlay-animations')) {
+                const style = document.createElement('style');
+                style.id = 'overlay-animations';
+                style.textContent = `
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    @keyframes slideIn {
+                        from { transform: translateY(-50px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(overlay);
             document.body.style.overflow = 'hidden';
+            
+            // Add click outside to close functionality
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    overlay.remove();
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Add escape key to close functionality
+            const escapeHandler = function(e) {
+                if (e.key === 'Escape') {
+                    overlay.remove();
+                    document.body.style.overflow = 'auto';
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+            
+            console.log(`🏘️ Showing town overlay for ${town.name}, ${town.state}`);
+            
+            // Auto-remove after 30 seconds if user doesn't interact
+            setTimeout(() => {
+                if (overlay.parentNode) {
+                    overlay.remove();
+                    document.body.style.overflow = 'auto';
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            }, 30000);
         }
 
         // Close town details modal
@@ -2802,10 +3450,10 @@
                         <div class="town-status">
                             <div class="status-badge ${statusClass}">${statusText}</div>
                             ${isCheckedIn ? 
-                                `<button class="uncheck-btn" onclick="event.stopPropagation(); performUncheck('${town.id}')">
+                                `<button class="uncheck-btn" onclick="event.stopPropagation(); performUncheck('${town.id}').catch(e => console.error('Uncheck error:', e))">>
                                     Uncheck
                                 </button>` :
-                                `<button class="checkin-btn" onclick="event.stopPropagation(); performCheckin('${town.id}')">
+                                `<button class="checkin-btn" onclick="event.stopPropagation(); performCheckin('${town.id}').catch(e => console.error('Checkin error:', e))">>
                                     Check In
                                 </button>`
                             }
@@ -2910,7 +3558,7 @@
                 
                 marker.on('click', () => {
                     if (!isCheckedIn) {
-                        performCheckin(town.id);
+                        performCheckin(town.id).catch(e => console.error('Map click checkin error:', e));
                     }
                 });
                 
@@ -2962,7 +3610,7 @@
         }
 
         // Clear all data
-        function clearAllTownData() {
+        async function clearAllTownData() {
             if (confirm('Are you sure you want to clear all your town check-in data? This cannot be undone.')) {
                 try {
                     localStorage.removeItem(STORAGE_KEY);
@@ -2995,7 +3643,7 @@
                     updateStats();
                     updateTownsDisplay();
                     updateMap();
-                    updateTravelPath();
+                    await updateTravelPath();
                     
                     showNotification('All town data cleared successfully!', 'info');
                 } catch (error) {
@@ -3039,12 +3687,6 @@
                     box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4);
                     border-color: #dee2e6;
                 }
-            }
-            .next-town-marker {
-                animation: pulse 2s infinite ease-in-out;
-                border-radius: 50% !important;
-                position: relative;
-                z-index: 1000;
             }
             .next-town-tile {
                 animation: tilePulse 3s infinite ease-in-out;
@@ -3094,7 +3736,7 @@
         }
 
         // Initialize application
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             console.log('🚀 Starting application initialization...');
             console.log('📝 townsData keys:', Object.keys(townsData));
             console.log('� townsData.route1:', townsData.route1);
@@ -3123,7 +3765,7 @@
             updateMap();
             
             console.log('🛣️ Updating travel path...');
-            updateTravelPath();
+            await updateTravelPath();
             
             console.log('💾 Starting auto-save...');
             startAutoSave();

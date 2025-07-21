@@ -1,0 +1,99 @@
+{
+  "overview": {
+    "totalTowns": 109,
+    "enhancedTowns": 109,
+    "lastUpdated": "2025-07-21T16:21:29.992Z"
+  },
+  "states": {
+    "MO": {
+      "count": 17,
+      "enhanced": 17
+    },
+    "IA": {
+      "count": 16,
+      "enhanced": 16
+    },
+    "WI": {
+      "count": 14,
+      "enhanced": 14
+    },
+    "IL": {
+      "count": 13,
+      "enhanced": 13
+    },
+    "IN": {
+      "count": 17,
+      "enhanced": 17
+    },
+    "OH": {
+      "count": 23,
+      "enhanced": 23
+    },
+    "WV": {
+      "count": 2,
+      "enhanced": 2
+    },
+    "PA": {
+      "count": 7,
+      "enhanced": 7
+    }
+  },
+  "populationRanges": {
+    "Under 1,000": 2,
+    "1,000 - 10,000": 33,
+    "10,000 - 50,000": 49,
+    "50,000+": 25
+  },
+  "topTowns": [
+    {
+      "name": "Des Moines, IA",
+      "population": 215000,
+      "noteCount": 10
+    },
+    {
+      "name": "Newark, OH",
+      "population": 49000,
+      "noteCount": 10
+    },
+    {
+      "name": "New Castle, IN",
+      "population": 18000,
+      "noteCount": 10
+    },
+    {
+      "name": "Mount Carmel, IL",
+      "population": 7200,
+      "noteCount": 10
+    },
+    {
+      "name": "Princeton, MO",
+      "population": 1200,
+      "noteCount": 9
+    },
+    {
+      "name": "Prairie du Chien, WI",
+      "population": 5900,
+      "noteCount": 9
+    },
+    {
+      "name": "Platteville, WI",
+      "population": 12000,
+      "noteCount": 9
+    },
+    {
+      "name": "Waukegan, IL",
+      "population": 87000,
+      "noteCount": 9
+    },
+    {
+      "name": "Wheeling, WV",
+      "population": 27000,
+      "noteCount": 9
+    },
+    {
+      "name": "Alliance, OH",
+      "population": 22000,
+      "noteCount": 9
+    }
+  ]
+}

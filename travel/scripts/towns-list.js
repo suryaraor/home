@@ -1,0 +1,167 @@
+// Auto-generated town list
+const TOWNS_LIST = [
+  {
+    "name": "Adel",
+    "state": "IA",
+    "lat": 41.6147,
+    "lng": -94.0155,
+    "population": 6153,
+    "type": "city",
+    "points": 10
+  },
+  {
+    "name": "Ames",
+    "state": "IA",
+    "lat": 42.0308,
+    "lng": -93.6319,
+    "population": 66427,
+    "type": "city",
+    "points": 15
+  },
+  {
+    "name": "Ankeny",
+    "state": "IA",
+    "lat": 41.7297,
+    "lng": -93.6058,
+    "population": 67887,
+    "type": "city",
+    "points": 15
+  },
+  {
+    "name": "Chariton",
+    "state": "IA",
+    "lat": 41.0133,
+    "lng": -93.3057,
+    "population": 4321,
+    "type": "city",
+    "points": 9
+  },
+  {
+    "name": "Corydon",
+    "state": "IA",
+    "lat": 40.7564,
+    "lng": -93.3185,
+    "population": 1585,
+    "type": "city",
+    "points": 7
+  },
+  {
+    "name": "Des Moines",
+    "state": "IA",
+    "lat": 41.5868,
+    "lng": -93.625,
+    "population": 214133,
+    "type": "city",
+    "points": 20
+  },
+  {
+    "name": "Grundy Center",
+    "state": "IA",
+    "lat": 42.3611,
+    "lng": -92.7677,
+    "population": 2706,
+    "type": "city",
+    "points": 8
+  },
+  {
+    "name": "Indianola",
+    "state": "IA",
+    "lat": 41.3581,
+    "lng": -93.5579,
+    "population": 15833,
+    "type": "city",
+    "points": 12
+  },
+  {
+    "name": "Story City",
+    "state": "IA",
+    "lat": 42.1894,
+    "lng": -93.5952,
+    "population": 3431,
+    "type": "city",
+    "points": 8
+  },
+  {
+    "name": "Winterset",
+    "state": "IA",
+    "lat": 41.3308,
+    "lng": -94.0138,
+    "population": 5190,
+    "type": "city",
+    "points": 10
+  },
+  {
+    "name": "Cameron",
+    "state": "MO",
+    "lat": 39.7397,
+    "lng": -94.2405,
+    "population": 9933,
+    "type": "city",
+    "points": 10
+  },
+  {
+    "name": "Gallatin",
+    "state": "MO",
+    "lat": 39.9142,
+    "lng": -93.9627,
+    "population": 1788,
+    "type": "town",
+    "points": 7
+  },
+  {
+    "name": "Kansas City",
+    "state": "MO",
+    "lat": 39.0997,
+    "lng": -94.5786,
+    "population": 508394,
+    "type": "city",
+    "points": 25
+  },
+  {
+    "name": "Lawson",
+    "state": "MO",
+    "lat": 39.4358,
+    "lng": -94.2036,
+    "population": 2473,
+    "type": "town",
+    "points": 8
+  },
+  {
+    "name": "Liberty",
+    "state": "MO",
+    "lat": 39.2461,
+    "lng": -94.4191,
+    "population": 30167,
+    "type": "city",
+    "points": 15
+  },
+  {
+    "name": "Princeton",
+    "state": "MO",
+    "lat": 40.4031,
+    "lng": -93.581,
+    "population": 1166,
+    "type": "city",
+    "points": 6
+  },
+  {
+    "name": "Spickard",
+    "state": "MO",
+    "lat": 40.2514,
+    "lng": -93.7232,
+    "population": 336,
+    "type": "village",
+    "points": 5
+  },
+  {
+    "name": "Trenton",
+    "state": "MO",
+    "lat": 40.0764,
+    "lng": -93.6163,
+    "population": 5989,
+    "type": "city",
+    "points": 10
+  }
+];
+
+module.exports = TOWNS_LIST;

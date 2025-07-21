@@ -1,0 +1,23 @@
+{
+  "name": "town-data-fetcher",
+  "version": "1.0.0",
+  "description": "Scripts to fetch and manage town data for the travel app",
+  "main": "extract-towns.js",
+  "scripts": {
+    "extract": "node extract-towns.js",
+    "fetch": "node fetch-town-data.js",
+    "build-database": "npm run extract && npm run fetch"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "openai": "^5.10.1"
+  },
+  "keywords": [
+    "travel",
+    "towns",
+    "data",
+    "research"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

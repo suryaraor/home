@@ -1,0 +1,2185 @@
+{
+  "instructions": "Complete the research for each town using the provided notes",
+  "towns": {
+    "kansascity-mo": {
+      "name": "Kansas City",
+      "state": "MO",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Kansas City official website for local attractions",
+        "Check state tourism site for MO - Kansas City section",
+        "Look up Kansas City historical society for unique facts",
+        "Search for annual festivals or events in Kansas City",
+        "Find notable residents or businesses from Kansas City"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "liberty-mo": {
+      "name": "Liberty",
+      "state": "MO",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Liberty official website for local attractions",
+        "Check state tourism site for MO - Liberty section",
+        "Look up Liberty historical society for unique facts",
+        "Search for annual festivals or events in Liberty",
+        "Find notable residents or businesses from Liberty"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "lawson-mo": {
+      "name": "Lawson",
+      "state": "MO",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Lawson official website for local attractions",
+        "Check state tourism site for MO - Lawson section",
+        "Look up Lawson historical society for unique facts",
+        "Search for annual festivals or events in Lawson",
+        "Find notable residents or businesses from Lawson"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "cameron-mo": {
+      "name": "Cameron",
+      "state": "MO",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Cameron official website for local attractions",
+        "Check state tourism site for MO - Cameron section",
+        "Look up Cameron historical society for unique facts",
+        "Search for annual festivals or events in Cameron",
+        "Find notable residents or businesses from Cameron"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "gallatin-mo": {
+      "name": "Gallatin",
+      "state": "MO",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Gallatin official website for local attractions",
+        "Check state tourism site for MO - Gallatin section",
+        "Look up Gallatin historical society for unique facts",
+        "Search for annual festivals or events in Gallatin",
+        "Find notable residents or businesses from Gallatin"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "trenton-mo": {
+      "name": "Trenton",
+      "state": "MO",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Trenton official website for local attractions",
+        "Check state tourism site for MO - Trenton section",
+        "Look up Trenton historical society for unique facts",
+        "Search for annual festivals or events in Trenton",
+        "Find notable residents or businesses from Trenton"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "spickard-mo": {
+      "name": "Spickard",
+      "state": "MO",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Spickard official website for local attractions",
+        "Check state tourism site for MO - Spickard section",
+        "Look up Spickard historical society for unique facts",
+        "Search for annual festivals or events in Spickard",
+        "Find notable residents or businesses from Spickard"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "princeton-mo": {
+      "name": "Princeton",
+      "state": "MO",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Princeton official website for local attractions",
+        "Check state tourism site for MO - Princeton section",
+        "Look up Princeton historical society for unique facts",
+        "Search for annual festivals or events in Princeton",
+        "Find notable residents or businesses from Princeton"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "corydon-ia": {
+      "name": "Corydon",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Corydon official website for local attractions",
+        "Check state tourism site for IA - Corydon section",
+        "Look up Corydon historical society for unique facts",
+        "Search for annual festivals or events in Corydon",
+        "Find notable residents or businesses from Corydon"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "chariton-ia": {
+      "name": "Chariton",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Chariton official website for local attractions",
+        "Check state tourism site for IA - Chariton section",
+        "Look up Chariton historical society for unique facts",
+        "Search for annual festivals or events in Chariton",
+        "Find notable residents or businesses from Chariton"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "indianola-ia": {
+      "name": "Indianola",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Indianola official website for local attractions",
+        "Check state tourism site for IA - Indianola section",
+        "Look up Indianola historical society for unique facts",
+        "Search for annual festivals or events in Indianola",
+        "Find notable residents or businesses from Indianola"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "winterset-ia": {
+      "name": "Winterset",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Winterset official website for local attractions",
+        "Check state tourism site for IA - Winterset section",
+        "Look up Winterset historical society for unique facts",
+        "Search for annual festivals or events in Winterset",
+        "Find notable residents or businesses from Winterset"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "adel-ia": {
+      "name": "Adel",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Adel official website for local attractions",
+        "Check state tourism site for IA - Adel section",
+        "Look up Adel historical society for unique facts",
+        "Search for annual festivals or events in Adel",
+        "Find notable residents or businesses from Adel"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "desmoines-ia": {
+      "name": "Des Moines",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Des Moines official website for local attractions",
+        "Check state tourism site for IA - Des Moines section",
+        "Look up Des Moines historical society for unique facts",
+        "Search for annual festivals or events in Des Moines",
+        "Find notable residents or businesses from Des Moines"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "ankeny-ia": {
+      "name": "Ankeny",
+      "state": "IA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Ankeny official website for local attractions",
+        "Check state tourism site for IA - Ankeny section",
+        "Look up Ankeny historical society for unique facts",
+        "Search for annual festivals or events in Ankeny",
+        "Find notable residents or businesses from Ankeny"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "ames-ia": {
+      "name": "Ames",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Ames official website for local attractions",
+        "Check state tourism site for IA - Ames section",
+        "Look up Ames historical society for unique facts",
+        "Search for annual festivals or events in Ames",
+        "Find notable residents or businesses from Ames"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "storycity-ia": {
+      "name": "Story City",
+      "state": "IA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Story City official website for local attractions",
+        "Check state tourism site for IA - Story City section",
+        "Look up Story City historical society for unique facts",
+        "Search for annual festivals or events in Story City",
+        "Find notable residents or businesses from Story City"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "grundycenter-ia": {
+      "name": "Grundy Center",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Grundy Center official website for local attractions",
+        "Check state tourism site for IA - Grundy Center section",
+        "Look up Grundy Center historical society for unique facts",
+        "Search for annual festivals or events in Grundy Center",
+        "Find notable residents or businesses from Grundy Center"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "reinbeck-ia": {
+      "name": "Reinbeck",
+      "state": "IA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Reinbeck official website for local attractions",
+        "Check state tourism site for IA - Reinbeck section",
+        "Look up Reinbeck historical society for unique facts",
+        "Search for annual festivals or events in Reinbeck",
+        "Find notable residents or businesses from Reinbeck"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "waterloo-ia": {
+      "name": "Waterloo",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Waterloo official website for local attractions",
+        "Check state tourism site for IA - Waterloo section",
+        "Look up Waterloo historical society for unique facts",
+        "Search for annual festivals or events in Waterloo",
+        "Find notable residents or businesses from Waterloo"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "cedarfalls-ia": {
+      "name": "Cedar Falls",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Cedar Falls official website for local attractions",
+        "Check state tourism site for IA - Cedar Falls section",
+        "Look up Cedar Falls historical society for unique facts",
+        "Search for annual festivals or events in Cedar Falls",
+        "Find notable residents or businesses from Cedar Falls"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "waverly-ia": {
+      "name": "Waverly",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Waverly official website for local attractions",
+        "Check state tourism site for IA - Waverly section",
+        "Look up Waverly historical society for unique facts",
+        "Search for annual festivals or events in Waverly",
+        "Find notable residents or businesses from Waverly"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "sumner-ia": {
+      "name": "Sumner",
+      "state": "IA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Sumner official website for local attractions",
+        "Check state tourism site for IA - Sumner section",
+        "Look up Sumner historical society for unique facts",
+        "Search for annual festivals or events in Sumner",
+        "Find notable residents or businesses from Sumner"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "fayette-ia": {
+      "name": "Fayette",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Fayette official website for local attractions",
+        "Check state tourism site for IA - Fayette section",
+        "Look up Fayette historical society for unique facts",
+        "Search for annual festivals or events in Fayette",
+        "Find notable residents or businesses from Fayette"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "prairieduchien-wi": {
+      "name": "Prairie du Chien",
+      "state": "WI",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Prairie du Chien official website for local attractions",
+        "Check state tourism site for WI - Prairie du Chien section",
+        "Look up Prairie du Chien historical society for unique facts",
+        "Search for annual festivals or events in Prairie du Chien",
+        "Find notable residents or businesses from Prairie du Chien"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "fennimore-wi": {
+      "name": "Fennimore",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Fennimore official website for local attractions",
+        "Check state tourism site for WI - Fennimore section",
+        "Look up Fennimore historical society for unique facts",
+        "Search for annual festivals or events in Fennimore",
+        "Find notable residents or businesses from Fennimore"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "platteville-wi": {
+      "name": "Platteville",
+      "state": "WI",
+      "currentFacts": 4,
+      "researchTasks": [
+        "Research Platteville official website for local attractions",
+        "Check state tourism site for WI - Platteville section",
+        "Look up Platteville historical society for unique facts",
+        "Search for annual festivals or events in Platteville",
+        "Find notable residents or businesses from Platteville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "dodgeville-wi": {
+      "name": "Dodgeville",
+      "state": "WI",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Dodgeville official website for local attractions",
+        "Check state tourism site for WI - Dodgeville section",
+        "Look up Dodgeville historical society for unique facts",
+        "Search for annual festivals or events in Dodgeville",
+        "Find notable residents or businesses from Dodgeville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "mounthoreb-wi": {
+      "name": "Mount Horeb",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Mount Horeb official website for local attractions",
+        "Check state tourism site for WI - Mount Horeb section",
+        "Look up Mount Horeb historical society for unique facts",
+        "Search for annual festivals or events in Mount Horeb",
+        "Find notable residents or businesses from Mount Horeb"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "middleton-wi": {
+      "name": "Middleton",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Middleton official website for local attractions",
+        "Check state tourism site for WI - Middleton section",
+        "Look up Middleton historical society for unique facts",
+        "Search for annual festivals or events in Middleton",
+        "Find notable residents or businesses from Middleton"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "madison-wi": {
+      "name": "Madison",
+      "state": "WI",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Madison official website for local attractions",
+        "Check state tourism site for WI - Madison section",
+        "Look up Madison historical society for unique facts",
+        "Search for annual festivals or events in Madison",
+        "Find notable residents or businesses from Madison"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "sunprairie-wi": {
+      "name": "Sun Prairie",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Sun Prairie official website for local attractions",
+        "Check state tourism site for WI - Sun Prairie section",
+        "Look up Sun Prairie historical society for unique facts",
+        "Search for annual festivals or events in Sun Prairie",
+        "Find notable residents or businesses from Sun Prairie"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "watertown-wi": {
+      "name": "Watertown",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Watertown official website for local attractions",
+        "Check state tourism site for WI - Watertown section",
+        "Look up Watertown historical society for unique facts",
+        "Search for annual festivals or events in Watertown",
+        "Find notable residents or businesses from Watertown"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "oconomowoc-wi": {
+      "name": "Oconomowoc",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Oconomowoc official website for local attractions",
+        "Check state tourism site for WI - Oconomowoc section",
+        "Look up Oconomowoc historical society for unique facts",
+        "Search for annual festivals or events in Oconomowoc",
+        "Find notable residents or businesses from Oconomowoc"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "waukesha-wi": {
+      "name": "Waukesha",
+      "state": "WI",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Waukesha official website for local attractions",
+        "Check state tourism site for WI - Waukesha section",
+        "Look up Waukesha historical society for unique facts",
+        "Search for annual festivals or events in Waukesha",
+        "Find notable residents or businesses from Waukesha"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "milwaukee-wi": {
+      "name": "Milwaukee",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Milwaukee official website for local attractions",
+        "Check state tourism site for WI - Milwaukee section",
+        "Look up Milwaukee historical society for unique facts",
+        "Search for annual festivals or events in Milwaukee",
+        "Find notable residents or businesses from Milwaukee"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "racine-wi": {
+      "name": "Racine",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Racine official website for local attractions",
+        "Check state tourism site for WI - Racine section",
+        "Look up Racine historical society for unique facts",
+        "Search for annual festivals or events in Racine",
+        "Find notable residents or businesses from Racine"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "kenosha-wi": {
+      "name": "Kenosha",
+      "state": "WI",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Kenosha official website for local attractions",
+        "Check state tourism site for WI - Kenosha section",
+        "Look up Kenosha historical society for unique facts",
+        "Search for annual festivals or events in Kenosha",
+        "Find notable residents or businesses from Kenosha"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "waukegan-il": {
+      "name": "Waukegan",
+      "state": "IL",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Waukegan official website for local attractions",
+        "Check state tourism site for IL - Waukegan section",
+        "Look up Waukegan historical society for unique facts",
+        "Search for annual festivals or events in Waukegan",
+        "Find notable residents or businesses from Waukegan"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "highlandpark-il": {
+      "name": "Highland Park",
+      "state": "IL",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Highland Park official website for local attractions",
+        "Check state tourism site for IL - Highland Park section",
+        "Look up Highland Park historical society for unique facts",
+        "Search for annual festivals or events in Highland Park",
+        "Find notable residents or businesses from Highland Park"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "evanston-il": {
+      "name": "Evanston",
+      "state": "IL",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Evanston official website for local attractions",
+        "Check state tourism site for IL - Evanston section",
+        "Look up Evanston historical society for unique facts",
+        "Search for annual festivals or events in Evanston",
+        "Find notable residents or businesses from Evanston"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "chicago-il": {
+      "name": "Chicago",
+      "state": "IL",
+      "currentFacts": 0,
+      "researchTasks": [
+        "Research Chicago official website for local attractions",
+        "Check state tourism site for IL - Chicago section",
+        "Look up Chicago historical society for unique facts",
+        "Search for annual festivals or events in Chicago",
+        "Find notable residents or businesses from Chicago"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "gary-in": {
+      "name": "Gary",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Gary official website for local attractions",
+        "Check state tourism site for IN - Gary section",
+        "Look up Gary historical society for unique facts",
+        "Search for annual festivals or events in Gary",
+        "Find notable residents or businesses from Gary"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "portage-in": {
+      "name": "Portage",
+      "state": "IN",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Portage official website for local attractions",
+        "Check state tourism site for IN - Portage section",
+        "Look up Portage historical society for unique facts",
+        "Search for annual festivals or events in Portage",
+        "Find notable residents or businesses from Portage"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "valparaiso-in": {
+      "name": "Valparaiso",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Valparaiso official website for local attractions",
+        "Check state tourism site for IN - Valparaiso section",
+        "Look up Valparaiso historical society for unique facts",
+        "Search for annual festivals or events in Valparaiso",
+        "Find notable residents or businesses from Valparaiso"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "plymouth-in": {
+      "name": "Plymouth",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Plymouth official website for local attractions",
+        "Check state tourism site for IN - Plymouth section",
+        "Look up Plymouth historical society for unique facts",
+        "Search for annual festivals or events in Plymouth",
+        "Find notable residents or businesses from Plymouth"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "warsaw-in": {
+      "name": "Warsaw",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Warsaw official website for local attractions",
+        "Check state tourism site for IN - Warsaw section",
+        "Look up Warsaw historical society for unique facts",
+        "Search for annual festivals or events in Warsaw",
+        "Find notable residents or businesses from Warsaw"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "fortwayne-in": {
+      "name": "Fort Wayne",
+      "state": "IN",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Fort Wayne official website for local attractions",
+        "Check state tourism site for IN - Fort Wayne section",
+        "Look up Fort Wayne historical society for unique facts",
+        "Search for annual festivals or events in Fort Wayne",
+        "Find notable residents or businesses from Fort Wayne"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "decatur-in": {
+      "name": "Decatur",
+      "state": "IN",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Decatur official website for local attractions",
+        "Check state tourism site for IN - Decatur section",
+        "Look up Decatur historical society for unique facts",
+        "Search for annual festivals or events in Decatur",
+        "Find notable residents or businesses from Decatur"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "vanwert-oh": {
+      "name": "Van Wert",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Van Wert official website for local attractions",
+        "Check state tourism site for OH - Van Wert section",
+        "Look up Van Wert historical society for unique facts",
+        "Search for annual festivals or events in Van Wert",
+        "Find notable residents or businesses from Van Wert"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "lima-oh": {
+      "name": "Lima",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Lima official website for local attractions",
+        "Check state tourism site for OH - Lima section",
+        "Look up Lima historical society for unique facts",
+        "Search for annual festivals or events in Lima",
+        "Find notable residents or businesses from Lima"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "bellefontaine-oh": {
+      "name": "Bellefontaine",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Bellefontaine official website for local attractions",
+        "Check state tourism site for OH - Bellefontaine section",
+        "Look up Bellefontaine historical society for unique facts",
+        "Search for annual festivals or events in Bellefontaine",
+        "Find notable residents or businesses from Bellefontaine"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "marysville-oh": {
+      "name": "Marysville",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Marysville official website for local attractions",
+        "Check state tourism site for OH - Marysville section",
+        "Look up Marysville historical society for unique facts",
+        "Search for annual festivals or events in Marysville",
+        "Find notable residents or businesses from Marysville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "delaware-oh": {
+      "name": "Delaware",
+      "state": "OH",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Delaware official website for local attractions",
+        "Check state tourism site for OH - Delaware section",
+        "Look up Delaware historical society for unique facts",
+        "Search for annual festivals or events in Delaware",
+        "Find notable residents or businesses from Delaware"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "sunbury-oh": {
+      "name": "Sunbury",
+      "state": "OH",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Sunbury official website for local attractions",
+        "Check state tourism site for OH - Sunbury section",
+        "Look up Sunbury historical society for unique facts",
+        "Search for annual festivals or events in Sunbury",
+        "Find notable residents or businesses from Sunbury"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "westerville-oh": {
+      "name": "Westerville",
+      "state": "OH",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Westerville official website for local attractions",
+        "Check state tourism site for OH - Westerville section",
+        "Look up Westerville historical society for unique facts",
+        "Search for annual festivals or events in Westerville",
+        "Find notable residents or businesses from Westerville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "columbus-oh": {
+      "name": "Columbus",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Columbus official website for local attractions",
+        "Check state tourism site for OH - Columbus section",
+        "Look up Columbus historical society for unique facts",
+        "Search for annual festivals or events in Columbus",
+        "Find notable residents or businesses from Columbus"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "reynoldsburg-oh": {
+      "name": "Reynoldsburg",
+      "state": "OH",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Reynoldsburg official website for local attractions",
+        "Check state tourism site for OH - Reynoldsburg section",
+        "Look up Reynoldsburg historical society for unique facts",
+        "Search for annual festivals or events in Reynoldsburg",
+        "Find notable residents or businesses from Reynoldsburg"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "newark-oh": {
+      "name": "Newark",
+      "state": "OH",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Newark official website for local attractions",
+        "Check state tourism site for OH - Newark section",
+        "Look up Newark historical society for unique facts",
+        "Search for annual festivals or events in Newark",
+        "Find notable residents or businesses from Newark"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "zanesville-oh": {
+      "name": "Zanesville",
+      "state": "OH",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Zanesville official website for local attractions",
+        "Check state tourism site for OH - Zanesville section",
+        "Look up Zanesville historical society for unique facts",
+        "Search for annual festivals or events in Zanesville",
+        "Find notable residents or businesses from Zanesville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "cambridge-oh": {
+      "name": "Cambridge",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Cambridge official website for local attractions",
+        "Check state tourism site for OH - Cambridge section",
+        "Look up Cambridge historical society for unique facts",
+        "Search for annual festivals or events in Cambridge",
+        "Find notable residents or businesses from Cambridge"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "stclairsville-oh": {
+      "name": "St. Clairsville",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research St. Clairsville official website for local attractions",
+        "Check state tourism site for OH - St. Clairsville section",
+        "Look up St. Clairsville historical society for unique facts",
+        "Search for annual festivals or events in St. Clairsville",
+        "Find notable residents or businesses from St. Clairsville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "bridgeport-oh": {
+      "name": "Bridgeport",
+      "state": "OH",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Bridgeport official website for local attractions",
+        "Check state tourism site for OH - Bridgeport section",
+        "Look up Bridgeport historical society for unique facts",
+        "Search for annual festivals or events in Bridgeport",
+        "Find notable residents or businesses from Bridgeport"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "wheeling-wv": {
+      "name": "Wheeling",
+      "state": "WV",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Wheeling official website for local attractions",
+        "Check state tourism site for WV - Wheeling section",
+        "Look up Wheeling historical society for unique facts",
+        "Search for annual festivals or events in Wheeling",
+        "Find notable residents or businesses from Wheeling"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "triadelphia-wv": {
+      "name": "Triadelphia",
+      "state": "WV",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Triadelphia official website for local attractions",
+        "Check state tourism site for WV - Triadelphia section",
+        "Look up Triadelphia historical society for unique facts",
+        "Search for annual festivals or events in Triadelphia",
+        "Find notable residents or businesses from Triadelphia"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "washington-pa": {
+      "name": "Washington",
+      "state": "PA",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Washington official website for local attractions",
+        "Check state tourism site for PA - Washington section",
+        "Look up Washington historical society for unique facts",
+        "Search for annual festivals or events in Washington",
+        "Find notable residents or businesses from Washington"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "canonsburg-pa": {
+      "name": "Canonsburg",
+      "state": "PA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Canonsburg official website for local attractions",
+        "Check state tourism site for PA - Canonsburg section",
+        "Look up Canonsburg historical society for unique facts",
+        "Search for annual festivals or events in Canonsburg",
+        "Find notable residents or businesses from Canonsburg"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "peterstownship-pa": {
+      "name": "Peters Township",
+      "state": "PA",
+      "currentFacts": 0,
+      "researchTasks": [
+        "Research Peters Township official website for local attractions",
+        "Check state tourism site for PA - Peters Township section",
+        "Look up Peters Township historical society for unique facts",
+        "Search for annual festivals or events in Peters Township",
+        "Find notable residents or businesses from Peters Township"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "bethelpark-pa": {
+      "name": "Bethel Park",
+      "state": "PA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Bethel Park official website for local attractions",
+        "Check state tourism site for PA - Bethel Park section",
+        "Look up Bethel Park historical society for unique facts",
+        "Search for annual festivals or events in Bethel Park",
+        "Find notable residents or businesses from Bethel Park"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "pittsburgh-pa": {
+      "name": "Pittsburgh",
+      "state": "PA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Pittsburgh official website for local attractions",
+        "Check state tourism site for PA - Pittsburgh section",
+        "Look up Pittsburgh historical society for unique facts",
+        "Search for annual festivals or events in Pittsburgh",
+        "Find notable residents or businesses from Pittsburgh"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "sewickley-pa": {
+      "name": "Sewickley",
+      "state": "PA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Sewickley official website for local attractions",
+        "Check state tourism site for PA - Sewickley section",
+        "Look up Sewickley historical society for unique facts",
+        "Search for annual festivals or events in Sewickley",
+        "Find notable residents or businesses from Sewickley"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "beaver-pa": {
+      "name": "Beaver",
+      "state": "PA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Beaver official website for local attractions",
+        "Check state tourism site for PA - Beaver section",
+        "Look up Beaver historical society for unique facts",
+        "Search for annual festivals or events in Beaver",
+        "Find notable residents or businesses from Beaver"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "eastliverpool-oh": {
+      "name": "East Liverpool",
+      "state": "OH",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research East Liverpool official website for local attractions",
+        "Check state tourism site for OH - East Liverpool section",
+        "Look up East Liverpool historical society for unique facts",
+        "Search for annual festivals or events in East Liverpool",
+        "Find notable residents or businesses from East Liverpool"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "salem-oh": {
+      "name": "Salem",
+      "state": "OH",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Salem official website for local attractions",
+        "Check state tourism site for OH - Salem section",
+        "Look up Salem historical society for unique facts",
+        "Search for annual festivals or events in Salem",
+        "Find notable residents or businesses from Salem"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "alliance-oh": {
+      "name": "Alliance",
+      "state": "OH",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Alliance official website for local attractions",
+        "Check state tourism site for OH - Alliance section",
+        "Look up Alliance historical society for unique facts",
+        "Search for annual festivals or events in Alliance",
+        "Find notable residents or businesses from Alliance"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "canton-oh": {
+      "name": "Canton",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Canton official website for local attractions",
+        "Check state tourism site for OH - Canton section",
+        "Look up Canton historical society for unique facts",
+        "Search for annual festivals or events in Canton",
+        "Find notable residents or businesses from Canton"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "massillon-oh": {
+      "name": "Massillon",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Massillon official website for local attractions",
+        "Check state tourism site for OH - Massillon section",
+        "Look up Massillon historical society for unique facts",
+        "Search for annual festivals or events in Massillon",
+        "Find notable residents or businesses from Massillon"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "wooster-oh": {
+      "name": "Wooster",
+      "state": "OH",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Wooster official website for local attractions",
+        "Check state tourism site for OH - Wooster section",
+        "Look up Wooster historical society for unique facts",
+        "Search for annual festivals or events in Wooster",
+        "Find notable residents or businesses from Wooster"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "mansfield-oh": {
+      "name": "Mansfield",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Mansfield official website for local attractions",
+        "Check state tourism site for OH - Mansfield section",
+        "Look up Mansfield historical society for unique facts",
+        "Search for annual festivals or events in Mansfield",
+        "Find notable residents or businesses from Mansfield"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "marion-oh": {
+      "name": "Marion",
+      "state": "OH",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Marion official website for local attractions",
+        "Check state tourism site for OH - Marion section",
+        "Look up Marion historical society for unique facts",
+        "Search for annual festivals or events in Marion",
+        "Find notable residents or businesses from Marion"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "dublin-oh": {
+      "name": "Dublin",
+      "state": "OH",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Dublin official website for local attractions",
+        "Check state tourism site for OH - Dublin section",
+        "Look up Dublin historical society for unique facts",
+        "Search for annual festivals or events in Dublin",
+        "Find notable residents or businesses from Dublin"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "richmond-in": {
+      "name": "Richmond",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Richmond official website for local attractions",
+        "Check state tourism site for IN - Richmond section",
+        "Look up Richmond historical society for unique facts",
+        "Search for annual festivals or events in Richmond",
+        "Find notable residents or businesses from Richmond"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "newcastle-in": {
+      "name": "New Castle",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research New Castle official website for local attractions",
+        "Check state tourism site for IN - New Castle section",
+        "Look up New Castle historical society for unique facts",
+        "Search for annual festivals or events in New Castle",
+        "Find notable residents or businesses from New Castle"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "anderson-in": {
+      "name": "Anderson",
+      "state": "IN",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Anderson official website for local attractions",
+        "Check state tourism site for IN - Anderson section",
+        "Look up Anderson historical society for unique facts",
+        "Search for annual festivals or events in Anderson",
+        "Find notable residents or businesses from Anderson"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "noblesville-in": {
+      "name": "Noblesville",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Noblesville official website for local attractions",
+        "Check state tourism site for IN - Noblesville section",
+        "Look up Noblesville historical society for unique facts",
+        "Search for annual festivals or events in Noblesville",
+        "Find notable residents or businesses from Noblesville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "fishers-in": {
+      "name": "Fishers",
+      "state": "IN",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Fishers official website for local attractions",
+        "Check state tourism site for IN - Fishers section",
+        "Look up Fishers historical society for unique facts",
+        "Search for annual festivals or events in Fishers",
+        "Find notable residents or businesses from Fishers"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "indianapolis-in": {
+      "name": "Indianapolis",
+      "state": "IN",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Indianapolis official website for local attractions",
+        "Check state tourism site for IN - Indianapolis section",
+        "Look up Indianapolis historical society for unique facts",
+        "Search for annual festivals or events in Indianapolis",
+        "Find notable residents or businesses from Indianapolis"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "plainfield-in": {
+      "name": "Plainfield",
+      "state": "IN",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Plainfield official website for local attractions",
+        "Check state tourism site for IN - Plainfield section",
+        "Look up Plainfield historical society for unique facts",
+        "Search for annual festivals or events in Plainfield",
+        "Find notable residents or businesses from Plainfield"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "greencastle-in": {
+      "name": "Greencastle",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Greencastle official website for local attractions",
+        "Check state tourism site for IN - Greencastle section",
+        "Look up Greencastle historical society for unique facts",
+        "Search for annual festivals or events in Greencastle",
+        "Find notable residents or businesses from Greencastle"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "terrehaute-in": {
+      "name": "Terre Haute",
+      "state": "IN",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Terre Haute official website for local attractions",
+        "Check state tourism site for IN - Terre Haute section",
+        "Look up Terre Haute historical society for unique facts",
+        "Search for annual festivals or events in Terre Haute",
+        "Find notable residents or businesses from Terre Haute"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "robinson-il": {
+      "name": "Robinson",
+      "state": "IL",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Robinson official website for local attractions",
+        "Check state tourism site for IL - Robinson section",
+        "Look up Robinson historical society for unique facts",
+        "Search for annual festivals or events in Robinson",
+        "Find notable residents or businesses from Robinson"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "lawrenceville-il": {
+      "name": "Lawrenceville",
+      "state": "IL",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Lawrenceville official website for local attractions",
+        "Check state tourism site for IL - Lawrenceville section",
+        "Look up Lawrenceville historical society for unique facts",
+        "Search for annual festivals or events in Lawrenceville",
+        "Find notable residents or businesses from Lawrenceville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "vincennes-in": {
+      "name": "Vincennes",
+      "state": "IN",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Vincennes official website for local attractions",
+        "Check state tourism site for IN - Vincennes section",
+        "Look up Vincennes historical society for unique facts",
+        "Search for annual festivals or events in Vincennes",
+        "Find notable residents or businesses from Vincennes"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "mountcarmel-il": {
+      "name": "Mount Carmel",
+      "state": "IL",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Mount Carmel official website for local attractions",
+        "Check state tourism site for IL - Mount Carmel section",
+        "Look up Mount Carmel historical society for unique facts",
+        "Search for annual festivals or events in Mount Carmel",
+        "Find notable residents or businesses from Mount Carmel"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "fairfield-il": {
+      "name": "Fairfield",
+      "state": "IL",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Fairfield official website for local attractions",
+        "Check state tourism site for IL - Fairfield section",
+        "Look up Fairfield historical society for unique facts",
+        "Search for annual festivals or events in Fairfield",
+        "Find notable residents or businesses from Fairfield"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "flora-il": {
+      "name": "Flora",
+      "state": "IL",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Flora official website for local attractions",
+        "Check state tourism site for IL - Flora section",
+        "Look up Flora historical society for unique facts",
+        "Search for annual festivals or events in Flora",
+        "Find notable residents or businesses from Flora"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "effingham-il": {
+      "name": "Effingham",
+      "state": "IL",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Effingham official website for local attractions",
+        "Check state tourism site for IL - Effingham section",
+        "Look up Effingham historical society for unique facts",
+        "Search for annual festivals or events in Effingham",
+        "Find notable residents or businesses from Effingham"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "vandalia-il": {
+      "name": "Vandalia",
+      "state": "IL",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Vandalia official website for local attractions",
+        "Check state tourism site for IL - Vandalia section",
+        "Look up Vandalia historical society for unique facts",
+        "Search for annual festivals or events in Vandalia",
+        "Find notable residents or businesses from Vandalia"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "greenville-il": {
+      "name": "Greenville",
+      "state": "IL",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Greenville official website for local attractions",
+        "Check state tourism site for IL - Greenville section",
+        "Look up Greenville historical society for unique facts",
+        "Search for annual festivals or events in Greenville",
+        "Find notable residents or businesses from Greenville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "highland-il": {
+      "name": "Highland",
+      "state": "IL",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Highland official website for local attractions",
+        "Check state tourism site for IL - Highland section",
+        "Look up Highland historical society for unique facts",
+        "Search for annual festivals or events in Highland",
+        "Find notable residents or businesses from Highland"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "stlouis-mo": {
+      "name": "St. Louis",
+      "state": "MO",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research St. Louis official website for local attractions",
+        "Check state tourism site for MO - St. Louis section",
+        "Look up St. Louis historical society for unique facts",
+        "Search for annual festivals or events in St. Louis",
+        "Find notable residents or businesses from St. Louis"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "wentzville-mo": {
+      "name": "Wentzville",
+      "state": "MO",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Wentzville official website for local attractions",
+        "Check state tourism site for MO - Wentzville section",
+        "Look up Wentzville historical society for unique facts",
+        "Search for annual festivals or events in Wentzville",
+        "Find notable residents or businesses from Wentzville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "columbia-mo": {
+      "name": "Columbia",
+      "state": "MO",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Columbia official website for local attractions",
+        "Check state tourism site for MO - Columbia section",
+        "Look up Columbia historical society for unique facts",
+        "Search for annual festivals or events in Columbia",
+        "Find notable residents or businesses from Columbia"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "boonville-mo": {
+      "name": "Boonville",
+      "state": "MO",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Boonville official website for local attractions",
+        "Check state tourism site for MO - Boonville section",
+        "Look up Boonville historical society for unique facts",
+        "Search for annual festivals or events in Boonville",
+        "Find notable residents or businesses from Boonville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "marshall-mo": {
+      "name": "Marshall",
+      "state": "MO",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Marshall official website for local attractions",
+        "Check state tourism site for MO - Marshall section",
+        "Look up Marshall historical society for unique facts",
+        "Search for annual festivals or events in Marshall",
+        "Find notable residents or businesses from Marshall"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "sedalia-mo": {
+      "name": "Sedalia",
+      "state": "MO",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Sedalia official website for local attractions",
+        "Check state tourism site for MO - Sedalia section",
+        "Look up Sedalia historical society for unique facts",
+        "Search for annual festivals or events in Sedalia",
+        "Find notable residents or businesses from Sedalia"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "warrensburg-mo": {
+      "name": "Warrensburg",
+      "state": "MO",
+      "currentFacts": 3,
+      "researchTasks": [
+        "Research Warrensburg official website for local attractions",
+        "Check state tourism site for MO - Warrensburg section",
+        "Look up Warrensburg historical society for unique facts",
+        "Search for annual festivals or events in Warrensburg",
+        "Find notable residents or businesses from Warrensburg"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "harrisonville-mo": {
+      "name": "Harrisonville",
+      "state": "MO",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Harrisonville official website for local attractions",
+        "Check state tourism site for MO - Harrisonville section",
+        "Look up Harrisonville historical society for unique facts",
+        "Search for annual festivals or events in Harrisonville",
+        "Find notable residents or businesses from Harrisonville"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "raymore-mo": {
+      "name": "Raymore",
+      "state": "MO",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Raymore official website for local attractions",
+        "Check state tourism site for MO - Raymore section",
+        "Look up Raymore historical society for unique facts",
+        "Search for annual festivals or events in Raymore",
+        "Find notable residents or businesses from Raymore"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    }
+  }
+}

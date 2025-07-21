@@ -11,7 +11,7 @@ const path = require('path');
 
 // Configuration
 const CONFIG = {
-    outputFile: './data/towns-database.json',
+    outputFile: path.join(__dirname, 'data', 'towns-database.json'),
     sources: {
         wikipedia: 'https://en.wikipedia.org/api/rest_v1/page/summary/',
         geonames: 'http://api.geonames.org/',
@@ -20,13 +20,19 @@ const CONFIG = {
     delay: 1000, // Delay between API calls to be respectful
 };
 
-// Your town list from the existing data
-const TOWNS_LIST = [
-    { name: "Grundy Center", state: "IA", lat: 42.3611, lng: -92.7677, population: 2706, type: "city" },
-    { name: "Princeton", state: "MO", lat: 40.4031, lng: -93.5810, population: 1166, type: "city" },
-    { name: "Reinbeck", state: "IA", lat: 42.3247, lng: -92.5999, population: 1664, type: "city" },
-    // Add all your towns here...
-];
+// Load town list from the comprehensive towns-list.json file
+let TOWNS_LIST = [];
+
+try {
+    const townsListPath = path.join(__dirname, 'data', 'towns-list.json');
+    const townsList = JSON.parse(fs.readFileSync(townsListPath, 'utf8'));
+    TOWNS_LIST = townsList.towns;
+    console.log(`📋 Loaded ${TOWNS_LIST.length} towns from towns-list.json`);
+} catch (error) {
+    console.error('❌ Error loading towns-list.json:', error.message);
+    console.log('Please ensure towns-list.json exists in the ./data/ directory');
+    process.exit(1);
+}
 
 class TownDataFetcher {
     constructor() {

@@ -1,0 +1,65 @@
+{
+  "instructions": "Complete the research for each town using the provided notes",
+  "towns": {
+    "grundycenter-ia": {
+      "name": "Grundy Center",
+      "state": "IA",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Grundy Center official website for local attractions",
+        "Check state tourism site for IA - Grundy Center section",
+        "Look up Grundy Center historical society for unique facts",
+        "Search for annual festivals or events in Grundy Center",
+        "Find notable residents or businesses from Grundy Center"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "princeton-mo": {
+      "name": "Princeton",
+      "state": "MO",
+      "currentFacts": 2,
+      "researchTasks": [
+        "Research Princeton official website for local attractions",
+        "Check state tourism site for MO - Princeton section",
+        "Look up Princeton historical society for unique facts",
+        "Search for annual festivals or events in Princeton",
+        "Find notable residents or businesses from Princeton"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    },
+    "reinbeck-ia": {
+      "name": "Reinbeck",
+      "state": "IA",
+      "currentFacts": 1,
+      "researchTasks": [
+        "Research Reinbeck official website for local attractions",
+        "Check state tourism site for IA - Reinbeck section",
+        "Look up Reinbeck historical society for unique facts",
+        "Search for annual festivals or events in Reinbeck",
+        "Find notable residents or businesses from Reinbeck"
+      ],
+      "suggestedFacts": [
+        "Historical founding story or origin",
+        "Notable residents (past or present)",
+        "Unique local businesses or industries",
+        "Annual festivals or community events",
+        "Interesting geographical features",
+        "Local legends or unusual facts"
+      ]
+    }
+  }
+}

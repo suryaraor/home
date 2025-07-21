@@ -1,0 +1,2820 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2025-07-21T14:48:10.720Z",
+    "totalTowns": 109,
+    "sources": [
+      "wikipedia",
+      "geonames"
+    ]
+  },
+  "towns": {
+    "kansascity-mo": {
+      "name": "Kansas City",
+      "state": "MO",
+      "population": 508000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.0997,
+        "lng": -94.5786
+      },
+      "facts": [
+        "state of Missouri by population and area."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": null,
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Kansas_City%2C_Missouri",
+      "researchNotes": [
+        "Research Kansas City official website for local attractions",
+        "Check state tourism site for MO - Kansas City section",
+        "Look up Kansas City historical society for unique facts",
+        "Search for annual festivals or events in Kansas City",
+        "Find notable residents or businesses from Kansas City"
+      ]
+    },
+    "liberty-mo": {
+      "name": "Liberty",
+      "state": "MO",
+      "population": 31000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.2461,
+        "lng": -94.4191
+      },
+      "facts": [
+        "Liberty is a city in and the county seat of Clay County, Missouri, United States and is a suburb of Kansas City, located in the Kansas City Metro Area.",
+        "As of the 2020 United States census the population was 30,167.",
+        "Liberty is home to William Jewell College and the historic Liberty Jail."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Liberty%2C_Missouri",
+      "researchNotes": [
+        "Research Liberty official website for local attractions",
+        "Check state tourism site for MO - Liberty section",
+        "Look up Liberty historical society for unique facts",
+        "Search for annual festivals or events in Liberty",
+        "Find notable residents or businesses from Liberty"
+      ]
+    },
+    "lawson-mo": {
+      "name": "Lawson",
+      "state": "MO",
+      "population": 2500,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.4358,
+        "lng": -94.2038
+      },
+      "facts": [
+        "The population was 2,541 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": null,
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Lawson%2C_Missouri",
+      "researchNotes": [
+        "Research Lawson official website for local attractions",
+        "Check state tourism site for MO - Lawson section",
+        "Look up Lawson historical society for unique facts",
+        "Search for annual festivals or events in Lawson",
+        "Find notable residents or businesses from Lawson"
+      ]
+    },
+    "cameron-mo": {
+      "name": "Cameron",
+      "state": "MO",
+      "population": 9900,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.7403,
+        "lng": -94.2413
+      },
+      "facts": [
+        "The population was 8,513 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": null,
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Cameron%2C_Missouri",
+      "researchNotes": [
+        "Research Cameron official website for local attractions",
+        "Check state tourism site for MO - Cameron section",
+        "Look up Cameron historical society for unique facts",
+        "Search for annual festivals or events in Cameron",
+        "Find notable residents or businesses from Cameron"
+      ]
+    },
+    "gallatin-mo": {
+      "name": "Gallatin",
+      "state": "MO",
+      "population": 1800,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.9139,
+        "lng": -93.9622
+      },
+      "facts": [
+        "The population was 1,821 at the 2020 census.",
+        "It is the county seat of Daviess County."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Daviess County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Gallatin%2C_Missouri",
+      "researchNotes": [
+        "Research Gallatin official website for local attractions",
+        "Check state tourism site for MO - Gallatin section",
+        "Look up Gallatin historical society for unique facts",
+        "Search for annual festivals or events in Gallatin",
+        "Find notable residents or businesses from Gallatin"
+      ]
+    },
+    "trenton-mo": {
+      "name": "Trenton",
+      "state": "MO",
+      "population": 6000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.0764,
+        "lng": -93.6166
+      },
+      "facts": [
+        "The population was 5,609 at the 2020 census.",
+        "It is the county seat of Grundy County."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Grundy County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Trenton%2C_Missouri",
+      "researchNotes": [
+        "Research Trenton official website for local attractions",
+        "Check state tourism site for MO - Trenton section",
+        "Look up Trenton historical society for unique facts",
+        "Search for annual festivals or events in Trenton",
+        "Find notable residents or businesses from Trenton"
+      ]
+    },
+    "spickard-mo": {
+      "name": "Spickard",
+      "state": "MO",
+      "population": 300,
+      "type": "village",
+      "coordinates": {
+        "lat": 40.2414,
+        "lng": -93.7305
+      },
+      "facts": [
+        "The population was 222 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Grundy County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Spickard%2C_Missouri",
+      "researchNotes": [
+        "Research Spickard official website for local attractions",
+        "Check state tourism site for MO - Spickard section",
+        "Look up Spickard historical society for unique facts",
+        "Search for annual festivals or events in Spickard",
+        "Find notable residents or businesses from Spickard"
+      ]
+    },
+    "princeton-mo": {
+      "name": "Princeton",
+      "state": "MO",
+      "population": 1200,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.4,
+        "lng": -93.5811
+      },
+      "facts": [
+        "Princeton is the county seat and largest city of Mercer County, Missouri, United States.",
+        "The population was 1,007 at the 2020 census, down from the 2010 census, which counted 1,166 people."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Princeton%2C_Missouri",
+      "researchNotes": [
+        "Research Princeton official website for local attractions",
+        "Check state tourism site for MO - Princeton section",
+        "Look up Princeton historical society for unique facts",
+        "Search for annual festivals or events in Princeton",
+        "Find notable residents or businesses from Princeton"
+      ]
+    },
+    "corydon-ia": {
+      "name": "Corydon",
+      "state": "IA",
+      "population": 1600,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.7561,
+        "lng": -93.3188
+      },
+      "facts": [
+        "The population was 1,526 in the 2020 census, a decline from 1,591 in 2000.",
+        "It is the county seat of Wayne County."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Wayne County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Corydon%2C_Iowa",
+      "researchNotes": [
+        "Research Corydon official website for local attractions",
+        "Check state tourism site for IA - Corydon section",
+        "Look up Corydon historical society for unique facts",
+        "Search for annual festivals or events in Corydon",
+        "Find notable residents or businesses from Corydon"
+      ]
+    },
+    "chariton-ia": {
+      "name": "Chariton",
+      "state": "IA",
+      "population": 4200,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.0119,
+        "lng": -93.3055
+      },
+      "facts": [
+        "Chariton is a city in, and the county seat of, Lucas County, Iowa, United States.",
+        "The population was 4,193 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Chariton%2C_Iowa",
+      "researchNotes": [
+        "Research Chariton official website for local attractions",
+        "Check state tourism site for IA - Chariton section",
+        "Look up Chariton historical society for unique facts",
+        "Search for annual festivals or events in Chariton",
+        "Find notable residents or businesses from Chariton"
+      ]
+    },
+    "indianola-ia": {
+      "name": "Indianola",
+      "state": "IA",
+      "population": 15800,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.3581,
+        "lng": -93.5577
+      },
+      "facts": [
+        "Indianola is city in and county seat of Warren County, Iowa, United States, located 19 miles (31 km) south of downtown Des Moines.",
+        "The population was 15,833 at the time of the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "And County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Indianola%2C_Iowa",
+      "researchNotes": [
+        "Research Indianola official website for local attractions",
+        "Check state tourism site for IA - Indianola section",
+        "Look up Indianola historical society for unique facts",
+        "Search for annual festivals or events in Indianola",
+        "Find notable residents or businesses from Indianola"
+      ]
+    },
+    "winterset-ia": {
+      "name": "Winterset",
+      "state": "IA",
+      "population": 5200,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.3306,
+        "lng": -94.0138
+      },
+      "facts": [
+        "Winterset is a city in and the county seat of Madison County, Iowa.",
+        "The population was 5,353 at the time of the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Winterset%2C_Iowa",
+      "researchNotes": [
+        "Research Winterset official website for local attractions",
+        "Check state tourism site for IA - Winterset section",
+        "Look up Winterset historical society for unique facts",
+        "Search for annual festivals or events in Winterset",
+        "Find notable residents or businesses from Winterset"
+      ]
+    },
+    "adel-ia": {
+      "name": "Adel",
+      "state": "IA",
+      "population": 5000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.6144,
+        "lng": -94.0144
+      },
+      "facts": [
+        "Adel is a city in and the county seat of Dallas County, Iowa, United States.",
+        "Its population was 6,153 at the time of the 2020 Census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Adel%2C_Iowa",
+      "researchNotes": [
+        "Research Adel official website for local attractions",
+        "Check state tourism site for IA - Adel section",
+        "Look up Adel historical society for unique facts",
+        "Search for annual festivals or events in Adel",
+        "Find notable residents or businesses from Adel"
+      ]
+    },
+    "desmoines-ia": {
+      "name": "Des Moines",
+      "state": "IA",
+      "population": 215000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.5868,
+        "lng": -93.625
+      },
+      "facts": [
+        "It is the county seat of Polk County with parts extending into Warren County.",
+        "Its population was 214,133 at the 2020 census, while the six-county Des Moines metropolitan area has an estimated 750,000 residents, the largest metropolitan area in Iowa."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Des_Moines%2C_Iowa",
+      "researchNotes": [
+        "Research Des Moines official website for local attractions",
+        "Check state tourism site for IA - Des Moines section",
+        "Look up Des Moines historical society for unique facts",
+        "Search for annual festivals or events in Des Moines",
+        "Find notable residents or businesses from Des Moines"
+      ]
+    },
+    "ankeny-ia": {
+      "name": "Ankeny",
+      "state": "IA",
+      "population": 67000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.7297,
+        "lng": -93.6058
+      },
+      "facts": [
+        "As of the 2020 census, the population of Ankeny was 67,887, making it the seventh most populous city in the state."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Polk County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Ankeny%2C_Iowa",
+      "researchNotes": [
+        "Research Ankeny official website for local attractions",
+        "Check state tourism site for IA - Ankeny section",
+        "Look up Ankeny historical society for unique facts",
+        "Search for annual festivals or events in Ankeny",
+        "Find notable residents or businesses from Ankeny"
+      ]
+    },
+    "ames-ia": {
+      "name": "Ames",
+      "state": "IA",
+      "population": 66000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.0308,
+        "lng": -93.6319
+      },
+      "facts": [
+        "According to the 2020 census, Ames had a population of 66,427, making it the state's ninth-most populous city.",
+        "Iowa State University was home to 30,177 students as of fall 2023, which make up approximately one half of the city's population."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Story County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Ames%2C_Iowa",
+      "researchNotes": [
+        "Research Ames official website for local attractions",
+        "Check state tourism site for IA - Ames section",
+        "Look up Ames historical society for unique facts",
+        "Search for annual festivals or events in Ames",
+        "Find notable residents or businesses from Ames"
+      ]
+    },
+    "storycity-ia": {
+      "name": "Story City",
+      "state": "IA",
+      "population": 3400,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.1872,
+        "lng": -93.5972
+      },
+      "facts": [
+        "The population was 3,352 in the 2020 census, a slight increase from 3,228 in 2000."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Story County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Story_City%2C_Iowa",
+      "researchNotes": [
+        "Research Story City official website for local attractions",
+        "Check state tourism site for IA - Story City section",
+        "Look up Story City historical society for unique facts",
+        "Search for annual festivals or events in Story City",
+        "Find notable residents or businesses from Story City"
+      ]
+    },
+    "grundycenter-ia": {
+      "name": "Grundy Center",
+      "state": "IA",
+      "population": 2700,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.3617,
+        "lng": -92.7685
+      },
+      "facts": [
+        "The population was 2,796 at the time of the 2020 census, a 7.7% increase from 2,596 at the 2000 census.",
+        "Grundy Center is also the county seat of Grundy County."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Grundy County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Grundy_Center%2C_Iowa",
+      "researchNotes": [
+        "Research Grundy Center official website for local attractions",
+        "Check state tourism site for IA - Grundy Center section",
+        "Look up Grundy Center historical society for unique facts",
+        "Search for annual festivals or events in Grundy Center",
+        "Find notable residents or businesses from Grundy Center"
+      ]
+    },
+    "reinbeck-ia": {
+      "name": "Reinbeck",
+      "state": "IA",
+      "population": 1700,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.3247,
+        "lng": -92.5974
+      },
+      "facts": [
+        "The population was 1,662 at the 2020 census—a five percent decrease from the population of 1,751 in 2000."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Grundy County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Reinbeck%2C_Iowa",
+      "researchNotes": [
+        "Research Reinbeck official website for local attractions",
+        "Check state tourism site for IA - Reinbeck section",
+        "Look up Reinbeck historical society for unique facts",
+        "Search for annual festivals or events in Reinbeck",
+        "Find notable residents or businesses from Reinbeck"
+      ]
+    },
+    "waterloo-ia": {
+      "name": "Waterloo",
+      "state": "IA",
+      "population": 68000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.4928,
+        "lng": -92.3426
+      },
+      "facts": [
+        "Waterloo is a city in and the county seat of Black Hawk County, Iowa, United States.",
+        "It is the eighth-most populous city in Iowa, with a population of 67,314 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Waterloo%2C_Iowa",
+      "researchNotes": [
+        "Research Waterloo official website for local attractions",
+        "Check state tourism site for IA - Waterloo section",
+        "Look up Waterloo historical society for unique facts",
+        "Search for annual festivals or events in Waterloo",
+        "Find notable residents or businesses from Waterloo"
+      ]
+    },
+    "cedarfalls-ia": {
+      "name": "Cedar Falls",
+      "state": "IA",
+      "population": 40000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.5348,
+        "lng": -92.4453
+      },
+      "facts": [
+        "As of the 2020 United States census, the city population was 40,713.",
+        "Cedar Falls is home to the University of Northern Iowa (UNI), a public university."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Hawk County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Cedar_Falls%2C_Iowa",
+      "researchNotes": [
+        "Research Cedar Falls official website for local attractions",
+        "Check state tourism site for IA - Cedar Falls section",
+        "Look up Cedar Falls historical society for unique facts",
+        "Search for annual festivals or events in Cedar Falls",
+        "Find notable residents or businesses from Cedar Falls"
+      ]
+    },
+    "waverly-ia": {
+      "name": "Waverly",
+      "state": "IA",
+      "population": 10000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.7258,
+        "lng": -92.4732
+      },
+      "facts": [
+        "The population was 10,394 at the time of the 2020 census.",
+        "It is the county seat of Bremer County and is part of the Waterloo-Cedar Falls metropolitan area."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Bremer County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Waverly%2C_Iowa",
+      "researchNotes": [
+        "Research Waverly official website for local attractions",
+        "Check state tourism site for IA - Waverly section",
+        "Look up Waverly historical society for unique facts",
+        "Search for annual festivals or events in Waverly",
+        "Find notable residents or businesses from Waverly"
+      ]
+    },
+    "sumner-ia": {
+      "name": "Sumner",
+      "state": "IA",
+      "population": 2000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.8469,
+        "lng": -92.1079
+      },
+      "facts": [
+        "The population was 2,030 at the time of the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Bremer County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Sumner%2C_Iowa",
+      "researchNotes": [
+        "Research Sumner official website for local attractions",
+        "Check state tourism site for IA - Sumner section",
+        "Look up Sumner historical society for unique facts",
+        "Search for annual festivals or events in Sumner",
+        "Find notable residents or businesses from Sumner"
+      ]
+    },
+    "fayette-ia": {
+      "name": "Fayette",
+      "state": "IA",
+      "population": 1300,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.8419,
+        "lng": -91.8004
+      },
+      "facts": [
+        "As of the 2020 census, the city population was 1,256.",
+        "It was named after the Marquis de la Fayette, French hero of the American Revolutionary War."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Fayette County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Fayette%2C_Iowa",
+      "researchNotes": [
+        "Research Fayette official website for local attractions",
+        "Check state tourism site for IA - Fayette section",
+        "Look up Fayette historical society for unique facts",
+        "Search for annual festivals or events in Fayette",
+        "Find notable residents or businesses from Fayette"
+      ]
+    },
+    "prairieduchien-wi": {
+      "name": "Prairie du Chien",
+      "state": "WI",
+      "population": 5900,
+      "type": "city",
+      "coordinates": {
+        "lat": 43.0517,
+        "lng": -91.1404
+      },
+      "facts": [
+        "Prairie du Chien is a city in Crawford County, Wisconsin, United States, and its county seat.",
+        "The population was 5,506 at the 2020 census.",
+        "Often called Wisconsin's second-oldest city, Prairie du Chien was established as a European settlement by French voyageurs in the late 17th century."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Crawford County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Prairie_du_Chien%2C_Wisconsin",
+      "researchNotes": [
+        "Research Prairie du Chien official website for local attractions",
+        "Check state tourism site for WI - Prairie du Chien section",
+        "Look up Prairie du Chien historical society for unique facts",
+        "Search for annual festivals or events in Prairie du Chien",
+        "Find notable residents or businesses from Prairie du Chien"
+      ]
+    },
+    "fennimore-wi": {
+      "name": "Fennimore",
+      "state": "WI",
+      "population": 2500,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.9839,
+        "lng": -90.6551
+      },
+      "facts": [
+        "The population was 2,764 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Grant County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Fennimore%2C_Wisconsin",
+      "researchNotes": [
+        "Research Fennimore official website for local attractions",
+        "Check state tourism site for WI - Fennimore section",
+        "Look up Fennimore historical society for unique facts",
+        "Search for annual festivals or events in Fennimore",
+        "Find notable residents or businesses from Fennimore"
+      ]
+    },
+    "platteville-wi": {
+      "name": "Platteville",
+      "state": "WI",
+      "population": 12000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.7341,
+        "lng": -90.4787
+      },
+      "facts": [
+        "The population was 11,836 at the 2020 census.",
+        "It is located atop the greater Platte River valley in the southern Driftless Region of Wisconsin, an area known for its karst topography and rolling hills.",
+        "It is home to the University of Wisconsin–Platteville.",
+        "It is the principal city of the Platteville micropolitan statistical area, which has an estimated population of 51,938."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Grant County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Platteville%2C_Wisconsin",
+      "researchNotes": [
+        "Research Platteville official website for local attractions",
+        "Check state tourism site for WI - Platteville section",
+        "Look up Platteville historical society for unique facts",
+        "Search for annual festivals or events in Platteville",
+        "Find notable residents or businesses from Platteville"
+      ]
+    },
+    "dodgeville-wi": {
+      "name": "Dodgeville",
+      "state": "WI",
+      "population": 5000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.96,
+        "lng": -90.1301
+      },
+      "facts": [
+        "Dodgeville is a city in Iowa County, Wisconsin, United States, and its county seat.",
+        "The population was 4,984 at the 2020 census, making it the county's most populous city."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Iowa County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Dodgeville%2C_Wisconsin",
+      "researchNotes": [
+        "Research Dodgeville official website for local attractions",
+        "Check state tourism site for WI - Dodgeville section",
+        "Look up Dodgeville historical society for unique facts",
+        "Search for annual festivals or events in Dodgeville",
+        "Find notable residents or businesses from Dodgeville"
+      ]
+    },
+    "mounthoreb-wi": {
+      "name": "Mount Horeb",
+      "state": "WI",
+      "population": 7500,
+      "type": "village",
+      "coordinates": {
+        "lat": 43.0119,
+        "lng": -89.7373
+      },
+      "facts": [
+        "The population was 7,754 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Dane County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Mount_Horeb%2C_Wisconsin",
+      "researchNotes": [
+        "Research Mount Horeb official website for local attractions",
+        "Check state tourism site for WI - Mount Horeb section",
+        "Look up Mount Horeb historical society for unique facts",
+        "Search for annual festivals or events in Mount Horeb",
+        "Find notable residents or businesses from Mount Horeb"
+      ]
+    },
+    "middleton-wi": {
+      "name": "Middleton",
+      "state": "WI",
+      "population": 21000,
+      "type": "city",
+      "coordinates": {
+        "lat": 43.0972,
+        "lng": -89.5043
+      },
+      "facts": [
+        "The population was 21,827 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Dane County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Middleton%2C_Wisconsin",
+      "researchNotes": [
+        "Research Middleton official website for local attractions",
+        "Check state tourism site for WI - Middleton section",
+        "Look up Middleton historical society for unique facts",
+        "Search for annual festivals or events in Middleton",
+        "Find notable residents or businesses from Middleton"
+      ]
+    },
+    "madison-wi": {
+      "name": "Madison",
+      "state": "WI",
+      "population": 260000,
+      "type": "city",
+      "coordinates": {
+        "lat": 43.0731,
+        "lng": -89.4012
+      },
+      "facts": [
+        "It is the second-most populous city in the state with a population of 269,840 at the 2020 census, while the Madison metropolitan area has an estimated 708,000 residents.",
+        "Madison was founded in 1836 and is named after American Founding Father and President James Madison.",
+        "It is the county seat of Dane County."
+      ],
+      "attractions": [],
+      "founded": 1836,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Madison%2C_Wisconsin",
+      "researchNotes": [
+        "Research Madison official website for local attractions",
+        "Check state tourism site for WI - Madison section",
+        "Look up Madison historical society for unique facts",
+        "Search for annual festivals or events in Madison",
+        "Find notable residents or businesses from Madison"
+      ]
+    },
+    "sunprairie-wi": {
+      "name": "Sun Prairie",
+      "state": "WI",
+      "population": 33000,
+      "type": "city",
+      "coordinates": {
+        "lat": 43.1836,
+        "lng": -89.2137
+      },
+      "facts": [
+        "The population was 35,967 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Dane County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Sun_Prairie%2C_Wisconsin",
+      "researchNotes": [
+        "Research Sun Prairie official website for local attractions",
+        "Check state tourism site for WI - Sun Prairie section",
+        "Look up Sun Prairie historical society for unique facts",
+        "Search for annual festivals or events in Sun Prairie",
+        "Find notable residents or businesses from Sun Prairie"
+      ]
+    },
+    "watertown-wi": {
+      "name": "Watertown",
+      "state": "WI",
+      "population": 24000,
+      "type": "city",
+      "coordinates": {
+        "lat": 43.1947,
+        "lng": -88.7292
+      },
+      "facts": [
+        "The population was 22,926 at the 2020 census, of which 14,674 were in Jefferson County and 8,252 were in Dodge County."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Jefferson County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Watertown%2C_Wisconsin",
+      "researchNotes": [
+        "Research Watertown official website for local attractions",
+        "Check state tourism site for WI - Watertown section",
+        "Look up Watertown historical society for unique facts",
+        "Search for annual festivals or events in Watertown",
+        "Find notable residents or businesses from Watertown"
+      ]
+    },
+    "oconomowoc-wi": {
+      "name": "Oconomowoc",
+      "state": "WI",
+      "population": 16000,
+      "type": "city",
+      "coordinates": {
+        "lat": 43.1119,
+        "lng": -88.4993
+      },
+      "facts": [
+        "The population was 18,203 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Waukesha County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Oconomowoc%2C_Wisconsin",
+      "researchNotes": [
+        "Research Oconomowoc official website for local attractions",
+        "Check state tourism site for WI - Oconomowoc section",
+        "Look up Oconomowoc historical society for unique facts",
+        "Search for annual festivals or events in Oconomowoc",
+        "Find notable residents or businesses from Oconomowoc"
+      ]
+    },
+    "waukesha-wi": {
+      "name": "Waukesha",
+      "state": "WI",
+      "population": 72000,
+      "type": "city",
+      "coordinates": {
+        "lat": 43.0117,
+        "lng": -88.2315
+      },
+      "facts": [
+        "Waukesha is a city in and the county seat of Waukesha County, Wisconsin, United States.",
+        "The population was 71,158 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Waukesha%2C_Wisconsin",
+      "researchNotes": [
+        "Research Waukesha official website for local attractions",
+        "Check state tourism site for WI - Waukesha section",
+        "Look up Waukesha historical society for unique facts",
+        "Search for annual festivals or events in Waukesha",
+        "Find notable residents or businesses from Waukesha"
+      ]
+    },
+    "milwaukee-wi": {
+      "name": "Milwaukee",
+      "state": "WI",
+      "population": 590000,
+      "type": "city",
+      "coordinates": {
+        "lat": 43.0389,
+        "lng": -87.9065
+      },
+      "facts": [
+        "It is the county seat of Milwaukee County."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Milwaukee",
+      "researchNotes": [
+        "Research Milwaukee official website for local attractions",
+        "Check state tourism site for WI - Milwaukee section",
+        "Look up Milwaukee historical society for unique facts",
+        "Search for annual festivals or events in Milwaukee",
+        "Find notable residents or businesses from Milwaukee"
+      ]
+    },
+    "racine-wi": {
+      "name": "Racine",
+      "state": "WI",
+      "population": 78000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.7261,
+        "lng": -87.7829
+      },
+      "facts": [
+        "Racine is a city in Racine County, Wisconsin, United States, and its county seat."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Racine County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Racine%2C_Wisconsin",
+      "researchNotes": [
+        "Research Racine official website for local attractions",
+        "Check state tourism site for WI - Racine section",
+        "Look up Racine historical society for unique facts",
+        "Search for annual festivals or events in Racine",
+        "Find notable residents or businesses from Racine"
+      ]
+    },
+    "kenosha-wi": {
+      "name": "Kenosha",
+      "state": "WI",
+      "population": 100000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.5847,
+        "lng": -87.8212
+      },
+      "facts": [
+        "Kenosha is a city in Kenosha County, Wisconsin, United States, and its county seat."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Kenosha County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Kenosha%2C_Wisconsin",
+      "researchNotes": [
+        "Research Kenosha official website for local attractions",
+        "Check state tourism site for WI - Kenosha section",
+        "Look up Kenosha historical society for unique facts",
+        "Search for annual festivals or events in Kenosha",
+        "Find notable residents or businesses from Kenosha"
+      ]
+    },
+    "waukegan-il": {
+      "name": "Waukegan",
+      "state": "IL",
+      "population": 87000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.3636,
+        "lng": -87.8448
+      },
+      "facts": [
+        "Waukegan is a city in Lake County, Illinois, United States, and its county seat."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Lake County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Waukegan%2C_Illinois",
+      "researchNotes": [
+        "Research Waukegan official website for local attractions",
+        "Check state tourism site for IL - Waukegan section",
+        "Look up Waukegan historical society for unique facts",
+        "Search for annual festivals or events in Waukegan",
+        "Find notable residents or businesses from Waukegan"
+      ]
+    },
+    "highlandpark-il": {
+      "name": "Highland Park",
+      "state": "IL",
+      "population": 30000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.1817,
+        "lng": -87.8006
+      },
+      "facts": [
+        "Per the 2020 census, the population was 30,176."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Lake County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Highland_Park%2C_Illinois",
+      "researchNotes": [
+        "Research Highland Park official website for local attractions",
+        "Check state tourism site for IL - Highland Park section",
+        "Look up Highland Park historical society for unique facts",
+        "Search for annual festivals or events in Highland Park",
+        "Find notable residents or businesses from Highland Park"
+      ]
+    },
+    "evanston-il": {
+      "name": "Evanston",
+      "state": "IL",
+      "population": 75000,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.0451,
+        "lng": -87.6877
+      },
+      "facts": [
+        "Evanston had a population of 78,110 as of 2020."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Cook County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Evanston%2C_Illinois",
+      "researchNotes": [
+        "Research Evanston official website for local attractions",
+        "Check state tourism site for IL - Evanston section",
+        "Look up Evanston historical society for unique facts",
+        "Search for annual festivals or events in Evanston",
+        "Find notable residents or businesses from Evanston"
+      ]
+    },
+    "chicago-il": {
+      "name": "Chicago",
+      "state": "IL",
+      "population": 2700000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.8781,
+        "lng": -87.6298
+      },
+      "facts": [],
+      "attractions": [],
+      "founded": null,
+      "county": "Cook County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Chicago",
+      "researchNotes": [
+        "Research Chicago official website for local attractions",
+        "Check state tourism site for IL - Chicago section",
+        "Look up Chicago historical society for unique facts",
+        "Search for annual festivals or events in Chicago",
+        "Find notable residents or businesses from Chicago"
+      ]
+    },
+    "gary-in": {
+      "name": "Gary",
+      "state": "IN",
+      "population": 75000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.5934,
+        "lng": -87.3464
+      },
+      "facts": [
+        "The population was 69,093 at the 2020 census, making it Indiana's eleventh-most populous city.",
+        "The city has been historically dominated by major industrial activity and is home to U.S."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Lake County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Gary%2C_Indiana",
+      "researchNotes": [
+        "Research Gary official website for local attractions",
+        "Check state tourism site for IN - Gary section",
+        "Look up Gary historical society for unique facts",
+        "Search for annual festivals or events in Gary",
+        "Find notable residents or businesses from Gary"
+      ]
+    },
+    "portage-in": {
+      "name": "Portage",
+      "state": "IN",
+      "population": 37000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.5759,
+        "lng": -87.1762
+      },
+      "facts": [
+        "The population was 37,926 as of the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Porter County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Portage%2C_Indiana",
+      "researchNotes": [
+        "Research Portage official website for local attractions",
+        "Check state tourism site for IN - Portage section",
+        "Look up Portage historical society for unique facts",
+        "Search for annual festivals or events in Portage",
+        "Find notable residents or businesses from Portage"
+      ]
+    },
+    "valparaiso-in": {
+      "name": "Valparaiso",
+      "state": "IN",
+      "population": 35000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.4731,
+        "lng": -87.0611
+      },
+      "facts": [
+        "Valparaiso, colloquially Valpo, is a city in and the county seat of Porter County, Indiana, United States.",
+        "The population was 34,151 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Valparaiso%2C_Indiana",
+      "researchNotes": [
+        "Research Valparaiso official website for local attractions",
+        "Check state tourism site for IN - Valparaiso section",
+        "Look up Valparaiso historical society for unique facts",
+        "Search for annual festivals or events in Valparaiso",
+        "Find notable residents or businesses from Valparaiso"
+      ]
+    },
+    "plymouth-in": {
+      "name": "Plymouth",
+      "state": "IN",
+      "population": 10000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.3436,
+        "lng": -86.31
+      },
+      "facts": [
+        "Plymouth is a city and the county seat of Marshall County, Indiana, United States.",
+        "The population is 10,214 in the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Plymouth%2C_Indiana",
+      "researchNotes": [
+        "Research Plymouth official website for local attractions",
+        "Check state tourism site for IN - Plymouth section",
+        "Look up Plymouth historical society for unique facts",
+        "Search for annual festivals or events in Plymouth",
+        "Find notable residents or businesses from Plymouth"
+      ]
+    },
+    "warsaw-in": {
+      "name": "Warsaw",
+      "state": "IN",
+      "population": 15000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.2381,
+        "lng": -85.853
+      },
+      "facts": [
+        "Warsaw is a city in and the county seat of Kosciusko County, Indiana, United States.",
+        "Warsaw has a population of 15,804 as of the 2020 U.S."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Warsaw%2C_Indiana",
+      "researchNotes": [
+        "Research Warsaw official website for local attractions",
+        "Check state tourism site for IN - Warsaw section",
+        "Look up Warsaw historical society for unique facts",
+        "Search for annual festivals or events in Warsaw",
+        "Find notable residents or businesses from Warsaw"
+      ]
+    },
+    "fortwayne-in": {
+      "name": "Fort Wayne",
+      "state": "IN",
+      "population": 270000,
+      "type": "city",
+      "coordinates": {
+        "lat": 41.0793,
+        "lng": -85.1394
+      },
+      "facts": [
+        "Fort Wayne is a city in Allen County, Indiana, United States, and its county seat.",
+        "The city's population was 263,886 at the 2020 census, making it the second-most populous city in Indiana after Indianapolis, and the 83rd-most populous city in the U.S.",
+        "The Fort Wayne metropolitan area, consisting of Allen and Whitley counties, has an estimated population of 463,000."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Allen County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Fort_Wayne%2C_Indiana",
+      "researchNotes": [
+        "Research Fort Wayne official website for local attractions",
+        "Check state tourism site for IN - Fort Wayne section",
+        "Look up Fort Wayne historical society for unique facts",
+        "Search for annual festivals or events in Fort Wayne",
+        "Find notable residents or businesses from Fort Wayne"
+      ]
+    },
+    "decatur-in": {
+      "name": "Decatur",
+      "state": "IN",
+      "population": 9500,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.8306,
+        "lng": -84.9291
+      },
+      "facts": [
+        "It is the county seat of Adams County.",
+        "Decatur is home to Adams Memorial Hospital, which was designated as one of the \"Top 100\" Critical Access Hospitals in the United States.",
+        "The population of Decatur was 9,913 at the 2020 census, up from 9,405 at the 2010 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Adams County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Decatur%2C_Indiana",
+      "researchNotes": [
+        "Research Decatur official website for local attractions",
+        "Check state tourism site for IN - Decatur section",
+        "Look up Decatur historical society for unique facts",
+        "Search for annual festivals or events in Decatur",
+        "Find notable residents or businesses from Decatur"
+      ]
+    },
+    "vanwert-oh": {
+      "name": "Van Wert",
+      "state": "OH",
+      "population": 10500,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.8695,
+        "lng": -84.5844
+      },
+      "facts": [
+        "Van Wert is a city in Van Wert County, Ohio, United States, and its county seat.",
+        "The population was 11,092 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Wert County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Van_Wert%2C_Ohio",
+      "researchNotes": [
+        "Research Van Wert official website for local attractions",
+        "Check state tourism site for OH - Van Wert section",
+        "Look up Van Wert historical society for unique facts",
+        "Search for annual festivals or events in Van Wert",
+        "Find notable residents or businesses from Van Wert"
+      ]
+    },
+    "lima-oh": {
+      "name": "Lima",
+      "state": "OH",
+      "population": 36000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.7425,
+        "lng": -84.1052
+      },
+      "facts": [
+        "Lima is a city in Allen County, Ohio, United States, and its county seat.",
+        "As of the 2020 census, the city had a population of 35,579."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Allen County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Lima%2C_Ohio",
+      "researchNotes": [
+        "Research Lima official website for local attractions",
+        "Check state tourism site for OH - Lima section",
+        "Look up Lima historical society for unique facts",
+        "Search for annual festivals or events in Lima",
+        "Find notable residents or businesses from Lima"
+      ]
+    },
+    "bellefontaine-oh": {
+      "name": "Bellefontaine",
+      "state": "OH",
+      "population": 14000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.3614,
+        "lng": -83.7596
+      },
+      "facts": [
+        "Bellefontaine is a city in Logan County, Ohio, United States, and its county seat.",
+        "Located 48 miles (77 km) northwest of Columbus, the population was 14,115 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Logan County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Bellefontaine%2C_Ohio",
+      "researchNotes": [
+        "Research Bellefontaine official website for local attractions",
+        "Check state tourism site for OH - Bellefontaine section",
+        "Look up Bellefontaine historical society for unique facts",
+        "Search for annual festivals or events in Bellefontaine",
+        "Find notable residents or businesses from Bellefontaine"
+      ]
+    },
+    "marysville-oh": {
+      "name": "Marysville",
+      "state": "OH",
+      "population": 25000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.2364,
+        "lng": -83.3677
+      },
+      "facts": [
+        "Marysville is a city in Union County, Ohio, United States, and its county seat.",
+        "The population was 25,571 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Union County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Marysville%2C_Ohio",
+      "researchNotes": [
+        "Research Marysville official website for local attractions",
+        "Check state tourism site for OH - Marysville section",
+        "Look up Marysville historical society for unique facts",
+        "Search for annual festivals or events in Marysville",
+        "Find notable residents or businesses from Marysville"
+      ]
+    },
+    "delaware-oh": {
+      "name": "Delaware",
+      "state": "OH",
+      "population": 40000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.2987,
+        "lng": -83.0679
+      },
+      "facts": [
+        "Delaware is a city in Delaware County, Ohio, United States, and its county seat.",
+        "The population was 41,302 at the 2020 census.",
+        "Delaware was founded in 1808 and was incorporated in 1816."
+      ],
+      "attractions": [],
+      "founded": 1808,
+      "county": "Delaware County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Delaware%2C_Ohio",
+      "researchNotes": [
+        "Research Delaware official website for local attractions",
+        "Check state tourism site for OH - Delaware section",
+        "Look up Delaware historical society for unique facts",
+        "Search for annual festivals or events in Delaware",
+        "Find notable residents or businesses from Delaware"
+      ]
+    },
+    "sunbury-oh": {
+      "name": "Sunbury",
+      "state": "OH",
+      "population": 5000,
+      "type": "village",
+      "coordinates": {
+        "lat": 40.2431,
+        "lng": -82.859
+      },
+      "facts": [
+        "The population was 6,614 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Delaware County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Sunbury%2C_Ohio",
+      "researchNotes": [
+        "Research Sunbury official website for local attractions",
+        "Check state tourism site for OH - Sunbury section",
+        "Look up Sunbury historical society for unique facts",
+        "Search for annual festivals or events in Sunbury",
+        "Find notable residents or businesses from Sunbury"
+      ]
+    },
+    "westerville-oh": {
+      "name": "Westerville",
+      "state": "OH",
+      "population": 39000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.1262,
+        "lng": -82.9291
+      },
+      "facts": [
+        "A northeastern suburb of Columbus as well as the home of Otterbein University, the population was 39,190 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": null,
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Westerville%2C_Ohio",
+      "researchNotes": [
+        "Research Westerville official website for local attractions",
+        "Check state tourism site for OH - Westerville section",
+        "Look up Westerville historical society for unique facts",
+        "Search for annual festivals or events in Westerville",
+        "Find notable residents or businesses from Westerville"
+      ]
+    },
+    "columbus-oh": {
+      "name": "Columbus",
+      "state": "OH",
+      "population": 900000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.9612,
+        "lng": -82.9988
+      },
+      "facts": [
+        "With a population of 905,748 at the 2020 census, it is the 14th-most populous city in the U.S., second-most populous city in the Midwest, and third-most populous U.S.",
+        "Columbus is the county seat of Franklin County; it also extends into Delaware and Fairfield counties."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Columbus%2C_Ohio",
+      "researchNotes": [
+        "Research Columbus official website for local attractions",
+        "Check state tourism site for OH - Columbus section",
+        "Look up Columbus historical society for unique facts",
+        "Search for annual festivals or events in Columbus",
+        "Find notable residents or businesses from Columbus"
+      ]
+    },
+    "reynoldsburg-oh": {
+      "name": "Reynoldsburg",
+      "state": "OH",
+      "population": 37000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.9548,
+        "lng": -82.8121
+      },
+      "facts": [
+        "The population was 41,076 at the 2020 census, making it the 30th-most populous city in Ohio."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": null,
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Reynoldsburg%2C_Ohio",
+      "researchNotes": [
+        "Research Reynoldsburg official website for local attractions",
+        "Check state tourism site for OH - Reynoldsburg section",
+        "Look up Reynoldsburg historical society for unique facts",
+        "Search for annual festivals or events in Reynoldsburg",
+        "Find notable residents or businesses from Reynoldsburg"
+      ]
+    },
+    "newark-oh": {
+      "name": "Newark",
+      "state": "OH",
+      "population": 49000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.0581,
+        "lng": -82.4013
+      },
+      "facts": [
+        "Newark is a city in Licking County, Ohio, United States, and its county seat.",
+        "The population was 49,934 at the 2020 census, making it the 18th-largest city in Ohio.",
+        "It is most known for having the world's largest basket, former headquarters of the now defunct Longaberger Company."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Licking County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Newark%2C_Ohio",
+      "researchNotes": [
+        "Research Newark official website for local attractions",
+        "Check state tourism site for OH - Newark section",
+        "Look up Newark historical society for unique facts",
+        "Search for annual festivals or events in Newark",
+        "Find notable residents or businesses from Newark"
+      ]
+    },
+    "zanesville-oh": {
+      "name": "Zanesville",
+      "state": "OH",
+      "population": 25000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.9403,
+        "lng": -82.0132
+      },
+      "facts": [
+        "Zanesville is a city in Muskingum County, Ohio, United States, and its county seat."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Muskingum County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Zanesville%2C_Ohio",
+      "researchNotes": [
+        "Research Zanesville official website for local attractions",
+        "Check state tourism site for OH - Zanesville section",
+        "Look up Zanesville historical society for unique facts",
+        "Search for annual festivals or events in Zanesville",
+        "Find notable residents or businesses from Zanesville"
+      ]
+    },
+    "cambridge-oh": {
+      "name": "Cambridge",
+      "state": "OH",
+      "population": 11000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.0312,
+        "lng": -81.5882
+      },
+      "facts": [
+        "Cambridge is a city in Guernsey County, Ohio, United States, and its county seat.",
+        "The population was 10,089 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Guernsey County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Cambridge%2C_Ohio",
+      "researchNotes": [
+        "Research Cambridge official website for local attractions",
+        "Check state tourism site for OH - Cambridge section",
+        "Look up Cambridge historical society for unique facts",
+        "Search for annual festivals or events in Cambridge",
+        "Find notable residents or businesses from Cambridge"
+      ]
+    },
+    "stclairsville-oh": {
+      "name": "St. Clairsville",
+      "state": "OH",
+      "population": 5000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.0806,
+        "lng": -80.9009
+      },
+      "facts": [
+        "Clairsville or Saint Clairsville is a city in Belmont County, Ohio, United States, and its county seat.",
+        "The population was 5,096 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Belmont County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/St._Clairsville%2C_Ohio",
+      "researchNotes": [
+        "Research St. Clairsville official website for local attractions",
+        "Check state tourism site for OH - St. Clairsville section",
+        "Look up St. Clairsville historical society for unique facts",
+        "Search for annual festivals or events in St. Clairsville",
+        "Find notable residents or businesses from St. Clairsville"
+      ]
+    },
+    "bridgeport-oh": {
+      "name": "Bridgeport",
+      "state": "OH",
+      "population": 1800,
+      "type": "village",
+      "coordinates": {
+        "lat": 40.1089,
+        "lng": -80.7545
+      },
+      "facts": [
+        "The population was 1,582 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Belmont County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Bridgeport%2C_Ohio",
+      "researchNotes": [
+        "Research Bridgeport official website for local attractions",
+        "Check state tourism site for OH - Bridgeport section",
+        "Look up Bridgeport historical society for unique facts",
+        "Search for annual festivals or events in Bridgeport",
+        "Find notable residents or businesses from Bridgeport"
+      ]
+    },
+    "wheeling-wv": {
+      "name": "Wheeling",
+      "state": "WV",
+      "population": 27000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.0687,
+        "lng": -80.7209
+      },
+      "facts": [
+        "The county seat of Ohio County, it lies along the Ohio River in the foothills of the Appalachian Mountains within the state's Northern Panhandle.",
+        "It is the fifth-most populous city in West Virginia and the most populous city in the Northern Panhandle with a population of 27,062 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Wheeling%2C_West_Virginia",
+      "researchNotes": [
+        "Research Wheeling official website for local attractions",
+        "Check state tourism site for WV - Wheeling section",
+        "Look up Wheeling historical society for unique facts",
+        "Search for annual festivals or events in Wheeling",
+        "Find notable residents or businesses from Wheeling"
+      ]
+    },
+    "triadelphia-wv": {
+      "name": "Triadelphia",
+      "state": "WV",
+      "population": 800,
+      "type": "town",
+      "coordinates": {
+        "lat": 40.0634,
+        "lng": -80.6309
+      },
+      "facts": [
+        "The population was 669 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Ohio County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Triadelphia%2C_West_Virginia",
+      "researchNotes": [
+        "Research Triadelphia official website for local attractions",
+        "Check state tourism site for WV - Triadelphia section",
+        "Look up Triadelphia historical society for unique facts",
+        "Search for annual festivals or events in Triadelphia",
+        "Find notable residents or businesses from Triadelphia"
+      ]
+    },
+    "washington-pa": {
+      "name": "Washington",
+      "state": "PA",
+      "population": 13000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.174,
+        "lng": -80.2462
+      },
+      "facts": [
+        "Washington, also known as Little Washington to distinguish it from the District of Columbia, is a city in Washington County, Pennsylvania, United States, and its county seat.",
+        "The population was 13,176 at the 2020 census.",
+        "The city is home to Washington & Jefferson College and Pony League baseball."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Washington County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Washington%2C_Pennsylvania",
+      "researchNotes": [
+        "Research Washington official website for local attractions",
+        "Check state tourism site for PA - Washington section",
+        "Look up Washington historical society for unique facts",
+        "Search for annual festivals or events in Washington",
+        "Find notable residents or businesses from Washington"
+      ]
+    },
+    "canonsburg-pa": {
+      "name": "Canonsburg",
+      "state": "PA",
+      "population": 9000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.262,
+        "lng": -80.1878
+      },
+      "facts": [
+        "The population was 9,735 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Washington County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Canonsburg%2C_Pennsylvania",
+      "researchNotes": [
+        "Research Canonsburg official website for local attractions",
+        "Check state tourism site for PA - Canonsburg section",
+        "Look up Canonsburg historical society for unique facts",
+        "Search for annual festivals or events in Canonsburg",
+        "Find notable residents or businesses from Canonsburg"
+      ]
+    },
+    "peterstownship-pa": {
+      "name": "Peters Township",
+      "state": "PA",
+      "population": 21000,
+      "type": "town",
+      "coordinates": {
+        "lat": 40.3351,
+        "lng": -80.0809
+      },
+      "facts": [],
+      "attractions": [],
+      "founded": null,
+      "county": "Franklin County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Peters_Township%2C_Pennsylvania",
+      "researchNotes": [
+        "Research Peters Township official website for local attractions",
+        "Check state tourism site for PA - Peters Township section",
+        "Look up Peters Township historical society for unique facts",
+        "Search for annual festivals or events in Peters Township",
+        "Find notable residents or businesses from Peters Township"
+      ]
+    },
+    "bethelpark-pa": {
+      "name": "Bethel Park",
+      "state": "PA",
+      "population": 32000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.3276,
+        "lng": -80.0387
+      },
+      "facts": [
+        "The population was 33,577 as of the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Allegheny County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Bethel_Park%2C_Pennsylvania",
+      "researchNotes": [
+        "Research Bethel Park official website for local attractions",
+        "Check state tourism site for PA - Bethel Park section",
+        "Look up Bethel Park historical society for unique facts",
+        "Search for annual festivals or events in Bethel Park",
+        "Find notable residents or businesses from Bethel Park"
+      ]
+    },
+    "pittsburgh-pa": {
+      "name": "Pittsburgh",
+      "state": "PA",
+      "population": 300000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.4406,
+        "lng": -79.9959
+      },
+      "facts": [
+        "Pittsburgh is a city in Allegheny County, Pennsylvania, United States, and its county seat."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Allegheny County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Pittsburgh",
+      "researchNotes": [
+        "Research Pittsburgh official website for local attractions",
+        "Check state tourism site for PA - Pittsburgh section",
+        "Look up Pittsburgh historical society for unique facts",
+        "Search for annual festivals or events in Pittsburgh",
+        "Find notable residents or businesses from Pittsburgh"
+      ]
+    },
+    "sewickley-pa": {
+      "name": "Sewickley",
+      "state": "PA",
+      "population": 4000,
+      "type": "town",
+      "coordinates": {
+        "lat": 40.5356,
+        "lng": -80.1848
+      },
+      "facts": [
+        "The population was 3,907 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Allegheny County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Sewickley%2C_Pennsylvania",
+      "researchNotes": [
+        "Research Sewickley official website for local attractions",
+        "Check state tourism site for PA - Sewickley section",
+        "Look up Sewickley historical society for unique facts",
+        "Search for annual festivals or events in Sewickley",
+        "Find notable residents or businesses from Sewickley"
+      ]
+    },
+    "beaver-pa": {
+      "name": "Beaver",
+      "state": "PA",
+      "population": 4300,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.6956,
+        "lng": -80.3048
+      },
+      "facts": [
+        "Beaver is a borough in Beaver County, Pennsylvania, United States, and its county seat.",
+        "As of the 2020 census, the population was 4,438."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Beaver County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Beaver%2C_Pennsylvania",
+      "researchNotes": [
+        "Research Beaver official website for local attractions",
+        "Check state tourism site for PA - Beaver section",
+        "Look up Beaver historical society for unique facts",
+        "Search for annual festivals or events in Beaver",
+        "Find notable residents or businesses from Beaver"
+      ]
+    },
+    "eastliverpool-oh": {
+      "name": "East Liverpool",
+      "state": "OH",
+      "population": 10000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.6187,
+        "lng": -80.5773
+      },
+      "facts": [
+        "The population was 9,958 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Columbiana County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/East_Liverpool%2C_Ohio",
+      "researchNotes": [
+        "Research East Liverpool official website for local attractions",
+        "Check state tourism site for OH - East Liverpool section",
+        "Look up East Liverpool historical society for unique facts",
+        "Search for annual festivals or events in East Liverpool",
+        "Find notable residents or businesses from East Liverpool"
+      ]
+    },
+    "salem-oh": {
+      "name": "Salem",
+      "state": "OH",
+      "population": 12000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.9009,
+        "lng": -80.8567
+      },
+      "facts": [
+        "The population was 11,915 at the 2020 census.",
+        "Salem was founded by Quakers in 1806 and played a key role in the abolitionist movement as a hub of the Underground Railroad.",
+        "It is home to Allegheny Wesleyan College and Kent State University at Salem."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Columbiana County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Salem%2C_Ohio",
+      "researchNotes": [
+        "Research Salem official website for local attractions",
+        "Check state tourism site for OH - Salem section",
+        "Look up Salem historical society for unique facts",
+        "Search for annual festivals or events in Salem",
+        "Find notable residents or businesses from Salem"
+      ]
+    },
+    "alliance-oh": {
+      "name": "Alliance",
+      "state": "OH",
+      "population": 22000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.9153,
+        "lng": -81.1059
+      },
+      "facts": [
+        "The population was 21,672 at the 2020 census.",
+        "It was established in 1854 by the merger of three smaller communities and was a manufacturing and railroad hub in the 20th century.",
+        "The University of Mount Union, a private liberal arts college established in 1846, is located in the city."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Stark County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Alliance%2C_Ohio",
+      "researchNotes": [
+        "Research Alliance official website for local attractions",
+        "Check state tourism site for OH - Alliance section",
+        "Look up Alliance historical society for unique facts",
+        "Search for annual festivals or events in Alliance",
+        "Find notable residents or businesses from Alliance"
+      ]
+    },
+    "canton-oh": {
+      "name": "Canton",
+      "state": "OH",
+      "population": 71000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.7989,
+        "lng": -81.3784
+      },
+      "facts": [
+        "Canton is a city in Stark County, Ohio, United States, and its county seat.",
+        "It is the eighth-most populous city in Ohio with a population of 70,872 at the 2020 census, while the Canton–Massillon metropolitan area has an estimated 400,000 residents."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Stark County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Canton%2C_Ohio",
+      "researchNotes": [
+        "Research Canton official website for local attractions",
+        "Check state tourism site for OH - Canton section",
+        "Look up Canton historical society for unique facts",
+        "Search for annual festivals or events in Canton",
+        "Find notable residents or businesses from Canton"
+      ]
+    },
+    "massillon-oh": {
+      "name": "Massillon",
+      "state": "OH",
+      "population": 32000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.7967,
+        "lng": -81.5215
+      },
+      "facts": [
+        "The population was 32,146 at the 2020 census.",
+        "Massillon is a principal city of the Canton–Massillon metropolitan area, which includes all of Stark and Carroll counties and had a population of 401,574 in 2020."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Stark County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Massillon%2C_Ohio",
+      "researchNotes": [
+        "Research Massillon official website for local attractions",
+        "Check state tourism site for OH - Massillon section",
+        "Look up Massillon historical society for unique facts",
+        "Search for annual festivals or events in Massillon",
+        "Find notable residents or businesses from Massillon"
+      ]
+    },
+    "wooster-oh": {
+      "name": "Wooster",
+      "state": "OH",
+      "population": 27000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.8051,
+        "lng": -81.9351
+      },
+      "facts": [
+        "Wooster is a city in Wayne County, Ohio, United States, and its county seat.",
+        "The population was 27,232 at the 2020 census.",
+        "Wooster has the main branch and administrative offices of the Wayne County Public Library, and is home to the private College of Wooster."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Wayne County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Wooster%2C_Ohio",
+      "researchNotes": [
+        "Research Wooster official website for local attractions",
+        "Check state tourism site for OH - Wooster section",
+        "Look up Wooster historical society for unique facts",
+        "Search for annual festivals or events in Wooster",
+        "Find notable residents or businesses from Wooster"
+      ]
+    },
+    "mansfield-oh": {
+      "name": "Mansfield",
+      "state": "OH",
+      "population": 47000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.7584,
+        "lng": -82.5154
+      },
+      "facts": [
+        "Mansfield is a city in Richland County, Ohio, United States, and its county seat.",
+        "The population was 47,534 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Richland County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Mansfield%2C_Ohio",
+      "researchNotes": [
+        "Research Mansfield official website for local attractions",
+        "Check state tourism site for OH - Mansfield section",
+        "Look up Mansfield historical society for unique facts",
+        "Search for annual festivals or events in Mansfield",
+        "Find notable residents or businesses from Mansfield"
+      ]
+    },
+    "marion-oh": {
+      "name": "Marion",
+      "state": "OH",
+      "population": 36000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.5887,
+        "lng": -83.1285
+      },
+      "facts": [
+        "Marion is a city in Marion County, Ohio, United States, and its county seat.",
+        "The population was 35,999 at the 2020 census, down slightly from 36,837 at the 2010 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Marion County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Marion%2C_Ohio",
+      "researchNotes": [
+        "Research Marion official website for local attractions",
+        "Check state tourism site for OH - Marion section",
+        "Look up Marion historical society for unique facts",
+        "Search for annual festivals or events in Marion",
+        "Find notable residents or businesses from Marion"
+      ]
+    },
+    "dublin-oh": {
+      "name": "Dublin",
+      "state": "OH",
+      "population": 47000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.0992,
+        "lng": -83.1141
+      },
+      "facts": [
+        "The population was 49,328 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": null,
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Dublin%2C_Ohio",
+      "researchNotes": [
+        "Research Dublin official website for local attractions",
+        "Check state tourism site for OH - Dublin section",
+        "Look up Dublin historical society for unique facts",
+        "Search for annual festivals or events in Dublin",
+        "Find notable residents or businesses from Dublin"
+      ]
+    },
+    "richmond-in": {
+      "name": "Richmond",
+      "state": "IN",
+      "population": 36000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.8289,
+        "lng": -84.8903
+      },
+      "facts": [
+        "Bordering the state of Ohio, it is the county seat of Wayne County.",
+        "In the 2020 census, the city had a population of 35,720."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Wayne County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Richmond%2C_Indiana",
+      "researchNotes": [
+        "Research Richmond official website for local attractions",
+        "Check state tourism site for IN - Richmond section",
+        "Look up Richmond historical society for unique facts",
+        "Search for annual festivals or events in Richmond",
+        "Find notable residents or businesses from Richmond"
+      ]
+    },
+    "newcastle-in": {
+      "name": "New Castle",
+      "state": "IN",
+      "population": 18000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.9289,
+        "lng": -85.3703
+      },
+      "facts": [
+        "Located 44 miles (71 km) east-northeast of Indianapolis, on the Big Blue River, the city is the county seat of Henry County.",
+        "New Castle is home to New Castle Fieldhouse, the largest high school gymnasium in the world."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Henry County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/New_Castle%2C_Indiana",
+      "researchNotes": [
+        "Research New Castle official website for local attractions",
+        "Check state tourism site for IN - New Castle section",
+        "Look up New Castle historical society for unique facts",
+        "Search for annual festivals or events in New Castle",
+        "Find notable residents or businesses from New Castle"
+      ]
+    },
+    "anderson-in": {
+      "name": "Anderson",
+      "state": "IN",
+      "population": 56000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.1053,
+        "lng": -85.6803
+      },
+      "facts": [
+        "Anderson is a city in and the county seat of Madison County, Indiana, United States.",
+        "The population was 54,788 at the 2020 census.",
+        "It is named after Chief William Anderson."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Anderson%2C_Indiana",
+      "researchNotes": [
+        "Research Anderson official website for local attractions",
+        "Check state tourism site for IN - Anderson section",
+        "Look up Anderson historical society for unique facts",
+        "Search for annual festivals or events in Anderson",
+        "Find notable residents or businesses from Anderson"
+      ]
+    },
+    "noblesville-in": {
+      "name": "Noblesville",
+      "state": "IN",
+      "population": 65000,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.0456,
+        "lng": -86.0086
+      },
+      "facts": [
+        "Noblesville is a city in and the county seat of Hamilton County, Indiana, United States, a part of the north Indianapolis suburbs along the White River.",
+        "The population was 69,604 at the 2020 census, making it the state's 10th most populous city, up from 14th in 2010."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Noblesville%2C_Indiana",
+      "researchNotes": [
+        "Research Noblesville official website for local attractions",
+        "Check state tourism site for IN - Noblesville section",
+        "Look up Noblesville historical society for unique facts",
+        "Search for annual festivals or events in Noblesville",
+        "Find notable residents or businesses from Noblesville"
+      ]
+    },
+    "fishers-in": {
+      "name": "Fishers",
+      "state": "IN",
+      "population": 95000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.9568,
+        "lng": -85.9685
+      },
+      "facts": [
+        "As of the 2020 census the population was 98,677."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Hamilton County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Fishers%2C_Indiana",
+      "researchNotes": [
+        "Research Fishers official website for local attractions",
+        "Check state tourism site for IN - Fishers section",
+        "Look up Fishers historical society for unique facts",
+        "Search for annual festivals or events in Fishers",
+        "Find notable residents or businesses from Fishers"
+      ]
+    },
+    "indianapolis-in": {
+      "name": "Indianapolis",
+      "state": "IN",
+      "population": 880000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.7684,
+        "lng": -86.1581
+      },
+      "facts": [
+        "state of Indiana and the county seat of Marion County."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Indianapolis",
+      "researchNotes": [
+        "Research Indianapolis official website for local attractions",
+        "Check state tourism site for IN - Indianapolis section",
+        "Look up Indianapolis historical society for unique facts",
+        "Search for annual festivals or events in Indianapolis",
+        "Find notable residents or businesses from Indianapolis"
+      ]
+    },
+    "plainfield-in": {
+      "name": "Plainfield",
+      "state": "IN",
+      "population": 34000,
+      "type": "town",
+      "coordinates": {
+        "lat": 39.7042,
+        "lng": -86.3994
+      },
+      "facts": [
+        "The population was 27,631 at the 2010 census, and in 2022 the estimated population was 36,074."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Hendricks County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Plainfield%2C_Indiana",
+      "researchNotes": [
+        "Research Plainfield official website for local attractions",
+        "Check state tourism site for IN - Plainfield section",
+        "Look up Plainfield historical society for unique facts",
+        "Search for annual festivals or events in Plainfield",
+        "Find notable residents or businesses from Plainfield"
+      ]
+    },
+    "greencastle-in": {
+      "name": "Greencastle",
+      "state": "IN",
+      "population": 10000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.6439,
+        "lng": -86.8647
+      },
+      "facts": [
+        "Greencastle is a city in Greencastle Township, Putnam County, Indiana, United States, and the county seat of Putnam County.",
+        "The population was 9,820 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Putnam County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Greencastle%2C_Indiana",
+      "researchNotes": [
+        "Research Greencastle official website for local attractions",
+        "Check state tourism site for IN - Greencastle section",
+        "Look up Greencastle historical society for unique facts",
+        "Search for annual festivals or events in Greencastle",
+        "Find notable residents or businesses from Greencastle"
+      ]
+    },
+    "terrehaute-in": {
+      "name": "Terre Haute",
+      "state": "IN",
+      "population": 61000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.4667,
+        "lng": -87.4139
+      },
+      "facts": [
+        "Terre Haute is a city in Vigo County, Indiana, United States, and its county seat.",
+        "As of the 2020 census, the city had a population of 58,389 and its metropolitan area had a population of 168,716."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Vigo County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Terre_Haute%2C_Indiana",
+      "researchNotes": [
+        "Research Terre Haute official website for local attractions",
+        "Check state tourism site for IN - Terre Haute section",
+        "Look up Terre Haute historical society for unique facts",
+        "Search for annual festivals or events in Terre Haute",
+        "Find notable residents or businesses from Terre Haute"
+      ]
+    },
+    "robinson-il": {
+      "name": "Robinson",
+      "state": "IL",
+      "population": 7500,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.0053,
+        "lng": -87.7392
+      },
+      "facts": [
+        "Robinson is a city in and the county seat of Crawford County, Illinois, United States.",
+        "The population was 7,150 at the 2020 census, down from 7,713 at the 2010 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Robinson%2C_Illinois",
+      "researchNotes": [
+        "Research Robinson official website for local attractions",
+        "Check state tourism site for IL - Robinson section",
+        "Look up Robinson historical society for unique facts",
+        "Search for annual festivals or events in Robinson",
+        "Find notable residents or businesses from Robinson"
+      ]
+    },
+    "lawrenceville-il": {
+      "name": "Lawrenceville",
+      "state": "IL",
+      "population": 4300,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.7297,
+        "lng": -87.6819
+      },
+      "facts": [
+        "Lawrenceville is a city in and the county seat of Lawrence County, Illinois, United States, located along the Embarras River.",
+        "The population was 4,348 at the 2010 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Lawrenceville%2C_Illinois",
+      "researchNotes": [
+        "Research Lawrenceville official website for local attractions",
+        "Check state tourism site for IL - Lawrenceville section",
+        "Look up Lawrenceville historical society for unique facts",
+        "Search for annual festivals or events in Lawrenceville",
+        "Find notable residents or businesses from Lawrenceville"
+      ]
+    },
+    "vincennes-in": {
+      "name": "Vincennes",
+      "state": "IN",
+      "population": 17000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.6772,
+        "lng": -87.5286
+      },
+      "facts": [
+        "Vincennes is a city in, and the county seat of, Knox County, Indiana, United States.",
+        "It was founded in 1732 by French fur traders, including the namesake François-Marie Bissot, Sieur de Vincennes.",
+        "The population was 16,759 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": 1732,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Vincennes%2C_Indiana",
+      "researchNotes": [
+        "Research Vincennes official website for local attractions",
+        "Check state tourism site for IN - Vincennes section",
+        "Look up Vincennes historical society for unique facts",
+        "Search for annual festivals or events in Vincennes",
+        "Find notable residents or businesses from Vincennes"
+      ]
+    },
+    "mountcarmel-il": {
+      "name": "Mount Carmel",
+      "state": "IL",
+      "population": 7200,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.4106,
+        "lng": -87.7614
+      },
+      "facts": [
+        "Mount Carmel is a city in and the county seat of Wabash County, Illinois, United States.",
+        "At the time of the 2020 census, the population was 7,015, and it is the largest city in the county.",
+        "The next largest town in Wabash County is Allendale, population 458."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Mount_Carmel%2C_Illinois",
+      "researchNotes": [
+        "Research Mount Carmel official website for local attractions",
+        "Check state tourism site for IL - Mount Carmel section",
+        "Look up Mount Carmel historical society for unique facts",
+        "Search for annual festivals or events in Mount Carmel",
+        "Find notable residents or businesses from Mount Carmel"
+      ]
+    },
+    "fairfield-il": {
+      "name": "Fairfield",
+      "state": "IL",
+      "population": 5000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.3789,
+        "lng": -88.3598
+      },
+      "facts": [
+        "Fairfield is a city in and the county seat of Wayne County, Illinois, United States, and the location of Frontier Community College.",
+        "The population was 4,883 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Fairfield%2C_Illinois",
+      "researchNotes": [
+        "Research Fairfield official website for local attractions",
+        "Check state tourism site for IL - Fairfield section",
+        "Look up Fairfield historical society for unique facts",
+        "Search for annual festivals or events in Fairfield",
+        "Find notable residents or businesses from Fairfield"
+      ]
+    },
+    "flora-il": {
+      "name": "Flora",
+      "state": "IL",
+      "population": 5000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.6689,
+        "lng": -88.4856
+      },
+      "facts": [
+        "The population was 4,803 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Clay County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Flora%2C_Illinois",
+      "researchNotes": [
+        "Research Flora official website for local attractions",
+        "Check state tourism site for IL - Flora section",
+        "Look up Flora historical society for unique facts",
+        "Search for annual festivals or events in Flora",
+        "Find notable residents or businesses from Flora"
+      ]
+    },
+    "effingham-il": {
+      "name": "Effingham",
+      "state": "IL",
+      "population": 12500,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.12,
+        "lng": -88.5434
+      },
+      "facts": [
+        "Effingham is a city in Effingham County, Illinois, United States, and its county seat.",
+        "Its population was 12,252 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Effingham County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Effingham%2C_Illinois",
+      "researchNotes": [
+        "Research Effingham official website for local attractions",
+        "Check state tourism site for IL - Effingham section",
+        "Look up Effingham historical society for unique facts",
+        "Search for annual festivals or events in Effingham",
+        "Find notable residents or businesses from Effingham"
+      ]
+    },
+    "vandalia-il": {
+      "name": "Vandalia",
+      "state": "IL",
+      "population": 7000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.9606,
+        "lng": -89.0937
+      },
+      "facts": [
+        "Vandalia is a city in and the county seat of Fayette County, Illinois, United States.",
+        "At the 2020 Census, the population was 7,458."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Vandalia%2C_Illinois",
+      "researchNotes": [
+        "Research Vandalia official website for local attractions",
+        "Check state tourism site for IL - Vandalia section",
+        "Look up Vandalia historical society for unique facts",
+        "Search for annual festivals or events in Vandalia",
+        "Find notable residents or businesses from Vandalia"
+      ]
+    },
+    "greenville-il": {
+      "name": "Greenville",
+      "state": "IL",
+      "population": 7000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.8923,
+        "lng": -89.4131
+      },
+      "facts": [
+        "The population as of the 2020 census was 7,083, up from 7,000 at the 2010 census.",
+        "It is the county seat of Bond County."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Bond County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Greenville%2C_Illinois",
+      "researchNotes": [
+        "Research Greenville official website for local attractions",
+        "Check state tourism site for IL - Greenville section",
+        "Look up Greenville historical society for unique facts",
+        "Search for annual festivals or events in Greenville",
+        "Find notable residents or businesses from Greenville"
+      ]
+    },
+    "highland-il": {
+      "name": "Highland",
+      "state": "IL",
+      "population": 10000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.7392,
+        "lng": -89.6712
+      },
+      "facts": [
+        "The population was 9,991 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Madison County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Highland%2C_Illinois",
+      "researchNotes": [
+        "Research Highland official website for local attractions",
+        "Check state tourism site for IL - Highland section",
+        "Look up Highland historical society for unique facts",
+        "Search for annual festivals or events in Highland",
+        "Find notable residents or businesses from Highland"
+      ]
+    },
+    "stlouis-mo": {
+      "name": "St. Louis",
+      "state": "MO",
+      "population": 300000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.627,
+        "lng": -90.1994
+      },
+      "facts": [
+        "In 2020, the city proper had a population of 301,578, while its metropolitan area, which extends into Illinois, had an estimated population of over 2.8 million."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": null,
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/St._Louis",
+      "researchNotes": [
+        "Research St. Louis official website for local attractions",
+        "Check state tourism site for MO - St. Louis section",
+        "Look up St. Louis historical society for unique facts",
+        "Search for annual festivals or events in St. Louis",
+        "Find notable residents or businesses from St. Louis"
+      ]
+    },
+    "wentzville-mo": {
+      "name": "Wentzville",
+      "state": "MO",
+      "population": 40000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.8114,
+        "lng": -90.8526
+      },
+      "facts": [
+        "Census Bureau estimates, the city had a total population of 48,646, making it the 15th-largest city in Missouri.",
+        "Wentzville has been the fastest growing city in Missouri, by percentage population increase from 2000 to 2020."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Charles County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Wentzville%2C_Missouri",
+      "researchNotes": [
+        "Research Wentzville official website for local attractions",
+        "Check state tourism site for MO - Wentzville section",
+        "Look up Wentzville historical society for unique facts",
+        "Search for annual festivals or events in Wentzville",
+        "Find notable residents or businesses from Wentzville"
+      ]
+    },
+    "columbia-mo": {
+      "name": "Columbia",
+      "state": "MO",
+      "population": 125000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.9517,
+        "lng": -92.3341
+      },
+      "facts": [
+        "It was founded in 1821 as the county seat of Boone County and had a population of 126,254 as recorded in the 2020 United States census, making it the fourth-most populous city in Missouri.",
+        "Columbia is a Midwestern college town, home to the University of Missouri, a major research institution also known as MU or Mizzou.",
+        "The city is the fastest-growing municipality in Missouri, with a growth of almost 40% since 2000, and a population estimated at 130,900 in 2024."
+      ],
+      "attractions": [],
+      "founded": 1821,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Columbia%2C_Missouri",
+      "researchNotes": [
+        "Research Columbia official website for local attractions",
+        "Check state tourism site for MO - Columbia section",
+        "Look up Columbia historical society for unique facts",
+        "Search for annual festivals or events in Columbia",
+        "Find notable residents or businesses from Columbia"
+      ]
+    },
+    "boonville-mo": {
+      "name": "Boonville",
+      "state": "MO",
+      "population": 8300,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.9736,
+        "lng": -92.7432
+      },
+      "facts": [
+        "Boonville is a city and the county seat of Cooper County, Missouri, United States.",
+        "The population was 7,964 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Boonville%2C_Missouri",
+      "researchNotes": [
+        "Research Boonville official website for local attractions",
+        "Check state tourism site for MO - Boonville section",
+        "Look up Boonville historical society for unique facts",
+        "Search for annual festivals or events in Boonville",
+        "Find notable residents or businesses from Boonville"
+      ]
+    },
+    "marshall-mo": {
+      "name": "Marshall",
+      "state": "MO",
+      "population": 13000,
+      "type": "city",
+      "coordinates": {
+        "lat": 39.1231,
+        "lng": -93.1971
+      },
+      "facts": [
+        "The population was 13,806 at the 2020 census.",
+        "It is the county seat of Saline County.",
+        "It is home to Missouri Valley College."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Saline County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Marshall%2C_Missouri",
+      "researchNotes": [
+        "Research Marshall official website for local attractions",
+        "Check state tourism site for MO - Marshall section",
+        "Look up Marshall historical society for unique facts",
+        "Search for annual festivals or events in Marshall",
+        "Find notable residents or businesses from Marshall"
+      ]
+    },
+    "sedalia-mo": {
+      "name": "Sedalia",
+      "state": "MO",
+      "population": 21000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.7047,
+        "lng": -93.2283
+      },
+      "facts": [
+        "As of the 2020 census, the city had a total population of 21,725."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Sedalia%2C_Missouri",
+      "researchNotes": [
+        "Research Sedalia official website for local attractions",
+        "Check state tourism site for MO - Sedalia section",
+        "Look up Sedalia historical society for unique facts",
+        "Search for annual festivals or events in Sedalia",
+        "Find notable residents or businesses from Sedalia"
+      ]
+    },
+    "warrensburg-mo": {
+      "name": "Warrensburg",
+      "state": "MO",
+      "population": 20000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.7628,
+        "lng": -93.736
+      },
+      "facts": [
+        "Warrensburg is a city in and the county seat of Johnson County, Missouri, United States.",
+        "Its population was 20,313 at the 2020 census.",
+        "The city is a college town, as it is home to the University of Central Missouri."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "The County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Warrensburg%2C_Missouri",
+      "researchNotes": [
+        "Research Warrensburg official website for local attractions",
+        "Check state tourism site for MO - Warrensburg section",
+        "Look up Warrensburg historical society for unique facts",
+        "Search for annual festivals or events in Warrensburg",
+        "Find notable residents or businesses from Warrensburg"
+      ]
+    },
+    "harrisonville-mo": {
+      "name": "Harrisonville",
+      "state": "MO",
+      "population": 10000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.6531,
+        "lng": -94.3488
+      },
+      "facts": [
+        "The population was 10,121 at the 2020 census.",
+        "It is the county seat of Cass \nCounty."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Cass County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Harrisonville%2C_Missouri",
+      "researchNotes": [
+        "Research Harrisonville official website for local attractions",
+        "Check state tourism site for MO - Harrisonville section",
+        "Look up Harrisonville historical society for unique facts",
+        "Search for annual festivals or events in Harrisonville",
+        "Find notable residents or businesses from Harrisonville"
+      ]
+    },
+    "raymore-mo": {
+      "name": "Raymore",
+      "state": "MO",
+      "population": 22000,
+      "type": "city",
+      "coordinates": {
+        "lat": 38.8022,
+        "lng": -94.4497
+      },
+      "facts": [
+        "Raymore's population estimate is 25,306 as of July 2024.",
+        "The population was 22,941 at the 2020 census."
+      ],
+      "attractions": [],
+      "founded": null,
+      "county": "Cass County",
+      "notableFacts": [],
+      "wikipediaUrl": "https://en.wikipedia.org/wiki/Raymore%2C_Missouri",
+      "researchNotes": [
+        "Research Raymore official website for local attractions",
+        "Check state tourism site for MO - Raymore section",
+        "Look up Raymore historical society for unique facts",
+        "Search for annual festivals or events in Raymore",
+        "Find notable residents or businesses from Raymore"
+      ]
+    }
+  }
+}
