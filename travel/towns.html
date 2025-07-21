@@ -1629,6 +1629,7 @@
         let visitedStates = new Set();
         let stateBoundaries = new Map();
         let stateLayers = new Map();
+        let townMarkers = new Map(); // Store town markers for pulse animation
 
         // Storage configuration
         const STORAGE_KEY = 'townsTravelState';
@@ -1641,43 +1642,12 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Load town boundaries data
+        // Load town boundaries data (disabled due to CORS issues with local files)
         async function loadTownBoundaries() {
-            if (boundariesLoaded) return;
-            
-            console.log('🔄 Loading town boundaries data...');
-            const states = ['il', 'in', 'mo', 'oh', 'pa', 'wi']; // Your route states
-            
-            try {
-                for (const state of states) {
-                    const response = await fetch(`data/chunks/${state}_towns.geojson`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.features) {
-                            data.features.forEach(feature => {
-                                const name = feature.properties.NAME;
-                                const stateAbbr = feature.properties.state_abbr;
-                                const id = `${name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${stateAbbr.toLowerCase()}`;
-                                
-                                boundariesData.set(id, {
-                                    id: id,
-                                    name: name,
-                                    state: stateAbbr,
-                                    geometry: feature.geometry,
-                                    properties: feature.properties
-                                });
-                            });
-                            console.log(`✅ Loaded ${data.features.length} boundaries for ${state.toUpperCase()}`);
-                        }
-                    } else {
-                        console.warn(`⚠️ Failed to load boundaries for ${state.toUpperCase()}`);
-                    }
-                }
-                boundariesLoaded = true;
-                console.log(`✅ Total boundaries loaded: ${boundariesData.size}`);
-            } catch (error) {
-                console.error('❌ Error loading boundaries:', error);
-            }
+            console.log('🔄 Town boundaries loading disabled (CORS issue with file:// protocol)');
+            // Note: When running on a web server (http://), this function can fetch GeoJSON files
+            // For now, we'll skip town boundaries and just use state boundaries
+            boundariesLoaded = false;
         }
 
         // Load state boundaries data
@@ -1901,6 +1871,12 @@
             // Remove existing boundary
             removeTownBoundary(townId);
 
+            // Skip boundary creation if boundaries aren't loaded (to avoid CORS issues)
+            if (!boundariesLoaded) {
+                console.log(`Skipping boundary for ${town.name} - boundaries not loaded`);
+                return;
+            }
+
             const boundary = findTownBoundary(town);
             let layer = null;
 
@@ -2018,8 +1994,7 @@
             
             console.log(`✅ Initialized ${allTowns.length} towns`);
             
-            // Load boundaries data
-            loadTownBoundaries();
+            // Load state boundaries data only (skip town boundaries due to CORS issues with local files)
             loadStateBoundaries();
         }
 
@@ -2098,6 +2073,95 @@
             return R * c;
         }
 
+        function centerMapBetweenTowns() {
+            const lastTown = getLastCheckedInTown();
+            const nextTown = getNextTown();
+            
+            if (!lastTown || !nextTown) return;
+            
+            // Remove any existing next town animation
+            townMarkers.forEach((marker, townId) => {
+                const markerElement = marker._path || marker._container;
+                if (markerElement && markerElement.classList.contains('next-town-marker')) {
+                    markerElement.classList.remove('next-town-marker');
+                }
+            });
+            
+            // Calculate bounds that include both towns
+            const bounds = L.latLngBounds([
+                [lastTown.lat, lastTown.lng],
+                [nextTown.lat, nextTown.lng]
+            ]);
+            
+            // Add padding around the bounds
+            const paddedBounds = bounds.pad(0.3);
+            
+            // Fit the map to show both towns
+            map.fitBounds(paddedBounds, {
+                animate: true,
+                duration: 1.5
+            });
+            
+            // Find the next town marker and add pulse animation
+            setTimeout(() => {
+                const nextTownId = `${nextTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${nextTown.state.toLowerCase()}`;
+                const nextTownMarker = townMarkers.get(nextTownId);
+                if (nextTownMarker) {
+                    // For CircleMarkers, we need to access the DOM element differently
+                    const markerElement = nextTownMarker._path || nextTownMarker._container;
+                    if (markerElement) {
+                        markerElement.classList.add('next-town-marker');
+                        console.log(`Added pulse animation to ${nextTown.name}`);
+                    } else {
+                        console.log(`Could not find marker element for ${nextTown.name}`);
+                    }
+                } else {
+                    console.log(`Could not find marker for ${nextTown.name} (ID: ${nextTownId})`);
+                }
+            }, 100);
+        }
+
+        // Enhanced function to get town facts from multiple sources
+        async function getEnhancedTownFacts(townName, state) {
+            // First, check local database
+            const townId = `${townName.toLowerCase().replace(/[^a-z0-9]/g, '')}-${state.toLowerCase()}`;
+            const localFacts = townFacts[townId] || [];
+            
+            // For now, return local facts
+            // TODO: Add API integration for additional facts
+            return localFacts;
+        }
+
+        // Function to add facts from research
+        function addTownFactsToDatabase(townId, facts) {
+            if (!townFacts[townId]) {
+                townFacts[townId] = [];
+            }
+            townFacts[townId] = [...townFacts[townId], ...facts];
+        }
+
+        function scrollToNextTownTile() {
+            const nextTownTile = document.querySelector('.next-town-tile');
+            if (nextTownTile) {
+                nextTownTile.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'nearest'
+                });
+            }
+        }
+
+        function highlightNextTownTile() {
+            // The highlighting is now handled automatically in updateTownsDisplay
+            // This function just needs to scroll to the next town
+            scrollToNextTownTile();
+            
+            const nextTown = getNextTown();
+            if (nextTown) {
+                console.log(`Scrolled to next town: ${nextTown.name}`);
+            }
+        }
+
         // Check for nearby towns and auto check-in
         function checkNearbyTowns() {
             if (!currentPosition) return;
@@ -2130,6 +2194,40 @@
             if (checkinHistory.length === 0) return null;
             const lastCheckinId = checkinHistory[0].townId;
             return allTowns.find(t => t.id === lastCheckinId);
+        }
+
+        function getNextTown() {
+            const lastTown = getLastCheckedInTown();
+            if (!lastTown) return null;
+            
+            // Find next town in the route sequence
+            const routeKey = Object.keys(townsData)[lastTown.routeIndex];
+            const routeTowns = townsData[routeKey].towns;
+            
+            // Look for next unchecked town in same route
+            for (let i = lastTown.townIndex + 1; i < routeTowns.length; i++) {
+                const town = routeTowns[i];
+                const townId = `${town.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${town.state.toLowerCase()}`;
+                if (!checkedInTowns.has(townId)) {
+                    return town;
+                }
+            }
+            
+            // If no more towns in current route, find first town in next route
+            for (let routeIdx = lastTown.routeIndex + 1; routeIdx < Object.keys(townsData).length; routeIdx++) {
+                const nextRouteKey = Object.keys(townsData)[routeIdx];
+                const nextRouteTowns = townsData[nextRouteKey].towns;
+                
+                for (let i = 0; i < nextRouteTowns.length; i++) {
+                    const town = nextRouteTowns[i];
+                    const townId = `${town.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${town.state.toLowerCase()}`;
+                    if (!checkedInTowns.has(townId)) {
+                        return town;
+                    }
+                }
+            }
+            
+            return null; // No more towns to visit
         }
 
         // Find towns along the route between two towns
@@ -2283,6 +2381,18 @@
             }
             
             showNotification(`Checked in at ${town.name}, ${town.state}! +${town.points} points`, isAuto ? 'auto' : 'manual');
+            
+            // Center map between current and next town with pulse animation (only for manual check-ins)
+            if (!isAuto) {
+                setTimeout(() => {
+                    centerMapBetweenTowns();
+                }, 1000); // Delay to let other animations complete
+                
+                // Highlight the next town tile after check-in
+                setTimeout(() => {
+                    highlightNextTownTile();
+                }, 1500); // Delay to let display update
+            }
         }
 
         // Perform uncheck-in
@@ -2667,6 +2777,17 @@
                     const townCard = document.createElement('div');
                     townCard.className = cardClass;
                     
+                    // Check if this is the next town to visit for pulse effect
+                    const nextTown = getNextTown();
+                    const isNextTown = nextTown && 
+                        nextTown.name === town.name && 
+                        nextTown.state === town.state && 
+                        !isCheckedIn;
+                    
+                    if (isNextTown) {
+                        townCard.classList.add('next-town-tile');
+                    }
+                    
                     townCard.innerHTML = `
                         <div class="town-header">
                             <div class="town-number">${town.number}</div>
@@ -2708,6 +2829,11 @@
                 routeSection.appendChild(townsGrid);
                 container.appendChild(routeSection);
             });
+            
+            // Scroll to the next town with pulse effect after display update
+            setTimeout(() => {
+                scrollToNextTownTile();
+            }, 100);
         }
 
         // Update map with all towns
@@ -2722,6 +2848,9 @@
                     map.removeLayer(layer);
                 }
             });
+
+            // Clear town markers map
+            townMarkers.clear();
 
             // Add town markers and boundaries
             allTowns.forEach(town => {
@@ -2766,6 +2895,9 @@
                     opacity: 1,
                     fillOpacity: 0.8
                 }).addTo(map);
+                
+                // Store marker in the map for later access
+                townMarkers.set(town.id, marker);
                 
                 marker.bindPopup(`
                     <div style="text-align: center;">
@@ -2883,6 +3015,41 @@
                 from { transform: translateX(0); opacity: 1; }
                 to { transform: translateX(100%); opacity: 0; }
             }
+            @keyframes pulse {
+                0% { 
+                    transform: scale(1);
+                }
+                50% { 
+                    transform: scale(1.5);
+                }
+                100% { 
+                    transform: scale(1);
+                }
+            }
+            @keyframes tilePulse {
+                0% { 
+                    box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4);
+                    border-color: #dee2e6;
+                }
+                50% { 
+                    box-shadow: 0 0 0 10px rgba(23, 162, 184, 0.1);
+                    border-color: rgba(23, 162, 184, 0.6);
+                }
+                100% { 
+                    box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4);
+                    border-color: #dee2e6;
+                }
+            }
+            .next-town-marker {
+                animation: pulse 2s infinite ease-in-out;
+                border-radius: 50% !important;
+                position: relative;
+                z-index: 1000;
+            }
+            .next-town-tile {
+                animation: tilePulse 3s infinite ease-in-out;
+                transition: all 0.3s ease;
+            }
         `;
         document.head.appendChild(style);
 
@@ -2965,6 +3132,12 @@
                 console.log('📍 Getting current location...');
                 getCurrentLocation();
             }
+            
+            // Highlight next town ready for check-in and scroll to it
+            console.log('🎯 Highlighting next town for check-in...');
+            setTimeout(() => {
+                highlightNextTownTile();
+            }, 500); // Delay to ensure DOM is fully rendered
             
             // Save state before page unload
             window.addEventListener('beforeunload', () => {

@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2025-01-21",
+    "totalTowns": 0,
+    "sources": [
+      "Wikipedia API",
+      "Official city websites", 
+      "State tourism sites",
+      "Local historical societies"
+    ]
+  },
+  "towns": {
+    "grundycenter-ia": {
+      "name": "Grundy Center",
+      "state": "IA",
+      "population": 2706,
+      "type": "city",
+      "coordinates": {
+        "lat": 42.3611,
+        "lng": -92.7677
+      },
+      "facts": [
+        "Founded in 1877 as a railroad town on the Illinois Central Railroad",
+        "Named after Felix Grundy, a Tennessee politician and U.S. Attorney General",
+        "Home to the annual Grundy County Fair since 1913",
+        "Features historic downtown with well-preserved early 20th-century architecture",
+        "Known for its strong agricultural heritage and corn production"
+      ],
+      "attractions": [
+        "Grundy County Heritage Village",
+        "Historic downtown district",
+        "Grundy County Fair"
+      ],
+      "founded": 1877,
+      "county": "Grundy County",
+      "notableFacts": [
+        "The town was platted by the Illinois Central Railroad",
+        "Has one of Iowa's oldest continuously operating county fairs"
+      ]
+    },
+    "princeton-mo": {
+      "name": "Princeton", 
+      "state": "MO",
+      "population": 1166,
+      "type": "city",
+      "coordinates": {
+        "lat": 40.4031,
+        "lng": -93.5810
+      },
+      "facts": [
+        "County seat of Mercer County since 1846",
+        "Named after Princeton, New Jersey by early settlers",
+        "Historic courthouse built in 1881 still serves the community",
+        "Known for its collection of antique shops around the courthouse square",
+        "Home to the annual Mercer County Fair, one of Missouri's oldest"
+      ],
+      "attractions": [
+        "Historic Mercer County Courthouse",
+        "Antique shops around courthouse square",
+        "Mercer County Fair"
+      ],
+      "founded": 1846,
+      "county": "Mercer County",
+      "notableFacts": [
+        "Courthouse square is listed on the National Register of Historic Places",
+        "Originally called Marion City before being renamed Princeton"
+      ]
+    }
+  }
+}
