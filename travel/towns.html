@@ -3997,12 +3997,17 @@
             
             // Auto-play AI insights if available (with a slight delay for better UX)
             if (townData.openaiInsights && townData.openaiInsights.length > 0) {
-                setTimeout(() => {
+                setTimeout(async () => {
                     const autoPlayBtn = document.getElementById(`audioPlayBtn-${townId}`);
                     if (autoPlayBtn && overlay.parentNode) {
                         // Show a subtle notification about auto-play
                         showNotification('🎧 Auto-playing AI Travel Insights...', 'audio');
-                        playTravelInsights(townId, autoPlayBtn);
+                        try {
+                            await playTravelInsights(townId, autoPlayBtn);
+                        } catch (error) {
+                            console.error('Auto-play failed:', error);
+                            showNotification('⚠️ Auto-play failed, click play button to try again', 'warning');
+                        }
                     }
                 }, 2500); // Wait 2.5 seconds after overlay opens
             }
@@ -4013,9 +4018,183 @@
         let speechQueue = [];
         let isPlaying = false;
         let isPaused = false;
+        let availableVoices = [];
+        let voicesLoaded = false;
+        
+        // Enhanced voice quality settings
+        const VOICE_PREFERENCES = {
+            primary: ['Google', 'Microsoft', 'Amazon', 'Apple'],
+            quality: ['Premium', 'Enhanced', 'Natural', 'HD'],
+            languages: ['en-US', 'en-GB', 'en-AU', 'en-CA'],
+            genders: ['female', 'male'], // Prefer female voices for travel content
+            excludeKeywords: ['monotone', 'robotic', 'basic', 'low']
+        };
+        
+        // Load and cache voices when available
+        function initializeVoices() {
+            if (voicesLoaded) return Promise.resolve();
+            
+            return new Promise((resolve) => {
+                const loadVoices = () => {
+                    availableVoices = window.speechSynthesis.getVoices();
+                    if (availableVoices.length > 0) {
+                        voicesLoaded = true;
+                        console.log(`🎤 Loaded ${availableVoices.length} voices for TTS`);
+                        resolve();
+                    }
+                };
+                
+                // Try to load voices immediately
+                loadVoices();
+                
+                // Also listen for the voiceschanged event
+                window.speechSynthesis.onvoiceschanged = loadVoices;
+                
+                // Fallback timeout
+                setTimeout(() => {
+                    if (!voicesLoaded) {
+                        console.warn('⚠️ Voice loading timeout, using default voice');
+                        voicesLoaded = true;
+                        resolve();
+                    }
+                }, 2000);
+            });
+        }
+        
+        // Smart voice selection with quality scoring
+        function selectBestVoice() {
+            if (!voicesLoaded || availableVoices.length === 0) {
+                return null;
+            }
+            
+            // Score each voice based on quality indicators
+            const scoredVoices = availableVoices.map(voice => {
+                let score = 0;
+                const nameLower = voice.name.toLowerCase();
+                const langLower = voice.lang.toLowerCase();
+                
+                // Prefer English voices
+                if (VOICE_PREFERENCES.languages.some(lang => langLower.startsWith(lang.toLowerCase()))) {
+                    score += 20;
+                }
+                
+                // Prefer high-quality voice providers
+                VOICE_PREFERENCES.primary.forEach((provider, index) => {
+                    if (nameLower.includes(provider.toLowerCase())) {
+                        score += 15 - (index * 2); // Higher score for preferred providers
+                    }
+                });
+                
+                // Prefer quality indicators in name
+                VOICE_PREFERENCES.quality.forEach((quality, index) => {
+                    if (nameLower.includes(quality.toLowerCase())) {
+                        score += 10 - (index * 2);
+                    }
+                });
+                
+                // Prefer female voices for travel content (generally more pleasant)
+                if (nameLower.includes('female') || nameLower.includes('woman') || 
+                    nameLower.includes('zira') || nameLower.includes('hazel') ||
+                    nameLower.includes('susan') || nameLower.includes('karen')) {
+                    score += 5;
+                }
+                
+                // Penalize low-quality indicators
+                VOICE_PREFERENCES.excludeKeywords.forEach(keyword => {
+                    if (nameLower.includes(keyword)) {
+                        score -= 10;
+                    }
+                });
+                
+                // Prefer local voices (not remote)
+                if (voice.localService) {
+                    score += 8;
+                }
+                
+                // Prefer default voices
+                if (voice.default) {
+                    score += 3;
+                }
+                
+                return { voice, score, name: voice.name };
+            });
+            
+            // Sort by score and return the best voice
+            scoredVoices.sort((a, b) => b.score - a.score);
+            
+            if (scoredVoices.length > 0) {
+                console.log(`🎯 Selected voice: ${scoredVoices[0].name} (score: ${scoredVoices[0].score})`);
+                return scoredVoices[0].voice;
+            }
+            
+            return null;
+        }
+        
+        // Preprocess text for better pronunciation and flow
+        function preprocessTextForSpeech(text) {
+            // Remove emojis and special characters that might confuse TTS
+            let processedText = text.replace(/[🔍🏛️🎭🌐🔮🎨🍴⭐🎯📚🤖]/g, '');
+            
+            // Fix common abbreviations and acronyms
+            processedText = processedText
+                .replace(/\bUS\b/g, 'United States')
+                .replace(/\bUSA\b/g, 'United States of America')
+                .replace(/\bUK\b/g, 'United Kingdom')
+                .replace(/\bSt\./g, 'Saint')
+                .replace(/\bDr\./g, 'Doctor')
+                .replace(/\bMt\./g, 'Mount')
+                .replace(/\bFt\./g, 'Fort')
+                .replace(/\b&\b/g, 'and')
+                .replace(/\@/g, 'at');
+            
+            // Add natural pauses
+            processedText = processedText
+                .replace(/\.\s+/g, '. ')  // Ensure space after periods
+                .replace(/,\s*/g, ', ')   // Ensure space after commas
+                .replace(/;\s*/g, '; ')   // Ensure space after semicolons
+                .replace(/:\s*/g, ': ');  // Ensure space after colons
+            
+            // Break up very long sentences
+            processedText = processedText.replace(/([.!?])\s*([A-Z])/g, '$1 $2');
+            
+            // Clean up extra whitespace
+            processedText = processedText.replace(/\s+/g, ' ').trim();
+            
+            return processedText;
+        }
+        
+        // Calculate optimal speech settings based on content
+        function calculateOptimalSpeechSettings(text) {
+            const wordCount = text.split(' ').length;
+            const charCount = text.length;
+            
+            // Adjust rate based on content length and complexity
+            let rate = 0.9; // Default rate
+            if (wordCount > 200) {
+                rate = 0.85; // Slower for longer content
+            } else if (wordCount < 50) {
+                rate = 1.0; // Slightly faster for short content
+            }
+            
+            // Adjust pitch for content type (travel content benefits from slightly higher pitch)
+            let pitch = 1.1; // Slightly elevated for enthusiasm
+            
+            // Adjust volume based on ambient considerations
+            let volume = 0.85; // Good balance
+            
+            // Calculate estimated duration
+            const estimatedDuration = (wordCount / (rate * 150)) * 60; // Rough estimate in seconds
+            
+            return {
+                rate,
+                pitch,
+                volume,
+                estimatedDuration: Math.round(estimatedDuration)
+            };
+        }
 
-        // Text-to-Speech function for AI Travel Insights
-        function playTravelInsights(townId, button) {
+        // Text-to-Speech function for AI Travel Insights (Enhanced)
+        async function playTravelInsights(townId, button) {
             // Stop any current speech
             if (currentSpeech) {
                 window.speechSynthesis.cancel();
@@ -4028,6 +4207,9 @@
                 return;
             }
             
+            // Initialize voices if not already loaded
+            await initializeVoices();
+            
             // Get the town data
             const town = allTowns.find(t => t.id === townId);
             if (!town) return;
@@ -4039,60 +4221,80 @@
                 audioControls.style.display = 'flex';
             }
             
-            // Update button appearance
+            // Update button appearance with loading state
             button.innerHTML = '🔄';
-            button.title = 'Playing...';
-            button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+            button.title = 'Preparing audio...';
+            button.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
             
             // Get insights container
             const insightsContainer = document.getElementById(`insightsContainer-${townId}`);
             
             // Get all insights from the database
-            getEnhancedTownFacts(town.name, town.state).then(townData => {
+            try {
+                const townData = await getEnhancedTownFacts(town.name, town.state);
+                
                 if (!townData.openaiInsights || townData.openaiInsights.length === 0) {
                     if (audioStatus) audioStatus.textContent = '❌ No AI insights to play';
                     resetAudioButton(townId, button);
                     return;
                 }
                 
-                // Prepare the text to speak
+                // Prepare and preprocess the text
                 const introText = `AI Travel Insights for ${town.name}, ${town.state}.`;
                 const insightsText = townData.openaiInsights
-                    .map(insight => insight.replace(/🔍/g, '').replace(/[🏛️🎭🌐🔮🎨🍴]/g, '').trim())
+                    .map(insight => preprocessTextForSpeech(insight))
                     .join('. ');
                 
-                const fullText = `${introText} ${insightsText}`;
+                const fullText = preprocessTextForSpeech(`${introText} ${insightsText}`);
+                
+                // Calculate optimal speech settings
+                const speechSettings = calculateOptimalSpeechSettings(fullText);
                 
                 // Create speech synthesis utterance
                 currentSpeech = new SpeechSynthesisUtterance(fullText);
                 
-                // Configure speech settings
-                currentSpeech.rate = 0.9; // Slightly slower for better comprehension
-                currentSpeech.pitch = 1.0;
-                currentSpeech.volume = 0.8;
+                // Apply optimized settings
+                currentSpeech.rate = speechSettings.rate;
+                currentSpeech.pitch = speechSettings.pitch;
+                currentSpeech.volume = speechSettings.volume;
                 
-                // Try to use a pleasant voice if available
-                const voices = window.speechSynthesis.getVoices();
-                const preferredVoice = voices.find(voice => 
-                    voice.name.includes('Google') || 
-                    voice.name.includes('Microsoft') ||
-                    voice.lang.startsWith('en-US')
-                );
-                if (preferredVoice) {
-                    currentSpeech.voice = preferredVoice;
+                // Use the best available voice
+                const bestVoice = selectBestVoice();
+                if (bestVoice) {
+                    currentSpeech.voice = bestVoice;
+                    console.log(`🎤 Using voice: ${bestVoice.name} (${bestVoice.lang})`);
+                } else {
+                    console.warn('⚠️ No optimal voice found, using default');
                 }
                 
-                // Event handlers
+                // Update status with estimated duration
+                if (audioStatus) {
+                    audioStatus.textContent = `🎧 Loading audio (${speechSettings.estimatedDuration}s estimated)...`;
+                }
+                
+                // Enhanced event handlers
                 currentSpeech.onstart = () => {
                     isPlaying = true;
                     isPaused = false;
-                    if (audioStatus) audioStatus.textContent = '🎧 Playing AI Travel Insights...';
                     
-                    // Highlight the insights container
+                    // Update UI
+                    button.innerHTML = '🎵';
+                    button.title = 'Playing AI Travel Insights';
+                    button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                    
+                    if (audioStatus) {
+                        audioStatus.textContent = `🎧 Playing insights (${speechSettings.estimatedDuration}s)`;
+                    }
+                    
+                    // Enhanced visual feedback
                     if (insightsContainer) {
                         insightsContainer.style.border = '3px solid #28a745';
-                        insightsContainer.style.boxShadow = '0 0 15px rgba(40, 167, 69, 0.3)';
+                        insightsContainer.style.boxShadow = '0 0 20px rgba(40, 167, 69, 0.4)';
+                        insightsContainer.style.background = 'linear-gradient(135deg, #f8fff8, #e8f5e8)';
                     }
+                    
+                    // Animate insights as they're being read
+                    animateInsightsHighlight(townId, townData.openaiInsights.length, speechSettings.estimatedDuration);
                 };
                 
                 currentSpeech.onend = () => {
@@ -4103,35 +4305,69 @@
                     if (audioStatus) audioStatus.textContent = '✅ Finished playing insights!';
                     resetAudioButton(townId, button);
                     
-                    // Remove highlight from container
+                    // Reset visual feedback
                     if (insightsContainer) {
                         insightsContainer.style.border = '2px solid #e74c3c';
                         insightsContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                        insightsContainer.style.background = 'linear-gradient(135deg, #fff5f5, #ffeaea)';
                     }
+                    
+                    // Clear any insight highlights
+                    clearInsightsHighlight(townId);
                     
                     // Hide audio controls after a delay
                     setTimeout(() => {
                         if (audioControls) audioControls.style.display = 'none';
-                    }, 3000);
+                    }, 4000);
+                    
+                    // Show completion notification
+                    showNotification('🎧 Finished playing AI travel insights!', 'audio');
                 };
                 
                 currentSpeech.onerror = (event) => {
                     console.error('Speech synthesis error:', event.error);
-                    if (audioStatus) audioStatus.textContent = '❌ Playback error occurred';
+                    if (audioStatus) {
+                        audioStatus.textContent = `❌ Playback error: ${event.error}`;
+                    }
                     resetAudioButton(townId, button);
                     isPlaying = false;
                     isPaused = false;
                     currentSpeech = null;
+                    
+                    // Show error notification
+                    showNotification('❌ Audio playback failed. Please try again.', 'error');
                 };
                 
-                // Start speaking
-                window.speechSynthesis.speak(currentSpeech);
+                // Enhanced progress tracking
+                let lastWordIndex = 0;
+                currentSpeech.onboundary = (event) => {
+                    if (event.name === 'word') {
+                        lastWordIndex = event.charIndex;
+                        // Update progress indicator if needed
+                        updateAudioProgress(townId, lastWordIndex, fullText.length);
+                    }
+                };
                 
-                console.log(`🎧 Playing AI insights for ${town.name}, ${town.state}`);
-            });
+                // Start speaking with retry mechanism
+                try {
+                    window.speechSynthesis.speak(currentSpeech);
+                    console.log(`🎧 Playing enhanced AI insights for ${town.name}, ${town.state}`);
+                    console.log(`📊 Settings: Rate ${speechSettings.rate}, Pitch ${speechSettings.pitch}, Volume ${speechSettings.volume}`);
+                } catch (error) {
+                    console.error('Failed to start speech synthesis:', error);
+                    if (audioStatus) audioStatus.textContent = '❌ Failed to start playback';
+                    resetAudioButton(townId, button);
+                }
+                
+            } catch (error) {
+                console.error('Error preparing audio:', error);
+                if (audioStatus) audioStatus.textContent = '❌ Error preparing audio';
+                resetAudioButton(townId, button);
+                showNotification('❌ Failed to prepare audio content', 'error');
+            }
         }
         
-        // Pause/Resume audio function
+        // Enhanced Pause/Resume audio function
         function pauseResumeAudio(townId, button) {
             if (!currentSpeech) return;
             
@@ -4142,17 +4378,36 @@
                 window.speechSynthesis.pause();
                 isPaused = true;
                 button.innerHTML = '▶️ Resume';
+                button.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
                 if (audioStatus) audioStatus.textContent = '⏸️ Paused - Click Resume to continue';
+                
+                // Update play button
+                const playButton = document.getElementById(`audioPlayBtn-${townId}`);
+                if (playButton) {
+                    playButton.innerHTML = '⏸️';
+                    playButton.title = 'Audio Paused';
+                    playButton.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+                }
+                
             } else if (isPaused) {
                 // Resume
                 window.speechSynthesis.resume();
                 isPaused = false;
                 button.innerHTML = '⏸️ Pause';
-                if (audioStatus) audioStatus.textContent = '🎧 Playing AI Travel Insights...';
+                button.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+                if (audioStatus) audioStatus.textContent = '🎧 Resuming AI Travel Insights...';
+                
+                // Update play button
+                const playButton = document.getElementById(`audioPlayBtn-${townId}`);
+                if (playButton) {
+                    playButton.innerHTML = '🎵';
+                    playButton.title = 'Playing AI Travel Insights';
+                    playButton.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                }
             }
         }
         
-        // Stop audio function
+        // Enhanced stop audio function
         function stopAudio(townId) {
             if (currentSpeech) {
                 window.speechSynthesis.cancel();
@@ -4165,21 +4420,32 @@
             const audioStatus = document.getElementById(`audioStatus-${townId}`);
             const audioControls = document.getElementById(`audioControls-${townId}`);
             const playButton = document.getElementById(`audioPlayBtn-${townId}`);
+            const pauseButton = document.getElementById(`pauseBtn-${townId}`);
             
             if (audioStatus) audioStatus.textContent = '⏹️ Playback stopped';
             if (playButton) resetAudioButton(townId, playButton);
+            
+            // Reset pause button
+            if (pauseButton) {
+                pauseButton.innerHTML = '⏸️ Pause';
+                pauseButton.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+            }
+            
+            // Clear insights highlighting
+            clearInsightsHighlight(townId);
+            
+            // Reset insights container styling
+            const insightsContainer = document.getElementById(`insightsContainer-${townId}`);
+            if (insightsContainer) {
+                insightsContainer.style.border = '2px solid #e74c3c';
+                insightsContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                insightsContainer.style.background = 'linear-gradient(135deg, #fff5f5, #ffeaea)';
+            }
             
             // Hide controls after a delay
             setTimeout(() => {
                 if (audioControls) audioControls.style.display = 'none';
             }, 2000);
-            
-            // Remove highlight from insights container
-            const insightsContainer = document.getElementById(`insightsContainer-${townId}`);
-            if (insightsContainer) {
-                insightsContainer.style.border = '2px solid #e74c3c';
-                insightsContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
-            }
         }
         
         // Reset audio button to original state
@@ -4189,7 +4455,61 @@
             button.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
         }
         
-        // Clean up speech when overlay is closed
+        // Animate insights highlighting during playback
+        function animateInsightsHighlight(townId, insightCount, duration) {
+            const timePerInsight = (duration * 1000) / insightCount; // Convert to milliseconds
+            
+            for (let i = 0; i < insightCount; i++) {
+                setTimeout(() => {
+                    const insightElement = document.getElementById(`insight-${townId}-${i}`);
+                    if (insightElement) {
+                        // Highlight current insight
+                        insightElement.style.background = 'linear-gradient(135deg, #fff9c4, #f0e68c)';
+                        insightElement.style.border = '3px solid #28a745';
+                        insightElement.style.transform = 'scale(1.02)';
+                        insightElement.style.boxShadow = '0 4px 12px rgba(40, 167, 69, 0.3)';
+                        
+                        // Remove highlight from previous insight
+                        if (i > 0) {
+                            const prevElement = document.getElementById(`insight-${townId}-${i-1}`);
+                            if (prevElement) {
+                                prevElement.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+                                prevElement.style.border = '4px solid #e74c3c';
+                                prevElement.style.transform = 'scale(1)';
+                                prevElement.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                            }
+                        }
+                    }
+                }, i * timePerInsight);
+            }
+        }
+        
+        // Clear insights highlighting
+        function clearInsightsHighlight(townId) {
+            // Find all insight elements for this town and reset their styling
+            let i = 0;
+            while (true) {
+                const insightElement = document.getElementById(`insight-${townId}-${i}`);
+                if (!insightElement) break;
+                
+                insightElement.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+                insightElement.style.border = '4px solid #e74c3c';
+                insightElement.style.transform = 'scale(1)';
+                insightElement.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                i++;
+            }
+        }
+        
+        // Update audio progress indicator
+        function updateAudioProgress(townId, charIndex, totalChars) {
+            const progress = Math.round((charIndex / totalChars) * 100);
+            const audioStatus = document.getElementById(`audioStatus-${townId}`);
+            if (audioStatus && progress > 0) {
+                audioStatus.textContent = `🎧 Playing insights... ${progress}%`;
+            }
+        }
+        
+        // Enhanced clean up speech when overlay is closed
         function cleanupAudio() {
             if (currentSpeech) {
                 window.speechSynthesis.cancel();
@@ -4197,7 +4517,23 @@
             }
             isPlaying = false;
             isPaused = false;
+            
+            // Clear any ongoing animations or highlights
+            const allInsightElements = document.querySelectorAll('[id^="insight-"]');
+            allInsightElements.forEach(element => {
+                element.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+                element.style.border = '4px solid #e74c3c';
+                element.style.transform = 'scale(1)';
+                element.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+            });
         }
+        
+        // Initialize voices when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeVoices().then(() => {
+                console.log('🎤 Voice system initialized and ready');
+            });
+        });
 
         // Close town details modal
         function closeTownModal() {
