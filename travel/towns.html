@@ -1937,101 +1937,28 @@
         let lastApiCall = 0;
         const API_RATE_LIMIT = 1000; // 1 second between calls
 
-        // Get highway route using multiple free routing services
-        async function getHighwayRoute(fromLat, fromLng, toLat, toLng) {
-            // Try multiple free routing services in order of preference
-            const routingServices = [
-                {
-                    name: 'OSRM (Free, No Limits)',
-                    url: `https://router.project-osrm.org/route/v1/driving/${fromLng},${fromLat};${toLng},${toLat}?overview=full&geometries=geojson`,
-                    parseResponse: (data) => {
-                        if (data.routes && data.routes[0] && data.routes[0].geometry) {
-                            const coordinates = data.routes[0].geometry.coordinates;
-                            return coordinates.map(coord => [coord[1], coord[0]]);
-                        }
-                        return null;
-                    }
-                },
-                {
-                    name: 'GraphHopper (2,500/day free)',
-                    url: `https://graphhopper.com/api/1/route?point=${fromLat},${fromLng}&point=${toLat},${toLng}&vehicle=car&locale=en&calc_points=true&key=YOUR_GRAPHHOPPER_KEY`,
-                    parseResponse: (data) => {
-                        if (data.paths && data.paths[0] && data.paths[0].points) {
-                            // GraphHopper uses encoded polyline, would need decoding
-                            // For now, skip this service unless you want to add polyline decoding
-                            return null;
-                        }
-                        return null;
-                    }
-                }
-            ];
-
-            // Try each service
-            for (const service of routingServices) {
-                try {
-                    // Rate limiting
-                    const now = Date.now();
-                    const timeSinceLastCall = now - lastApiCall;
-                    if (timeSinceLastCall < API_RATE_LIMIT) {
-                        await new Promise(resolve => setTimeout(resolve, API_RATE_LIMIT - timeSinceLastCall));
-                    }
-                    lastApiCall = Date.now();
-
-                    console.log(`🔄 Trying ${service.name}...`);
-                    const response = await fetch(service.url);
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        const routeCoords = service.parseResponse(data);
-                        
-                        if (routeCoords && routeCoords.length > 0) {
-                            console.log(`✅ Got route from ${service.name}: ${routeCoords.length} points`);
-                            return routeCoords;
-                        }
-                    } else {
-                        console.log(`❌ ${service.name} returned ${response.status}`);
-                    }
-                } catch (error) {
-                    console.log(`❌ ${service.name} failed:`, error.message);
-                }
-            }
-
-            console.log('🔄 All routing services failed, using enhanced smart interpolation...');
+        // Get simple route between start and end points of a travel day
+        async function getSimpleDayRoute(fromLat, fromLng, toLat, toLng) {
+            // Create a simple, clean route with minimal waypoints for day-to-day travel
+            const route = [];
+            route.push([fromLat, fromLng]);
             
-            // Enhanced fallback with smart interpolation if all APIs fail
-            try {
-                const route = [];
-                route.push([fromLat, fromLng]);
-                
-                const distance = calculateDistance(fromLat, fromLng, toLat, toLng);
-                
-                if (distance > 50) {
-                    const numWaypoints = Math.min(Math.floor(distance / 30), 8);
-                    
-                    for (let i = 1; i <= numWaypoints; i++) {
-                        const fraction = i / (numWaypoints + 1);
-                        let lat = fromLat + (toLat - fromLat) * fraction;
-                        let lng = fromLng + (toLng - fromLng) * fraction;
-                        
-                        const variation = 0.01;
-                        const offset = (Math.sin(fraction * Math.PI * 2) * variation) * (distance / 100);
-                        lat += offset;
-                        lng += offset * 0.5;
-                        
-                        route.push([lat, lng]);
-                    }
-                }
-                
-                route.push([toLat, toLng]);
-                console.log(`🛣️ Using smart interpolation: ${route.length} waypoints for ${distance.toFixed(0)} mile trip`);
-                return route;
-            } catch (fallbackError) {
-                console.log('Fallback route generation failed, using direct line');
-                return [[fromLat, fromLng], [toLat, toLng]];
+            const distance = calculateDistance(fromLat, fromLng, toLat, toLng);
+            
+            // Only add one or two intermediate points for very long distances
+            if (distance > 200) {
+                // Add one waypoint at the midpoint for very long travel days
+                const midLat = (fromLat + toLat) / 2;
+                const midLng = (fromLng + toLng) / 2;
+                route.push([midLat, midLng]);
             }
+            
+            route.push([toLat, toLng]);
+            console.log(`🛣️ Simple day route: ${route.length} points for ${distance.toFixed(0)} mile day`);
+            return route;
         }
 
-        // Get cached or fetch highway route between towns
+        // Get cached or fetch simple day route between towns
         async function getRouteSegment(fromTown, toTown) {
             const routeKey = `${fromTown.id}->${toTown.id}`;
             
@@ -2040,13 +1967,34 @@
                 return highwayRoutes.get(routeKey);
             }
             
-            // Fetch new route
-            const route = await getHighwayRoute(fromTown.lat, fromTown.lng, toTown.lat, toTown.lng);
+            // Fetch new simple route (start and end point only)
+            const route = await getSimpleDayRoute(fromTown.lat, fromTown.lng, toTown.lat, toTown.lng);
             
             // Cache the route for future use
             highwayRoutes.set(routeKey, route);
             
             return route;
+        }
+
+        // Organize towns into travel days (simplified grouping)
+        function organizeTownsByTravelDays(towns) {
+            const travelDays = [];
+            const townsPerDay = 8; // Approximate towns per travel day
+            
+            for (let i = 0; i < towns.length; i += townsPerDay) {
+                const dayTowns = towns.slice(i, i + townsPerDay);
+                if (dayTowns.length > 0) {
+                    travelDays.push({
+                        day: travelDays.length + 1,
+                        startTown: dayTowns[0],
+                        endTown: dayTowns[dayTowns.length - 1],
+                        towns: dayTowns
+                    });
+                }
+            }
+            
+            console.log(`📅 Organized ${towns.length} towns into ${travelDays.length} travel days`);
+            return travelDays;
         }
 
         // Generate and display the complete trip route
@@ -2076,56 +2024,62 @@
                 return;
             }
             
+            // Organize towns into travel days
+            const travelDays = organizeTownsByTravelDays(allRouteTowns);
+            
             plannedRouteCoordinates = [];
             let totalPlannedDistance = 0;
-            let completedSegments = 0;
+            let completedDays = 0;
             
-            // Generate route segments between all consecutive towns
-            for (let i = 0; i < allRouteTowns.length - 1; i++) {
-                const fromTown = allRouteTowns[i];
-                const toTown = allRouteTowns[i + 1];
+            // Generate route segments between start and end of each travel day
+            for (let i = 0; i < travelDays.length; i++) {
+                const currentDay = travelDays[i];
+                const nextDay = travelDays[i + 1];
                 
-                try {
-                    const routeSegment = await getRouteSegment(fromTown, toTown);
-                    
-                    // Add route segment coordinates
-                    if (i === 0) {
-                        plannedRouteCoordinates.push(...routeSegment);
-                    } else {
-                        plannedRouteCoordinates.push(...routeSegment.slice(1));
-                    }
-                    
-                    // Calculate distance
-                    const segmentDistance = routeSegment.reduce((dist, coord, idx) => {
-                        if (idx > 0) {
-                            const prevCoord = routeSegment[idx - 1];
-                            return dist + calculateDistance(prevCoord[0], prevCoord[1], coord[0], coord[1]);
+                // If there's a next day, create route from end of current day to start of next day
+                if (nextDay) {
+                    try {
+                        const routeSegment = await getRouteSegment(currentDay.endTown, nextDay.startTown);
+                        
+                        // Add route segment coordinates
+                        if (i === 0) {
+                            plannedRouteCoordinates.push(...routeSegment);
+                        } else {
+                            plannedRouteCoordinates.push(...routeSegment.slice(1));
                         }
-                        return dist;
-                    }, 0);
-                    totalPlannedDistance += segmentDistance;
-                    
-                    // Check if this segment is completed (both towns checked in)
-                    const fromChecked = checkedInTowns.has(fromTown.id);
-                    const toChecked = checkedInTowns.has(toTown.id);
-                    if (fromChecked && toChecked) {
-                        completedSegments++;
+                        
+                        // Calculate distance
+                        const segmentDistance = calculateDistance(
+                            currentDay.endTown.lat, currentDay.endTown.lng,
+                            nextDay.startTown.lat, nextDay.startTown.lng
+                        );
+                        totalPlannedDistance += segmentDistance;
+                        
+                        // Check if this day is completed (both start and end towns of day checked in)
+                        const dayStartChecked = checkedInTowns.has(currentDay.startTown.id);
+                        const dayEndChecked = checkedInTowns.has(currentDay.endTown.id);
+                        if (dayStartChecked && dayEndChecked) {
+                            completedDays++;
+                        }
+                        
+                    } catch (error) {
+                        console.log(`Error getting route between day ${currentDay.day} and day ${nextDay.day}:`, error);
+                        // Fallback to direct line
+                        if (i === 0) {
+                            plannedRouteCoordinates.push([currentDay.endTown.lat, currentDay.endTown.lng], [nextDay.startTown.lat, nextDay.startTown.lng]);
+                        } else {
+                            plannedRouteCoordinates.push([nextDay.startTown.lat, nextDay.startTown.lng]);
+                        }
+                        totalPlannedDistance += calculateDistance(
+                            currentDay.endTown.lat, currentDay.endTown.lng,
+                            nextDay.startTown.lat, nextDay.startTown.lng
+                        );
                     }
-                    
-                } catch (error) {
-                    console.log(`Error getting route between ${fromTown.name} and ${toTown.name}:`, error);
-                    // Fallback to direct line
-                    if (i === 0) {
-                        plannedRouteCoordinates.push([fromTown.lat, fromTown.lng], [toTown.lat, toTown.lng]);
-                    } else {
-                        plannedRouteCoordinates.push([toTown.lat, toTown.lng]);
-                    }
-                    totalPlannedDistance += calculateDistance(fromTown.lat, fromTown.lng, toTown.lat, toTown.lng);
                 }
                 
                 // Show progress
-                const progress = ((i + 1) / (allRouteTowns.length - 1) * 100).toFixed(0);
-                console.log(`🛣️ Route generation progress: ${progress}% (${i + 1}/${allRouteTowns.length - 1} segments)`);
+                const progress = ((i + 1) / travelDays.length * 100).toFixed(0);
+                console.log(`� Day-based route progress: ${progress}% (Day ${i + 1}/${travelDays.length})`);
             }
             
             // Create the complete route polyline
@@ -2140,26 +2094,28 @@
                 }).addTo(map);
                 
                 // Add popup with trip information
-                const completionPercentage = ((completedSegments / (allRouteTowns.length - 1)) * 100).toFixed(1);
+                const completionPercentage = ((completedDays / travelDays.length) * 100).toFixed(1);
                 fullTripRoute.bindPopup(`
                     <div style="text-align: center;">
-                        <h4 style="margin: 0; color: #2563eb;">🗺️ Complete Trip Route</h4>
-                        <p style="margin: 5px 0;">Total Distance: ~${totalPlannedDistance.toFixed(0)} miles</p>
-                        <p style="margin: 5px 0;">Towns: ${allRouteTowns.length} locations</p>
-                        <p style="margin: 5px 0;">Progress: ${completionPercentage}% completed</p>
+                        <h4 style="margin: 0; color: #2563eb;">🗺️ Day-by-Day Trip Route</h4>
+                        <p style="margin: 5px 0;">${travelDays.length} travel days planned</p>
+                        <p style="margin: 5px 0;">~${totalPlannedDistance.toFixed(0)} miles between days</p>
                         <p style="margin: 5px 0; font-size: 0.8rem;">
-                            ${allRouteTowns[0].name}, ${allRouteTowns[0].state} → ${allRouteTowns[allRouteTowns.length - 1].name}, ${allRouteTowns[allRouteTowns.length - 1].state}
+                            ${travelDays[0].startTown.name} → ${travelDays[travelDays.length - 1].endTown.name}
                         </p>
                         <p style="margin: 5px 0; font-size: 0.7rem; color: #666;">
-                            Blue dashed line shows planned highway route
+                            Showing day-to-day travel segments only
+                        </p>
+                        <p style="margin: 5px 0; font-size: 0.8rem; font-weight: bold; color: #2563eb;">
+                            ${completionPercentage}% of travel days completed
                         </p>
                     </div>
                 `);
                 
-                console.log(`🗺️ Complete trip route displayed: ${allRouteTowns.length} towns, ~${totalPlannedDistance.toFixed(0)} miles, ${completionPercentage}% completed`);
+                console.log(`🗺️ Day-based trip route displayed: ${travelDays.length} days, ~${totalPlannedDistance.toFixed(0)} miles, ${completionPercentage}% completed`);
                 
                 // Show notification about route generation
-                showNotification(`🗺️ Complete trip route generated: ${totalPlannedDistance.toFixed(0)} miles planned!`, 'info');
+                showNotification(`🗺️ Day-by-day route generated: ${travelDays.length} travel days planned!`, 'info');
             }
         }
 
@@ -2953,10 +2909,7 @@
                     highlightNextTownTile();
                 }, 1500); // Delay to let display update
                 
-                // Show next town overlay with facts (only for manual check-ins)
-                setTimeout(() => {
-                    showNextTownOverlay();
-                }, 30000); // Wait 30 seconds after check-in before showing next town
+                // Automatic overlay removed - now only shows when manually triggered
             }
         }
 
