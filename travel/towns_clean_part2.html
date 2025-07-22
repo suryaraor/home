@@ -1,0 +1,1698 @@
+﻿                                        ðŸ“ ${fact}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${townData.openaiInsights && townData.openaiInsights.length > 0 ? `
+                            <h3 style="color: #333; margin-top: 30px;">ðŸ¤– AI Travel Insights</h3>
+                            <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 25px; border-radius: 15px; color: white;">
+                                ${townData.openaiInsights.map(insight => `
+                                    <div style="margin: 15px 0; padding: 18px; background: rgba(255,255,255,0.1); border-radius: 12px; border-left: 4px solid rgba(255,255,255,0.3);">
+                                        ðŸŽ¯ ${insight}
+                                    </div>
+                                `).join('')}
+                                
+                                <button onclick="playTravelInsights('${town.id}', this)"
+                                    style="
+                                        background: #ff6b6b;
+                                        color: white;
+                                        border: none;
+                                        border-radius: 10px;
+                                        padding: 12px 24px;
+                                        margin-top: 15px;
+                                        cursor: pointer;
+                                        font-weight: bold;
+                                        transition: all 0.3s ease;
+                                    "
+                                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(255, 107, 107, 0.4)'"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                    ðŸ”Š Listen to Insights
+                                </button>
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Google Search Results Section -->
+                        <div style="margin-top: 30px;">
+                            <h3 style="color: #333; margin-bottom: 20px;">ðŸ” Explore ${town.name} Online</h3>
+                            <div style="
+                                background: white;
+                                border-radius: 15px;
+                                overflow: hidden;
+                                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                                border: 1px solid #e0e0e0;
+                            ">
+                                <div style="
+                                    background: linear-gradient(135deg, #4285f4, #34a853);
+                                    color: white;
+                                    padding: 15px 20px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 10px;
+                                ">
+                                    <i class="fab fa-google" style="font-size: 1.2rem;"></i>
+                                    <span style="font-weight: 600;">Live Google Search Results</span>
+                                    <button onclick="refreshGoogleSearch('${town.name}', '${town.state}', '${town.id}')"
+                                        style="
+                                            background: rgba(255,255,255,0.2);
+                                            color: white;
+                                            border: none;
+                                            border-radius: 6px;
+                                            padding: 6px 12px;
+                                            cursor: pointer;
+                                            font-size: 12px;
+                                            margin-left: auto;
+                                        ">
+                                        ðŸ”„ Refresh
+                                    </button>
+                                </div>
+                                
+                                <div style="position: relative; width: 100%; height: 600px;">
+                                    <iframe 
+                                        id="googleSearchFrame-${town.id}"
+                                        src="https://www.google.com/search?q=${encodeURIComponent(town.name + ', ' + town.state)}&igu=1"
+                                        style="
+                                            width: 100%;
+                                            height: 100%;
+                                            border: none;
+                                        "
+                                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                                        loading="lazy">
+                                    </iframe>
+                                    
+                                    <!-- Fallback content if iframe doesn't load -->
+                                    <div style="
+                                        position: absolute;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        text-align: center;
+                                        color: #666;
+                                        z-index: -1;
+                                    ">
+                                        <i class="fas fa-search" style="font-size: 3rem; color: #ddd; margin-bottom: 15px;"></i>
+                                        <p>Loading Google search results...</p>
+                                        <p style="font-size: 14px;">
+                                            <a href="https://www.google.com/search?q=${encodeURIComponent(town.name + ', ' + town.state + ' tourism')}" 
+                                               target="_blank" 
+                                               style="color: #4285f4; text-decoration: none;">
+                                                ðŸ”— Open in new tab
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Quick search suggestions -->
+                                <div style="
+                                    background: #f8f9fa;
+                                    padding: 15px 20px;
+                                    border-top: 1px solid #e0e0e0;
+                                ">
+                                    <div style="font-size: 14px; color: #666; margin-bottom: 10px;">
+                                        <strong>Quick searches:</strong>
+                                    </div>
+                                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                        <button onclick="searchGoogle('${town.name}, ${town.state} restaurants', '${town.id}')"
+                                            class="quick-search-btn">ðŸ½ï¸ Restaurants</button>
+                                        <button onclick="searchGoogle('${town.name}, ${town.state} hotels', '${town.id}')"
+                                            class="quick-search-btn">ðŸ¨ Hotels</button>
+                                        <button onclick="searchGoogle('${town.name}, ${town.state} attractions', '${town.id}')"
+                                            class="quick-search-btn">ðŸŽ¯ Attractions</button>
+                                        <button onclick="searchGoogle('${town.name}, ${town.state} weather', '${town.id}')"
+                                            class="quick-search-btn">ðŸŒ¤ï¸ Weather</button>
+                                        <button onclick="searchGoogle('${town.name}, ${town.state} events', '${town.id}')"
+                                            class="quick-search-btn">ðŸ“… Events</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action buttons -->
+                        <div style="
+                            margin-top: 30px;
+                            display: flex;
+                            gap: 15px;
+                            justify-content: center;
+                            flex-wrap: wrap;
+                        ">
+                            ${!isCheckedIn ? `
+                                <button onclick="
+                                    performCheckin('${town.id}', false, false);
+                                    returnToMainInterface();
+                                    showNotification('Checked in at ${town.name}!', 'success');
+                                " style="
+                                    background: #28a745;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 10px;
+                                    padding: 12px 24px;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    transition: all 0.3s ease;
+                                ">
+                                    âœ… Check In
+                                </button>
+                            ` : `
+                                <button onclick="
+                                    performUncheck('${town.id}');
+                                    returnToMainInterface();
+                                    showNotification('Unchecked from ${town.name}!', 'info');
+                                " style="
+                                    background: #ffc107;
+                                    color: #212529;
+                                    border: none;
+                                    border-radius: 10px;
+                                    padding: 12px 24px;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    transition: all 0.3s ease;
+                                ">
+                                    â†©ï¸ Uncheck
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(townScreen);
+            
+            // Fade in the screen
+            setTimeout(() => {
+                townScreen.style.opacity = '1';
+            }, 100);
+        }
+
+        // Function to return to main interface
+        function returnToMainInterface() {
+            const townScreen = document.getElementById('townDetailsScreen');
+            if (townScreen) {
+                townScreen.style.transition = 'opacity 0.3s ease';
+                townScreen.style.opacity = '0';
+                
+                setTimeout(() => {
+                    townScreen.remove();
+                    showMainInterface();
+                }, 300);
+            }
+        }
+        
+        // Function to show main interface
+        function showMainInterface() {
+            const mainElements = document.querySelectorAll('body > *:not(script):not(#townDetailsScreen)');
+            mainElements.forEach(el => {
+                el.style.display = '';
+            });
+            
+            const mainContent = document.body;
+            mainContent.style.transition = 'opacity 0.5s ease';
+            mainContent.style.opacity = '1';
+            
+            // Clean up any audio
+            cleanupAudio();
+        }
+
+        // Fetch relevant images for a town (simplified, no external APIs)
+        async function fetchRelevantImages(townName, stateName, townId) {
+            const cleanTownName = townName.replace(/[^a-zA-Z\s]/g, '').trim();
+            const cleanStateName = stateName.replace(/[^a-zA-Z\s]/g, '').trim();
+            
+            try {
+                console.log(`ðŸ” Generating relevant images for ${cleanTownName}, ${cleanStateName}`);
+                
+                // Use curated local images (no external APIs)
+                return generateCuratedImages(cleanTownName, cleanStateName);
+                
+            } catch (error) {
+                console.error('Error generating relevant images:', error);
+                return generateContextualPlaceholders(cleanTownName, cleanStateName);
+            }
+        }
+        
+        // Note: Simplified image generation without external APIs
+        // Removed Google Maps functionality for cleaner implementation
+        
+        // Note: CORS-free image generation - no external API calls needed
+        // This function has been simplified to avoid CORS issues
+        
+        // Pre-defined coordinates for major towns (no API calls needed)
+        function getTownCoordinatesFromDatabase(townName, stateName) {
+            const townDatabase = {
+                // Missouri towns
+                'Kansas City_MO': { lat: 39.0997, lon: -94.5786 },
+                'Raymore_MO': { lat: 38.8072, lon: -94.4497 },
+                'Independence_MO': { lat: 39.0911, lon: -94.4155 },
+                'Blue Springs_MO': { lat: 39.0169, lon: -94.2816 },
+                'Lee\'s Summit_MO': { lat: 38.9109, lon: -94.3822 },
+                
+                // Iowa towns
+                'Des Moines_IA': { lat: 41.5868, lon: -93.6250 },
+                'Cedar Rapids_IA': { lat: 41.9778, lon: -91.6656 },
+                'Davenport_IA': { lat: 41.5236, lon: -90.5776 },
+                
+                // Wisconsin towns
+                'Milwaukee_WI': { lat: 43.0389, lon: -87.9065 },
+                'Madison_WI': { lat: 43.0731, lon: -89.4012 },
+                'Green Bay_WI': { lat: 44.5133, lon: -88.0133 },
+                
+                // Illinois towns
+                'Chicago_IL': { lat: 41.8781, lon: -87.6298 },
+                'Springfield_IL': { lat: 39.7817, lon: -89.6501 },
+                'Rockford_IL': { lat: 42.2711, lon: -89.0940 },
+                
+                // Indiana towns
+                'Indianapolis_IN': { lat: 39.7684, lon: -86.1581 },
+                'Fort Wayne_IN': { lat: 41.0793, lon: -85.1394 },
+                'Evansville_IN': { lat: 37.9716, lon: -87.5711 },
+                
+                // Ohio towns
+                'Columbus_OH': { lat: 39.9612, lon: -82.9988 },
+                'Cleveland_OH': { lat: 41.4993, lon: -81.6944 },
+                'Cincinnati_OH': { lat: 39.1031, lon: -84.5120 },
+                
+                // Pennsylvania towns
+                'Pittsburgh_PA': { lat: 40.4406, lon: -79.9959 },
+                'Philadelphia_PA': { lat: 39.9526, lon: -75.1652 },
+                'Allentown_PA': { lat: 40.6023, lon: -75.4714 },
+                
+                // West Virginia towns
+                'Wheeling_WV': { lat: 40.0640, lon: -80.7209 },
+                'Charleston_WV': { lat: 38.3498, lon: -81.6326 },
+                'Huntington_WV': { lat: 38.4192, lon: -82.4452 }
+            };
+            
+            const key = `${townName}_${stateName}`;
+            return townDatabase[key];
+        }
+        
+        // Get approximate center coordinates for each state
+        function getStateCenter(stateName) {
+            const stateCenters = {
+                'MO': { lat: 38.3566, lon: -92.4580 }, // Missouri
+                'IA': { lat: 41.9216, lon: -93.3122 }, // Iowa  
+                'WI': { lat: 43.7844, lon: -88.7879 }, // Wisconsin
+                'IL': { lat: 40.0417, lon: -89.1965 }, // Illinois
+                'IN': { lat: 39.7910, lon: -86.1480 }, // Indiana
+                'OH': { lat: 40.2732, lon: -82.7937 }, // Ohio
+                'PA': { lat: 41.2033, lon: -77.1945 }, // Pennsylvania
+                'WV': { lat: 38.4680, lon: -80.9696 }  // West Virginia
+            };
+            
+            return stateCenters[stateName];
+        }
+        
+        // Generate Mapbox static images (no CORS issues)
+        function generateMapboxImage(coords, size, style = 'satellite') {
+            const [width, height] = size.split('x').map(Number);
+            const zoom = 13;
+            
+            // Using Mapbox public token (replace with your own for production)
+            const accessToken = 'pk.eyJ1IjoidHJhdmVsYXBwIiwiYSI6ImNrNWY4ajg3NjA3ZGszbnp3eWk4ejMxMjcifQ.demo'; // Demo token
+            
+            const styleMap = {
+                'satellite': 'mapbox/satellite-v9',
+                'streets': 'mapbox/streets-v11', 
+                'outdoors': 'mapbox/outdoors-v11',
+                'light': 'mapbox/light-v10'
+            };
+            
+            const mapStyle = styleMap[style] || styleMap.satellite;
+            
+            // Use OpenStreetMap tiles as fallback (no API key needed)
+            if (!accessToken || accessToken.includes('demo')) {
+                return generateOpenStreetMapImage(coords, size, style);
+            }
+            
+            return `https://api.mapbox.com/styles/v1/${mapStyle}/static/${coords.lon},${coords.lat},${zoom}/${width}x${height}@2x?access_token=${accessToken}`;
+        }
+        
+        // Generate OpenStreetMap-based images (completely free, no CORS)
+        function generateOpenStreetMapImage(coords, size, style) {
+            const [width, height] = size.split('x').map(Number);
+            const zoom = 13;
+            
+            // Calculate tile coordinates
+            const tileX = Math.floor((coords.lon + 180) / 360 * Math.pow(2, zoom));
+            const tileY = Math.floor((1 - Math.log(Math.tan(coords.lat * Math.PI / 180) + 1 / Math.cos(coords.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
+            
+            const styleUrls = {
+                'satellite': `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${tileY}/${tileX}`,
+                'streets': `https://tile.openstreetmap.org/${zoom}/${tileX}/${tileY}.png`,
+                'outdoors': `https://tiles.wmflabs.org/hikebike/${zoom}/${tileX}/${tileY}.png`
+            };
+            
+            return styleUrls[style] || styleUrls.streets;
+        }
+        
+        // Generate curated local images without external APIs
+        function generateCuratedImages(townName, stateName) {
+            console.log(`ðŸŽ¨ Creating curated images for ${townName}, ${stateName}`);
+            
+            return {
+                primary: generateLocalImage(townName, stateName, 'hero'),
+                gallery: [
+                    generateLocalImage(townName, stateName, 'downtown'),
+                    generateLocalImage(townName, stateName, 'historic'),
+                    generateLocalImage(townName, stateName, 'nature')
+                ]
+            };
+        }
+        
+        // Generate local-themed images with town characteristics
+        function generateLocalImage(townName, stateName, type) {
+            const stateInfo = {
+                'MO': { 
+                    colors: ['#8B0000', '#DAA520'], 
+                    icon: 'ðŸ›ï¸', 
+                    landmarks: ['Gateway Arch', 'Ozark Mountains', 'Missouri River'],
+                    themes: { downtown: 'Historic Square', historic: 'Civil War Heritage', nature: 'Ozark Beauty' }
+                },
+                'IA': { 
+                    colors: ['#FFD700', '#228B22'], 
+                    icon: 'ðŸŒ½', 
+                    landmarks: ['Corn Fields', 'Prairie', 'State Fair'],
+                    themes: { downtown: 'Main Street', historic: 'Pioneer Heritage', nature: 'Prairie Lands' }
+                },
+                'WI': { 
+                    colors: ['#228B22', '#FFA500'], 
+                    icon: 'ðŸ§€', 
+                    landmarks: ['Lake Michigan', 'Dairy Farms', 'Wisconsin Dells'],
+                    themes: { downtown: 'Town Square', historic: 'Lumber Heritage', nature: 'Great Lakes' }
+                },
+                'IL': { 
+                    colors: ['#4169E1', '#DC143C'], 
+                    icon: 'ðŸŒ†', 
+                    landmarks: ['Prairie State', 'Great Lakes', 'Lincoln Sites'],
+                    themes: { downtown: 'Main Street', historic: 'Lincoln Heritage', nature: 'Prairie State' }
+                },
+                'IN': { 
+                    colors: ['#DC143C', '#000080'], 
+                    icon: 'ðŸ', 
+                    landmarks: ['Indianapolis 500', 'Crossroads', 'Covered Bridges'],
+                    themes: { downtown: 'Town Center', historic: 'Pioneer Trail', nature: 'Hoosier Hills' }
+                },
+                'OH': { 
+                    colors: ['#800080', '#FF6347'], 
+                    icon: 'âœˆï¸', 
+                    landmarks: ['Lake Erie', 'Rock Hall', 'Buckeye Trees'],
+                    themes: { downtown: 'City Center', historic: 'Aviation Heritage', nature: 'Buckeye State' }
+                },
+                'PA': { 
+                    colors: ['#2F4F4F', '#B22222'], 
+                    icon: 'ðŸ””', 
+                    landmarks: ['Liberty Bell', 'Appalachian Mountains', 'Steel Heritage'],
+                    themes: { downtown: 'Historic District', historic: 'Colonial Heritage', nature: 'Appalachian Beauty' }
+                },
+                'WV': { 
+                    colors: ['#2E8B57', '#4682B4'], 
+                    icon: 'â›°ï¸', 
+                    landmarks: ['Appalachian Mountains', 'Coal Heritage', 'White Water'],
+                    themes: { downtown: 'Mountain Town', historic: 'Coal Heritage', nature: 'Mountain State' }
+                }
+            };
+            
+            const info = stateInfo[stateName] || stateInfo['MO'];
+            const theme = info.themes[type] || `${townName} Area`;
+            const [primaryColor, secondaryColor] = info.colors;
+            
+            const typeIcons = {
+                hero: info.icon,
+                downtown: 'ðŸ¢',
+                historic: 'ðŸ›ï¸', 
+                nature: 'ðŸŒ²',
+                landmark: 'â­'
+            };
+            
+            const size = type === 'hero' ? '1200x400' : '800x600';
+            const [width, height] = size.split('x').map(Number);
+            
+            return `data:image/svg+xml,${encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+                    <defs>
+                        <linearGradient id="bg${type}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:${primaryColor};stop-opacity:0.9" />
+                            <stop offset="50%" style="stop-color:${secondaryColor};stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:${primaryColor};stop-opacity:0.7" />
+                        </linearGradient>
+                        <pattern id="pattern${type}" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+                            <circle cx="30" cy="30" r="3" fill="white" opacity="0.1"/>
+                            <circle cx="10" cy="10" r="2" fill="white" opacity="0.08"/>
+                            <circle cx="50" cy="20" r="1.5" fill="white" opacity="0.12"/>
+                        </pattern>
+                        <filter id="shadow">
+                            <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Background -->
+                    <rect width="100%" height="100%" fill="url(#bg${type})"/>
+                    <rect width="100%" height="100%" fill="url(#pattern${type})"/>
+                    
+                    <!-- Main icon -->
+                    <text x="50%" y="35%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" 
+                          font-size="84" font-weight="bold" opacity="0.95" filter="url(#shadow)">
+                        ${typeIcons[type]}
+                    </text>
+                    
+                    <!-- Town name -->
+                    <text x="50%" y="55%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" 
+                          font-size="42" font-weight="bold" filter="url(#shadow)">
+                        ${townName}
+                    </text>
+                    
+                    <!-- State -->
+                    <text x="50%" y="65%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" 
+                          font-size="28" opacity="0.9" filter="url(#shadow)">
+                        ${stateName}
+                    </text>
+                    
+                    <!-- Theme -->
+                    <text x="50%" y="75%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" 
+                          font-size="20" opacity="0.8">
+                        ${theme}
+                    </text>
+                    
+                    <!-- Decorative elements -->
+                    <circle cx="20%" cy="25%" r="4" fill="white" opacity="0.2"/>
+                    <circle cx="80%" cy="30%" r="3" fill="white" opacity="0.15"/>
+                    <circle cx="15%" cy="75%" r="2.5" fill="white" opacity="0.18"/>
+                    <circle cx="85%" cy="80%" r="3.5" fill="white" opacity="0.12"/>
+                </svg>
+            `)}`;
+        }
+        
+        // Fetch images from Wikimedia Commons
+        async function fetchWikimediaImages(townName, stateName) {
+            try {
+                // Search for town-specific articles
+                const searchTerms = [
+                    `${townName}, ${stateName}`,
+                    `${townName} ${stateName}`,
+                    townName
+                ];
+                
+                const images = [];
+                
+                for (const term of searchTerms) {
+                    const searchUrl = `https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(term)}`;
+                    
+                    try {
+                        const response = await fetch(searchUrl);
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.items && data.items.length > 0) {
+                                // Filter for actual photos (not logos, maps, etc.)
+                                const photos = data.items.filter(item => 
+                                    item.type === 'image' && 
+                                    !item.title.toLowerCase().includes('logo') &&
+                                    !item.title.toLowerCase().includes('seal') &&
+                                    (item.title.toLowerCase().includes('.jpg') || 
+                                     item.title.toLowerCase().includes('.jpeg') ||
+                                     item.title.toLowerCase().includes('.png'))
+                                );
+                                
+                                photos.slice(0, 3).forEach(photo => {
+                                    const imageUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(photo.title)}?width=1200`;
+                                    images.push(imageUrl);
+                                });
+                                
+                                if (images.length >= 3) break;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn(`Failed to fetch images for term: ${term}`, e);
+                    }
+                }
+                
+                return images;
+            } catch (error) {
+                console.error('Wikimedia API error:', error);
+                return [];
+            }
+        }
+        
+        // Note: CORS-free image generation - no external API calls needed
+        // This function has been simplified to avoid CORS issues
+        
+        // Generate contextual placeholders based on town/state characteristics
+        function generateContextualPlaceholders(townName, stateName) {
+            const stateThemes = {
+                'Missouri': { color: '#8B0000', icon: 'ðŸ›ï¸', landmark: 'Gateway Arch Region' },
+                'Iowa': { color: '#FFD700', icon: 'ðŸŒ½', landmark: 'Corn State' },
+                'Wisconsin': { color: '#228B22', icon: 'ðŸ§€', landmark: 'Cheese State' },
+                'Illinois': { color: '#4169E1', icon: 'ðŸŒ†', landmark: 'Prairie State' },
+                'Indiana': { color: '#DC143C', icon: 'ðŸ', landmark: 'Crossroads of America' },
+                'Ohio': { color: '#800080', icon: 'âœˆï¸', landmark: 'Buckeye State' },
+                'Pennsylvania': { color: '#2F4F4F', icon: 'ðŸ””', landmark: 'Keystone State' },
+                'West Virginia': { color: '#2E8B57', icon: 'â›°ï¸', landmark: 'Mountain State' }
+            };
+            
+            const theme = stateThemes[stateName] || { color: '#667eea', icon: 'ðŸ˜ï¸', landmark: 'American Town' };
+            
+            return {
+                primary: createAdvancedPlaceholder(townName, stateName, theme, '1200x400', 'hero'),
+                gallery: [
+                    createAdvancedPlaceholder(townName, stateName, theme, '800x600', 'downtown'),
+                    createAdvancedPlaceholder(townName, stateName, theme, '800x600', 'historic'),
+                    createAdvancedPlaceholder(townName, stateName, theme, '800x600', 'nature')
+                ]
+            };
+        }
+        
+        // Create advanced SVG placeholders with state themes
+        function createAdvancedPlaceholder(townName, stateName, theme, size, type) {
+            const [width, height] = size.split('x').map(Number);
+            
+            const typeInfo = {
+                hero: { subtitle: `${theme.landmark}`, pattern: 'city' },
+                downtown: { subtitle: 'Downtown District', pattern: 'buildings' },
+                historic: { subtitle: 'Historic Quarter', pattern: 'heritage' },
+                nature: { subtitle: 'Natural Areas', pattern: 'landscape' }
+            };
+            
+            const info = typeInfo[type] || typeInfo.hero;
+            
+            return `data:image/svg+xml,${encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+                    <defs>
+                        <linearGradient id="bg${type}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:${theme.color};stop-opacity:0.9" />
+                            <stop offset="50%" style="stop-color:${theme.color};stop-opacity:0.7" />
+                            <stop offset="100%" style="stop-color:${theme.color}88;stop-opacity:0.8" />
+                        </linearGradient>
+                        <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#bg${type})"/>
+                    <rect width="100%" height="100%" fill="url(#dots)"/>
+                    <text x="50%" y="35%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="72" font-weight="bold" opacity="0.9">${theme.icon}</text>
+                    <text x="50%" y="55%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="36" font-weight="bold">${townName}</text>
+                    <text x="50%" y="65%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" opacity="0.9">${stateName}</text>
+                    <text x="50%" y="75%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" opacity="0.7">${info.subtitle}</text>
+                </svg>
+            `)}`;
+        }
+        
+        // Update images in the DOM when relevant images are found
+
+            console.log(`ðŸ”„ Updating images for ${townId} with relevant content`);
+            
+            const heroImage = document.getElementById(`heroImage-${townId}`);
+            if (heroImage && relevantImages.primary) {
+                // Show that we're updating to a relevant image
+                const heroContainer = heroImage.parentElement;
+                const updateIndicator = document.createElement('div');
+                updateIndicator.style.cssText = `
+                    position: absolute;
+                    top: 15px;
+                    left: 15px;
+                    background: rgba(0,150,0,0.9);
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-size: 0.9rem;
+                    font-weight: bold;
+                    z-index: 10;
+                    animation: fadeIn 0.5s ease;
+                `;
+                updateIndicator.textContent = 'ðŸŒŸ Found relevant image!';
+                heroContainer.appendChild(updateIndicator);
+                
+                // Update the image with a smooth transition
+                heroImage.style.transition = 'opacity 0.5s ease';
+                heroImage.style.opacity = '0.5';
+                
+                setTimeout(() => {
+                    heroImage.src = relevantImages.primary;
+                    heroImage.onload = () => {
+                        heroImage.style.opacity = '1';
+                        console.log(`ðŸ–¼ï¸ Updated hero image for town ${townId}`);
+                        // Remove update indicator after a delay
+                        setTimeout(() => {
+                            if (updateIndicator.parentElement) {
+                                updateIndicator.remove();
+                            }
+                        }, 3000);
+                    };
+                }, 500);
+            }
+            
+            relevantImages.gallery?.forEach((imageUrl, index) => {
+                const galleryImage = document.getElementById(`galleryImg-${townId}-${index}`);
+                const loader = document.getElementById(`galleryLoader-${townId}-${index}`);
+                
+                if (galleryImage && imageUrl) {
+                    if (loader) {
+                        loader.style.display = 'block';
+                        loader.textContent = 'ðŸ”„ Updating...';
+                    }
+                    
+                    galleryImage.style.transition = 'opacity 0.5s ease';
+                    galleryImage.style.opacity = '0.5';
+                    
+                    setTimeout(() => {
+                        galleryImage.src = imageUrl;
+                        galleryImage.onload = () => {
+                            galleryImage.style.opacity = '1';
+                            if (loader) {
+                                loader.style.display = 'none';
+                            }
+                            console.log(`ðŸ–¼ï¸ Updated gallery image ${index} for town ${townId}`);
+                        };
+                        galleryImage.onerror = () => {
+                            galleryImage.style.opacity = '1';
+                            if (loader) {
+                                loader.style.display = 'none';
+                            }
+                            console.warn(`Failed to load gallery image ${index} for town ${townId}`);
+        
+        // Audio control variables
+        let currentSpeech = null;
+        let speechQueue = [];
+        let isPlaying = false;
+        let isPaused = false;
+
+        // Text-to-Speech function for AI Travel Insights (Enhanced)
+        async function playTravelInsights(townId, button) {
+            // Stop any current speech
+            if (currentSpeech) {
+                window.speechSynthesis.cancel();
+                currentSpeech = null;
+            }
+            
+            // Check if speech synthesis is supported
+            if (!('speechSynthesis' in window)) {
+                showNotification('âŒ Text-to-speech not supported in this browser', 'error');
+                return;
+            }
+            
+            // Initialize voices if not already loaded
+            await initializeVoices();
+            
+            // Get the town data
+            const town = allTowns.find(t => t.id === townId);
+            if (!town) return;
+            
+            // Show audio controls
+            const audioControls = document.getElementById(`audioControls-${townId}`);
+            const audioStatus = document.getElementById(`audioStatus-${townId}`);
+            if (audioControls) {
+                audioControls.style.display = 'flex';
+            }
+            
+            // Update button appearance with loading state
+            button.innerHTML = 'ðŸ”„';
+            button.title = 'Preparing audio...';
+            button.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+            
+            // Get insights container
+            const insightsContainer = document.getElementById(`insightsContainer-${townId}`);
+            
+            // Get all insights from the database
+            try {
+                const townData = await getEnhancedTownFacts(town.name, town.state);
+                
+                if (!townData.openaiInsights || townData.openaiInsights.length === 0) {
+                    if (audioStatus) audioStatus.textContent = 'âŒ No AI insights to play';
+                    resetAudioButton(townId, button);
+                    return;
+                }
+                
+                // Prepare and preprocess the text
+                const introText = `AI Travel Insights for ${town.name}, ${town.state}.`;
+                const insightsText = townData.openaiInsights
+                    .map(insight => preprocessTextForSpeech(insight))
+                    .join('. ');
+                
+                const fullText = preprocessTextForSpeech(`${introText} ${insightsText}`);
+                
+                // Calculate optimal speech settings
+                const speechSettings = calculateOptimalSpeechSettings(fullText);
+                
+                // Create speech synthesis utterance
+                currentSpeech = new SpeechSynthesisUtterance(fullText);
+                
+                // Apply optimized settings
+                currentSpeech.rate = speechSettings.rate;
+                currentSpeech.pitch = speechSettings.pitch;
+                currentSpeech.volume = speechSettings.volume;
+                
+                // Use the best available voice
+                const bestVoice = selectBestVoice();
+                if (bestVoice) {
+                    currentSpeech.voice = bestVoice;
+                    console.log(`ðŸŽ¤ Using voice: ${bestVoice.name} (${bestVoice.lang})`);
+                } else {
+                    console.warn('âš ï¸ No optimal voice found, using default');
+                }
+                
+                // Update status with estimated duration
+                if (audioStatus) {
+                    audioStatus.textContent = `ðŸŽ§ Loading audio (${speechSettings.estimatedDuration}s estimated)...`;
+                }
+                
+                // Enhanced event handlers
+                currentSpeech.onstart = () => {
+                    isPlaying = true;
+                    isPaused = false;
+                    
+                    // Update UI
+                    button.innerHTML = 'ðŸŽµ';
+                    button.title = 'Playing AI Travel Insights';
+                    button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                    
+                    if (audioStatus) {
+                        audioStatus.textContent = `ðŸŽ§ Playing insights (${speechSettings.estimatedDuration}s)`;
+                    }
+                    
+                    // Enhanced visual feedback
+                    if (insightsContainer) {
+                        insightsContainer.style.border = '3px solid #28a745';
+                        insightsContainer.style.boxShadow = '0 0 20px rgba(40, 167, 69, 0.4)';
+                        insightsContainer.style.background = 'linear-gradient(135deg, #f8fff8, #e8f5e8)';
+                    }
+                    
+                    // Animate insights as they're being read
+                    animateInsightsHighlight(townId, townData.openaiInsights.length, speechSettings.estimatedDuration);
+                };
+                
+                currentSpeech.onend = () => {
+                    isPlaying = false;
+                    isPaused = false;
+                    currentSpeech = null;
+                    
+                    if (audioStatus) audioStatus.textContent = 'âœ… Finished playing insights!';
+                    resetAudioButton(townId, button);
+                    
+                    // Reset visual feedback
+                    if (insightsContainer) {
+                        insightsContainer.style.border = '2px solid #e74c3c';
+                        insightsContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                        insightsContainer.style.background = 'linear-gradient(135deg, #fff5f5, #ffeaea)';
+                    }
+                    
+                    // Clear any insight highlights
+                    clearInsightsHighlight(townId);
+                    
+                    // Hide audio controls after a delay
+                    setTimeout(() => {
+                        if (audioControls) audioControls.style.display = 'none';
+                    }, 4000);
+                    
+                    // Show completion notification
+                    showNotification('ðŸŽ§ Finished playing AI travel insights!', 'audio');
+                };
+                
+                currentSpeech.onerror = (event) => {
+                    console.error('Speech synthesis error:', event.error);
+                    if (audioStatus) {
+                        audioStatus.textContent = `âŒ Playback error: ${event.error}`;
+                    }
+                    resetAudioButton(townId, button);
+                    isPlaying = false;
+                    isPaused = false;
+                    currentSpeech = null;
+                    
+                    // Show error notification
+                    showNotification('âŒ Audio playback failed. Please try again.', 'error');
+                };
+                
+                // Enhanced progress tracking
+                let lastWordIndex = 0;
+                currentSpeech.onboundary = (event) => {
+                    if (event.name === 'word') {
+                        lastWordIndex = event.charIndex;
+                        // Update progress indicator if needed
+                        updateAudioProgress(townId, lastWordIndex, fullText.length);
+                    }
+                };
+                
+                // Start speaking with retry mechanism
+                try {
+                    window.speechSynthesis.speak(currentSpeech);
+                    console.log(`ðŸŽ§ Playing enhanced AI insights for ${town.name}, ${town.state}`);
+                    console.log(`ðŸ“Š Settings: Rate ${speechSettings.rate}, Pitch ${speechSettings.pitch}, Volume ${speechSettings.volume}`);
+                } catch (error) {
+                    console.error('Failed to start speech synthesis:', error);
+                    if (audioStatus) audioStatus.textContent = 'âŒ Failed to start playback';
+                    resetAudioButton(townId, button);
+                }
+                
+            } catch (error) {
+                console.error('Error preparing audio:', error);
+                if (audioStatus) audioStatus.textContent = 'âŒ Error preparing audio';
+                resetAudioButton(townId, button);
+                showNotification('âŒ Failed to prepare audio content', 'error');
+            }
+        }
+        
+        // Enhanced Pause/Resume audio function
+        function pauseResumeAudio(townId, button) {
+            if (!currentSpeech) return;
+            
+            const audioStatus = document.getElementById(`audioStatus-${townId}`);
+            
+            if (isPlaying && !isPaused) {
+                // Pause
+                window.speechSynthesis.pause();
+                isPaused = true;
+                button.innerHTML = 'â–¶ï¸ Resume';
+                button.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
+                if (audioStatus) audioStatus.textContent = 'â¸ï¸ Paused - Click Resume to continue';
+                
+                // Update play button
+                const playButton = document.getElementById(`audioPlayBtn-${townId}`);
+                if (playButton) {
+                    playButton.innerHTML = 'â¸ï¸';
+                    playButton.title = 'Audio Paused';
+                    playButton.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+                }
+                
+            } else if (isPaused) {
+                // Resume
+                window.speechSynthesis.resume();
+                isPaused = false;
+                button.innerHTML = 'â¸ï¸ Pause';
+                button.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+                if (audioStatus) audioStatus.textContent = 'ðŸŽ§ Resuming AI Travel Insights...';
+                
+                // Update play button
+                const playButton = document.getElementById(`audioPlayBtn-${townId}`);
+                if (playButton) {
+                    playButton.innerHTML = 'ðŸŽµ';
+                    playButton.title = 'Playing AI Travel Insights';
+                    playButton.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                }
+            }
+        }
+        
+        // Enhanced stop audio function
+        function stopAudio(townId) {
+            if (currentSpeech) {
+                window.speechSynthesis.cancel();
+                currentSpeech = null;
+            }
+            
+            isPlaying = false;
+            isPaused = false;
+            
+            const audioStatus = document.getElementById(`audioStatus-${townId}`);
+            const audioControls = document.getElementById(`audioControls-${townId}`);
+            const playButton = document.getElementById(`audioPlayBtn-${townId}`);
+            const pauseButton = document.getElementById(`pauseBtn-${townId}`);
+            
+            if (audioStatus) audioStatus.textContent = 'â¹ï¸ Playback stopped';
+            if (playButton) resetAudioButton(townId, playButton);
+            
+            // Reset pause button
+            if (pauseButton) {
+                pauseButton.innerHTML = 'â¸ï¸ Pause';
+                pauseButton.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+            }
+            
+            // Clear insights highlighting
+            clearInsightsHighlight(townId);
+            
+            // Reset insights container styling
+            const insightsContainer = document.getElementById(`insightsContainer-${townId}`);
+            if (insightsContainer) {
+                insightsContainer.style.border = '2px solid #e74c3c';
+                insightsContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                insightsContainer.style.background = 'linear-gradient(135deg, #fff5f5, #ffeaea)';
+            }
+            
+            // Hide controls after a delay
+            setTimeout(() => {
+                if (audioControls) audioControls.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Reset audio button to original state
+        function resetAudioButton(townId, button) {
+            button.innerHTML = 'ðŸ”Š';
+            button.title = 'Play AI Travel Insights';
+            button.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+        }
+        
+        // Animate insights highlighting during playback
+        function animateInsightsHighlight(townId, insightCount, duration) {
+            const timePerInsight = (duration * 1000) / insightCount; // Convert to milliseconds
+            
+            for (let i = 0; i < insightCount; i++) {
+                setTimeout(() => {
+                    const insightElement = document.getElementById(`insight-${townId}-${i}`);
+                    if (insightElement) {
+                        // Highlight current insight
+                        insightElement.style.background = 'linear-gradient(135deg, #fff9c4, #f0e68c)';
+                        insightElement.style.border = '3px solid #28a745';
+                        insightElement.style.transform = 'scale(1.02)';
+                        insightElement.style.boxShadow = '0 4px 12px rgba(40, 167, 69, 0.3)';
+                        
+                        // Remove highlight from previous insight
+                        if (i > 0) {
+                            const prevElement = document.getElementById(`insight-${townId}-${i-1}`);
+                            if (prevElement) {
+                                prevElement.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+                                prevElement.style.border = '4px solid #e74c3c';
+                                prevElement.style.transform = 'scale(1)';
+                                prevElement.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                            }
+                        }
+                    }
+                }, i * timePerInsight);
+            }
+        }
+        
+        // Clear insights highlighting
+        function clearInsightsHighlight(townId) {
+            // Find all insight elements for this town and reset their styling
+            let i = 0;
+            while (true) {
+                const insightElement = document.getElementById(`insight-${townId}-${i}`);
+                if (!insightElement) break;
+                
+                insightElement.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+                insightElement.style.border = '4px solid #e74c3c';
+                insightElement.style.transform = 'scale(1)';
+                insightElement.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                i++;
+            }
+        }
+        
+        // Update audio progress indicator
+        function updateAudioProgress(townId, charIndex, totalChars) {
+            const progress = Math.round((charIndex / totalChars) * 100);
+            const audioStatus = document.getElementById(`audioStatus-${townId}`);
+            if (audioStatus && progress > 0) {
+                audioStatus.textContent = `ðŸŽ§ Playing insights... ${progress}%`;
+            }
+        }
+        
+        // Enhanced clean up speech when overlay is closed
+        function cleanupAudio() {
+            if (currentSpeech) {
+                window.speechSynthesis.cancel();
+                currentSpeech = null;
+            }
+            isPlaying = false;
+            isPaused = false;
+            
+            // Clear any ongoing animations or highlights
+            const allInsightElements = document.querySelectorAll('[id^="insight-"]');
+            allInsightElements.forEach(element => {
+                element.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+                element.style.border = '4px solid #e74c3c';
+                element.style.transform = 'scale(1)';
+                element.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+            });
+        }
+        
+        // Initialize voices when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeVoices().then(() => {
+                console.log('ðŸŽ¤ Voice system initialized and ready');
+            });
+        });
+
+        // Close town details modal
+        function closeTownModal() {
+            const modal = document.getElementById('townModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('townModal');
+            if (e.target === modal) {
+                closeTownModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeTownModal();
+            }
+        });
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            
+            let bgColor, icon;
+            switch(type) {
+                case 'auto':
+                    bgColor = 'var(--success-green)';
+                    icon = 'fa-location-arrow';
+                    break;
+                case 'route':
+                    bgColor = '#6f42c1'; // Purple for route auto-checkins
+                    icon = 'fa-route';
+                    break;
+                case 'state':
+                    bgColor = '#28a745'; // Green for state welcome
+                    icon = 'fa-flag';
+                    break;
+                case 'county':
+                    bgColor = '#fd7e14'; // Orange for county check-ins
+                    icon = 'fa-landmark';
+                    break;
+                case 'sync':
+                    bgColor = '#17a2b8'; // Cyan for cross-screen sync
+                    icon = 'fa-sync-alt';
+                    break;
+                case 'manual':
+                    bgColor = 'var(--primary-blue)';
+                    icon = 'fa-check';
+                    break;
+                case 'uncheck':
+                    bgColor = '#dc3545';
+                    icon = 'fa-times';
+                    break;
+                case 'info':
+                    bgColor = 'var(--info-blue)';
+                    icon = 'fa-info-circle';
+                    break;
+                case 'warning':
+                    bgColor = 'var(--warning-yellow)';
+                    icon = 'fa-exclamation-triangle';
+                    break;
+                case 'error':
+                    bgColor = '#dc3545';
+                    icon = 'fa-exclamation-circle';
+                    break;
+                default:
+                    bgColor = 'var(--success-green)';
+                    icon = 'fa-check';
+            }
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                font-weight: bold;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                animation: slideIn 0.5s ease;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            notification.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Show save status
+        function showSaveStatus(status, message) {
+            const statusEl = document.getElementById('saveStatus');
+            const iconEl = statusEl.querySelector('i');
+            const textEl = statusEl.querySelector('span');
+            
+            statusEl.classList.remove('saving', 'saved', 'error');
+            
+            switch(status) {
+                case 'saving':
+                    statusEl.classList.add('saving', 'show');
+                    iconEl.className = 'fas fa-spinner fa-spin';
+                    textEl.textContent = message || 'Saving...';
+                    break;
+                case 'saved':
+                    statusEl.classList.add('saved', 'show');
+                    iconEl.className = 'fas fa-check';
+                    textEl.textContent = message || 'Saved!';
+                    setTimeout(() => statusEl.classList.remove('show'), 2000);
+                    break;
+                case 'error':
+                    statusEl.classList.add('error', 'show');
+                    iconEl.className = 'fas fa-exclamation-triangle';
+                    textEl.textContent = message || 'Save failed';
+                    setTimeout(() => statusEl.classList.remove('show'), 3000);
+                    break;
+            }
+        }
+
+        // Filter towns based on criteria
+        function filterTowns() {
+            const stateFilter = document.getElementById('stateFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            filteredTowns = allTowns.filter(town => {
+                // State filter
+                if (stateFilter !== 'all' && town.state !== stateFilter) return false;
+                
+                // Type filter
+                if (typeFilter !== 'all' && town.type !== typeFilter) return false;
+                
+                // Status filter
+                if (statusFilter !== 'all') {
+                    const isCheckedIn = checkedInTowns.has(town.id);
+                    const isNearby = town.isNearby || false;
+                    
+                    if (statusFilter === 'checked-in' && !isCheckedIn) return false;
+                    if (statusFilter === 'nearby' && !isNearby) return false;
+                    if (statusFilter === 'not-visited' && (isCheckedIn || isNearby)) return false;
+                }
+                
+                return true;
+            });
+
+            updateTownsDisplay();
+
+            updateStats();
+        }
+
+        // Update statistics
+        // Calculate points based on population
+        function calculatePoints(population) {
+            if (population >= 100000) return 5;
+            if (population >= 50000) return 10;
+            if (population >= 25000) return 15;
+            if (population >= 10000) return 25;
+            if (population >= 5000) return 35;
+            if (population >= 1000) return 50;
+            return 100; // Small towns under 1000 people
+        }
+
+        // Add numbering to towns and calculate points
+        function initializeTownsWithNumbers() {
+            let townNumber = 1;
+            Object.values(townsData).forEach(route => {
+                route.towns.forEach(town => {
+                    town.number = townNumber++;
+                    town.points = calculatePoints(town.population);
+                });
+            });
+        }
+
+        function updateStats() {
+            const totalTowns = allTowns.length;
+            const checkedInCount = checkedInTowns.size;
+            const nearbyCount = allTowns.filter(town => town.isNearby).length;
+            const progressPercentage = Math.round((checkedInCount / totalTowns) * 100);
+            
+            // Calculate total points and average score
+            let totalPoints = 0;
+            checkedInTowns.forEach(townId => {
+                const town = allTowns.find(t => t.id === townId);
+                if (town && town.points) {
+                    totalPoints += town.points;
+                }
+            });
+            const averageScore = checkedInCount > 0 ? Math.round(totalPoints / checkedInCount) : 0;
+
+            document.getElementById('totalTowns').textContent = totalTowns;
+            document.getElementById('checkedInTowns').textContent = checkedInCount;
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('averageScore').textContent = averageScore;
+            document.getElementById('nearbyTowns').textContent = nearbyCount;
+            document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
+        }
+
+        // Update towns display
+        function updateTownsDisplay() {
+            console.log('ðŸ˜ï¸ Starting updateTownsDisplay...');
+            console.log(`ðŸ“Š filteredTowns.length: ${filteredTowns.length}`);
+            
+            const container = document.getElementById('townsContainer');
+            container.innerHTML = '';
+
+            // Group towns by route
+            const townsByRoute = {};
+            filteredTowns.forEach(town => {
+                if (!townsByRoute[town.route]) {
+                    townsByRoute[town.route] = [];
+                }
+                townsByRoute[town.route].push(town);
+            });
+
+            console.log(`ðŸ›£ï¸ Routes found: ${Object.keys(townsByRoute).length}`);
+            Object.keys(townsByRoute).forEach(route => {
+                console.log(`  - ${route}: ${townsByRoute[route].length} towns`);
+            });
+
+            Object.entries(townsByRoute).forEach(([routeName, towns]) => {
+                const routeSection = document.createElement('div');
+                routeSection.className = 'route-section';
+                
+                const routeHeader = document.createElement('div');
+                routeHeader.className = 'route-header';
+                routeHeader.innerHTML = `
+                    <div class="route-title">${routeName}</div>
+                    <div class="route-distance">${towns[0].routeDistance}</div>
+                `;
+                
+                const townsGrid = document.createElement('div');
+                townsGrid.className = 'towns-grid';
+                
+                towns.forEach(town => {
+                    const isCheckedIn = checkedInTowns.has(town.id);
+                    const isNearby = town.isNearby || false;
+                    
+                    let cardClass = 'town-card';
+                    let statusText = 'Not Visited';
+                    let statusClass = 'status-not-visited';
+                    
+                    if (isCheckedIn) {
+                        cardClass += ' checked-in';
+                        statusText = 'âœ“ Checked In';
+                        statusClass = 'status-checked-in';
+                    } else if (isNearby) {
+                        cardClass += ' nearby';
+                        statusText = 'ðŸ“ Nearby';
+                        statusClass = 'status-nearby';
+                    }
+                    
+                    const distanceText = town.distance ? `${town.distance.toFixed(1)} miles away` : '';
+                    
+                    const townCard = document.createElement('div');
+                    townCard.className = cardClass;
+                    
+                    // Check if this is the next town to visit for pulse effect
+                    const nextTown = getNextTown();
+                    const isNextTown = nextTown && 
+                        nextTown.name === town.name && 
+                        nextTown.state === town.state && 
+                        !isCheckedIn;
+                    
+                    if (isNextTown) {
+                        townCard.classList.add('next-town-tile');
+                    }
+                    
+                    townCard.innerHTML = `
+                        <div class="town-header">
+                            <div class="town-number">${town.number}</div>
+                            <div class="town-name">${town.name}</div>
+                            <div class="town-type">${town.type}</div>
+                            <div class="points-indicator">${town.points} pts</div>
+                        </div>
+                        <div class="town-details">
+                            ${town.state} â€¢ Pop: ${town.population.toLocaleString()}
+                            ${distanceText ? `<br><div class="distance-info">${distanceText}</div>` : ''}
+                        </div>
+                        <div class="town-status">
+                            <div class="status-badge ${statusClass}">${statusText}</div>
+                            ${isCheckedIn ? 
+                                `<button class="uncheck-btn" onclick="event.stopPropagation(); performUncheck('${town.id}').catch(e => console.error('Uncheck error:', e))">
+                                    Uncheck
+                                </button>` :
+                                `<button class="checkin-btn" onclick="event.stopPropagation(); performCheckin('${town.id}').catch(e => console.error('Checkin error:', e))">
+                                    Check In
+                                </button>`
+                            }
+                        </div>
+                    `;
+
+                    // Add click event to show town details (excluding the button area)
+                    townCard.addEventListener('click', function(e) {
+                        if (!e.target.classList.contains('checkin-btn') && !e.target.classList.contains('uncheck-btn')) {
+                            showTownDetails(town.id);
+                        }
+                    });
+
+                    // Add hover effect cursor
+                    townCard.style.cursor = 'pointer';
+                    
+                    townsGrid.appendChild(townCard);
+                });
+                
+                routeSection.appendChild(routeHeader);
+                routeSection.appendChild(townsGrid);
+                container.appendChild(routeSection);
+            });
+            
+            // Scroll to the next town with pulse effect after display update
+            setTimeout(() => {
+                scrollToNextTownTile();
+            }, 100);
+        }
+
+        // Update map with all towns
+        function updateMap() {
+            // Clear existing markers except user location and boundaries
+            map.eachLayer(layer => {
+                if (layer instanceof L.CircleMarker && layer !== userLocationMarker) {
+                    map.removeLayer(layer);
+                }
+                // Remove old circle boundaries (we'll use new boundary system)
+                if (layer instanceof L.Circle) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            // Clear town markers map
+            townMarkers.clear();
+
+            // Add town markers and boundaries
+            allTowns.forEach(town => {
+                const isCheckedIn = checkedInTowns.has(town.id);
+                const isNearby = town.isNearby || false;
+                
+                let color, size;
+                
+                if (isCheckedIn) {
+                    color = '#28a745'; // Green for checked in
+                    size = 8;
+                } else if (isNearby) {
+                    color = '#ffc107'; // Yellow for nearby
+                    size = 7;
+                } else {
+                    // Color by type
+                    switch(town.type) {
+                        case 'city':
+                            color = '#2c5aa0'; // Blue
+                            size = 6;
+                            break;
+                        case 'town':
+                            color = '#17a2b8'; // Teal
+                            size = 5;
+                            break;
+                        case 'village':
+                            color = '#6f42c1'; // Purple
+                            size = 4;
+                            break;
+                        default:
+                            color = '#6c757d'; // Gray
+                            size = 4;
+                    }
+                }
+                
+                // Add town center marker
+                const marker = L.circleMarker([town.lat, town.lng], {
+                    radius: size,
+                    fillColor: color,
+                    color: 'white',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+                
+                // Store marker in the map for later access
+                townMarkers.set(town.id, marker);
+                
+                marker.bindPopup(`
+                    <div style="text-align: center;">
+                        <h4 style="margin: 0; color: ${color};">${town.name}, ${town.state}</h4>
+                        <p style="margin: 5px 0; font-size: 0.9rem;">${town.type.toUpperCase()} â€¢ Pop: ${town.population.toLocaleString()}</p>
+                        ${isCheckedIn ? '<p style="color: #28a745; margin: 5px 0 0 0; font-weight: bold;">âœ“ Checked In</p>' : ''}
+                        ${isNearby && !isCheckedIn ? '<p style="color: #ffc107; margin: 5px 0 0 0; font-weight: bold;">ðŸ“ Nearby</p>' : ''}
+                    </div>
+                `);
+                
+                marker.on('click', () => {
+                    if (!isCheckedIn) {
+                        performCheckin(town.id).catch(e => console.error('Map click checkin error:', e));
+                    }
+                });
+                
+                // Add boundary for checked-in towns
+                if (isCheckedIn && boundariesLoaded) {
+                    addTownBoundary(town.id, true);
+                }
+            });
+        }
+
+        // Get current location
+        function getCurrentLocation() {
+            if (!navigator.geolocation) {
+                showNotification('Geolocation is not supported by this browser.', 'error');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    currentPosition = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Update/add user location marker
+                    if (userLocationMarker) {
+                        map.removeLayer(userLocationMarker);
+                    }
+
+                    userLocationMarker = L.circleMarker([currentPosition.lat, currentPosition.lng], {
+                        radius: 8,
+                        fillColor: '#ff0000',
+                        color: 'white',
+                        weight: 3,
+                        opacity: 1,
+                        fillOpacity: 1
+                    }).addTo(map);
+
+                    userLocationMarker.bindPopup('<div style="text-align: center;"><h4 style="margin: 0; color: #ff0000;">ðŸ“ Your Current Location</h4></div>');
+
+                    checkNearbyTowns();
+                    saveTownsState();
+                },
+                (error) => {
+                    let errorMessage = 'Unable to get your location.';
+                    showNotification(errorMessage, 'error');
+                }
+            );
+        }
+
+        // Google Search Integration Functions
+        function refreshGoogleSearch(townName, stateName, townId) {
+            const iframe = document.getElementById(`googleSearchFrame-${townId}`);
+            if (iframe) {
+                const searchQuery = encodeURIComponent(`${townName}, ${stateName} `);
+                const newSrc = `https://www.google.com/search?q=${searchQuery}&igu=1&timestamp=${Date.now()}`;
+                iframe.src = newSrc;
+                
+                showNotification(`ðŸ”„ Refreshing search results for ${townName}`, 'info');
+            }
+        }
+        
+        function searchGoogle(query, townId) {
+            const iframe = document.getElementById(`googleSearchFrame-${townId}`);
+            if (iframe) {
+                const encodedQuery = encodeURIComponent(query);
+                const newSrc = `https://www.google.com/search?q=${encodedQuery}&igu=1&timestamp=${Date.now()}`;
+                iframe.src = newSrc;
+                
+                showNotification(`ðŸ” Searching for: ${query}`, 'info');
+            }
+        }
+        
+        function openGoogleInNewTab(townName, stateName) {
+            const query = encodeURIComponent(`${townName}, ${stateName} tourism attractions`);
+            const url = `https://www.google.com/search?q=${query}`;
+            window.open(url, '_blank');
+            
+            showNotification(`ðŸŒ Opened Google search in new tab`, 'info');
+        }
+
+        // Clear all data
+        async function clearAllTownData() {
+            if (confirm('Are you sure you want to clear all your town check-in data? This cannot be undone.')) {
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                    
+                    checkedInTowns = new Set();
+                    checkinHistory = [];
+                    travelPath = [];
+                    visitedStates = new Set();
+                    autoCheckinEnabled = false;
+                    currentPosition = null;
+                    
+                    document.getElementById('autoCheckinToggle').checked = false;
+                    
+                    if (userLocationMarker) {
+                        map.removeLayer(userLocationMarker);
+                        userLocationMarker = null;
+                    }
+                    
+                    allTowns.forEach(town => {
+                        town.distance = null;
+                        town.isNearby = false;
+                    });
+                    
+                    // Clear state boundaries from map
+                    stateLayers.forEach((layer, stateCode) => {
+                        map.removeLayer(layer);
+                    });
+                    stateLayers.clear();
+                    
+                    updateStats();
+                    updateTownsDisplay();
+                    updateMap();
+                    await updateTravelPath();
+                    
+                    showNotification('All town data cleared successfully!', 'info');
+                } catch (error) {
+                    showNotification('Failed to clear data. Please try again.', 'error');
+                }
+            }
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            @keyframes pulse {
+                0% { 
+                    transform: scale(1);
+                }
+                50% { 
+                    transform: scale(1.5);
+                }
+                100% { 
+                    transform: scale(1);
+                }
+            }
+            @keyframes tilePulse {
+                0% { 
+                    box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4);
+                    border-color: #dee2e6;
+                }
+                50% { 
+                    box-shadow: 0 0 0 10px rgba(23, 162, 184, 0.1);
+                    border-color: rgba(23, 162, 184, 0.6);
+                }
+                100% { 
+                    box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4);
+                    border-color: #dee2e6;
+                }
+            }
+            .next-town-tile {
+                animation: tilePulse 3s infinite ease-in-out;
+                transition: all 0.3s ease;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Event listeners
+        document.getElementById('autoCheckinToggle').addEventListener('change', function() {
+            autoCheckinEnabled = this.checked;
+            saveTownsState();
+            
+            if (autoCheckinEnabled) {
+                getCurrentLocation();
+                showNotification('Auto check-in enabled for towns within 2 miles!', 'info');
+                setInterval(() => {
+                    if (autoCheckinEnabled) {
+                        getCurrentLocation();
+                    }
+                }, 30000);
+            } else {
+                showNotification('Auto check-in disabled for towns.', 'info');
+            }
+        });
+
+        document.getElementById('routeCheckinToggle').addEventListener('change', function() {
+            routeCheckinEnabled = this.checked;
+            saveTownsState();
+            
+            if (routeCheckinEnabled) {
+                showNotification('ðŸ›£ï¸ Route auto check-in enabled! Intermediate towns will be automatically checked in.', 'info');
+            } else {
+                showNotification('ðŸ›£ï¸ Route auto check-in disabled.', 'info');
+            }
+        });
+
+        document.getElementById('stateFilter').addEventListener('change', filterTowns);
+        document.getElementById('typeFilter').addEventListener('change', filterTowns);
+        document.getElementById('statusFilter').addEventListener('change', filterTowns);
+
+        // Auto-save functionality
+        function startAutoSave() {
+            setInterval(() => {
+                saveTownsState();
+            }, AUTO_SAVE_INTERVAL);
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('ðŸš€ Starting application initialization...');
+            console.log('ðŸ“ townsData keys:', Object.keys(townsData));
+            console.log('ï¿½ townsData.route1:', townsData.route1);
+            
+            console.log('ï¿½ðŸ“Š Initializing towns with numbers...');
+            initializeTownsWithNumbers();
+            
+            console.log('ðŸ—ºï¸ Initializing towns data...');
+            await initializeTownsData();
+            
+            console.log('ðŸ“ allTowns.length after init:', allTowns.length);
+            
+            console.log('ðŸ’¾ Loading towns state...');
+            loadTownsState();
+            
+            console.log('ðŸ“ˆ Updating stats...');
+            updateStats();
+            
+            console.log('ðŸ˜ï¸ Updating towns display...');
+            updateTownsDisplay();
+            
+            console.log('ðŸ›ï¸ Updating counties display...');
+
+            
+            console.log('ðŸ—ºï¸ Updating map...');
+            updateMap();
+            
+            console.log('ðŸ›£ï¸ Updating travel path...');
+            await updateTravelPath();
+            
+            console.log('ï¿½ï¸ Displaying full trip route...');
+            await showFullTripRoute();
+            
+            console.log('ï¿½ðŸ’¾ Starting auto-save...');
+            startAutoSave();
+            
+            if (autoCheckinEnabled) {
+                console.log('ðŸ“ Getting current location...');
+                getCurrentLocation();
+            }
+            
+            // Highlight next town ready for check-in and scroll to it
+            console.log('ðŸŽ¯ Highlighting next town for check-in...');
+            setTimeout(() => {
+                highlightNextTownTile();
+            }, 500); // Delay to ensure DOM is fully rendered
+            
+            // Save state before page unload
+            window.addEventListener('beforeunload', () => {
+                saveTownsState();
+            });
+            
+            // Listen for storage changes from other tabs/windows
+            window.addEventListener('storage', function(e) {
+                if (e.key === STORAGE_KEY) {
+                    // Reload towns data if changed externally
+                    loadTownsState();
+                    updateStats();
+                    updateTownsDisplay();
+                    updateMap();
+                    console.log('ðŸ”„ Towns data updated from external change');
+                } else if (e.key === 'statesTravelData') {
+                    // If states were unchecked, we might need to uncheck our towns too
+                    // But since we're the source of truth for state sync from towns, 
+                    // we don't need to do anything here to avoid loops
+                    console.log('ðŸ”„ States data changed externally');
+                }
+            });
+            
+            console.log('âœ… Application initialization complete!');
+        });
+    </script>
+</body>
+</html>

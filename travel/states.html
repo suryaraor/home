@@ -249,6 +249,7 @@
             cursor: pointer;
             font-size: 0.8rem;
             transition: all 0.3s ease;
+            margin-left: 5px;
         }
 
         .checkin-btn:hover {
@@ -258,6 +259,31 @@
         .checkin-btn:disabled {
             background: #6c757d;
             cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            margin-left: 5px;
+        }
+
+        .cancel-btn:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .state-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         @media (max-width: 768px) {
@@ -713,6 +739,9 @@
                 
                 <div class="stats-container">
                     <div id="stats">States visited: 0/8 (0%)</div>
+                    <div id="tripCountdown" style="margin-top: 10px; padding: 10px; background: linear-gradient(135deg, #ff6b35, #e55d2b); color: white; border-radius: 8px; text-align: center; font-weight: bold;">
+                        <i class="fas fa-calendar-day"></i> <span id="countdownText">Loading countdown...</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -786,7 +815,7 @@
                         </div>
                         <div class="progress-text">
                             <span id="mapProgressText">0% Complete</span>
-                            <span id="mapDistanceText">~2,800 miles</span>
+                            <span id="mapDistanceText">Jul 27 - Aug 5, 2025</span>
                         </div>
                     </div>
                 </div>
@@ -819,20 +848,122 @@
                 <div class="states-summary">
                     <div class="summary-item">
                         <i class="fas fa-route"></i>
-                        <span>Route: Missouri → Pennsylvania</span>
+                        <span>Your July-August 2025 Midwest Adventure</span>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Jul 27 - Aug 5, 2025 (10 days)</span>
                     </div>
                     <div class="summary-item">
                         <i class="fas fa-road"></i>
-                        <span>Distance: ~2,800 miles</span>
+                        <span>Kansas City → Milwaukee → Columbus → Pittsburgh → Indianapolis → Kansas City</span>
                     </div>
                     <div class="summary-item">
                         <i class="fas fa-clock"></i>
-                        <span>Est. Time: 40+ hours driving</span>
+                        <span>~1,900 miles total driving</span>
                     </div>
                 </div>
                 
                 <div id="statesContainer" class="states-grid">
                     <!-- States will be populated by JavaScript -->
+                </div>
+                
+                <!-- Travel Itinerary Section -->
+                <div class="itinerary-section" style="margin: 25px 0; padding: 20px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; border: 2px solid #dee2e6;">
+                    <h3 style="color: #495057; margin: 0 0 20px 0; text-align: center; font-size: 1.3rem;">
+                        <i class="fas fa-calendar-check"></i> Your Travel Itinerary
+                    </h3>
+                    <div class="itinerary-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #2c5aa0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #2c5aa0; margin-bottom: 8px;">
+                                <i class="fas fa-plane-departure"></i> Sun, Jul 27
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Kansas City → Milwaukee</div>
+                            <div style="color: #666; font-size: 0.9rem;">States: MO → IA → WI</div>
+                            <div style="color: #666; font-size: 0.9rem;">~460 miles, 7 hours drive</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #28a745; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #28a745; margin-bottom: 8px;">
+                                <i class="fas fa-bed"></i> Mon, Jul 28
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Rest Day in Milwaukee</div>
+                            <div style="color: #666; font-size: 0.9rem;">Explore Wisconsin</div>
+                            <div style="color: #666; font-size: 0.9rem;">Visit breweries & Lake Michigan</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #2c5aa0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #2c5aa0; margin-bottom: 8px;">
+                                <i class="fas fa-route"></i> Tue, Jul 29
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Milwaukee → Columbus</div>
+                            <div style="color: #666; font-size: 0.9rem;">States: WI → IL → IN → OH</div>
+                            <div style="color: #666; font-size: 0.9rem;">~440 miles, 7 hours drive</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #28a745; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #28a745; margin-bottom: 8px;">
+                                <i class="fas fa-bed"></i> Wed, Jul 30
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Rest Day in Columbus</div>
+                            <div style="color: #666; font-size: 0.9rem;">Explore Ohio's capital</div>
+                            <div style="color: #666; font-size: 0.9rem;">Visit German Village & Short North</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #28a745; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #28a745; margin-bottom: 8px;">
+                                <i class="fas fa-bed"></i> Thu, Jul 31
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Extended Stay in Columbus</div>
+                            <div style="color: #666; font-size: 0.9rem;">More Ohio exploration</div>
+                            <div style="color: #666; font-size: 0.9rem;">Museums & local attractions</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #2c5aa0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #2c5aa0; margin-bottom: 8px;">
+                                <i class="fas fa-route"></i> Fri, Aug 1
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Columbus → Pittsburgh</div>
+                            <div style="color: #666; font-size: 0.9rem;">States: OH → WV → PA</div>
+                            <div style="color: #666; font-size: 0.9rem;">~185 miles, 3 hours drive</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #28a745; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #28a745; margin-bottom: 8px;">
+                                <i class="fas fa-bed"></i> Sat, Aug 2
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Rest Day in Pittsburgh</div>
+                            <div style="color: #666; font-size: 0.9rem;">Explore Steel City</div>
+                            <div style="color: #666; font-size: 0.9rem;">Heinz Field & Point State Park</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #2c5aa0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #2c5aa0; margin-bottom: 8px;">
+                                <i class="fas fa-route"></i> Sun, Aug 3
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Pittsburgh → Indianapolis</div>
+                            <div style="color: #666; font-size: 0.9rem;">States: PA → WV → OH → IN</div>
+                            <div style="color: #666; font-size: 0.9rem;">~360 miles, 5.5 hours drive</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #2c5aa0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #2c5aa0; margin-bottom: 8px;">
+                                <i class="fas fa-route"></i> Mon, Aug 4
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Indianapolis → Kansas City</div>
+                            <div style="color: #666; font-size: 0.9rem;">States: IN → IL → MO</div>
+                            <div style="color: #666; font-size: 0.9rem;">~465 miles, 7 hours drive</div>
+                        </div>
+                        
+                        <div class="itinerary-day" style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #28a745; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; color: #28a745; margin-bottom: 8px;">
+                                <i class="fas fa-home"></i> Tue, Aug 5
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Back in Kansas City</div>
+                            <div style="color: #666; font-size: 0.9rem;">Trip completed!</div>
+                            <div style="color: #666; font-size: 0.9rem;">8 states, 10 days, amazing memories</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="states-footer">
@@ -990,7 +1121,13 @@
                 return;
             }
             
-            if (confirm('Are you sure you want to uncheck all states? This will clear your visit history.')) {
+            if (confirm('Are you sure you want to uncheck all states? This will also clear all town check-ins.')) {
+                // Sync town checkouts for all states before clearing
+                const statesToClear = Array.from(visitedStates);
+                statesToClear.forEach(stateAbbr => {
+                    syncTownCheckouts(stateAbbr);
+                });
+                
                 visitedStates.clear();
                 checkinHistory = [];
                 
@@ -1000,9 +1137,35 @@
                 updateMap();
                 updateControlStats();
                 
-                updateControlStatus('All states unchecked!');
-                showNotification('All states have been unchecked!', 'info');
+                updateControlStatus('All states and towns unchecked!');
+                showNotification('All states and towns have been unchecked!', 'info');
             }
+        }
+
+        // Uncheck individual state function
+        function performStateUncheck(stateAbbr) {
+            if (!visitedStates.has(stateAbbr)) return;
+
+            const stateInfo = tripStates.find(s => s.abbr === stateAbbr);
+            if (!stateInfo) return;
+
+            // Remove from visited states
+            visitedStates.delete(stateAbbr);
+            
+            // Remove from checkin history
+            checkinHistory = checkinHistory.filter(entry => entry.state !== stateAbbr);
+
+            // Sync with towns - remove all towns in this state
+            syncTownCheckouts(stateAbbr);
+
+            saveStatesState();
+            updateStats();
+            updateStatesDisplay();
+            updateMap();
+            updateControlStats();
+
+            showNotification(`Unchecked from ${stateInfo.name}! All towns in this state were also unchecked.`, 'info');
+            updateControlStatus(`${stateInfo.name} check-in cancelled`);
         }
 
         function updateControlStatus(message) {
@@ -1181,7 +1344,15 @@
                 dashArray: '10, 5'
             }).addTo(map);
             
-            routePath.bindPopup('Midwest Road Trip Route - 8 States, ~2,800 miles');
+            routePath.bindPopup(`
+                <div style="text-align: center;">
+                    <h4 style="margin: 0 0 10px 0; color: #ff6b35;">Your July-August 2025 Road Trip</h4>
+                    <p style="margin: 5px 0; font-size: 0.9rem;"><strong>Duration:</strong> July 27 - August 5, 2025</p>
+                    <p style="margin: 5px 0; font-size: 0.9rem;"><strong>Route:</strong> Kansas City → Milwaukee → Columbus → Pittsburgh → Indianapolis → Kansas City</p>
+                    <p style="margin: 5px 0; font-size: 0.9rem;"><strong>Distance:</strong> ~1,900 miles total</p>
+                    <p style="margin: 5px 0; font-size: 0.9rem;"><strong>States:</strong> 8 Midwest states</p>
+                </div>
+            `);
         }
 
         // Enhanced states list functions
@@ -1280,19 +1451,111 @@
             const percentage = Math.round((visitedStates.size / tripStates.length) * 100);
             
             if (percentage === 0) {
-                completionMessage.innerHTML = '<i class="fas fa-route"></i> Start your journey across the Midwest!';
+                completionMessage.innerHTML = '<i class="fas fa-route"></i> Ready for your July 27th departure to Milwaukee!';
             } else if (percentage < 25) {
-                completionMessage.innerHTML = '<i class="fas fa-play"></i> Great start! Keep exploring the route!';
+                completionMessage.innerHTML = '<i class="fas fa-play"></i> Great start! Your Midwest adventure has begun!';
             } else if (percentage < 50) {
-                completionMessage.innerHTML = '<i class="fas fa-road"></i> Quarter way there! The journey continues!';
+                completionMessage.innerHTML = '<i class="fas fa-road"></i> Halfway through your 10-day journey!';
             } else if (percentage < 75) {
-                completionMessage.innerHTML = '<i class="fas fa-mountain"></i> Halfway through! Amazing progress!';
+                completionMessage.innerHTML = '<i class="fas fa-mountain"></i> Amazing progress! Pittsburgh and final states ahead!';
             } else if (percentage < 100) {
-                completionMessage.innerHTML = '<i class="fas fa-flag-checkered"></i> Almost there! Final states ahead!';
+                completionMessage.innerHTML = '<i class="fas fa-flag-checkered"></i> Almost home! Final stretch to Kansas City!';
             } else {
-                completionMessage.innerHTML = '<i class="fas fa-trophy"></i> 🎉 Congratulations! You\'ve completed the entire Midwest route!';
+                completionMessage.innerHTML = '<i class="fas fa-trophy"></i> 🎉 Welcome back to Kansas City! Your Midwest adventure is complete!';
                 completionMessage.style.color = '#28a745';
                 completionMessage.style.fontWeight = 'bold';
+            }
+        }
+
+        // Trip countdown functionality
+        function updateTripCountdown() {
+            const tripStartDate = new Date('2025-07-27T08:00:00'); // July 27, 2025 8:00 AM
+            const tripEndDate = new Date('2025-08-05T18:00:00'); // August 5, 2025 6:00 PM
+            const now = new Date();
+            const countdownElement = document.getElementById('countdownText');
+            
+            if (now < tripStartDate) {
+                // Before trip starts
+                const timeDiff = tripStartDate - now;
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                
+                if (days > 0) {
+                    countdownElement.textContent = `${days} days until departure to Milwaukee!`;
+                } else if (hours > 0) {
+                    countdownElement.textContent = `${hours} hours until departure to Milwaukee!`;
+                } else {
+                    countdownElement.textContent = 'Departure day is here! Safe travels!';
+                }
+            } else if (now >= tripStartDate && now <= tripEndDate) {
+                // During trip
+                const dayOfTrip = Math.floor((now - tripStartDate) / (1000 * 60 * 60 * 24)) + 1;
+                const tripDay = Math.min(dayOfTrip, 10);
+                
+                const dayDescriptions = {
+                    1: "Day 1: Kansas City → Milwaukee",
+                    2: "Day 2: Exploring Milwaukee",
+                    3: "Day 3: Milwaukee → Columbus", 
+                    4: "Day 4: Exploring Columbus",
+                    5: "Day 5: More Columbus adventures",
+                    6: "Day 6: Columbus → Pittsburgh",
+                    7: "Day 7: Exploring Pittsburgh",
+                    8: "Day 8: Pittsburgh → Indianapolis",
+                    9: "Day 9: Indianapolis → Kansas City",
+                    10: "Day 10: Back home in Kansas City!"
+                };
+                
+                countdownElement.textContent = dayDescriptions[tripDay] || "Enjoying your Midwest adventure!";
+            } else {
+                // After trip
+                const daysSinceTrip = Math.floor((now - tripEndDate) / (1000 * 60 * 60 * 24));
+                countdownElement.textContent = `Trip completed ${daysSinceTrip} days ago! Amazing memories made!`;
+            }
+        }
+
+        // Trip countdown functionality
+        function updateTripCountdown() {
+            const tripStartDate = new Date('2025-07-27T08:00:00'); // July 27, 2025 8:00 AM
+            const tripEndDate = new Date('2025-08-05T18:00:00'); // August 5, 2025 6:00 PM
+            const now = new Date();
+            const countdownElement = document.getElementById('countdownText');
+            
+            if (now < tripStartDate) {
+                // Before trip starts
+                const timeDiff = tripStartDate - now;
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                
+                if (days > 0) {
+                    countdownElement.textContent = `${days} days until departure to Milwaukee!`;
+                } else if (hours > 0) {
+                    countdownElement.textContent = `${hours} hours until departure to Milwaukee!`;
+                } else {
+                    countdownElement.textContent = 'Departure day is here! Safe travels!';
+                }
+            } else if (now >= tripStartDate && now <= tripEndDate) {
+                // During trip
+                const dayOfTrip = Math.floor((now - tripStartDate) / (1000 * 60 * 60 * 24)) + 1;
+                const tripDay = Math.min(dayOfTrip, 10);
+                
+                const dayDescriptions = {
+                    1: "Day 1: Kansas City → Milwaukee",
+                    2: "Day 2: Exploring Milwaukee",
+                    3: "Day 3: Milwaukee → Columbus", 
+                    4: "Day 4: Exploring Columbus",
+                    5: "Day 5: More Columbus adventures",
+                    6: "Day 6: Columbus → Pittsburgh",
+                    7: "Day 7: Exploring Pittsburgh",
+                    8: "Day 8: Pittsburgh → Indianapolis",
+                    9: "Day 9: Indianapolis → Kansas City",
+                    10: "Day 10: Back home in Kansas City!"
+                };
+                
+                countdownElement.textContent = dayDescriptions[tripDay] || "Enjoying your Midwest adventure!";
+            } else {
+                // After trip
+                const daysSinceTrip = Math.floor((now - tripEndDate) / (1000 * 60 * 60 * 24));
+                countdownElement.textContent = `Trip completed ${daysSinceTrip} days ago! Amazing memories made!`;
             }
         }
 
@@ -1321,6 +1584,57 @@
         const STORAGE_KEY = 'statesTravelData';
         const TOWNS_STORAGE_KEY = 'townsTravelState';
         const AUTO_SAVE_INTERVAL = 10000;
+
+        // Cross-screen synchronization functions
+        function syncTownCheckouts(stateCode) {
+            try {
+                // Remove all towns in this state from towns.html data
+                const townsData = localStorage.getItem(TOWNS_STORAGE_KEY);
+                if (townsData) {
+                    const data = JSON.parse(townsData);
+                    if (data.checkedIn) {
+                        // Create state mapping for towns
+                        const stateMapping = {
+                            'MO': ['kansascity-mo', 'liberty-mo', 'lawson-mo', 'cameron-mo', 'gallatin-mo', 'trenton-mo', 'spickard-mo', 'stlouis-mo', 'wentzville-mo', 'columbia-mo', 'boonville-mo', 'marshall-mo', 'sedalia-mo', 'warrensburg-mo', 'harrisonville-mo', 'raymore-mo'],
+                            'IA': ['grundycenter-ia', 'reinbeck-ia', 'waterloo-ia', 'cedarfalls-ia', 'waverly-ia', 'sumner-ia', 'fayette-ia'],
+                            'WI': ['prairieduchien-wi', 'fennimore-wi', 'platteville-wi', 'dodgeville-wi', 'mounthoreb-wi', 'middleton-wi', 'madison-wi', 'sunprairie-wi', 'watertown-wi', 'oconomowoc-wi', 'waukesha-wi', 'milwaukee-wi', 'racine-wi', 'kenosha-wi'],
+                            'IL': ['waukegan-il', 'highlandpark-il', 'evanston-il', 'chicago-il', 'robinson-il', 'lawrenceville-il', 'mountcarmel-il', 'fairfield-il', 'flora-il', 'effingham-il', 'vandalia-il', 'greenville-il', 'highland-il'],
+                            'IN': ['gary-in', 'portage-in', 'valparaiso-in', 'plymouth-in', 'warsaw-in', 'fortwayne-in', 'decatur-in', 'richmond-in', 'newcastle-in', 'anderson-in', 'noblesville-in', 'fishers-in', 'indianapolis-in', 'plainfield-in', 'greencastle-in', 'terrehaute-in', 'vincennes-in'],
+                            'OH': ['vanwert-oh', 'lima-oh', 'bellefontaine-oh', 'marysville-oh', 'delaware-oh', 'sunbury-oh', 'westerville-oh', 'columbus-oh', 'reynoldsburg-oh', 'newark-oh', 'zanesville-oh', 'cambridge-oh', 'stclairsville-oh', 'bridgeport-oh', 'eastliverpool-oh', 'salem-oh', 'alliance-oh', 'canton-oh', 'massillon-oh', 'wooster-oh', 'mansfield-oh', 'marion-oh', 'dublin-oh'],
+                            'WV': ['wheeling-wv', 'triadelphia-wv'],
+                            'PA': ['washington-pa', 'canonsburg-pa', 'peterstownship-pa', 'bethelpark-pa', 'pittsburgh-pa', 'sewickley-pa', 'beaver-pa']
+                        };
+
+                        const stateTowns = stateMapping[stateCode] || [];
+                        
+                        // Remove all towns in this state from checked-in list
+                        const originalCount = data.checkedIn.length;
+                        data.checkedIn = data.checkedIn.filter(townId => !stateTowns.includes(townId));
+                        
+                        // Also remove from history
+                        if (data.history) {
+                            data.history = data.history.filter(entry => !stateTowns.includes(entry.townId));
+                        }
+                        
+                        // Remove from travel path
+                        if (data.travelPath) {
+                            data.travelPath = data.travelPath.filter(point => !stateTowns.includes(point.townId));
+                        }
+                        
+                        const removedCount = originalCount - data.checkedIn.length;
+                        if (removedCount > 0) {
+                            console.log(`🔄 Removed ${removedCount} towns in ${stateCode} from towns data`);
+                        }
+                        
+                        localStorage.setItem(TOWNS_STORAGE_KEY, JSON.stringify(data));
+                    }
+                }
+                
+                console.log(`🔄 Town sync completed for ${stateCode}: all towns unchecked`);
+            } catch (error) {
+                console.error('Error syncing town data:', error);
+            }
+        }
 
         // Initialize map
         const map = L.map('usMap').setView([39.8283, -89.6965], 5);
@@ -1371,8 +1685,18 @@
                                             <p style="margin: 5px 0; font-size: 0.9rem;">Capital: ${stateInfo.capital}</p>
                                             <p style="margin: 5px 0; font-size: 0.9rem;">Population: ${stateInfo.population}</p>
                                             <p style="margin: 5px 0; font-style: italic;">"${stateInfo.nickname}"</p>
-                                            ${isVisited ? '<p style="color: #28a745; margin: 5px 0 0 0; font-weight: bold;">✓ Visited</p>' : 
-                                              '<button onclick="performStateCheckin(\'' + stateAbbr + '\')" style="background: #2c5aa0; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;">Check In</button>'}
+                                            ${isVisited ? 
+                                                `<div style="margin: 10px 0;">
+                                                    <p style="color: #28a745; margin: 5px 0; font-weight: bold;">✓ Visited</p>
+                                                    <button onclick="performStateUncheck('${stateAbbr}')" 
+                                                            style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-size: 0.8rem;">
+                                                        <i class="fas fa-times"></i> Cancel Check-in
+                                                    </button>
+                                                </div>` : 
+                                                `<button onclick="performStateCheckin('${stateAbbr}')" 
+                                                         style="background: #2c5aa0; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;">
+                                                    <i class="fas fa-check"></i> Check In
+                                                </button>`}
                                         </div>
                                     `);
                                     
@@ -1587,10 +1911,19 @@
                         <div class="status-badge ${isVisited ? 'status-visited' : 'status-not-visited'}">
                             ${isVisited ? '✓ Visited' : 'Not Visited'}
                         </div>
-                        <button class="checkin-btn" onclick="event.stopPropagation(); performStateCheckin('${state.abbr}')" 
-                                ${isVisited ? 'disabled' : ''}>
-                            ${isVisited ? 'Visited' : 'Check In'}
-                        </button>
+                        <div class="state-buttons">
+                            ${isVisited ? `
+                                <button class="cancel-btn" onclick="event.stopPropagation(); performStateUncheck('${state.abbr}')" 
+                                        title="Cancel check-in for ${state.name}">
+                                    <i class="fas fa-times"></i> Cancel Check-in
+                                </button>
+                            ` : `
+                                <button class="checkin-btn" onclick="event.stopPropagation(); performStateCheckin('${state.abbr}')"
+                                        title="Check in to ${state.name}">
+                                    <i class="fas fa-check"></i> Check In
+                                </button>
+                            `}
+                        </div>
                     </div>
                 `;
                 
@@ -1630,8 +1963,18 @@
                         <p style="margin: 5px 0; font-size: 0.9rem;">Capital: ${state.capital}</p>
                         <p style="margin: 5px 0; font-size: 0.9rem;">Population: ${state.population}</p>
                         <p style="margin: 5px 0; font-style: italic;">"${state.nickname}"</p>
-                        ${isVisited ? '<p style="color: #28a745; margin: 5px 0 0 0; font-weight: bold;">✓ Visited</p>' : 
-                          '<button onclick="performStateCheckin(\'' + state.abbr + '\')" style="background: #2c5aa0; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;">Check In</button>'}
+                        ${isVisited ? 
+                            `<div style="margin: 10px 0;">
+                                <p style="color: #28a745; margin: 5px 0; font-weight: bold;">✓ Visited</p>
+                                <button onclick="performStateUncheck('${state.abbr}')" 
+                                        style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-size: 0.8rem;">
+                                    <i class="fas fa-times"></i> Cancel Check-in
+                                </button>
+                            </div>` : 
+                            `<button onclick="performStateCheckin('${state.abbr}')" 
+                                     style="background: #2c5aa0; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;">
+                                <i class="fas fa-check"></i> Check In
+                            </button>`}
                     </div>
                 `);
                 
@@ -1672,8 +2015,18 @@
                                     <p style="margin: 5px 0; font-size: 0.9rem;">Capital: ${state.capital}</p>
                                     <p style="margin: 5px 0; font-size: 0.9rem;">Population: ${state.population}</p>
                                     <p style="margin: 5px 0; font-style: italic;">"${state.nickname}"</p>
-                                    ${isVisited ? '<p style="color: #28a745; margin: 5px 0 0 0; font-weight: bold;">✓ Visited</p>' : 
-                                      '<button onclick="performStateCheckin(\'' + state.abbr + '\')" style="background: #2c5aa0; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;">Check In</button>'}
+                                    ${isVisited ? 
+                                        `<div style="margin: 10px 0;">
+                                            <p style="color: #28a745; margin: 5px 0; font-weight: bold;">✓ Visited</p>
+                                            <button onclick="performStateUncheck('${state.abbr}')" 
+                                                    style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-size: 0.8rem;">
+                                                <i class="fas fa-times"></i> Cancel Check-in
+                                            </button>
+                                        </div>` : 
+                                        `<button onclick="performStateCheckin('${state.abbr}')" 
+                                                 style="background: #2c5aa0; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;">
+                                            <i class="fas fa-check"></i> Check In
+                                        </button>`}
                                 </div>
                             `;
                             layer.getPopup().setContent(popupContent);
@@ -1833,6 +2186,10 @@
             addTooltips(); // Add keyboard shortcut tooltips
             startAutoSave();
             
+            // Initialize trip countdown
+            updateTripCountdown();
+            setInterval(updateTripCountdown, 60000); // Update every minute
+            
             // Initialize auto mode checkbox
             const autoModeCheckbox = document.getElementById('auto-mode');
             autoModeCheckbox.checked = autoMode;
@@ -1851,6 +2208,20 @@
 
             // Check for auto state visits every 30 seconds
             setInterval(checkAutoStateVisits, 30000);
+            
+            // Listen for storage changes from other tabs/windows
+            window.addEventListener('storage', function(e) {
+                if (e.key === STORAGE_KEY) {
+                    // Reload states data if changed externally
+                    loadStatesState();
+                    updateStats();
+                    updateStatesDisplay();
+                    updateMap();
+                    updateControlStats();
+                    updateMapInfo();
+                    console.log('🔄 States data updated from external change');
+                }
+            });
         });
     </script>
 </body>

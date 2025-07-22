@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -805,14 +805,14 @@
                 <div style="margin-top: 15px; padding: 15px; background: var(--light-gray); border-radius: 8px;">
                     <h4 style="margin: 0 0 10px 0; color: var(--primary-blue);">Map Legend</h4>
                     <div style="display: flex; flex-direction: column; gap: 5px; font-size: 0.9rem;">
-                        <div><span style="color: #28a745;">●</span> Checked In</div>
-                        <div><span style="color: #ffc107;">●</span> Nearby (2 miles)</div>
-                        <div><span style="color: #2c5aa0;">●</span> Cities</div>
-                        <div><span style="color: #17a2b8;">●</span> Towns</div>
-                        <div><span style="color: #6f42c1;">●</span> Villages</div>
-                        <div><span style="color: #ff0000;">●</span> Your Location</div>
+                        <div><span style="color: #28a745;">â—</span> Checked In</div>
+                        <div><span style="color: #ffc107;">â—</span> Nearby (2 miles)</div>
+                        <div><span style="color: #2c5aa0;">â—</span> Cities</div>
+                        <div><span style="color: #17a2b8;">â—</span> Towns</div>
+                        <div><span style="color: #6f42c1;">â—</span> Villages</div>
+                        <div><span style="color: #ff0000;">â—</span> Your Location</div>
                         <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6;">
-                            <div><span style="color: #28a745;">⭕</span> Town Boundaries (Checked In)</div>
+                            <div><span style="color: #28a745;">â­•</span> Town Boundaries (Checked In)</div>
                             <small style="color: #6c757d; margin-left: 20px;">Green circles show claimed territory</small>
                         </div>
                     </div>
@@ -860,7 +860,7 @@
         // Towns and cities data along the route
         const townsData = {
             "route1": {
-                name: "Kansas City, MO → Milwaukee, WI",
+                name: "Kansas City, MO â†’ Milwaukee, WI",
                 distance: "460 miles",
                 towns: [
                     { name: "Kansas City", state: "MO", type: "city", lat: 39.0997, lng: -94.5786, population: 508000 },
@@ -902,7 +902,7 @@
                 ]
             },
             "route2": {
-                name: "Milwaukee, WI → Columbus, OH",
+                name: "Milwaukee, WI â†’ Columbus, OH",
                 distance: "355 miles",
                 towns: [
                     { name: "Milwaukee", state: "WI", type: "city", lat: 43.0389, lng: -87.9065, population: 590000 },
@@ -930,7 +930,7 @@
                 ]
             },
             "route3": {
-                name: "Columbus, OH → Pittsburgh, PA",
+                name: "Columbus, OH â†’ Pittsburgh, PA",
                 distance: "185 miles",
                 towns: [
                     { name: "Columbus", state: "OH", type: "city", lat: 39.9612, lng: -82.9988, population: 900000 },
@@ -950,7 +950,7 @@
                 ]
             },
             "route4": {
-                name: "Pittsburgh, PA → Indianapolis, IN",
+                name: "Pittsburgh, PA â†’ Indianapolis, IN",
                 distance: "360 miles",
                 towns: [
                     { name: "Pittsburgh", state: "PA", type: "city", lat: 40.4406, lng: -79.9959, population: 300000 },
@@ -975,7 +975,7 @@
                 ]
             },
             "route5": {
-                name: "Indianapolis, IN → Kansas City, MO",
+                name: "Indianapolis, IN â†’ Kansas City, MO",
                 distance: "290 miles",
                 towns: [
                     { name: "Indianapolis", state: "IN", type: "city", lat: 39.7684, lng: -86.1581, population: 880000 },
@@ -1699,12 +1699,12 @@
                         if (!data.visited) data.visited = [];
                         if (!data.visited.includes(stateCode)) {
                             data.visited.push(stateCode);
-                            console.log(`✅ Synced state check-in: ${stateCode}`);
+                            console.log(`âœ… Synced state check-in: ${stateCode}`);
                         }
                     } else {
                         if (data.visited) {
                             data.visited = data.visited.filter(state => state !== stateCode);
-                            console.log(`❌ Synced state uncheck: ${stateCode}`);
+                            console.log(`âŒ Synced state uncheck: ${stateCode}`);
                         }
                     }
                     localStorage.setItem('statesTravelData', JSON.stringify(data));
@@ -1726,7 +1726,7 @@
                     localStorage.setItem('travelAppState', JSON.stringify(data));
                 }
                 
-                console.log(`🔄 State sync completed for ${stateCode}: ${isCheckedIn ? 'checked in' : 'unchecked'}`);
+                console.log(`ðŸ”„ State sync completed for ${stateCode}: ${isCheckedIn ? 'checked in' : 'unchecked'}`);
             } catch (error) {
                 console.error('Error syncing state data:', error);
             }
@@ -1741,12 +1741,12 @@
         // Initialize map
         const map = L.map('townsMap').setView([40.5, -88], 6);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: 'Â© OpenStreetMap contributors'
         }).addTo(map);
 
         // Load town boundaries data (disabled due to CORS issues with local files)
         async function loadTownBoundaries() {
-            console.log('🔄 Town boundaries loading disabled (CORS issue with file:// protocol)');
+            console.log('ðŸ”„ Town boundaries loading disabled (CORS issue with file:// protocol)');
             // Note: When running on a web server (http://), this function can fetch GeoJSON files
             // For now, we'll skip town boundaries and just use state boundaries
             boundariesLoaded = false;
@@ -1754,7 +1754,7 @@
 
         // Load state boundaries data
         async function loadStateBoundaries() {
-            console.log('🔄 Loading state boundaries data...');
+            console.log('ðŸ”„ Loading state boundaries data...');
             
             try {
                 const response = await fetch('data/us-states.json');
@@ -1778,15 +1778,15 @@
                             
                             if (stateAbbr) {
                                 stateBoundaries.set(stateAbbr, feature);
-                                console.log(`✅ Loaded boundary for ${stateAbbr} (${stateName})`);
+                                console.log(`âœ… Loaded boundary for ${stateAbbr} (${stateName})`);
                             }
                         });
                     }
                 }
-                console.log(`✅ Total state boundaries loaded: ${stateBoundaries.size}`);
+                console.log(`âœ… Total state boundaries loaded: ${stateBoundaries.size}`);
                 return true; // Success
             } catch (error) {
-                console.error('❌ Error loading state boundaries:', error);
+                console.error('âŒ Error loading state boundaries:', error);
                 // Fallback - create simple boundary objects for states
                 const fallbackStates = ['MO', 'IA', 'WI', 'IL', 'IN', 'OH', 'PA', 'WV'];
                 fallbackStates.forEach(state => {
@@ -1836,7 +1836,7 @@
                 }).bindPopup(`
                     <div style="text-align: center;">
                         <h4 style="margin: 0; color: ${colors.border};">
-                            ${isFirstVisit ? '🎉 First Visit to' : visitedStates.has(stateCode) ? '🗺️ Visited State:' : '📍 Planned State:'} 
+                            ${isFirstVisit ? 'ðŸŽ‰ First Visit to' : visitedStates.has(stateCode) ? 'ðŸ—ºï¸ Visited State:' : 'ðŸ“ Planned State:'} 
                             ${stateFacts[stateCode]?.name || stateCode}!
                         </h4>
                         <p style="margin: 5px 0; font-style: italic;">${stateFacts[stateCode]?.nickname || ''}</p>
@@ -1882,8 +1882,8 @@
             
             // Get state emoji/icon
             const stateEmojis = {
-                'MO': '🏛️', 'IA': '🌽', 'WI': '🧀', 'IL': '🏙️', 
-                'IN': '🏁', 'OH': '✈️', 'PA': '🔔', 'WV': '⛰️'
+                'MO': 'ðŸ›ï¸', 'IA': 'ðŸŒ½', 'WI': 'ðŸ§€', 'IL': 'ðŸ™ï¸', 
+                'IN': 'ðŸ', 'OH': 'âœˆï¸', 'PA': 'ðŸ””', 'WV': 'â›°ï¸'
             };
             
             // Create overlay modal
@@ -1945,12 +1945,12 @@
                                 animation: bounceIn 1s ease-out 0.3s both;
                                 display: inline-block;
                                 filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-                            ">${stateEmojis[stateCode] || '🎉'}</div>
+                            ">${stateEmojis[stateCode] || 'ðŸŽ‰'}</div>
                             <div style="
                                 font-size: 2rem;
                                 margin-bottom: 10px;
                                 animation: sparkle 2s ease-in-out infinite;
-                            ">✨ � ✨</div>
+                            ">âœ¨ ï¿½ âœ¨</div>
                         </div>
                         
                         <!-- State name and nickname -->
@@ -1995,7 +1995,7 @@
                                 justify-content: center;
                                 gap: 10px;
                             ">
-                                <span style="font-size: 1.5rem;">🏛️</span>
+                                <span style="font-size: 1.5rem;">ðŸ›ï¸</span>
                                 Capital: ${stateInfo.capital}
                             </p>
                         </div>
@@ -2016,7 +2016,7 @@
                                 justify-content: center;
                                 gap: 10px;
                             ">
-                                <span style="font-size: 1.8rem;">🌟</span>
+                                <span style="font-size: 1.8rem;">ðŸŒŸ</span>
                                 Interesting Facts
                             </h3>
                             <div style="
@@ -2042,7 +2042,7 @@
                                             line-height: 1.5;
                                             font-size: 1rem;
                                         ">
-                                            💡 ${feature}
+                                            ðŸ’¡ ${feature}
                                         </p>
                                     </div>
                                 `).join('')}
@@ -2076,7 +2076,7 @@
                                 " 
                                 onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(40, 167, 69, 0.4)'"
                                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(40, 167, 69, 0.3)'">
-                                <span style="font-size: 1.2rem;">🚀</span>
+                                <span style="font-size: 1.2rem;">ðŸš€</span>
                                 Continue Journey
                             </button>
                         </div>
@@ -2100,9 +2100,9 @@
                                 justify-content: center;
                                 gap: 10px;
                             ">
-                                <span style="font-size: 1.4rem;">🏆</span>
+                                <span style="font-size: 1.4rem;">ðŸ†</span>
                                 Achievement Unlocked: ${stateInfo.name} Explorer!
-                                <span style="font-size: 1.4rem;">🏆</span>
+                                <span style="font-size: 1.4rem;">ðŸ†</span>
                             </p>
                         </div>
                     </div>
@@ -2305,7 +2305,7 @@
             }
             
             route.push([toLat, toLng]);
-            console.log(`🛣️ Simple day route: ${route.length} points for ${distance.toFixed(0)} mile day`);
+            console.log(`ðŸ›£ï¸ Simple day route: ${route.length} points for ${distance.toFixed(0)} mile day`);
             return route;
         }
 
@@ -2344,13 +2344,13 @@
                 }
             }
             
-            console.log(`📅 Organized ${towns.length} towns into ${travelDays.length} travel days`);
+            console.log(`ðŸ“… Organized ${towns.length} towns into ${travelDays.length} travel days`);
             return travelDays;
         }
 
         // Generate and display the complete trip route
         async function showFullTripRoute() {
-            console.log('🗺️ Generating complete trip route...');
+            console.log('ðŸ—ºï¸ Generating complete trip route...');
             
             // Remove existing full route
             if (fullTripRoute) {
@@ -2430,7 +2430,7 @@
                 
                 // Show progress
                 const progress = ((i + 1) / travelDays.length * 100).toFixed(0);
-                console.log(`� Day-based route progress: ${progress}% (Day ${i + 1}/${travelDays.length})`);
+                console.log(`ï¿½ Day-based route progress: ${progress}% (Day ${i + 1}/${travelDays.length})`);
             }
             
             // Create the complete route polyline
@@ -2448,11 +2448,11 @@
                 const completionPercentage = ((completedDays / travelDays.length) * 100).toFixed(1);
                 fullTripRoute.bindPopup(`
                     <div style="text-align: center;">
-                        <h4 style="margin: 0; color: #2563eb;">🗺️ Day-by-Day Trip Route</h4>
+                        <h4 style="margin: 0; color: #2563eb;">ðŸ—ºï¸ Day-by-Day Trip Route</h4>
                         <p style="margin: 5px 0;">${travelDays.length} travel days planned</p>
                         <p style="margin: 5px 0;">~${totalPlannedDistance.toFixed(0)} miles between days</p>
                         <p style="margin: 5px 0; font-size: 0.8rem;">
-                            ${travelDays[0].startTown.name} → ${travelDays[travelDays.length - 1].endTown.name}
+                            ${travelDays[0].startTown.name} â†’ ${travelDays[travelDays.length - 1].endTown.name}
                         </p>
                         <p style="margin: 5px 0; font-size: 0.7rem; color: #666;">
                             Showing day-to-day travel segments only
@@ -2463,10 +2463,10 @@
                     </div>
                 `);
                 
-                console.log(`🗺️ Day-based trip route displayed: ${travelDays.length} days, ~${totalPlannedDistance.toFixed(0)} miles, ${completionPercentage}% completed`);
+                console.log(`ðŸ—ºï¸ Day-based trip route displayed: ${travelDays.length} days, ~${totalPlannedDistance.toFixed(0)} miles, ${completionPercentage}% completed`);
                 
                 // Show notification about route generation
-                showNotification(`🗺️ Day-by-day route generated: ${travelDays.length} travel days planned!`, 'info');
+                showNotification(`ðŸ—ºï¸ Day-by-day route generated: ${travelDays.length} travel days planned!`, 'info');
             }
         }
 
@@ -2534,11 +2534,11 @@
                     // Add popup to show travel path info
                     pathPolyline.bindPopup(`
                         <div style="text-align: center;">
-                            <h4 style="margin: 0; color: #ff6b35;">🛣️ Highway Travel Path</h4>
+                            <h4 style="margin: 0; color: #ff6b35;">ðŸ›£ï¸ Highway Travel Path</h4>
                             <p style="margin: 5px 0;">${travelPath.length} locations visited</p>
                             <p style="margin: 5px 0;">~${totalDistance.toFixed(0)} miles driven</p>
                             <p style="margin: 5px 0; font-size: 0.8rem;">
-                                ${travelPath[0].name} → ${travelPath[travelPath.length - 1].name}
+                                ${travelPath[0].name} â†’ ${travelPath[travelPath.length - 1].name}
                             </p>
                             <p style="margin: 5px 0; font-size: 0.7rem; color: #666;">
                                 Following actual highway routes
@@ -2546,7 +2546,7 @@
                         </div>
                     `);
                     
-                    console.log(`🛣️ Updated highway travel path: ${travelPath.length} towns, ~${totalDistance.toFixed(0)} miles`);
+                    console.log(`ðŸ›£ï¸ Updated highway travel path: ${travelPath.length} towns, ~${totalDistance.toFixed(0)} miles`);
                 }
             }
         }
@@ -2579,7 +2579,7 @@
             allTowns = uniqueTowns;
             filteredTowns = [...allTowns];
             
-            console.log(`✅ Initialized ${allTowns.length} towns`);
+            console.log(`âœ… Initialized ${allTowns.length} towns`);
             
             // Load state boundaries data only (skip town boundaries due to CORS issues with local files)
             const boundariesLoaded = await loadStateBoundaries();
@@ -2587,7 +2587,7 @@
                 // Initialize all state boundaries after loading
                 initializeAllStateBoundaries();
             } else {
-                console.log('⚠️ State boundaries failed to load, using fallback display');
+                console.log('âš ï¸ State boundaries failed to load, using fallback display');
                 // Still initialize but with fallback styling
                 initializeAllStateBoundariesFallback();
             }
@@ -2602,7 +2602,7 @@
                 addStateBoundary(stateCode, false);
             });
             
-            console.log('🗺️ Initialized all state boundaries with visit status');
+            console.log('ðŸ—ºï¸ Initialized all state boundaries with visit status');
         }
 
         // Fallback initialization for when boundaries don't load
@@ -2651,7 +2651,7 @@
                 }
             });
             
-            console.log('🗺️ Initialized fallback state markers');
+            console.log('ðŸ—ºï¸ Initialized fallback state markers');
         }
 
         // Load state from localStorage
@@ -2670,7 +2670,7 @@
                     // Restore cached highway routes
                     if (data.highwayRoutes) {
                         highwayRoutes = new Map(Object.entries(data.highwayRoutes));
-                        console.log(`🛣️ Restored ${highwayRoutes.size} cached highway routes`);
+                        console.log(`ðŸ›£ï¸ Restored ${highwayRoutes.size} cached highway routes`);
                     }
                     
                     if (data.lastPosition) {
@@ -2687,11 +2687,11 @@
                         });
                     }, 1000); // Wait for state boundaries to load
                     
-                    console.log('✅ Towns state loaded successfully');
+                    console.log('âœ… Towns state loaded successfully');
                     return true;
                 }
             } catch (error) {
-                console.error('❌ Error loading towns state:', error);
+                console.error('âŒ Error loading towns state:', error);
             }
             return false;
         }
@@ -2718,7 +2718,7 @@
                 showSaveStatus('saved');
                 return true;
             } catch (error) {
-                console.error('❌ Error saving towns state:', error);
+                console.error('âŒ Error saving towns state:', error);
                 showSaveStatus('error');
                 return false;
             }
@@ -2769,7 +2769,7 @@
                     const response = await fetch('./scripts/data/towns-database-openai-enhanced.json');
                     if (response.ok) {
                         window.townDatabase = await response.json();
-                        console.log('🤖 Loaded OpenAI-enhanced town database with professional insights');
+                        console.log('ðŸ¤– Loaded OpenAI-enhanced town database with professional insights');
                     }
                 }
                 
@@ -2873,7 +2873,7 @@
                 ? `
                     <div style="margin-top: 20px;">
                         <h4 style="color: #17a2b8; margin: 0 0 10px 0; font-size: 1.1rem;">
-                            🎯 Things to See
+                            ðŸŽ¯ Things to See
                         </h4>
                         <ul style="margin: 0; padding-left: 20px;">
                             ${townData.attractions.map(attraction => `<li style="margin: 5px 0;">${attraction}</li>`).join('')}
@@ -2920,7 +2920,7 @@
                     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
                     overflow-y: auto;
                 ">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">🎯</div>
+                    <div style="font-size: 3rem; margin-bottom: 15px;">ðŸŽ¯</div>
                     <h2 style="color: #28a745; margin: 0 0 10px 0; font-size: 1.8rem;">
                         Next Destination
                     </h2>
@@ -2932,7 +2932,7 @@
                     
                     <div style="text-align: left; margin: 20px 0;">
                         <h4 style="color: #17a2b8; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
-                            📚 Interesting Facts
+                            ðŸ“š Interesting Facts
                         </h4>
                         ${factsHtml}
                     </div>
@@ -2944,7 +2944,7 @@
                         ? `
                         <div style="text-align: left; margin: 20px 0;">
                             <h4 style="color: #e74c3c; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
-                                🤖 Professional Travel Insights
+                                ðŸ¤– Professional Travel Insights
                             </h4>
                             <div style="max-height: 250px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 8px; padding: 12px; background: linear-gradient(135deg, #fff5f5, #ffeaea);">
                                 ${townData.openaiInsights.map((insight, index) => `
@@ -2969,7 +2969,7 @@
                         ? `
                         <div style="text-align: left; margin: 20px 0;">
                             <h4 style="color: #6f42c1; margin: 0 0 15px 0; font-size: 1.2rem; text-align: center;">
-                                🔬 AI Research Insights
+                                ðŸ”¬ AI Research Insights
                             </h4>
                             <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 8px; padding: 10px;">
                                 ${townData.researchNotes.map((note, index) => `
@@ -3003,7 +3003,7 @@
                             "
                             onmouseover="this.style.background='#218838'"
                             onmouseout="this.style.background='#28a745'">
-                            🚗 Let's Go!
+                            ðŸš— Let's Go!
                         </button>
                         <button onclick="
                             const townId = '${nextTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${nextTown.state.toLowerCase()}';
@@ -3024,7 +3024,7 @@
                             "
                             onmouseover="this.style.background='#c82333'"
                             onmouseout="this.style.background='#dc3545'">
-                            ✅ Check In Now
+                            âœ… Check In Now
                         </button>
                         <button onclick="showTownDetails('${nextTown.name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${nextTown.state.toLowerCase()}')" 
                             style="
@@ -3039,7 +3039,7 @@
                             "
                             onmouseover="this.style.background='#138496'"
                             onmouseout="this.style.background='#17a2b8'">
-                            📖 More Details
+                            ðŸ“– More Details
                         </button>
                     </div>
                 </div>
@@ -3065,7 +3065,7 @@
             document.body.appendChild(overlay);
             document.body.style.overflow = 'hidden';
             
-            console.log(`🎯 Showing next town overlay for ${nextTown.name}, ${nextTown.state}`);
+            console.log(`ðŸŽ¯ Showing next town overlay for ${nextTown.name}, ${nextTown.state}`);
             
             // Auto-remove after 15 seconds if user doesn't interact
             setTimeout(() => {
@@ -3243,7 +3243,7 @@
                     const intermediateTowns = getTownsAlongRoute(lastTown, town);
                     
                     if (intermediateTowns.length > 0) {
-                        console.log(`🛣️ Auto-checking in ${intermediateTowns.length} towns along route from ${lastTown.name} to ${town.name}`);
+                        console.log(`ðŸ›£ï¸ Auto-checking in ${intermediateTowns.length} towns along route from ${lastTown.name} to ${town.name}`);
                         
                         // Check in intermediate towns first
                         intermediateTowns.forEach(intermediateTown => {
@@ -3251,7 +3251,7 @@
                             performCheckin(intermediateId, true, true).catch(e => console.error('Route checkin error:', e)); // Auto check-in, skip route logic
                         });
                         
-                        showNotification(`🛣️ Auto-checked in ${intermediateTowns.length} towns along your route!`, 'route');
+                        showNotification(`ðŸ›£ï¸ Auto-checked in ${intermediateTowns.length} towns along your route!`, 'route');
                     }
                 }
             }
@@ -3274,13 +3274,13 @@
                 }
                 
                 // Special notification for first state visit
-                showNotification(`🎉 First visit to ${stateFacts[stateCode]?.name || stateCode}!`, 'state');
+                showNotification(`ðŸŽ‰ First visit to ${stateFacts[stateCode]?.name || stateCode}!`, 'state');
                 
                 // Sync state check-in across all screens
                 syncStateCheckin(stateCode, true);
                 
                 // Show sync notification
-                showNotification(`🔄 State ${stateCode} auto-checked across all screens!`, 'sync');
+                showNotification(`ðŸ”„ State ${stateCode} auto-checked across all screens!`, 'sync');
             } else {
                 // Update existing state boundary with visited styling
                 addStateBoundary(stateCode, false);
@@ -3372,7 +3372,7 @@
                 // Sync state uncheck across all screens
                 syncStateCheckin(stateCode, false);
                 
-                showNotification(`🔄 State ${stateCode} auto-unchecked across all screens!`, 'sync');
+                showNotification(`ðŸ”„ State ${stateCode} auto-unchecked across all screens!`, 'sync');
                 
                 showNotification(`Left ${stateFacts[stateCode]?.name || stateCode} - no towns remaining`, 'info');
             }
@@ -3506,7 +3506,7 @@
                                 align-items: center;
                                 gap: 8px;
                             ">
-                            ← Back to Towns
+                            â† Back to Towns
                         </button>
                         <h1 style="
                             color: white;
@@ -3528,1904 +3528,8 @@
                         <!-- Welcome Section -->
                         <div style="text-align: center; margin-bottom: 30px;">
                             <h3 style="color: #333; margin: 0 0 15px 0; font-size: 1.8rem;">
-                                Welcome to ${town.name}! 🏙️
+                                Welcome to ${town.name}! ðŸ™ï¸
                             </h3>
                             <p style="color: #666; font-size: 1.1rem; line-height: 1.6;">
                                 Discover the charm and attractions of ${town.name}, ${town.state}. 
                                 ${isCheckedIn ? "Thanks for visiting!" : "Ready for your adventure?"}
-                            </p>
-                        </div>
-                        
-                        ${townData.facts && townData.facts.length > 0 ? `
-                            <h3 style="color: #333; margin-top: 30px;">📍 Local Facts</h3>
-                            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                                ${townData.facts.map(fact => `
-                                    <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 5px; border-left: 4px solid #667eea;">
-                                        📍 ${fact}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : ''}
-                        
-                        ${townData.openaiInsights && townData.openaiInsights.length > 0 ? `
-                            <h3 style="color: #333; margin-top: 30px;">🤖 AI Travel Insights</h3>
-                            <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 25px; border-radius: 15px; color: white;">
-                                ${townData.openaiInsights.map(insight => `
-                                    <div style="margin: 15px 0; padding: 18px; background: rgba(255,255,255,0.1); border-radius: 12px; border-left: 4px solid rgba(255,255,255,0.3);">
-                                        🎯 ${insight}
-                                    </div>
-                                `).join('')}
-                                
-                                <button onclick="playTravelInsights('${town.id}', this)"
-                                    style="
-                                        background: #ff6b6b;
-                                        color: white;
-                                        border: none;
-                                        border-radius: 10px;
-                                        padding: 12px 24px;
-                                        margin-top: 15px;
-                                        cursor: pointer;
-                                        font-weight: bold;
-                                        transition: all 0.3s ease;
-                                    "
-                                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(255, 107, 107, 0.4)'"
-                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                                    🔊 Listen to Insights
-                                </button>
-                            </div>
-                        ` : ''}
-                        
-                        <!-- Google Search Results Section -->
-                        <div style="margin-top: 30px;">
-                            <h3 style="color: #333; margin-bottom: 20px;">🔍 Explore ${town.name} Online</h3>
-                            <div style="
-                                background: white;
-                                border-radius: 15px;
-                                overflow: hidden;
-                                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                                border: 1px solid #e0e0e0;
-                            ">
-                                <div style="
-                                    background: linear-gradient(135deg, #4285f4, #34a853);
-                                    color: white;
-                                    padding: 15px 20px;
-                                    display: flex;
-                                    align-items: center;
-                                    gap: 10px;
-                                ">
-                                    <i class="fab fa-google" style="font-size: 1.2rem;"></i>
-                                    <span style="font-weight: 600;">Live Google Search Results</span>
-                                    <button onclick="refreshGoogleSearch('${town.name}', '${town.state}', '${town.id}')"
-                                        style="
-                                            background: rgba(255,255,255,0.2);
-                                            color: white;
-                                            border: none;
-                                            border-radius: 6px;
-                                            padding: 6px 12px;
-                                            cursor: pointer;
-                                            font-size: 12px;
-                                            margin-left: auto;
-                                        ">
-                                        🔄 Refresh
-                                    </button>
-                                </div>
-                                
-                                <div style="position: relative; width: 100%; height: 600px;">
-                                    <iframe 
-                                        id="googleSearchFrame-${town.id}"
-                                        src="https://www.google.com/search?q=${encodeURIComponent(town.name + ', ' + town.state)}&igu=1"
-                                        style="
-                                            width: 100%;
-                                            height: 100%;
-                                            border: none;
-                                        "
-                                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                                        loading="lazy">
-                                    </iframe>
-                                    
-                                    <!-- Fallback content if iframe doesn't load -->
-                                    <div style="
-                                        position: absolute;
-                                        top: 50%;
-                                        left: 50%;
-                                        transform: translate(-50%, -50%);
-                                        text-align: center;
-                                        color: #666;
-                                        z-index: -1;
-                                    ">
-                                        <i class="fas fa-search" style="font-size: 3rem; color: #ddd; margin-bottom: 15px;"></i>
-                                        <p>Loading Google search results...</p>
-                                        <p style="font-size: 14px;">
-                                            <a href="https://www.google.com/search?q=${encodeURIComponent(town.name + ', ' + town.state + ' tourism')}" 
-                                               target="_blank" 
-                                               style="color: #4285f4; text-decoration: none;">
-                                                🔗 Open in new tab
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                                
-                                <!-- Quick search suggestions -->
-                                <div style="
-                                    background: #f8f9fa;
-                                    padding: 15px 20px;
-                                    border-top: 1px solid #e0e0e0;
-                                ">
-                                    <div style="font-size: 14px; color: #666; margin-bottom: 10px;">
-                                        <strong>Quick searches:</strong>
-                                    </div>
-                                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                        <button onclick="searchGoogle('${town.name}, ${town.state} restaurants', '${town.id}')"
-                                            class="quick-search-btn">🍽️ Restaurants</button>
-                                        <button onclick="searchGoogle('${town.name}, ${town.state} hotels', '${town.id}')"
-                                            class="quick-search-btn">🏨 Hotels</button>
-                                        <button onclick="searchGoogle('${town.name}, ${town.state} attractions', '${town.id}')"
-                                            class="quick-search-btn">🎯 Attractions</button>
-                                        <button onclick="searchGoogle('${town.name}, ${town.state} weather', '${town.id}')"
-                                            class="quick-search-btn">🌤️ Weather</button>
-                                        <button onclick="searchGoogle('${town.name}, ${town.state} events', '${town.id}')"
-                                            class="quick-search-btn">📅 Events</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Action buttons -->
-                        <div style="
-                            margin-top: 30px;
-                            display: flex;
-                            gap: 15px;
-                            justify-content: center;
-                            flex-wrap: wrap;
-                        ">
-                            ${!isCheckedIn ? `
-                                <button onclick="
-                                    performCheckin('${town.id}', false, false);
-                                    returnToMainInterface();
-                                    showNotification('Checked in at ${town.name}!', 'success');
-                                " style="
-                                    background: #28a745;
-                                    color: white;
-                                    border: none;
-                                    border-radius: 10px;
-                                    padding: 12px 24px;
-                                    cursor: pointer;
-                                    font-weight: bold;
-                                    transition: all 0.3s ease;
-                                ">
-                                    ✅ Check In
-                                </button>
-                            ` : `
-                                <button onclick="
-                                    performUncheck('${town.id}');
-                                    returnToMainInterface();
-                                    showNotification('Unchecked from ${town.name}!', 'info');
-                                " style="
-                                    background: #ffc107;
-                                    color: #212529;
-                                    border: none;
-                                    border-radius: 10px;
-                                    padding: 12px 24px;
-                                    cursor: pointer;
-                                    font-weight: bold;
-                                    transition: all 0.3s ease;
-                                ">
-                                    ↩️ Uncheck
-                                </button>
-                            `}
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(townScreen);
-            
-            // Fade in the screen
-            setTimeout(() => {
-                townScreen.style.opacity = '1';
-            }, 100);
-        }
-
-        // Function to return to main interface
-        function returnToMainInterface() {
-            const townScreen = document.getElementById('townDetailsScreen');
-            if (townScreen) {
-                townScreen.style.transition = 'opacity 0.3s ease';
-                townScreen.style.opacity = '0';
-                
-                setTimeout(() => {
-                    townScreen.remove();
-                    showMainInterface();
-                }, 300);
-            }
-        }
-        
-        // Function to show main interface
-        function showMainInterface() {
-            const mainElements = document.querySelectorAll('body > *:not(script):not(#townDetailsScreen)');
-            mainElements.forEach(el => {
-                el.style.display = '';
-            });
-            
-            const mainContent = document.body;
-            mainContent.style.transition = 'opacity 0.5s ease';
-            mainContent.style.opacity = '1';
-            
-            // Clean up any audio
-            cleanupAudio();
-        }
-
-        // Fetch relevant images for a town (simplified, no external APIs)
-        async function fetchRelevantImages(townName, stateName, townId) {
-            const cleanTownName = townName.replace(/[^a-zA-Z\s]/g, '').trim();
-            const cleanStateName = stateName.replace(/[^a-zA-Z\s]/g, '').trim();
-            
-            try {
-                console.log(`🔍 Generating relevant images for ${cleanTownName}, ${cleanStateName}`);
-                
-                // Use curated local images (no external APIs)
-                return generateCuratedImages(cleanTownName, cleanStateName);
-                
-            } catch (error) {
-                console.error('Error generating relevant images:', error);
-                return generateContextualPlaceholders(cleanTownName, cleanStateName);
-            }
-        }
-        
-        // Note: Simplified image generation without external APIs
-        // Removed Google Maps functionality for cleaner implementation
-        
-        // Note: CORS-free image generation - no external API calls needed
-        // This function has been simplified to avoid CORS issues
-        
-        // Pre-defined coordinates for major towns (no API calls needed)
-        function getTownCoordinatesFromDatabase(townName, stateName) {
-            const townDatabase = {
-                // Missouri towns
-                'Kansas City_MO': { lat: 39.0997, lon: -94.5786 },
-                'Raymore_MO': { lat: 38.8072, lon: -94.4497 },
-                'Independence_MO': { lat: 39.0911, lon: -94.4155 },
-                'Blue Springs_MO': { lat: 39.0169, lon: -94.2816 },
-                'Lee\'s Summit_MO': { lat: 38.9109, lon: -94.3822 },
-                
-                // Iowa towns
-                'Des Moines_IA': { lat: 41.5868, lon: -93.6250 },
-                'Cedar Rapids_IA': { lat: 41.9778, lon: -91.6656 },
-                'Davenport_IA': { lat: 41.5236, lon: -90.5776 },
-                
-                // Wisconsin towns
-                'Milwaukee_WI': { lat: 43.0389, lon: -87.9065 },
-                'Madison_WI': { lat: 43.0731, lon: -89.4012 },
-                'Green Bay_WI': { lat: 44.5133, lon: -88.0133 },
-                
-                // Illinois towns
-                'Chicago_IL': { lat: 41.8781, lon: -87.6298 },
-                'Springfield_IL': { lat: 39.7817, lon: -89.6501 },
-                'Rockford_IL': { lat: 42.2711, lon: -89.0940 },
-                
-                // Indiana towns
-                'Indianapolis_IN': { lat: 39.7684, lon: -86.1581 },
-                'Fort Wayne_IN': { lat: 41.0793, lon: -85.1394 },
-                'Evansville_IN': { lat: 37.9716, lon: -87.5711 },
-                
-                // Ohio towns
-                'Columbus_OH': { lat: 39.9612, lon: -82.9988 },
-                'Cleveland_OH': { lat: 41.4993, lon: -81.6944 },
-                'Cincinnati_OH': { lat: 39.1031, lon: -84.5120 },
-                
-                // Pennsylvania towns
-                'Pittsburgh_PA': { lat: 40.4406, lon: -79.9959 },
-                'Philadelphia_PA': { lat: 39.9526, lon: -75.1652 },
-                'Allentown_PA': { lat: 40.6023, lon: -75.4714 },
-                
-                // West Virginia towns
-                'Wheeling_WV': { lat: 40.0640, lon: -80.7209 },
-                'Charleston_WV': { lat: 38.3498, lon: -81.6326 },
-                'Huntington_WV': { lat: 38.4192, lon: -82.4452 }
-            };
-            
-            const key = `${townName}_${stateName}`;
-            return townDatabase[key];
-        }
-        
-        // Get approximate center coordinates for each state
-        function getStateCenter(stateName) {
-            const stateCenters = {
-                'MO': { lat: 38.3566, lon: -92.4580 }, // Missouri
-                'IA': { lat: 41.9216, lon: -93.3122 }, // Iowa  
-                'WI': { lat: 43.7844, lon: -88.7879 }, // Wisconsin
-                'IL': { lat: 40.0417, lon: -89.1965 }, // Illinois
-                'IN': { lat: 39.7910, lon: -86.1480 }, // Indiana
-                'OH': { lat: 40.2732, lon: -82.7937 }, // Ohio
-                'PA': { lat: 41.2033, lon: -77.1945 }, // Pennsylvania
-                'WV': { lat: 38.4680, lon: -80.9696 }  // West Virginia
-            };
-            
-            return stateCenters[stateName];
-        }
-        
-        // Generate Mapbox static images (no CORS issues)
-        function generateMapboxImage(coords, size, style = 'satellite') {
-            const [width, height] = size.split('x').map(Number);
-            const zoom = 13;
-            
-            // Using Mapbox public token (replace with your own for production)
-            const accessToken = 'pk.eyJ1IjoidHJhdmVsYXBwIiwiYSI6ImNrNWY4ajg3NjA3ZGszbnp3eWk4ejMxMjcifQ.demo'; // Demo token
-            
-            const styleMap = {
-                'satellite': 'mapbox/satellite-v9',
-                'streets': 'mapbox/streets-v11', 
-                'outdoors': 'mapbox/outdoors-v11',
-                'light': 'mapbox/light-v10'
-            };
-            
-            const mapStyle = styleMap[style] || styleMap.satellite;
-            
-            // Use OpenStreetMap tiles as fallback (no API key needed)
-            if (!accessToken || accessToken.includes('demo')) {
-                return generateOpenStreetMapImage(coords, size, style);
-            }
-            
-            return `https://api.mapbox.com/styles/v1/${mapStyle}/static/${coords.lon},${coords.lat},${zoom}/${width}x${height}@2x?access_token=${accessToken}`;
-        }
-        
-        // Generate OpenStreetMap-based images (completely free, no CORS)
-        function generateOpenStreetMapImage(coords, size, style) {
-            const [width, height] = size.split('x').map(Number);
-            const zoom = 13;
-            
-            // Calculate tile coordinates
-            const tileX = Math.floor((coords.lon + 180) / 360 * Math.pow(2, zoom));
-            const tileY = Math.floor((1 - Math.log(Math.tan(coords.lat * Math.PI / 180) + 1 / Math.cos(coords.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
-            
-            const styleUrls = {
-                'satellite': `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${tileY}/${tileX}`,
-                'streets': `https://tile.openstreetmap.org/${zoom}/${tileX}/${tileY}.png`,
-                'outdoors': `https://tiles.wmflabs.org/hikebike/${zoom}/${tileX}/${tileY}.png`
-            };
-            
-            return styleUrls[style] || styleUrls.streets;
-        }
-        
-        // Generate curated local images without external APIs
-        function generateCuratedImages(townName, stateName) {
-            console.log(`🎨 Creating curated images for ${townName}, ${stateName}`);
-            
-            return {
-                primary: generateLocalImage(townName, stateName, 'hero'),
-                gallery: [
-                    generateLocalImage(townName, stateName, 'downtown'),
-                    generateLocalImage(townName, stateName, 'historic'),
-                    generateLocalImage(townName, stateName, 'nature')
-                ]
-            };
-        }
-        
-        // Generate local-themed images with town characteristics
-        function generateLocalImage(townName, stateName, type) {
-            const stateInfo = {
-                'MO': { 
-                    colors: ['#8B0000', '#DAA520'], 
-                    icon: '🏛️', 
-                    landmarks: ['Gateway Arch', 'Ozark Mountains', 'Missouri River'],
-                    themes: { downtown: 'Historic Square', historic: 'Civil War Heritage', nature: 'Ozark Beauty' }
-                },
-                'IA': { 
-                    colors: ['#FFD700', '#228B22'], 
-                    icon: '🌽', 
-                    landmarks: ['Corn Fields', 'Prairie', 'State Fair'],
-                    themes: { downtown: 'Main Street', historic: 'Pioneer Heritage', nature: 'Prairie Lands' }
-                },
-                'WI': { 
-                    colors: ['#228B22', '#FFA500'], 
-                    icon: '🧀', 
-                    landmarks: ['Lake Michigan', 'Dairy Farms', 'Wisconsin Dells'],
-                    themes: { downtown: 'Town Square', historic: 'Lumber Heritage', nature: 'Great Lakes' }
-                },
-                'IL': { 
-                    colors: ['#4169E1', '#DC143C'], 
-                    icon: '🌆', 
-                    landmarks: ['Prairie State', 'Great Lakes', 'Lincoln Sites'],
-                    themes: { downtown: 'Main Street', historic: 'Lincoln Heritage', nature: 'Prairie State' }
-                },
-                'IN': { 
-                    colors: ['#DC143C', '#000080'], 
-                    icon: '🏁', 
-                    landmarks: ['Indianapolis 500', 'Crossroads', 'Covered Bridges'],
-                    themes: { downtown: 'Town Center', historic: 'Pioneer Trail', nature: 'Hoosier Hills' }
-                },
-                'OH': { 
-                    colors: ['#800080', '#FF6347'], 
-                    icon: '✈️', 
-                    landmarks: ['Lake Erie', 'Rock Hall', 'Buckeye Trees'],
-                    themes: { downtown: 'City Center', historic: 'Aviation Heritage', nature: 'Buckeye State' }
-                },
-                'PA': { 
-                    colors: ['#2F4F4F', '#B22222'], 
-                    icon: '🔔', 
-                    landmarks: ['Liberty Bell', 'Appalachian Mountains', 'Steel Heritage'],
-                    themes: { downtown: 'Historic District', historic: 'Colonial Heritage', nature: 'Appalachian Beauty' }
-                },
-                'WV': { 
-                    colors: ['#2E8B57', '#4682B4'], 
-                    icon: '⛰️', 
-                    landmarks: ['Appalachian Mountains', 'Coal Heritage', 'White Water'],
-                    themes: { downtown: 'Mountain Town', historic: 'Coal Heritage', nature: 'Mountain State' }
-                }
-            };
-            
-            const info = stateInfo[stateName] || stateInfo['MO'];
-            const theme = info.themes[type] || `${townName} Area`;
-            const [primaryColor, secondaryColor] = info.colors;
-            
-            const typeIcons = {
-                hero: info.icon,
-                downtown: '🏢',
-                historic: '🏛️', 
-                nature: '🌲',
-                landmark: '⭐'
-            };
-            
-            const size = type === 'hero' ? '1200x400' : '800x600';
-            const [width, height] = size.split('x').map(Number);
-            
-            return `data:image/svg+xml,${encodeURIComponent(`
-                <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-                    <defs>
-                        <linearGradient id="bg${type}" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:${primaryColor};stop-opacity:0.9" />
-                            <stop offset="50%" style="stop-color:${secondaryColor};stop-opacity:0.8" />
-                            <stop offset="100%" style="stop-color:${primaryColor};stop-opacity:0.7" />
-                        </linearGradient>
-                        <pattern id="pattern${type}" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-                            <circle cx="30" cy="30" r="3" fill="white" opacity="0.1"/>
-                            <circle cx="10" cy="10" r="2" fill="white" opacity="0.08"/>
-                            <circle cx="50" cy="20" r="1.5" fill="white" opacity="0.12"/>
-                        </pattern>
-                        <filter id="shadow">
-                            <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
-                        </filter>
-                    </defs>
-                    
-                    <!-- Background -->
-                    <rect width="100%" height="100%" fill="url(#bg${type})"/>
-                    <rect width="100%" height="100%" fill="url(#pattern${type})"/>
-                    
-                    <!-- Main icon -->
-                    <text x="50%" y="35%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" 
-                          font-size="84" font-weight="bold" opacity="0.95" filter="url(#shadow)">
-                        ${typeIcons[type]}
-                    </text>
-                    
-                    <!-- Town name -->
-                    <text x="50%" y="55%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" 
-                          font-size="42" font-weight="bold" filter="url(#shadow)">
-                        ${townName}
-                    </text>
-                    
-                    <!-- State -->
-                    <text x="50%" y="65%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" 
-                          font-size="28" opacity="0.9" filter="url(#shadow)">
-                        ${stateName}
-                    </text>
-                    
-                    <!-- Theme -->
-                    <text x="50%" y="75%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" 
-                          font-size="20" opacity="0.8">
-                        ${theme}
-                    </text>
-                    
-                    <!-- Decorative elements -->
-                    <circle cx="20%" cy="25%" r="4" fill="white" opacity="0.2"/>
-                    <circle cx="80%" cy="30%" r="3" fill="white" opacity="0.15"/>
-                    <circle cx="15%" cy="75%" r="2.5" fill="white" opacity="0.18"/>
-                    <circle cx="85%" cy="80%" r="3.5" fill="white" opacity="0.12"/>
-                </svg>
-            `)}`;
-        }
-        
-        // Fetch images from Wikimedia Commons
-        async function fetchWikimediaImages(townName, stateName) {
-            try {
-                // Search for town-specific articles
-                const searchTerms = [
-                    `${townName}, ${stateName}`,
-                    `${townName} ${stateName}`,
-                    townName
-                ];
-                
-                const images = [];
-                
-                for (const term of searchTerms) {
-                    const searchUrl = `https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(term)}`;
-                    
-                    try {
-                        const response = await fetch(searchUrl);
-                        if (response.ok) {
-                            const data = await response.json();
-                            if (data.items && data.items.length > 0) {
-                                // Filter for actual photos (not logos, maps, etc.)
-                                const photos = data.items.filter(item => 
-                                    item.type === 'image' && 
-                                    !item.title.toLowerCase().includes('logo') &&
-                                    !item.title.toLowerCase().includes('seal') &&
-                                    (item.title.toLowerCase().includes('.jpg') || 
-                                     item.title.toLowerCase().includes('.jpeg') ||
-                                     item.title.toLowerCase().includes('.png'))
-                                );
-                                
-                                photos.slice(0, 3).forEach(photo => {
-                                    const imageUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(photo.title)}?width=1200`;
-                                    images.push(imageUrl);
-                                });
-                                
-                                if (images.length >= 3) break;
-                            }
-                        }
-                    } catch (e) {
-                        console.warn(`Failed to fetch images for term: ${term}`, e);
-                    }
-                }
-                
-                return images;
-            } catch (error) {
-                console.error('Wikimedia API error:', error);
-                return [];
-            }
-        }
-        
-        // Note: CORS-free image generation - no external API calls needed
-        // This function has been simplified to avoid CORS issues
-        
-        // Generate contextual placeholders based on town/state characteristics
-        function generateContextualPlaceholders(townName, stateName) {
-            const stateThemes = {
-                'Missouri': { color: '#8B0000', icon: '🏛️', landmark: 'Gateway Arch Region' },
-                'Iowa': { color: '#FFD700', icon: '🌽', landmark: 'Corn State' },
-                'Wisconsin': { color: '#228B22', icon: '🧀', landmark: 'Cheese State' },
-                'Illinois': { color: '#4169E1', icon: '🌆', landmark: 'Prairie State' },
-                'Indiana': { color: '#DC143C', icon: '🏁', landmark: 'Crossroads of America' },
-                'Ohio': { color: '#800080', icon: '✈️', landmark: 'Buckeye State' },
-                'Pennsylvania': { color: '#2F4F4F', icon: '🔔', landmark: 'Keystone State' },
-                'West Virginia': { color: '#2E8B57', icon: '⛰️', landmark: 'Mountain State' }
-            };
-            
-            const theme = stateThemes[stateName] || { color: '#667eea', icon: '🏘️', landmark: 'American Town' };
-            
-            return {
-                primary: createAdvancedPlaceholder(townName, stateName, theme, '1200x400', 'hero'),
-                gallery: [
-                    createAdvancedPlaceholder(townName, stateName, theme, '800x600', 'downtown'),
-                    createAdvancedPlaceholder(townName, stateName, theme, '800x600', 'historic'),
-                    createAdvancedPlaceholder(townName, stateName, theme, '800x600', 'nature')
-                ]
-            };
-        }
-        
-        // Create advanced SVG placeholders with state themes
-        function createAdvancedPlaceholder(townName, stateName, theme, size, type) {
-            const [width, height] = size.split('x').map(Number);
-            
-            const typeInfo = {
-                hero: { subtitle: `${theme.landmark}`, pattern: 'city' },
-                downtown: { subtitle: 'Downtown District', pattern: 'buildings' },
-                historic: { subtitle: 'Historic Quarter', pattern: 'heritage' },
-                nature: { subtitle: 'Natural Areas', pattern: 'landscape' }
-            };
-            
-            const info = typeInfo[type] || typeInfo.hero;
-            
-            return `data:image/svg+xml,${encodeURIComponent(`
-                <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-                    <defs>
-                        <linearGradient id="bg${type}" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:${theme.color};stop-opacity:0.9" />
-                            <stop offset="50%" style="stop-color:${theme.color};stop-opacity:0.7" />
-                            <stop offset="100%" style="stop-color:${theme.color}88;stop-opacity:0.8" />
-                        </linearGradient>
-                        <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                            <circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/>
-                        </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#bg${type})"/>
-                    <rect width="100%" height="100%" fill="url(#dots)"/>
-                    <text x="50%" y="35%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="72" font-weight="bold" opacity="0.9">${theme.icon}</text>
-                    <text x="50%" y="55%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="36" font-weight="bold">${townName}</text>
-                    <text x="50%" y="65%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" opacity="0.9">${stateName}</text>
-                    <text x="50%" y="75%" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" opacity="0.7">${info.subtitle}</text>
-                </svg>
-            `)}`;
-        }
-        
-        // Audio control variables
-        let currentSpeech = null;
-        let speechQueue = [];
-        let isPlaying = false;
-        let isPaused = false;
-
-        // Initialize voices for speech synthesis
-        async function initializeVoices() {
-            return new Promise((resolve) => {
-                if (speechSynthesis.getVoices().length > 0) {
-                    resolve();
-                    return;
-                }
-                
-                speechSynthesis.addEventListener('voiceschanged', () => {
-                    resolve();
-                }, { once: true });
-                
-                // Fallback timeout
-                setTimeout(() => {
-                    resolve();
-                }, 1000);
-            });
-        }
-
-        // Preprocess text for better speech synthesis
-        function preprocessTextForSpeech(text) {
-            if (!text || typeof text !== 'string') {
-                return '';
-            }
-            
-            return text
-                // Remove HTML tags
-                .replace(/<[^>]*>/g, '')
-                // Fix common abbreviations for better pronunciation
-                .replace(/\bUS\b/g, 'United States')
-                .replace(/\bUSA\b/g, 'United States of America')
-                .replace(/\bNY\b/g, 'New York')
-                .replace(/\bCA\b/g, 'California')
-                .replace(/\bFL\b/g, 'Florida')
-                .replace(/\bTX\b/g, 'Texas')
-                .replace(/\bIL\b/g, 'Illinois')
-                .replace(/\bPA\b/g, 'Pennsylvania')
-                .replace(/\bOH\b/g, 'Ohio')
-                .replace(/\bMI\b/g, 'Michigan')
-                .replace(/\bGA\b/g, 'Georgia')
-                .replace(/\bNC\b/g, 'North Carolina')
-                .replace(/\bNJ\b/g, 'New Jersey')
-                .replace(/\bVA\b/g, 'Virginia')
-                .replace(/\bWA\b/g, 'Washington')
-                .replace(/\bAZ\b/g, 'Arizona')
-                .replace(/\bMA\b/g, 'Massachusetts')
-                .replace(/\bTN\b/g, 'Tennessee')
-                .replace(/\bIN\b/g, 'Indiana')
-                .replace(/\bMO\b/g, 'Missouri')
-                .replace(/\bMD\b/g, 'Maryland')
-                .replace(/\bWI\b/g, 'Wisconsin')
-                .replace(/\bCO\b/g, 'Colorado')
-                .replace(/\bMN\b/g, 'Minnesota')
-                .replace(/\bSC\b/g, 'South Carolina')
-                .replace(/\bAL\b/g, 'Alabama')
-                .replace(/\bLA\b/g, 'Louisiana')
-                .replace(/\bKY\b/g, 'Kentucky')
-                .replace(/\bOR\b/g, 'Oregon')
-                .replace(/\bOK\b/g, 'Oklahoma')
-                .replace(/\bCT\b/g, 'Connecticut')
-                .replace(/\bUT\b/g, 'Utah')
-                .replace(/\bNV\b/g, 'Nevada')
-                .replace(/\bAR\b/g, 'Arkansas')
-                .replace(/\bMS\b/g, 'Mississippi')
-                .replace(/\bKS\b/g, 'Kansas')
-                .replace(/\bNM\b/g, 'New Mexico')
-                .replace(/\bNE\b/g, 'Nebraska')
-                .replace(/\bWV\b/g, 'West Virginia')
-                .replace(/\bID\b/g, 'Idaho')
-                .replace(/\bHI\b/g, 'Hawaii')
-                .replace(/\bNH\b/g, 'New Hampshire')
-                .replace(/\bME\b/g, 'Maine')
-                .replace(/\bRI\b/g, 'Rhode Island')
-                .replace(/\bMT\b/g, 'Montana')
-                .replace(/\bDE\b/g, 'Delaware')
-                .replace(/\bSD\b/g, 'South Dakota')
-                .replace(/\bND\b/g, 'North Dakota')
-                .replace(/\bAK\b/g, 'Alaska')
-                .replace(/\bVT\b/g, 'Vermont')
-                .replace(/\bWY\b/g, 'Wyoming')
-                // Fix common acronyms and abbreviations
-                .replace(/\bNASA\b/g, 'NASA')
-                .replace(/\bFBI\b/g, 'F.B.I.')
-                .replace(/\bCIA\b/g, 'C.I.A.')
-                .replace(/\bNFL\b/g, 'N.F.L.')
-                .replace(/\bNBA\b/g, 'N.B.A.')
-                .replace(/\bMLB\b/g, 'M.L.B.')
-                .replace(/\bNHL\b/g, 'N.H.L.')
-                .replace(/\bCEO\b/g, 'C.E.O.')
-                .replace(/\bCTO\b/g, 'C.T.O.')
-                .replace(/\bCFO\b/g, 'C.F.O.')
-                .replace(/\bGDP\b/g, 'G.D.P.')
-                .replace(/\bAPI\b/g, 'A.P.I.')
-                .replace(/\bURL\b/g, 'U.R.L.')
-                .replace(/\bHTML\b/g, 'H.T.M.L.')
-                .replace(/\bCSS\b/g, 'C.S.S.')
-                .replace(/\bJS\b/g, 'JavaScript')
-                .replace(/\bAI\b/g, 'A.I.')
-                .replace(/\bML\b/g, 'machine learning')
-                // Fix numbers and dates
-                .replace(/(\d{4})-(\d{1,2})-(\d{1,2})/g, '$2/$3/$1')
-                .replace(/(\d+)th\b/g, '$1th')
-                .replace(/(\d+)st\b/g, '$1st')
-                .replace(/(\d+)nd\b/g, '$1nd')
-                .replace(/(\d+)rd\b/g, '$1rd')
-                // Clean up multiple spaces and punctuation
-                .replace(/\s+/g, ' ')
-                .replace(/\.\s*\./g, '.')
-                .replace(/!\s*!/g, '!')
-                .replace(/\?\s*\?/g, '?')
-                // Ensure proper sentence ending
-                .replace(/([a-zA-Z0-9])([.!?])(\s*)$/g, '$1$2 ')
-                .trim();
-        }
-
-        // Calculate optimal speech synthesis settings based on text length and content
-        function calculateOptimalSpeechSettings(text) {
-            if (!text || typeof text !== 'string') {
-                return {
-                    rate: 1.0,
-                    pitch: 1.0,
-                    volume: 1.0
-                };
-            }
-            
-            const textLength = text.length;
-            const wordCount = text.split(' ').filter(word => word.length > 0).length;
-            const avgWordLength = textLength / Math.max(wordCount, 1);
-            
-            // Calculate reading rate based on text complexity
-            let rate = 1.0;
-            if (textLength > 2000) {
-                // Longer texts - slightly faster
-                rate = 1.1;
-            } else if (textLength > 1000) {
-                // Medium texts - normal rate
-                rate = 1.0;
-            } else if (textLength > 500) {
-                // Shorter texts - slightly slower for clarity
-                rate = 0.9;
-            } else {
-                // Very short texts - slower for emphasis
-                rate = 0.8;
-            }
-            
-            // Adjust rate for word complexity
-            if (avgWordLength > 7) {
-                // Complex words - slower rate
-                rate *= 0.9;
-            } else if (avgWordLength < 4) {
-                // Simple words - can be faster
-                rate *= 1.1;
-            }
-            
-            // Calculate pitch - slightly vary for interest
-            let pitch = 1.0;
-            if (text.includes('!') || text.includes('exciting') || text.includes('amazing')) {
-                // Enthusiastic content - slightly higher pitch
-                pitch = 1.1;
-            } else if (text.includes('historic') || text.includes('traditional') || text.includes('established')) {
-                // Historical content - slightly lower pitch for gravitas
-                pitch = 0.9;
-            }
-            
-            // Volume is typically kept at maximum for clarity
-            const volume = 1.0;
-            
-            // Ensure values are within valid ranges
-            return {
-                rate: Math.max(0.1, Math.min(2.0, rate)),
-                pitch: Math.max(0.0, Math.min(2.0, pitch)),
-                volume: Math.max(0.0, Math.min(1.0, volume))
-            };
-        }
-
-        // Select the best available voice for speech synthesis
-        function selectBestVoice() {
-            const voices = speechSynthesis.getVoices();
-            
-            if (!voices || voices.length === 0) {
-                console.warn('⚠️ No voices available');
-                return null;
-            }
-            
-            // Priority order for voice selection
-            const preferredVoices = [
-                // High-quality English voices (US)
-                'Microsoft Zira - English (United States)',
-                'Microsoft David - English (United States)', 
-                'Google US English',
-                'Alex',
-                'Samantha',
-                
-                // Other English voices
-                'Microsoft Hazel - English (Great Britain)',
-                'Google UK English Female',
-                'Google UK English Male',
-                'Karen',
-                'Daniel',
-                
-                // Generic English voices
-                'English',
-                'en-US',
-                'en-GB'
-            ];
-            
-            // First, try to find an exact match from preferred voices
-            for (const preferredName of preferredVoices) {
-                const exactMatch = voices.find(voice => 
-                    voice.name === preferredName
-                );
-                if (exactMatch) {
-                    console.log(`🎯 Found exact match: ${exactMatch.name}`);
-                    return exactMatch;
-                }
-            }
-            
-            // Next, try partial matches for preferred voices
-            for (const preferredName of preferredVoices) {
-                const partialMatch = voices.find(voice => 
-                    voice.name.toLowerCase().includes(preferredName.toLowerCase()) ||
-                    preferredName.toLowerCase().includes(voice.name.toLowerCase())
-                );
-                if (partialMatch) {
-                    console.log(`🎯 Found partial match: ${partialMatch.name}`);
-                    return partialMatch;
-                }
-            }
-            
-            // Look for any English language voice
-            const englishVoice = voices.find(voice => 
-                voice.lang && (
-                    voice.lang.toLowerCase().startsWith('en') ||
-                    voice.name.toLowerCase().includes('english') ||
-                    voice.name.toLowerCase().includes('en-')
-                )
-            );
-            
-            if (englishVoice) {
-                console.log(`🌐 Found English voice: ${englishVoice.name} (${englishVoice.lang})`);
-                return englishVoice;
-            }
-            
-            // Look for high-quality voices (usually have longer names or specific keywords)
-            const qualityVoice = voices.find(voice => 
-                voice.name.toLowerCase().includes('premium') ||
-                voice.name.toLowerCase().includes('neural') ||
-                voice.name.toLowerCase().includes('enhanced') ||
-                voice.name.toLowerCase().includes('microsoft') ||
-                voice.name.toLowerCase().includes('google')
-            );
-            
-            if (qualityVoice) {
-                console.log(`⭐ Found quality voice: ${qualityVoice.name}`);
-                return qualityVoice;
-            }
-            
-            // Fallback to the first available voice
-            const fallbackVoice = voices[0];
-            console.log(`🔄 Using fallback voice: ${fallbackVoice.name} (${fallbackVoice.lang})`);
-            return fallbackVoice;
-        }
-
-        // Text-to-Speech function for AI Travel Insights (Enhanced)
-        async function playTravelInsights(townId, button) {
-            // Stop any current speech
-            if (currentSpeech) {
-                window.speechSynthesis.cancel();
-                currentSpeech = null;
-            }
-            
-            // Check if speech synthesis is supported
-            if (!('speechSynthesis' in window)) {
-                showNotification('❌ Text-to-speech not supported in this browser', 'error');
-                return;
-            }
-            
-            // Initialize voices if not already loaded
-            await initializeVoices();
-            
-            // Get the town data
-            const town = allTowns.find(t => t.id === townId);
-            if (!town) return;
-            
-            // Show audio controls
-            const audioControls = document.getElementById(`audioControls-${townId}`);
-            const audioStatus = document.getElementById(`audioStatus-${townId}`);
-            if (audioControls) {
-                audioControls.style.display = 'flex';
-            }
-            
-            // Update button appearance with loading state
-            button.innerHTML = '🔄';
-            button.title = 'Preparing audio...';
-            button.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
-            
-            // Get insights container
-            const insightsContainer = document.getElementById(`insightsContainer-${townId}`);
-            
-            // Get all insights from the database
-            try {
-                const townData = await getEnhancedTownFacts(town.name, town.state);
-                
-                if (!townData.openaiInsights || townData.openaiInsights.length === 0) {
-                    if (audioStatus) audioStatus.textContent = '❌ No AI insights to play';
-                    resetAudioButton(townId, button);
-                    return;
-                }
-                
-                // Prepare and preprocess the text
-                const introText = `AI Travel Insights for ${town.name}, ${town.state}.`;
-                const insightsText = townData.openaiInsights
-                    .map(insight => preprocessTextForSpeech(insight))
-                    .join('. ');
-                
-                const fullText = preprocessTextForSpeech(`${introText} ${insightsText}`);
-                
-                // Calculate optimal speech settings
-                const speechSettings = calculateOptimalSpeechSettings(fullText);
-                
-                // Create speech synthesis utterance
-                currentSpeech = new SpeechSynthesisUtterance(fullText);
-                
-                // Apply optimized settings
-                currentSpeech.rate = speechSettings.rate;
-                currentSpeech.pitch = speechSettings.pitch;
-                currentSpeech.volume = speechSettings.volume;
-                
-                // Use the best available voice
-                const bestVoice = selectBestVoice();
-                if (bestVoice) {
-                    currentSpeech.voice = bestVoice;
-                    console.log(`🎤 Using voice: ${bestVoice.name} (${bestVoice.lang})`);
-                } else {
-                    console.warn('⚠️ No optimal voice found, using default');
-                }
-                
-                // Update status with estimated duration
-                if (audioStatus) {
-                    audioStatus.textContent = `🎧 Loading audio (${speechSettings.estimatedDuration}s estimated)...`;
-                }
-                
-                // Enhanced event handlers
-                currentSpeech.onstart = () => {
-                    isPlaying = true;
-                    isPaused = false;
-                    
-                    // Update UI
-                    button.innerHTML = '🎵';
-                    button.title = 'Playing AI Travel Insights';
-                    button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
-                    
-                    if (audioStatus) {
-                        audioStatus.textContent = `🎧 Playing insights (${speechSettings.estimatedDuration}s)`;
-                    }
-                    
-                    // Enhanced visual feedback
-                    if (insightsContainer) {
-                        insightsContainer.style.border = '3px solid #28a745';
-                        insightsContainer.style.boxShadow = '0 0 20px rgba(40, 167, 69, 0.4)';
-                        insightsContainer.style.background = 'linear-gradient(135deg, #f8fff8, #e8f5e8)';
-                    }
-                    
-                    // Animate insights as they're being read
-                    animateInsightsHighlight(townId, townData.openaiInsights.length, speechSettings.estimatedDuration);
-                };
-                
-                currentSpeech.onend = () => {
-                    isPlaying = false;
-                    isPaused = false;
-                    currentSpeech = null;
-                    
-                    if (audioStatus) audioStatus.textContent = '✅ Finished playing insights!';
-                    resetAudioButton(townId, button);
-                    
-                    // Reset visual feedback
-                    if (insightsContainer) {
-                        insightsContainer.style.border = '2px solid #e74c3c';
-                        insightsContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
-                        insightsContainer.style.background = 'linear-gradient(135deg, #fff5f5, #ffeaea)';
-                    }
-                    
-                    // Clear any insight highlights
-                    clearInsightsHighlight(townId);
-                    
-                    // Hide audio controls after a delay
-                    setTimeout(() => {
-                        if (audioControls) audioControls.style.display = 'none';
-                    }, 4000);
-                    
-                    // Show completion notification
-                    showNotification('🎧 Finished playing AI travel insights!', 'audio');
-                };
-                
-                currentSpeech.onerror = (event) => {
-                    console.error('Speech synthesis error:', event.error);
-                    if (audioStatus) {
-                        audioStatus.textContent = `❌ Playback error: ${event.error}`;
-                    }
-                    resetAudioButton(townId, button);
-                    isPlaying = false;
-                    isPaused = false;
-                    currentSpeech = null;
-                    
-                    // Show error notification
-                    showNotification('❌ Audio playback failed. Please try again.', 'error');
-                };
-                
-                // Enhanced progress tracking
-                let lastWordIndex = 0;
-                currentSpeech.onboundary = (event) => {
-                    if (event.name === 'word') {
-                        lastWordIndex = event.charIndex;
-                        // Update progress indicator if needed
-                        updateAudioProgress(townId, lastWordIndex, fullText.length);
-                    }
-                };
-                
-                // Start speaking with retry mechanism
-                try {
-                    window.speechSynthesis.speak(currentSpeech);
-                    console.log(`🎧 Playing enhanced AI insights for ${town.name}, ${town.state}`);
-                    console.log(`📊 Settings: Rate ${speechSettings.rate}, Pitch ${speechSettings.pitch}, Volume ${speechSettings.volume}`);
-                } catch (error) {
-                    console.error('Failed to start speech synthesis:', error);
-                    if (audioStatus) audioStatus.textContent = '❌ Failed to start playback';
-                    resetAudioButton(townId, button);
-                }
-                
-            } catch (error) {
-                console.error('Error preparing audio:', error);
-                if (audioStatus) audioStatus.textContent = '❌ Error preparing audio';
-                resetAudioButton(townId, button);
-                showNotification('❌ Failed to prepare audio content', 'error');
-            }
-        }
-        
-        // Enhanced Pause/Resume audio function
-        function pauseResumeAudio(townId, button) {
-            if (!currentSpeech) return;
-            
-            const audioStatus = document.getElementById(`audioStatus-${townId}`);
-            
-            if (isPlaying && !isPaused) {
-                // Pause
-                window.speechSynthesis.pause();
-                isPaused = true;
-                button.innerHTML = '▶️ Resume';
-                button.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
-                if (audioStatus) audioStatus.textContent = '⏸️ Paused - Click Resume to continue';
-                
-                // Update play button
-                const playButton = document.getElementById(`audioPlayBtn-${townId}`);
-                if (playButton) {
-                    playButton.innerHTML = '⏸️';
-                    playButton.title = 'Audio Paused';
-                    playButton.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
-                }
-                
-            } else if (isPaused) {
-                // Resume
-                window.speechSynthesis.resume();
-                isPaused = false;
-                button.innerHTML = '⏸️ Pause';
-                button.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
-                if (audioStatus) audioStatus.textContent = '🎧 Resuming AI Travel Insights...';
-                
-                // Update play button
-                const playButton = document.getElementById(`audioPlayBtn-${townId}`);
-                if (playButton) {
-                    playButton.innerHTML = '🎵';
-                    playButton.title = 'Playing AI Travel Insights';
-                    playButton.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
-                }
-            }
-        }
-        
-        // Enhanced stop audio function
-        function stopAudio(townId) {
-            if (currentSpeech) {
-                window.speechSynthesis.cancel();
-                currentSpeech = null;
-            }
-            
-            isPlaying = false;
-            isPaused = false;
-            
-            const audioStatus = document.getElementById(`audioStatus-${townId}`);
-            const audioControls = document.getElementById(`audioControls-${townId}`);
-            const playButton = document.getElementById(`audioPlayBtn-${townId}`);
-            const pauseButton = document.getElementById(`pauseBtn-${townId}`);
-            
-            if (audioStatus) audioStatus.textContent = '⏹️ Playback stopped';
-            if (playButton) resetAudioButton(townId, playButton);
-            
-            // Reset pause button
-            if (pauseButton) {
-                pauseButton.innerHTML = '⏸️ Pause';
-                pauseButton.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
-            }
-            
-            // Clear insights highlighting
-            clearInsightsHighlight(townId);
-            
-            // Reset insights container styling
-            const insightsContainer = document.getElementById(`insightsContainer-${townId}`);
-            if (insightsContainer) {
-                insightsContainer.style.border = '2px solid #e74c3c';
-                insightsContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
-                insightsContainer.style.background = 'linear-gradient(135deg, #fff5f5, #ffeaea)';
-            }
-            
-            // Hide controls after a delay
-            setTimeout(() => {
-                if (audioControls) audioControls.style.display = 'none';
-            }, 2000);
-        }
-        
-        // Reset audio button to original state
-        function resetAudioButton(townId, button) {
-            button.innerHTML = '🔊';
-            button.title = 'Play AI Travel Insights';
-            button.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
-        }
-        
-        // Animate insights highlighting during playback
-        function animateInsightsHighlight(townId, insightCount, duration) {
-            const timePerInsight = (duration * 1000) / insightCount; // Convert to milliseconds
-            
-            for (let i = 0; i < insightCount; i++) {
-                setTimeout(() => {
-                    const insightElement = document.getElementById(`insight-${townId}-${i}`);
-                    if (insightElement) {
-                        // Highlight current insight
-                        insightElement.style.background = 'linear-gradient(135deg, #fff9c4, #f0e68c)';
-                        insightElement.style.border = '3px solid #28a745';
-                        insightElement.style.transform = 'scale(1.02)';
-                        insightElement.style.boxShadow = '0 4px 12px rgba(40, 167, 69, 0.3)';
-                        
-                        // Remove highlight from previous insight
-                        if (i > 0) {
-                            const prevElement = document.getElementById(`insight-${townId}-${i-1}`);
-                            if (prevElement) {
-                                prevElement.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
-                                prevElement.style.border = '4px solid #e74c3c';
-                                prevElement.style.transform = 'scale(1)';
-                                prevElement.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
-                            }
-                        }
-                    }
-                }, i * timePerInsight);
-            }
-        }
-        
-        // Clear insights highlighting
-        function clearInsightsHighlight(townId) {
-            // Find all insight elements for this town and reset their styling
-            let i = 0;
-            while (true) {
-                const insightElement = document.getElementById(`insight-${townId}-${i}`);
-                if (!insightElement) break;
-                
-                insightElement.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
-                insightElement.style.border = '4px solid #e74c3c';
-                insightElement.style.transform = 'scale(1)';
-                insightElement.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
-                i++;
-            }
-        }
-        
-        // Update audio progress indicator
-        function updateAudioProgress(townId, charIndex, totalChars) {
-            const progress = Math.round((charIndex / totalChars) * 100);
-            const audioStatus = document.getElementById(`audioStatus-${townId}`);
-            if (audioStatus && progress > 0) {
-                audioStatus.textContent = `🎧 Playing insights... ${progress}%`;
-            }
-        }
-        
-        // Enhanced clean up speech when overlay is closed
-        function cleanupAudio() {
-            if (currentSpeech) {
-                window.speechSynthesis.cancel();
-                currentSpeech = null;
-            }
-            isPlaying = false;
-            isPaused = false;
-            
-            // Clear any ongoing animations or highlights
-            const allInsightElements = document.querySelectorAll('[id^="insight-"]');
-            allInsightElements.forEach(element => {
-                element.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
-                element.style.border = '4px solid #e74c3c';
-                element.style.transform = 'scale(1)';
-                element.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
-            });
-        }
-        
-        // Initialize voices when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeVoices().then(() => {
-                console.log('🎤 Voice system initialized and ready');
-            });
-        });
-
-        // Close town details modal
-        function closeTownModal() {
-            const modal = document.getElementById('townModal');
-            modal.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close modal when clicking outside
-        document.addEventListener('click', function(e) {
-            const modal = document.getElementById('townModal');
-            if (e.target === modal) {
-                closeTownModal();
-            }
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeTownModal();
-            }
-        });
-
-        // Show notification
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            
-            let bgColor, icon;
-            switch(type) {
-                case 'auto':
-                    bgColor = 'var(--success-green)';
-                    icon = 'fa-location-arrow';
-                    break;
-                case 'route':
-                    bgColor = '#6f42c1'; // Purple for route auto-checkins
-                    icon = 'fa-route';
-                    break;
-                case 'state':
-                    bgColor = '#28a745'; // Green for state welcome
-                    icon = 'fa-flag';
-                    break;
-                case 'county':
-                    bgColor = '#fd7e14'; // Orange for county check-ins
-                    icon = 'fa-landmark';
-                    break;
-                case 'sync':
-                    bgColor = '#17a2b8'; // Cyan for cross-screen sync
-                    icon = 'fa-sync-alt';
-                    break;
-                case 'manual':
-                    bgColor = 'var(--primary-blue)';
-                    icon = 'fa-check';
-                    break;
-                case 'uncheck':
-                    bgColor = '#dc3545';
-                    icon = 'fa-times';
-                    break;
-                case 'info':
-                    bgColor = 'var(--info-blue)';
-                    icon = 'fa-info-circle';
-                    break;
-                case 'warning':
-                    bgColor = 'var(--warning-yellow)';
-                    icon = 'fa-exclamation-triangle';
-                    break;
-                case 'error':
-                    bgColor = '#dc3545';
-                    icon = 'fa-exclamation-circle';
-                    break;
-                default:
-                    bgColor = 'var(--success-green)';
-                    icon = 'fa-check';
-            }
-            
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${bgColor};
-                color: white;
-                padding: 15px 20px;
-                border-radius: 8px;
-                z-index: 1000;
-                font-weight: bold;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                animation: slideIn 0.5s ease;
-                max-width: 300px;
-                word-wrap: break-word;
-            `;
-            notification.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.5s ease';
-                setTimeout(() => notification.remove(), 500);
-            }, 3000);
-        }
-
-        // Show save status
-        function showSaveStatus(status, message) {
-            const statusEl = document.getElementById('saveStatus');
-            const iconEl = statusEl.querySelector('i');
-            const textEl = statusEl.querySelector('span');
-            
-            statusEl.classList.remove('saving', 'saved', 'error');
-            
-            switch(status) {
-                case 'saving':
-                    statusEl.classList.add('saving', 'show');
-                    iconEl.className = 'fas fa-spinner fa-spin';
-                    textEl.textContent = message || 'Saving...';
-                    break;
-                case 'saved':
-                    statusEl.classList.add('saved', 'show');
-                    iconEl.className = 'fas fa-check';
-                    textEl.textContent = message || 'Saved!';
-                    setTimeout(() => statusEl.classList.remove('show'), 2000);
-                    break;
-                case 'error':
-                    statusEl.classList.add('error', 'show');
-                    iconEl.className = 'fas fa-exclamation-triangle';
-                    textEl.textContent = message || 'Save failed';
-                    setTimeout(() => statusEl.classList.remove('show'), 3000);
-                    break;
-            }
-        }
-
-        // Filter towns based on criteria
-        function filterTowns() {
-            const stateFilter = document.getElementById('stateFilter').value;
-            const typeFilter = document.getElementById('typeFilter').value;
-            const statusFilter = document.getElementById('statusFilter').value;
-
-            filteredTowns = allTowns.filter(town => {
-                // State filter
-                if (stateFilter !== 'all' && town.state !== stateFilter) return false;
-                
-                // Type filter
-                if (typeFilter !== 'all' && town.type !== typeFilter) return false;
-                
-                // Status filter
-                if (statusFilter !== 'all') {
-                    const isCheckedIn = checkedInTowns.has(town.id);
-                    const isNearby = town.isNearby || false;
-                    
-                    if (statusFilter === 'checked-in' && !isCheckedIn) return false;
-                    if (statusFilter === 'nearby' && !isNearby) return false;
-                    if (statusFilter === 'not-visited' && (isCheckedIn || isNearby)) return false;
-                }
-                
-                return true;
-            });
-
-            updateTownsDisplay();
-
-            updateStats();
-        }
-
-        // Update statistics
-        // Calculate points based on population
-        function calculatePoints(population) {
-            if (population >= 100000) return 5;
-            if (population >= 50000) return 10;
-            if (population >= 25000) return 15;
-            if (population >= 10000) return 25;
-            if (population >= 5000) return 35;
-            if (population >= 1000) return 50;
-            return 100; // Small towns under 1000 people
-        }
-
-        // Add numbering to towns and calculate points
-        function initializeTownsWithNumbers() {
-            let townNumber = 1;
-            Object.values(townsData).forEach(route => {
-                route.towns.forEach(town => {
-                    town.number = townNumber++;
-                    town.points = calculatePoints(town.population);
-                });
-            });
-        }
-
-        function updateStats() {
-            const totalTowns = allTowns.length;
-            const checkedInCount = checkedInTowns.size;
-            const nearbyCount = allTowns.filter(town => town.isNearby).length;
-            const progressPercentage = Math.round((checkedInCount / totalTowns) * 100);
-            
-            // Calculate total points and average score
-            let totalPoints = 0;
-            checkedInTowns.forEach(townId => {
-                const town = allTowns.find(t => t.id === townId);
-                if (town && town.points) {
-                    totalPoints += town.points;
-                }
-            });
-            const averageScore = checkedInCount > 0 ? Math.round(totalPoints / checkedInCount) : 0;
-
-            document.getElementById('totalTowns').textContent = totalTowns;
-            document.getElementById('checkedInTowns').textContent = checkedInCount;
-            document.getElementById('totalPoints').textContent = totalPoints;
-            document.getElementById('averageScore').textContent = averageScore;
-            document.getElementById('nearbyTowns').textContent = nearbyCount;
-            document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
-        }
-
-        // Update towns display
-        function updateTownsDisplay() {
-            console.log('🏘️ Starting updateTownsDisplay...');
-            console.log(`📊 filteredTowns.length: ${filteredTowns.length}`);
-            
-            const container = document.getElementById('townsContainer');
-            container.innerHTML = '';
-
-            // Group towns by route
-            const townsByRoute = {};
-            filteredTowns.forEach(town => {
-                if (!townsByRoute[town.route]) {
-                    townsByRoute[town.route] = [];
-                }
-                townsByRoute[town.route].push(town);
-            });
-
-            console.log(`🛣️ Routes found: ${Object.keys(townsByRoute).length}`);
-            Object.keys(townsByRoute).forEach(route => {
-                console.log(`  - ${route}: ${townsByRoute[route].length} towns`);
-            });
-
-            Object.entries(townsByRoute).forEach(([routeName, towns]) => {
-                const routeSection = document.createElement('div');
-                routeSection.className = 'route-section';
-                
-                const routeHeader = document.createElement('div');
-                routeHeader.className = 'route-header';
-                routeHeader.innerHTML = `
-                    <div class="route-title">${routeName}</div>
-                    <div class="route-distance">${towns[0].routeDistance}</div>
-                `;
-                
-                const townsGrid = document.createElement('div');
-                townsGrid.className = 'towns-grid';
-                
-                towns.forEach(town => {
-                    const isCheckedIn = checkedInTowns.has(town.id);
-                    const isNearby = town.isNearby || false;
-                    
-                    let cardClass = 'town-card';
-                    let statusText = 'Not Visited';
-                    let statusClass = 'status-not-visited';
-                    
-                    if (isCheckedIn) {
-                        cardClass += ' checked-in';
-                        statusText = '✓ Checked In';
-                        statusClass = 'status-checked-in';
-                    } else if (isNearby) {
-                        cardClass += ' nearby';
-                        statusText = '📍 Nearby';
-                        statusClass = 'status-nearby';
-                    }
-                    
-                    const distanceText = town.distance ? `${town.distance.toFixed(1)} miles away` : '';
-                    
-                    const townCard = document.createElement('div');
-                    townCard.className = cardClass;
-                    
-                    // Check if this is the next town to visit for pulse effect
-                    const nextTown = getNextTown();
-                    const isNextTown = nextTown && 
-                        nextTown.name === town.name && 
-                        nextTown.state === town.state && 
-                        !isCheckedIn;
-                    
-                    if (isNextTown) {
-                        townCard.classList.add('next-town-tile');
-                    }
-                    
-                    townCard.innerHTML = `
-                        <div class="town-header">
-                            <div class="town-number">${town.number}</div>
-                            <div class="town-name">${town.name}</div>
-                            <div class="town-type">${town.type}</div>
-                            <div class="points-indicator">${town.points} pts</div>
-                        </div>
-                        <div class="town-details">
-                            ${town.state} • Pop: ${town.population.toLocaleString()}
-                            ${distanceText ? `<br><div class="distance-info">${distanceText}</div>` : ''}
-                        </div>
-                        <div class="town-status">
-                            <div class="status-badge ${statusClass}">${statusText}</div>
-                            ${isCheckedIn ? 
-                                `<button class="uncheck-btn" onclick="event.stopPropagation(); performUncheck('${town.id}').catch(e => console.error('Uncheck error:', e))">
-                                    Uncheck
-                                </button>` :
-                                `<button class="checkin-btn" onclick="event.stopPropagation(); performCheckin('${town.id}').catch(e => console.error('Checkin error:', e))">
-                                    Check In
-                                </button>`
-                            }
-                        </div>
-                    `;
-
-                    // Add click event to show town details (excluding the button area)
-                    townCard.addEventListener('click', function(e) {
-                        if (!e.target.classList.contains('checkin-btn') && !e.target.classList.contains('uncheck-btn')) {
-                            showTownDetails(town.id);
-                        }
-                    });
-
-                    // Add hover effect cursor
-                    townCard.style.cursor = 'pointer';
-                    
-                    townsGrid.appendChild(townCard);
-                });
-                
-                routeSection.appendChild(routeHeader);
-                routeSection.appendChild(townsGrid);
-                container.appendChild(routeSection);
-            });
-            
-            // Scroll to the next town with pulse effect after display update
-            setTimeout(() => {
-                scrollToNextTownTile();
-            }, 100);
-        }
-
-        // Update map with all towns
-        function updateMap() {
-            // Clear existing markers except user location and boundaries
-            map.eachLayer(layer => {
-                if (layer instanceof L.CircleMarker && layer !== userLocationMarker) {
-                    map.removeLayer(layer);
-                }
-                // Remove old circle boundaries (we'll use new boundary system)
-                if (layer instanceof L.Circle) {
-                    map.removeLayer(layer);
-                }
-            });
-
-            // Clear town markers map
-            townMarkers.clear();
-
-            // Add town markers and boundaries
-            allTowns.forEach(town => {
-                const isCheckedIn = checkedInTowns.has(town.id);
-                const isNearby = town.isNearby || false;
-                
-                let color, size;
-                
-                if (isCheckedIn) {
-                    color = '#28a745'; // Green for checked in
-                    size = 8;
-                } else if (isNearby) {
-                    color = '#ffc107'; // Yellow for nearby
-                    size = 7;
-                } else {
-                    // Color by type
-                    switch(town.type) {
-                        case 'city':
-                            color = '#2c5aa0'; // Blue
-                            size = 6;
-                            break;
-                        case 'town':
-                            color = '#17a2b8'; // Teal
-                            size = 5;
-                            break;
-                        case 'village':
-                            color = '#6f42c1'; // Purple
-                            size = 4;
-                            break;
-                        default:
-                            color = '#6c757d'; // Gray
-                            size = 4;
-                    }
-                }
-                
-                // Add town center marker
-                const marker = L.circleMarker([town.lat, town.lng], {
-                    radius: size,
-                    fillColor: color,
-                    color: 'white',
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.8
-                }).addTo(map);
-                
-                // Store marker in the map for later access
-                townMarkers.set(town.id, marker);
-                
-                marker.bindPopup(`
-                    <div style="text-align: center;">
-                        <h4 style="margin: 0; color: ${color};">${town.name}, ${town.state}</h4>
-                        <p style="margin: 5px 0; font-size: 0.9rem;">${town.type.toUpperCase()} • Pop: ${town.population.toLocaleString()}</p>
-                        ${isCheckedIn ? '<p style="color: #28a745; margin: 5px 0 0 0; font-weight: bold;">✓ Checked In</p>' : ''}
-                        ${isNearby && !isCheckedIn ? '<p style="color: #ffc107; margin: 5px 0 0 0; font-weight: bold;">📍 Nearby</p>' : ''}
-                    </div>
-                `);
-                
-                marker.on('click', () => {
-                    if (!isCheckedIn) {
-                        performCheckin(town.id).catch(e => console.error('Map click checkin error:', e));
-                    }
-                });
-                
-                // Add boundary for checked-in towns
-                if (isCheckedIn && boundariesLoaded) {
-                    addTownBoundary(town.id, true);
-                }
-            });
-        }
-
-        // Get current location
-        function getCurrentLocation() {
-            if (!navigator.geolocation) {
-                showNotification('Geolocation is not supported by this browser.', 'error');
-                return;
-            }
-
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    currentPosition = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-
-                    // Update/add user location marker
-                    if (userLocationMarker) {
-                        map.removeLayer(userLocationMarker);
-                    }
-
-                    userLocationMarker = L.circleMarker([currentPosition.lat, currentPosition.lng], {
-                        radius: 8,
-                        fillColor: '#ff0000',
-                        color: 'white',
-                        weight: 3,
-                        opacity: 1,
-                        fillOpacity: 1
-                    }).addTo(map);
-
-                    userLocationMarker.bindPopup('<div style="text-align: center;"><h4 style="margin: 0; color: #ff0000;">📍 Your Current Location</h4></div>');
-
-                    checkNearbyTowns();
-                    saveTownsState();
-                },
-                (error) => {
-                    let errorMessage = 'Unable to get your location.';
-                    showNotification(errorMessage, 'error');
-                }
-            );
-        }
-
-        // Google Search Integration Functions
-        function refreshGoogleSearch(townName, stateName, townId) {
-            const iframe = document.getElementById(`googleSearchFrame-${townId}`);
-            if (iframe) {
-                const searchQuery = encodeURIComponent(`${townName}, ${stateName} `);
-                const newSrc = `https://www.google.com/search?q=${searchQuery}&igu=1&timestamp=${Date.now()}`;
-                iframe.src = newSrc;
-                
-                showNotification(`🔄 Refreshing search results for ${townName}`, 'info');
-            }
-        }
-        
-        function searchGoogle(query, townId) {
-            const iframe = document.getElementById(`googleSearchFrame-${townId}`);
-            if (iframe) {
-                const encodedQuery = encodeURIComponent(query);
-                const newSrc = `https://www.google.com/search?q=${encodedQuery}&igu=1&timestamp=${Date.now()}`;
-                iframe.src = newSrc;
-                
-                showNotification(`🔍 Searching for: ${query}`, 'info');
-            }
-        }
-        
-        function openGoogleInNewTab(townName, stateName) {
-            const query = encodeURIComponent(`${townName}, ${stateName} tourism attractions`);
-            const url = `https://www.google.com/search?q=${query}`;
-            window.open(url, '_blank');
-            
-            showNotification(`🌐 Opened Google search in new tab`, 'info');
-        }
-
-        // Clear all data
-        async function clearAllTownData() {
-            if (confirm('Are you sure you want to clear all your town check-in data? This cannot be undone.')) {
-                try {
-                    localStorage.removeItem(STORAGE_KEY);
-                    
-                    checkedInTowns = new Set();
-                    checkinHistory = [];
-                    travelPath = [];
-                    visitedStates = new Set();
-                    autoCheckinEnabled = false;
-                    currentPosition = null;
-                    
-                    document.getElementById('autoCheckinToggle').checked = false;
-                    
-                    if (userLocationMarker) {
-                        map.removeLayer(userLocationMarker);
-                        userLocationMarker = null;
-                    }
-                    
-                    allTowns.forEach(town => {
-                        town.distance = null;
-                        town.isNearby = false;
-                    });
-                    
-                    // Clear state boundaries from map
-                    stateLayers.forEach((layer, stateCode) => {
-                        map.removeLayer(layer);
-                    });
-                    stateLayers.clear();
-                    
-                    updateStats();
-                    updateTownsDisplay();
-                    updateMap();
-                    await updateTravelPath();
-                    
-                    showNotification('All town data cleared successfully!', 'info');
-                } catch (error) {
-                    showNotification('Failed to clear data. Please try again.', 'error');
-                }
-            }
-        }
-
-        // Add CSS animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-            @keyframes pulse {
-                0% { 
-                    transform: scale(1);
-                }
-                50% { 
-                    transform: scale(1.5);
-                }
-                100% { 
-                    transform: scale(1);
-                }
-            }
-            @keyframes tilePulse {
-                0% { 
-                    box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4);
-                    border-color: #dee2e6;
-                }
-                50% { 
-                    box-shadow: 0 0 0 10px rgba(23, 162, 184, 0.1);
-                    border-color: rgba(23, 162, 184, 0.6);
-                }
-                100% { 
-                    box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4);
-                    border-color: #dee2e6;
-                }
-            }
-            .next-town-tile {
-                animation: tilePulse 3s infinite ease-in-out;
-                transition: all 0.3s ease;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Event listeners
-        document.getElementById('autoCheckinToggle').addEventListener('change', function() {
-            autoCheckinEnabled = this.checked;
-            saveTownsState();
-            
-            if (autoCheckinEnabled) {
-                getCurrentLocation();
-                showNotification('Auto check-in enabled for towns within 2 miles!', 'info');
-                setInterval(() => {
-                    if (autoCheckinEnabled) {
-                        getCurrentLocation();
-                    }
-                }, 30000);
-            } else {
-                showNotification('Auto check-in disabled for towns.', 'info');
-            }
-        });
-
-        document.getElementById('routeCheckinToggle').addEventListener('change', function() {
-            routeCheckinEnabled = this.checked;
-            saveTownsState();
-            
-            if (routeCheckinEnabled) {
-                showNotification('🛣️ Route auto check-in enabled! Intermediate towns will be automatically checked in.', 'info');
-            } else {
-                showNotification('🛣️ Route auto check-in disabled.', 'info');
-            }
-        });
-
-        document.getElementById('stateFilter').addEventListener('change', filterTowns);
-        document.getElementById('typeFilter').addEventListener('change', filterTowns);
-        document.getElementById('statusFilter').addEventListener('change', filterTowns);
-
-        // Auto-save functionality
-        function startAutoSave() {
-            setInterval(() => {
-                saveTownsState();
-            }, AUTO_SAVE_INTERVAL);
-        }
-
-        // Initialize application
-        document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🚀 Starting application initialization...');
-            console.log('📝 townsData keys:', Object.keys(townsData));
-            console.log('� townsData.route1:', townsData.route1);
-            
-            console.log('�📊 Initializing towns with numbers...');
-            initializeTownsWithNumbers();
-            
-            console.log('🗺️ Initializing towns data...');
-            await initializeTownsData();
-            
-            console.log('📝 allTowns.length after init:', allTowns.length);
-            
-            console.log('💾 Loading towns state...');
-            loadTownsState();
-            
-            console.log('📈 Updating stats...');
-            updateStats();
-            
-            console.log('🏘️ Updating towns display...');
-            updateTownsDisplay();
-            
-            console.log('🏛️ Updating counties display...');
-
-            
-            console.log('🗺️ Updating map...');
-            updateMap();
-            
-            console.log('🛣️ Updating travel path...');
-            await updateTravelPath();
-            
-            console.log('�️ Displaying full trip route...');
-            await showFullTripRoute();
-            
-            console.log('�💾 Starting auto-save...');
-            startAutoSave();
-            
-            if (autoCheckinEnabled) {
-                console.log('📍 Getting current location...');
-                getCurrentLocation();
-            }
-            
-            // Highlight next town ready for check-in and scroll to it
-            console.log('🎯 Highlighting next town for check-in...');
-            setTimeout(() => {
-                highlightNextTownTile();
-            }, 500); // Delay to ensure DOM is fully rendered
-            
-            // Save state before page unload
-            window.addEventListener('beforeunload', () => {
-                saveTownsState();
-            });
-            
-            // Listen for storage changes from other tabs/windows
-            window.addEventListener('storage', function(e) {
-                if (e.key === STORAGE_KEY) {
-                    // Reload towns data if changed externally
-                    loadTownsState();
-                    updateStats();
-                    updateTownsDisplay();
-                    updateMap();
-                    console.log('🔄 Towns data updated from external change');
-                } else if (e.key === 'statesTravelData') {
-                    // If states were unchecked, we might need to uncheck our towns too
-                    // But since we're the source of truth for state sync from towns, 
-                    // we don't need to do anything here to avoid loops
-                    console.log('🔄 States data changed externally');
-                }
-            });
-            
-            console.log('✅ Application initialization complete!');
-        });
-    </script>
-</body>
-</html>
