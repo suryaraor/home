@@ -8,7 +8,7 @@
 
 class TownBoundariesManager {
     constructor() {
-        this.baseUrl = 'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/';
+        this.baseUrl = 'data/';
         this.cacheKey = 'usTownBoundaries';
         this.boundaries = new Map();
         this.loaded = false;
@@ -67,13 +67,13 @@ class TownBoundariesManager {
     async downloadBoundaries() {
         const sources = [
             {
-                name: 'US Places',
-                url: 'https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-places.json',
+                name: 'Local US Small Towns',
+                url: 'data/us_small_towns_boundaries.geojson',
                 type: 'places'
             },
             {
-                name: 'Alternative Source',
-                url: 'https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson',
+                name: 'Local US Small Towns Simplified',
+                url: 'data/us_small_towns_simplified.geojson',
                 type: 'backup'
             }
         ];
