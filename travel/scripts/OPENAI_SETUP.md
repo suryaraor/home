@@ -27,11 +27,11 @@ node travel-app-integrator.js sample
 
 ### After (OpenAI Enhanced):
 ```
-🏛️ HISTORICAL INTRIGUE: Spickard's position along the old cattle trails suggests it may have served as an unofficial waystation where cowboys and settlers exchanged stories that shaped local folklore.
+🏛️ Spickard's position along the old cattle trails suggests it may have served as an unofficial waystation where cowboys and settlers exchanged stories that shaped local folklore.
 
-🎭 LOCAL CHARACTER: In a village of 300, the coffee shop likely serves as an unofficial town hall where decades of community decisions get discussed over morning coffee and homemade pie.
+🎭 In a village of 300, the coffee shop likely serves as an unofficial town hall where decades of community decisions get discussed over morning coffee and homemade pie.
 
-🔍 HIDDEN STORIES: The spacing between houses here tells a story of agricultural prosperity and decline, with larger lots hinting at family properties subdivided across generations.
+🔍 The spacing between houses here tells a story of agricultural prosperity and decline, with larger lots hinting at family properties subdivided across generations.
 ```
 
 ## Cost & Time Estimates

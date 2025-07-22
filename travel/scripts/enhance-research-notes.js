@@ -186,7 +186,7 @@ class ResearchNotesEnhancer {
         }
         
         // Future potential
-        stories.push(`🚀 FUTURE POTENTIAL: What emerging trends or developments might transform ${townName} in the coming decades? Every community sits at the edge of change.`);
+        stories.push(`🚀 What emerging trends or developments might transform ${townName} in the coming decades? Every community sits at the edge of change.`);
         
         return stories;
     }

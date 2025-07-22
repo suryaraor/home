@@ -1,0 +1,29 @@
+{
+  "summary": {
+    "totalTowns": 109,
+    "openaiEnhancedTowns": 24,
+    "openaiSkippedTowns": 85,
+    "enhancementDate": "2025-07-22T04:31:53.980Z",
+    "modelUsed": "gpt-4",
+    "estimatedCost": 0.5898300000000001,
+    "avgInsightsPerTown": 25.21
+  },
+  "features": [
+    "🤖 OpenAI GPT-powered creative insights",
+    "🎯 Town-specific, non-generic content",
+    "🏛️ Historical intrigue and mysteries",
+    "🎭 Local character and cultural quirks",
+    "🔍 Hidden stories and surprising connections",
+    "🚀 Future potential and developments",
+    "📚 Professional travel writing style",
+    "💡 Curiosity-sparking narratives"
+  ],
+  "recommendations": [
+    "Review generated insights for accuracy and local appropriateness",
+    "Consider reaching out to local historians to verify interesting claims",
+    "Use insights as starting points for deeper research",
+    "Integrate with travel app overlay for enhanced user experience",
+    "Share interesting discoveries with local communities",
+    "Consider creating social media content from the insights"
+  ]
+}

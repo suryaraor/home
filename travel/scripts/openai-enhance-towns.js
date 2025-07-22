@@ -23,7 +23,7 @@ try {
 
 // Configuration
 const CONFIG = {
-    inputFile: path.join(__dirname, 'data', 'towns-database-enhanced.json'),
+    inputFile: path.join(__dirname, 'data', 'towns-database-openai-enhanced.json'),
     outputFile: path.join(__dirname, 'data', 'towns-database-openai-enhanced.json'),
     
     // OpenAI Settings
@@ -52,6 +52,7 @@ class OpenAITownEnhancer {
         
         this.database = null;
         this.enhanced = 0;
+        this.skipped = 0;
         this.totalCost = 0;
     }
 
@@ -102,12 +103,13 @@ STYLE REQUIREMENTS:
 - Avoid generic statements that could apply to any town
 - Use emojis sparingly but effectively
 - Be respectful and positive about the community
+- 
 
-FORMAT: Return exactly 6-8 insights, each on a new line, starting with an emoji and category tag like "🏛️ HISTORICAL INTRIGUE:" or "🎭 LOCAL CHARACTER:".
+FORMAT: Return exactly 6-8 insights, each on a new line, starting with an emoji and category tag like "🏛️" or "🎭".
 
 Example format:
-🏛️ HISTORICAL INTRIGUE: The positioning near [geographic feature] suggests this town may have played a role in [historical context] that local records might not fully capture.
-🎭 LOCAL CHARACTER: A community this size likely has [specific local tradition] where [interesting detail about community dynamics].
+🏛️ The positioning near [geographic feature] suggests this town may have played a role in [historical context] that local records might not fully capture.
+🎭 A community this size likely has [specific local tradition] where [interesting detail about community dynamics].
 
 Generate insights that feel authentic to ${town.name}, ${town.state} specifically:`;
 
@@ -174,6 +176,25 @@ Generate insights that feel authentic to ${town.name}, ${town.state} specificall
         console.log('');
         
         const townIds = Object.keys(this.database.towns);
+        let townsToProcess = 0;
+        let townsAlreadyEnhanced = 0;
+        
+        // Count how many towns need processing
+        townIds.forEach(townId => {
+            const townData = this.database.towns[townId];
+            if (townData.hasOwnProperty('openaiInsights')) {
+                townsAlreadyEnhanced++;
+            } else {
+                townsToProcess++;
+            }
+        });
+        
+        console.log(`📊 Enhancement Status:`);
+        console.log(`   ✅ Already enhanced: ${townsAlreadyEnhanced} towns`);
+        console.log(`   🔄 Need processing: ${townsToProcess} towns`);
+        console.log(`   💰 Estimated cost: $${(townsToProcess * CONFIG.estimatedCostPerTown).toFixed(2)}`);
+        console.log(`   ⏱️ Estimated time: ${Math.round(townsToProcess * CONFIG.delayBetweenRequests / 1000 / 60)} minutes`);
+        console.log('');
         
         for (let i = 0; i < townIds.length; i++) {
             const townId = townIds[i];
@@ -181,13 +202,16 @@ Generate insights that feel authentic to ${town.name}, ${town.state} specificall
             
             console.log(`📍 Processing ${i + 1}/${townIds.length}: ${townData.name}, ${townData.state}`);
             
-            // Skip if already enhanced with OpenAI
-            if (townData.openaiEnhanced) {
-                console.log(`⏭️ Already enhanced, skipping...`);
+            // Skip if already has openaiInsights property (regardless of content)
+            if (townData.hasOwnProperty('openaiInsights')) {
+                const insightCount = Array.isArray(townData.openaiInsights) ? townData.openaiInsights.length : 0;
+                console.log(`⏭️ SKIPPING: Already has openaiInsights property (${insightCount} insights)`);
+                this.skipped++;
                 continue;
             }
             
             // Get OpenAI enhancement
+            console.log(`🆕 ENHANCING: Generating new AI insights for ${townData.name}, ${townData.state}...`);
             const openaiInsights = await this.enhanceTownWithOpenAI(
                 townData,
                 townData.facts || [],
@@ -219,7 +243,7 @@ Generate insights that feel authentic to ${town.name}, ${town.state} specificall
     saveProgress() {
         try {
             fs.writeFileSync(CONFIG.outputFile, JSON.stringify(this.database, null, 2));
-            console.log(`💾 Progress saved (${this.enhanced} towns enhanced, cost: ~$${this.totalCost.toFixed(2)})`);
+            console.log(`💾 Progress saved (${this.enhanced} enhanced, ${this.skipped} skipped, cost: ~$${this.totalCost.toFixed(2)})`);
         } catch (error) {
             console.error('❌ Error saving progress:', error.message);
         }
@@ -231,6 +255,7 @@ Generate insights that feel authentic to ${town.name}, ${town.state} specificall
             // Update metadata
             this.database.metadata.lastOpenAIEnhanced = new Date().toISOString();
             this.database.metadata.openaiEnhancedTowns = this.enhanced;
+            this.database.metadata.openaiSkippedTowns = this.skipped;
             this.database.metadata.openaiModel = CONFIG.model;
             this.database.metadata.estimatedOpenAICost = this.totalCost;
             
@@ -250,6 +275,7 @@ Generate insights that feel authentic to ${town.name}, ${town.state} specificall
             summary: {
                 totalTowns: Object.keys(this.database.towns).length,
                 openaiEnhancedTowns: this.enhanced,
+                openaiSkippedTowns: this.skipped,
                 enhancementDate: new Date().toISOString(),
                 modelUsed: CONFIG.model,
                 estimatedCost: this.totalCost,
@@ -284,6 +310,7 @@ Generate insights that feel authentic to ${town.name}, ${town.state} specificall
         console.log('\n🎯 OPENAI ENHANCEMENT COMPLETE!');
         console.log(`   🤖 Model Used: ${report.summary.modelUsed}`);
         console.log(`   🏘️ Towns Enhanced: ${report.summary.openaiEnhancedTowns}/${report.summary.totalTowns}`);
+        console.log(`   ⏭️ Towns Skipped: ${report.summary.openaiSkippedTowns} (already had AI insights)`);
         console.log(`   📝 Avg Insights per Town: ${report.summary.avgInsightsPerTown}`);
         console.log(`   💰 Estimated Cost: $${report.summary.estimatedCost.toFixed(2)}`);
         console.log(`   📋 Report saved to: ${reportPath}`);
