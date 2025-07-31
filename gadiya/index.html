@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telugu Gadiya Time Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .converter-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            min-width: 120px;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .gadiya-chart {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .time-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .time-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-time {
+            border-color: #ffc107;
+            background: linear-gradient(45deg, #fff9c4, #fff59d);
+        }
+
+        .night-time {
+            border-color: #6c757d;
+            background: linear-gradient(45deg, #e8eaf6, #c5cae9);
+        }
+
+        .current-time {
+            background: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            label {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕐 Telugu Gadiya Time Converter</h1>
+        <p class="subtitle">Convert between traditional Telugu Gadiya time and modern English time</p>
+        
+        <div class="info-box">
+            <h3>About Gadiya Time System:</h3>
+            <p>• Total 60 Gadiya in 24 hours (30 day + 30 night)</p>
+            <p>• Each Gadiya = 24 minutes</p>
+            <p>• Day starts at sunrise (6:00 AM), Night starts at sunset (6:00 PM)</p>
+            <p>• Day Gadiya: 1-30, Night Gadiya: 1-30</p>
+        </div>
+
+        <div class="converter-section">
+            <h3>🔄 Convert English Time to Gadiya</h3>
+            <div class="input-group">
+                <label>Current Time:</label>
+                <input type="time" id="englishTime" value="12:00">
+                <button onclick="convertToGadiya()">Convert to Gadiya</button>
+            </div>
+            <div id="gadiyaResult"></div>
+        </div>
+
+        <div class="converter-section">
+            <h3>🔄 Convert Gadiya to English Time</h3>
+            <div class="input-group">
+                <label>Period:</label>
+                <select id="period">
+                    <option value="day">Day (పగలు)</option>
+                    <option value="night">Night (రాత్రి)</option>
+                </select>
+                <label>Gadiya Number:</label>
+                <input type="number" id="gadiyaNumber" min="1" max="30" value="1">
+                <button onclick="convertToEnglish()">Convert to English Time</button>
+            </div>
+            <div id="englishResult"></div>
+        </div>
+
+        <div class="converter-section">
+            <h3>📊 Current Time Display</h3>
+            <div style="text-align: center;">
+                <button onclick="showCurrentTime()">Show Current Time in Both Formats</button>
+                <div id="currentTimeDisplay"></div>
+            </div>
+        </div>
+
+        <div class="converter-section">
+            <h3>📋 Complete Gadiya Chart</h3>
+            <button onclick="generateChart()">Generate Full Day Chart</button>
+            <div id="gadiyaChart" class="gadiya-chart"></div>
+        </div>
+    </div>
+
+    <script>
+        // Convert English time to Gadiya
+        function convertToGadiya() {
+            const timeInput = document.getElementById('englishTime').value;
+            if (!timeInput) {
+                alert('Please select a time');
+                return;
+            }
+
+            const [hours, minutes] = timeInput.split(':').map(Number);
+            const totalMinutes = hours * 60 + minutes;
+            
+            // Sunrise at 6:00 AM (360 minutes), Sunset at 6:00 PM (1080 minutes)
+            const sunrise = 6 * 60; // 360 minutes
+            const sunset = 18 * 60; // 1080 minutes
+            
+            let period, gadiyaNumber, gadiyaMinute;
+            
+            if (totalMinutes >= sunrise && totalMinutes < sunset) {
+                // Day time
+                period = 'Day (పగలు)';
+                const dayMinutes = totalMinutes - sunrise;
+                gadiyaNumber = Math.floor(dayMinutes / 24) + 1;
+                gadiyaMinute = dayMinutes % 24;
+            } else {
+                // Night time
+                period = 'Night (రాత్రి)';
+                let nightMinutes;
+                if (totalMinutes >= sunset) {
+                    nightMinutes = totalMinutes - sunset;
+                } else {
+                    // After midnight
+                    nightMinutes = totalMinutes + (24 * 60 - sunset);
+                }
+                gadiyaNumber = Math.floor(nightMinutes / 24) + 1;
+                gadiyaMinute = nightMinutes % 24;
+            }
+
+            // Handle edge cases
+            if (gadiyaNumber > 30) {
+                gadiyaNumber = 30;
+                gadiyaMinute = 23;
+            }
+
+            const result = `
+                <div class="result">
+                    🕐 ${timeInput} = ${period} - Gadiya ${gadiyaNumber}<br>
+                    (${gadiyaMinute} minutes into the gadiya)
+                </div>
+            `;
+            
+            document.getElementById('gadiyaResult').innerHTML = result;
+        }
+
+        // Convert Gadiya to English time
+        function convertToEnglish() {
+            const period = document.getElementById('period').value;
+            const gadiyaNumber = parseInt(document.getElementById('gadiyaNumber').value);
+            
+            if (!gadiyaNumber || gadiyaNumber < 1 || gadiyaNumber > 30) {
+                alert('Please enter a valid Gadiya number (1-30)');
+                return;
+            }
+
+            let startMinutes, totalMinutes;
+            
+            if (period === 'day') {
+                // Day starts at 6:00 AM
+                startMinutes = 6 * 60; // 360 minutes
+                totalMinutes = startMinutes + (gadiyaNumber - 1) * 24;
+            } else {
+                // Night starts at 6:00 PM
+                startMinutes = 18 * 60; // 1080 minutes
+                totalMinutes = startMinutes + (gadiyaNumber - 1) * 24;
+            }
+
+            // Handle overflow to next day
+            if (totalMinutes >= 24 * 60) {
+                totalMinutes -= 24 * 60;
+            }
+
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            const endMinutes = totalMinutes + 24;
+            const endHours = Math.floor(endMinutes / 60);
+            const endMins = endMinutes % 60;
+            let endTimeString = `${endHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}`;
+            
+            if (endHours >= 24) {
+                const adjustedHours = endHours - 24;
+                endTimeString = `${adjustedHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')} (+1 day)`;
+            }
+
+            const periodText = period === 'day' ? 'Day (పగలు)' : 'Night (రాత్రి)';
+            
+            const result = `
+                <div class="result">
+                    🕐 ${periodText} - Gadiya ${gadiyaNumber}<br>
+                    = ${timeString} to ${endTimeString}
+                </div>
+            `;
+            
+            document.getElementById('englishResult').innerHTML = result;
+        }
+
+        // Show current time in both formats
+        function showCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const currentTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            
+            // Set the time input and convert
+            document.getElementById('englishTime').value = currentTimeString;
+            convertToGadiya();
+            
+            const totalMinutes = hours * 60 + minutes;
+            const sunrise = 6 * 60;
+            const sunset = 18 * 60;
+            
+            let period, gadiyaNumber;
+            
+            if (totalMinutes >= sunrise && totalMinutes < sunset) {
+                period = 'Day';
+                const dayMinutes = totalMinutes - sunrise;
+                gadiyaNumber = Math.floor(dayMinutes / 24) + 1;
+            } else {
+                period = 'Night';
+                let nightMinutes;
+                if (totalMinutes >= sunset) {
+                    nightMinutes = totalMinutes - sunset;
+                } else {
+                    nightMinutes = totalMinutes + (24 * 60 - sunset);
+                }
+                gadiyaNumber = Math.floor(nightMinutes / 24) + 1;
+            }
+
+            const currentDisplay = `
+                <div class="result">
+                    🌅 Current Time: ${currentTimeString}<br>
+                    🕐 Current Gadiya: ${period} ${gadiyaNumber}<br>
+                    📅 ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
+                </div>
+            `;
+            
+            document.getElementById('currentTimeDisplay').innerHTML = currentDisplay;
+        }
+
+        // Generate complete gadiya chart
+        function generateChart() {
+            let chartHTML = '';
+            
+            // Day Gadiya (1-30)
+            for (let i = 1; i <= 30; i++) {
+                const startMinutes = 6 * 60 + (i - 1) * 24; // 6 AM + gadiya offset
+                const endMinutes = startMinutes + 24;
+                
+                const startHours = Math.floor(startMinutes / 60);
+                const startMins = startMinutes % 60;
+                const endHours = Math.floor(endMinutes / 60);
+                const endMins = endMinutes % 60;
+                
+                const startTime = `${startHours.toString().padStart(2, '0')}:${startMins.toString().padStart(2, '0')}`;
+                const endTime = `${endHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}`;
+                
+                chartHTML += `
+                    <div class="time-card day-time">
+                        <strong>Day Gadiya ${i}</strong><br>
+                        ${startTime} - ${endTime}
+                    </div>
+                `;
+            }
+            
+            // Night Gadiya (1-30)
+            for (let i = 1; i <= 30; i++) {
+                const startMinutes = 18 * 60 + (i - 1) * 24; // 6 PM + gadiya offset
+                const endMinutes = startMinutes + 24;
+                
+                let startHours = Math.floor(startMinutes / 60);
+                let endHours = Math.floor(endMinutes / 60);
+                const startMins = startMinutes % 60;
+                const endMins = endMinutes % 60;
+                
+                // Handle day overflow
+                let dayIndicator = '';
+                if (startHours >= 24) {
+                    startHours -= 24;
+                    dayIndicator = ' (+1)';
+                }
+                if (endHours >= 24) {
+                    endHours -= 24;
+                }
+                
+                const startTime = `${startHours.toString().padStart(2, '0')}:${startMins.toString().padStart(2, '0')}${dayIndicator}`;
+                const endTime = `${endHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}${dayIndicator}`;
+                
+                chartHTML += `
+                    <div class="time-card night-time">
+                        <strong>Night Gadiya ${i}</strong><br>
+                        ${startTime} - ${endTime}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('gadiyaChart').innerHTML = chartHTML;
+        }
+
+        // Initialize with current time on page load
+        window.onload = function() {
+            const now = new Date();
+            const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            document.getElementById('englishTime').value = timeString;
+        };
+    </script>
+</body>
+</html>
