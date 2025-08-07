@@ -1,219 +1,567 @@
-షిరిడి సాయి బాబా సాయమ్కాల ఆరతి - ధూప్ ఆరతి
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>షిరిడి సాయి బాబా ఆరతి మరియు స్తోత్రాలు</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ramabhadra&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6600;
+            --secondary-color: #4a5568;
+            --background-color: #fff8f0;
+            --text-color: #2d3748;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-శ్రీ సచ్చిదానంద సద్గురు సాయినాధ మహరాజ్ కీ జై౤
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-ఆరతి సాయిబాబా సౌఖ్య దాతార జీవ
-చరణ రజతాలీ ద్యావా దాసావిసావా
-భక్తావిసావా ఆరతిసాయిబాబా
+        body {
+            font-family: 'Ramabhadra', 'Noto Sans Telugu', sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background: var(--background-color);
+            padding: 20px;
+        }
 
-జాళునియ అనంగ సస్వరూపిరాహేదంగ
-ముమూక్ష జనదావి నిజడోళా శ్రీరంగ
-డోళా శ్రీరంగ ఆరతిసాయిబాబా
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
 
-జయమని జైసాభావ తయ తైసా అనుభవ
-దావిసి దయాఘనా ఐసి తుఝీహిమావ
-తుఝీహిమావా ఆరతిసాయిబాబా
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #ff8533);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
 
-తుమచేనామ ద్యాతా హరే సంస్కృతి వ్యధా
-అగాధతవకరణి మార్గ దావిసి అనాధా
-దావిసి అనాధా ఆరతి సాయిబాబా
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
 
-కలియుగి అవతారా సద్గుణ పరబ్రహ్మా సాచార
-అవతీర్ణ ఝూలాసే స్వామీ దత్త దిగంబర
-దత్త దిగంబర ఆరతి సాయిబాబా
+        .header .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
 
-ఆఠాదివసా గురువారీ భక్త కరీతివారీ
-ప్రభుపద పహావయా భవభయ నివారీ
-భయనివారీ ఆరతి సాయిబాబా
+        .content {
+            padding: 40px;
+        }
 
-మాఝానిజ ద్రవ్యఠేవ తవ చరణరజసేవా
-మాగణే హేచి^^ఆతా తుహ్మా దేవాదిదేవా
-దేవాదిదేవ ఆరతిసాయిబాబా
+        .section {
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 30px;
+        }
 
-ఇచ్ఛితా దీనచాతక నిర్మల తోయనిజసూఖ
-పాజవే మాధవాయా సంభాళ అపూళిబాక
-అపూళిబాక ఆరతిసాయిబాబా
-సౌఖ్యదాతార జీవా చరణ రజతాళీ ద్యావాదాసా
-విసావా భక్తావిసావా ఆరతి సాయిబాబా
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
 
-2౤ అభంగ్
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+        }
 
-శిరిడి మాఝే పండరీపుర సాయిబాబారమావర
-బాబారమావర - సాయిబాబారమావర
-శుద్దభక్తి చంద్రభాగా - భావపుండలీకజాగా
-పుండలీక జాగా - భావపుండలీకజాగా
-యాహో యాహో అవఘేజన| కరూబాబాన్సీ వందన
-సాయిసీ వందన| కరూబాబాన్సీ వందన‖
-గణూహ్మణే బాబాసాయి| దావపావ మాఝే ఆయీ
-పావమాఝే ఆయీ దావపావ మాఝేయా^^ఈ
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
 
-3౤ నమనం
+        .verse {
+            background: #fef5e7;
+            border-left: 4px solid var(--primary-color);
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.1rem;
+            line-height: 2;
+        }
 
-ఘాలీన లోటాంగణ,వందీన చరణ
-డోల్యానీ పాహీన రూపతుఝే|
-ప్రేమే ఆలింగన,ఆనందే పూజిన
-భావే ఓవాళీన హ్మణే నామా‖
+        .verse-line {
+            margin-bottom: 8px;
+            text-align: center;
+        }
 
-త్వమేవ మాతా చ పితా త్వమేవ
-త్వమేవ బంధుశ్చ సఖా త్వమేవ
-త్వమేవ విద్యా ద్రవిణం త్వమేవ
-త్వమేవ సర్వం మమదేవదేవ
+        .chorus {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-weight: 500;
+            text-align: center;
+            color: #2c7a7b;
+        }
 
-కాయేన వాచా మనసేంద్రియైర్వా
-బుద్ధ్యాత్మనావా ప్రకృతే స్వభావాత్
-కరోమి యద్యత్సకలం పరస్మై
-నారాయణాయేతి సమర్పయామీ
+        .mantra {
+            background: #f0fff4;
+            border: 2px solid #68d391;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #22543d;
+        }
 
-అచ్యుతంకేశవం రామనారాయణం
-కృష్ణదామోదరం వాసుదేవం హరిం
-శ్రీధరం మాధవం గోపికావల్లభం
-జానకీనాయకం రామచంద్రం భజే
+        .prayer-text {
+            font-size: 1.05rem;
+            line-height: 2.2;
+            text-align: justify;
+            margin: 15px 0;
+        }
 
-4౤ నామ స్మరణం
+        .emphasis {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
 
-హరేరామ హరేరామ రామరామ హరే హరే
-హరేకృష్ణ హరేకృష్ణ కృష్ణ కృష్ణ హరే హరే ‖శ్రీ గురుదేవదత్త
+        .closing {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            margin: 40px -40px -40px -40px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
 
-5౤ నమస్కారాష్టకం
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .verse {
+                padding: 15px 20px;
+                font-size: 1rem;
+            }
+            
+            .closing {
+                margin: 30px -20px -20px -20px;
+                font-size: 1.1rem;
+            }
+        }
 
-అనంతా తులాతే కసేరే స్తవావే
-అనంతా తులాతే కసేరే నమావే
-అనంతాముఖాచా శిణే శేష గాత
-నమస్కార సాష్టాంగ శ్రీసాయినాధా
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .header {
+                background: var(--primary-color) !important;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>షిరిడి సాయి బాబా</h1>
+            <p class="subtitle">సాయంకాల ఆరతి - ధూప్ ఆరతి</p>
+        </header>
 
-స్మరావేమనీత్వత్పదా నిత్యభావే
-ఉరావేతరీ భక్తిసాఠీ స్వభావే
-తరావే జగా తారునీమాయా తాతా
-నమస్కార సాష్టాంగ శ్రీసాయినాధా
+        <div class="content">
+            <div class="mantra">
+                <span class="emphasis">శ్రీ సచ్చిదానంద సద్గురు సాయినాధ మహరాజ్ కీ జై౤</span>
+            </div>
 
-వసే జోసదా దావయా సంతలీలా
-దిసే ఆజ్ఞ లోకా పరీ జోజనాలా
-పరీ అంతరీ జ్ఞానకైవల్య దాతా
-నమస్కార సాష్టాంగ శ్రీసాయినాధా
+            <!-- Section 1: Main Aarti -->
+            <section class="section">
+                <h2 class="section-title">1౤ ప్రధాన ఆరతి</h2>
+                
+                <div class="verse">
+                    <div class="verse-line">ఆరతి సాయిబాబా సౌఖ్య దాతార జీవ</div>
+                    <div class="verse-line">చరణ రజతాలీ ద్యావా దాసావిసావా</div>
+                    <div class="verse-line">భక్తావిసావా ఆరతిసాయిబాబా</div>
+                </div>
 
-భరాలధలా జన్మహా మాన వాచా
-నరాసార్ధకా సాధనీభూత సాచా
-ధరూసాయి ప్రేమా గళాయా అహంతా
-నమస్కార సాష్టాంగ శ్రీసాయినాధా
+                <div class="verse">
+                    <div class="verse-line">జాళునియ అనంగ సస్వరూపిరాహేదంగ</div>
+                    <div class="verse-line">ముమూక్ష జనదావి నిజడోళా శ్రీరంగ</div>
+                    <div class="verse-line">డోళా శ్రీరంగ ఆరతిసాయిబాబా</div>
+                </div>
 
-ధరావే కరీసాన అల్పజ్ఞ బాలా
-కరావే అహ్మాధన్యచుంభోనిగాలా
-ముఖీఘాల ప్రేమేఖరాగ్రాస అతా
-నమస్కార సాష్టాంగ శ్రీసాయినాధా
+                <div class="verse">
+                    <div class="verse-line">జయమని జైసాభావ తయ తైసా అనుభవ</div>
+                    <div class="verse-line">దావిసి దయాఘనా ఐసి తుఝీహిమావ</div>
+                    <div class="verse-line">తుఝీహిమావా ఆరతిసాయిబాబా</div>
+                </div>
 
-సురా దీక జ్యాంచ్యా పదావందితాతి
-శుకాదీక జాతే సమానత్వదేతీ
-ప్రయాగాది తీర్ధే పదీనమ్రహోతా
-నమస్కార సాష్టాంగ శ్రీసాయినాధా
+                <div class="verse">
+                    <div class="verse-line">తుమచేనామ ద్యాతా హరే సంస్కృతి వ్యధా</div>
+                    <div class="verse-line">అగాధతవకరణి మార్గ దావిసి అనాధా</div>
+                    <div class="verse-line">దావిసి అనాధా ఆరతి సాయిబాబా</div>
+                </div>
 
-తుఝ్యాజ్యాపదా పాహతా గోపబాలీ
-సదారంగలీ చిత్స్వరూపీ మిళాలీ
-కరీరాసక్రీడా సవే కృష్ణనాధా
-నమస్కార సాష్టాంగ శ్రీసాయినాధా
+                <div class="verse">
+                    <div class="verse-line">కలియుగి అవతారా సద్గుణ పరబ్రహ్మా సాచార</div>
+                    <div class="verse-line">అవతీర్ణ ఝూలాసే స్వామీ దత్త దిగంబర</div>
+                    <div class="verse-line">దత్త దిగంబర ఆరతి సాయిబాబా</div>
+                </div>
 
-తులామాగతో మాగణే ఏకధ్యావే
-కరాజోడితో దీన అత్యంత భావే
-భవీమోహనీరాజ హాతారి ఆతా
-నమస్కార సాష్టాంగ శ్రీసాయినాధా
+                <div class="verse">
+                    <div class="verse-line">ఆఠాదివసా గురువారీ భక్త కరీతివారీ</div>
+                    <div class="verse-line">ప్రభుపద పహావయా భవభయ నివారీ</div>
+                    <div class="verse-line">భయనివారీ ఆరతి సాయిబాబా</div>
+                </div>
 
-6౤ ప్రార్థన
+                <div class="verse">
+                    <div class="verse-line">మాఝానిజ ద్రవ్యఠేవ తవ చరణరజసేవా</div>
+                    <div class="verse-line">మాగణే హేచి^^ఆతా తుహ్మా దేవాదిదేవా</div>
+                    <div class="verse-line">దేవాదిదేవ ఆరతిసాయిబాబా</div>
+                </div>
 
-ఐసా యే^^ఈబా! సాయి దిగంబరా
-అక్షయరూప అవతారా | సర్వహి వ్యాపక తూ
-శ్రుతిసారా, అనసూయాత్రికుమారా(బాబాయే) మహారాజే ఈబా
-కాశీస్నాన జప ప్రతిదివసీ కొల్హాపుర భిక్షేసీ నిర్మల నది తుంగా
-జలప్రాసీ, నిద్రామాహురదేశీ ఐసా యే యీబా
+                <div class="verse">
+                    <div class="verse-line">ఇచ్ఛితా దీనచాతక నిర్మల తోయనిజసూఖ</div>
+                    <div class="verse-line">పాజవే మాధవాయా సంభాళ అపూళిబాక</div>
+                    <div class="verse-line">అపూళిబాక ఆరతిసాయిబాబా</div>
+                </div>
 
-ఝోళీలోంబతసే వామకరీ త్రిశూల ఢమరూధారి
-భక్తావరదసదా సుఖకారీ, దేశీల ముక్తీచారీ ఐసా యే యీబా
+                <div class="chorus">
+                    సౌఖ్యదాతార జీవా చరణ రజతాళీ ద్యావాదాసా<br>
+                    విసావా భక్తావిసావా ఆరతి సాయిబాబా
+                </div>
+            </section>
 
-పాయిపాదుకా జపమాలా కమండలూమృగఛాలా
-ధారణ కరిశీబా నాగజటా, ముకుట శోభతోమాథా ఐసా యే యీబా
+            <!-- Section 2: Abhang -->
+            <section class="section">
+                <h2 class="section-title">2౤ అభంగ్</h2>
+                
+                <div class="verse">
+                    <div class="verse-line">శిరిడి మాఝే పండరీపుర సాయిబాబారమావర</div>
+                    <div class="verse-line">బాబారమావర - సాయిబాబారమావర</div>
+                </div>
 
-తత్పర తుఝ్యాయా జేధ్యానీ అక్షయత్వాంచేసదనీ
-లక్ష్మీవాసకరీ దినరజనీ, రక్షసిసంకట వారుని ఐసా యే యీబా
+                <div class="verse">
+                    <div class="verse-line">శుద్దభక్తి చంద్రభాగా - భావపుండలీకజాగా</div>
+                    <div class="verse-line">పుండలీక జాగా - భావపుండలీకజాగా</div>
+                </div>
 
-యాపరిధ్యాన తుఝే గురురాయా దృశ్యకరీ నయనాయా
-పూర్ణానంద సుఖే హీకాయా, లావిసిహరి గుణగాయా
-ఐసా యే యీబా సాయి దిగంబర అక్షయ రూప అవతారా
-సర్వహివ్యాపక తూ, శ్రుతిసారా అనసూయాత్రి కుమారా(బాబాయే) మహారాజే ఈబా
+                <div class="verse">
+                    <div class="verse-line">యాహో యాహో అవఘేజన| కరూబాబాన్సీ వందన</div>
+                    <div class="verse-line">సాయిసీ వందన| కరూబాబాన్సీ వందన‖</div>
+                </div>
 
-7౤ సాయి మహిమా స్తోత్రం
+                <div class="verse">
+                    <div class="verse-line">గణూహ్మణే బాబాసాయి| దావపావ మాఝే ఆయీ</div>
+                    <div class="verse-line">పావమాఝే ఆయీ దావపావ మాఝేయా^^ఈ</div>
+                </div>
+            </section>
 
-సదాసత్స్వరూపం చిదానందకందం
-జగత్సంభవస్ధాన సంహార హేతుం
-స్వభక్తేచ్ఛయా మానుషం దర్శయంతం
-నమామీశ్వరం సద్గురుం సాయినాథం
+            <!-- Section 3: Namnam -->
+            <section class="section">
+                <h2 class="section-title">3౤ నమనం</h2>
+                
+                <div class="verse">
+                    <div class="verse-line">ఘాలీన లోటాంగణ,వందీన చరణ</div>
+                    <div class="verse-line">డోల్యానీ పాహీన రూపతుఝే|</div>
+                    <div class="verse-line">ప్రేమే ఆలింగన,ఆనందే పూజిన</div>
+                    <div class="verse-line">భావే ఓవాళీన హ్మణే నామా‖</div>
+                </div>
 
-భవధ్వాంత విధ్వంస మార్తాండమీడ్యం
-మనోవాగతీతం మునిర్ ధ్యాన గమ్యం
-జగద్వ్యాపకం నిర్మలం నిర్గుణం త్వాం
-నమామీశ్వరం సద్గురుం సాయినాథం
+                <div class="mantra">
+                    త్వమేవ మాతా చ పితా త్వమేవ<br>
+                    త్వమేవ బంధుశ్చ సఖా త్వమేవ<br>
+                    త్వమేవ విద్యా ద్రవిణం త్వమేవ<br>
+                    త్వమేవ సర్వం మమదేవదేవ
+                </div>
 
-భవాంభోది మగ్నార్ధితానాం జనానాం
-స్వపాదాశ్రితానాం స్వభక్తి ప్రియాణాం
-సముద్దారణార్ధం కలౌ సంభవంతం
-నమామీశ్వరం సద్గురుం సాయినాథం
+                <div class="prayer-text">
+                    కాయేన వాచా మనసేంద్రియైర్వా<br>
+                    బుద్ధ్యాత్మనావా ప్రకృతే స్వభావాత్<br>
+                    కరోమి యద్యత్సకలం పరస్మై<br>
+                    నారాయణాయేతి సమర్పయామీ
+                </div>
 
-సదానింబ వృక్షస్యములాధి వాసాత్
-సుధాస్రావిణం తిక్త మప్య ప్రియంతం
-తరుం కల్ప వృక్షాధికం సాధయంతం
-నమామీశ్వరం సద్గురుం సాయినాథం
+                <div class="prayer-text">
+                    అచ్యుతంకేశవం రామనారాయణం<br>
+                    కృష్ణదామోదరం వాసుదేవం హరిం<br>
+                    శ్రీధరం మాధవం గోపికావల్లభం<br>
+                    జానకీనాయకం రామచంద్రం భజే
+                </div>
+            </section>
 
-సదాకల్ప వృక్షస్య తస్యాధిమూలే
-భవద్భావబుద్ధ్యా సపర్యాదిసేవాం
-నృణాం కుర్వతాం భుక్తి-ముక్తి ప్రదంతం
-నమామీశ్వరం సద్గురుం సాయినాథం
+            <!-- Section 4: Naam Smaran -->
+            <section class="section">
+                <h2 class="section-title">4౤ నామ స్మరణం</h2>
+                
+                <div class="mantra">
+                    హరేరామ హరేరామ రామరామ హరే హరే<br>
+                    హరేకృష్ణ హరేకృష్ణ కృష్ణ కృష్ణ హరే హరే ‖శ్రీ గురుదేవదత్త
+                </div>
+            </section>
 
-అనేకా శృతా తర్క్య లీలా విలాసై:
-సమా విష్కృతేశాన భాస్వత్ర్పభావం
-అహంభావహీనం ప్రసన్నాత్మభావం
-నమామీశ్వరం సద్గురుం సాయినాథం
+            <!-- Section 5: Namaskara Ashtakam -->
+            <section class="section">
+                <h2 class="section-title">5౤ నమస్కారాష్టకం</h2>
+                
+                <div class="verse">
+                    <div class="verse-line">అనంతా తులాతే కసేరే స్తవావే</div>
+                    <div class="verse-line">అనంతా తులాతే కసేరే నమావే</div>
+                    <div class="verse-line">అనంతాముఖాచా శిణే శేష గాత</div>
+                    <div class="verse-line">నమస్కార సాష్టాంగ శ్రీసాయినాధా</div>
+                </div>
 
-సతాం విశ్రమారామ మేవాభిరామం
-సదాసజ్జనై సంస్తుతం సన్నమద్భి:
-జనామోదదం భక్త భద్ర ప్రదంతం
-నమామీశ్వరం సద్గురుం సాయినాథం
+                <div class="verse">
+                    <div class="verse-line">స్మరావేమనీత్వత్పదా నిత్యభావే</div>
+                    <div class="verse-line">ఉరావేతరీ భక్తిసాఠీ స్వభావే</div>
+                    <div class="verse-line">తరావే జగా తారునీమాయా తాతా</div>
+                    <div class="verse-line">నమస్కార సాష్టాంగ శ్రీసాయినాధా</div>
+                </div>
 
-అజన్మాద్యమేకం పరంబ్రహ్మ సాక్షాత్
-స్వయం సంభవం రామమేవావతీర్ణం
-భవద్దర్శనాత్సంపునీత: ప్రభోహం
-నమామీశ్వరం సద్గురుం సాయినాథం
+                <div class="verse">
+                    <div class="verse-line">వసే జోసదా దావయా సంతలీలా</div>
+                    <div class="verse-line">దిసે ఆజ్ఞ లోకా పరీ జోజనాలా</div>
+                    <div class="verse-line">పరీ అంతరీ జ్ఞానకైవల్య దాతా</div>
+                    <div class="verse-line">నమస్కార సాష్టాంగ శ్రీసాయినాధా</div>
+                </div>
 
-శ్రీసాయిశ కృపానిధే ఖిలనృణాం సర్వార్ధసిద్దిప్రద
-యుష్మత్పాదరజ: ప్రభావమతులం ధాతాపివక్తాక్షమ:
-సద్భక్త్యాశ్శరణం కృతాంజలిపుట: సంప్రాప్తితోస్మిన్ ప్రభో
-శ్రీమత్సాయిపరేశ పాద కమలాన్ నాన్యచ్చరణ్యంమమ
+                <div class="verse">
+                    <div class="verse-line">భరాలధలా జన్మహా మాన వాచా</div>
+                    <div class="verse-line">నరాసార్ధకా సాధనీభూత సాచా</div>
+                    <div class="verse-line">ధరూసాయి ప్రేమా గళాయా అహంతా</div>
+                    <div class="verse-line">నమస్కార సాష్టాంగ శ్రీసాయినాధా</div>
+                </div>
 
-సాయిరూపధర రాఘవోత్తమం
-భక్తకామ విబుధ ద్రుమం ప్రభుం
-మాయయోపహత చిత్త శుద్ధయే
-చింతయామ్యహ మహర్నిశం ముదా
+                <div class="verse">
+                    <div class="verse-line">ధరావే కరీసాన అల్పజ్ఞ బాలా</div>
+                    <div class="verse-line">కరావే అహ్మాధన్యచుంభోనిగాలా</div>
+                    <div class="verse-line">ముఖీఘాల ప్రేమేఖరాగ్రాస అతా</div>
+                    <div class="verse-line">నమస్కార సాష్టాంగ శ్రీసాయినాధా</div>
+                </div>
 
-శరత్సుధాంశం ప్రతిమం ప్రకాశం
-కృపాతపత్రం తవసాయినాథ
-త్వదీయపాదాబ్జ సమాశ్రితానాం
-స్వచ్ఛాయయాతాప మపాకరోతు
+                <div class="verse">
+                    <div class="verse-line">సురా దీక జ్యాంచ్యా పదావందితాతి</div>
+                    <div class="verse-line">శుకాదీక జాతే సమానత్వదేతీ</div>
+                    <div class="verse-line">ప్రయాగాది తీర్ధే పదీనమ్రహోతా</div>
+                    <div class="verse-line">నమస్కార సాష్టాంగ శ్రీసాయినాధా</div>
+                </div>
 
-ఉపాసనాదైవత సాయినాథ
-స్మవైర్మ యోపాసని నాస్తుతస్త్వం
-రమేన్మనోమే తవపాదయుగ్మే
-భ్రుంగో యదాబ్జే మకరందలుబ్ధ:
+                <div class="verse">
+                    <div class="verse-line">తుఝ్యాజ్యాపదా పాహతా గోపబాలీ</div>
+                    <div class="verse-line">సదారంగలీ చిత్స్వరూపీ మిళాలీ</div>
+                    <div class="verse-line">కరీరాసక్రీడా సవే కృష్ణనాధా</div>
+                    <div class="verse-line">నమస్కార సాష్టాంగ శ్రీసాయినాధా</div>
+                </div>
 
-అనేకజన్మార్జిత పాపసంక్షయో
-భవేద్భవత్పాద సరోజ దర్శనాత్
-క్షమస్వ సర్వానపరాధ పుంజకాన్
-ప్రసీద సాయిశ సద్గురో దయానిధే
+                <div class="verse">
+                    <div class="verse-line">తులామాగతో మాగణే ఏకధ్యావే</div>
+                    <div class="verse-line">కరాజోడితో దీన అత్యంత భావే</div>
+                    <div class="verse-line">భవీమోహనీరాజ హాతారి ఆతా</div>
+                    <div class="verse-line">నమస్కార సాష్టాంగ శ్రీసాయినాధా</div>
+                </div>
+            </section>
 
-శ్రీసాయినాథ చరణామృత పూర్ణచిత్తా
-తత్పాద సేవనరతా స్సత తంచ భక్త్యా
-సంసారజన్య దురితౌఘ వినిర్గ తాస్తే
-కైవల్య ధామ పరమం సమవాప్నువంతి
+            <!-- Section 6: Prarthana -->
+            <section class="section">
+                <h2 class="section-title">6౤ ప్రార్థన</h2>
+                
+                <div class="verse">
+                    <div class="verse-line">ఐసా యే^^ఈబా! సాయి దిగంబరా</div>
+                    <div class="verse-line">అక్షయరూప అవతారా | సర్వహి వ్యాపక తూ</div>
+                    <div class="verse-line">శ్రుతిసారా, అనసూయాత్రికుమారా(బాబాయే) మహారాజే ఈబా</div>
+                </div>
 
-స్తోత్రమే తత్పఠేద్భక్త్యా యోన్నరస్తన్మనాసదా
-సద్గురో: సాయినాథస్య కృపాపాత్రం భవేద్భవం
+                <div class="verse">
+                    <div class="verse-line">కాశీస్నాన జప ప్రతిదివసీ కొల్హాపుర భిక్షేసీ నిర్మల నది తుంగా</div>
+                    <div class="verse-line">జలప్రాసీ, నిద్రామాహురదేశీ ఐసా యే యీబా</div>
+                </div>
 
-8౤ గురు ప్రసాద యాచనాదశకం
+                <div class="verse">
+                    <div class="verse-line">ఝోళీలోంబతసే వామకరీ త్రిశూల ఢమరూధారి</div>
+                    <div class="verse-line">భక్తావరదసదా సుఖకారీ, దేశీల ముక్తీచారీ ఐసా యే యీబా</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">పాయిపాదుకా జపమాలా కమండలూమృగఛాలా</div>
+                    <div class="verse-line">ధారణ కరిశీబా నాగజటా, ముకుట శోభతోమాథా ఐసా యే యీబా</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">తత్పర తుఝ్యాయా జేధ్యానీ అక్షయత్వాంచేసదనీ</div>
+                    <div class="verse-line">లక్ష్మీవాసకరీ దినరజనీ, రక్షసిసంకట వారుని ఐసా యే యీబా</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">యాపరిధ్యాన తుఝే గురురాయా దృశ్యకరీ నయనాయా</div>
+                    <div class="verse-line">పూర్ణానంద సుఖే హీకాయా, లావిసిహరి గుణగాయా</div>
+                    <div class="verse-line">ఐసా యే యీబా సాయి దిగంబర అక్షయ రూప అవతారా</div>
+                    <div class="verse-line">సర్వహివ్యాపక తూ, శ్రుతిసారా అనసూయాత్రి కుమారా(బాబాయే) మహారాజే ఈబా</div>
+                </div>
+            </section>
+
+            <!-- Section 7: Sai Mahima Stotram -->
+            <section class="section">
+                <h2 class="section-title">7౤ సాయి మహిమా స్తోత్రం</h2>
+                
+                <div class="verse">
+                    <div class="verse-line">సదాసత్స్వరూపం చిదానందకందం</div>
+                    <div class="verse-line">జగత్సంభవస్ధాన సంహార హేతుం</div>
+                    <div class="verse-line">స్వభక్తేచ్ఛయా మానుషం దర్శయంతం</div>
+                    <div class="verse-line">నమామీశ్వరం సద్గురుం సాయినాథం</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">భవధ్వాంత విధ్వంస మార్తాండమీడ్యం</div>
+                    <div class="verse-line">మనోవాగతీతం మునిర్ ధ్యాన గమ్యం</div>
+                    <div class="verse-line">జగద్వ్యాపకం నిర్మలం నిర్గుణం త్వాం</div>
+                    <div class="verse-line">నమామీశ్వరం సద్గురుం సాయినాథం</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">భవాంభోది మగ్నార్ధితానాం జనానాం</div>
+                    <div class="verse-line">స్వపాదాశ్రితానాం స్వభక్తి ప్రియాణాం</div>
+                    <div class="verse-line">సముద్దారణార్ధం కలౌ సంభవంతం</div>
+                    <div class="verse-line">నమామీశ్వరం సద్గురుం సాయినాథం</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">సదానింబ వృక్షస్యములాధి వాసాత్</div>
+                    <div class="verse-line">సుధాస్రావిణం తిక్త మప్య ప్రియంతం</div>
+                    <div class="verse-line">తరుం కల్ప వృక్షాధికం సాధయంతం</div>
+                    <div class="verse-line">నమామీశ్వరం సద్గురుం సాయినాథం</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">సదాకల్ప వృక్షస్య తస్యాధిమూలే</div>
+                    <div class="verse-line">భవద్భావబుద్ధ్యా సపర్యాదిసేవాం</div>
+                    <div class="verse-line">నృణాం కుర్వతాం భుక్తి-ముక్తি ప్రదంతం</div>
+                    <div class="verse-line">నమామీశ్వరం సద్గురుం సాయినాథం</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">అనేకా శృతా తర్క్య లీలా విలాసై:</div>
+                    <div class="verse-line">సమా విష్కృతేశాన భాస్వత్ర్పభావం</div>
+                    <div class="verse-line">అహంభావహీనం ప్రసన్నాత్మభావం</div>
+                    <div class="verse-line">నమామీశ్వరం సద్గురుం సాయినాథం</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">సతాం విశ్రమారామ మేవాభిరామం</div>
+                    <div class="verse-line">సదాసజ్జనై సంస్తుతం సన్నమద్భి:</div>
+                    <div class="verse-line">జనామోదదం భక్త భద్ర ప్రదంతం</div>
+                    <div class="verse-line">నమామీశ్వరం సద్గురుం సాయినాథం</div>
+                </div>
+
+                <div class="verse">
+                    <div class="verse-line">అజన్మాద్యమేకం పరంబ్రహ్మ సాక్షాత్</div>
+                    <div class="verse-line">స్వయం సంభవం రామమేవావతీర్ణం</div>
+                    <div class="verse-line">భవద్దర్శనాత్సంపునీత: ప్రభోహం</div>
+                    <div class="verse-line">నమామీశ్వరం సద్గురుం సాయినాథం</div>
+                </div>
+
+                <div class="mantra">
+                    శ్రీసాయిశ కృపానిధే ఖిలనృణాం సర్వార్ధసిద్దిప్రద<br>
+                    యుష్మత్పాదరజ: ప్రభావమతులం ధాతాపివక్తాక్షమ:<br>
+                    సద్భక్త్యాశ్శరణం కృతాంజలిపుట: సంప్రాప్తితోస్మిన్ ప్రభో<br>
+                    శ్రీమత్సాయిపరేశ పాద కమలాన్ నాన్యచ్చరణ్యంమమ
+                </div>
+
+                <div class="mantra">
+                    సాయిరూపధర రాఘవోత్తమం<br>
+                    భక్తకామ విబుధ ద్రుమం ప్రభుం<br>
+                    మాయయోపహత చిత్త శుద్ధయే<br>
+                    చింతయామ్యహ మహర్నిశం ముదా
+                </div>
+
+                <div class="mantra">
+                    శరత్సుధాంశం ప్రతిమం ప్రకాశం<br>
+                    కృపాతపత్రం తవసాయినాథ<br>
+                    త్వదీయపాదాబ్జ సమాశ్రితానాం<br>
+                    స్వచ్ఛాయయాతాప మపాకరోతు
+                </div>
+
+                <div class="mantra">
+                    ఉపాసనాదైవత సాయినాథ<br>
+                    స్మవైర్మ యోపాసని నాస్తుతస్త్వం<br>
+                    రమేన్మనోమే తవపాదయుగ్మే<br>
+                    భ్రుంగో యదాబ్జే మకరందలుబ్ధ:
+                </div>
+
+                <div class="mantra">
+                    అనేకజన్మార్జిత పాపసంక్షయో<br>
+                    భవేద్భవత్పాద సరోజ దర్శనాత్<br>
+                    క్షమస్వ సర్వానపరాధ పుంజకాన్<br>
+                    ప్రసీద సాయిశ సద్గురో దయానిధే
+                </div>
+
+                <div class="mantra">
+                    శ్రీసాయినాథ చరణామృత పూర్ణచిత్తా<br>
+                    తత్పాద సేవనరతా స్సత తంచ భక్త్యా<br>
+                    సంసారజన్య దురితౌఘ వినిర్గ తాస్తే<br>
+                    కైవల్య ధామ పరమం సమవాప్నువంతి
+                </div>
+
+                <div class="mantra">
+                    స్తోత్రమే తత్పఠేద్భక్త్యా యోన్నరస్తన్మనాసదా<br>
+                    సద్గురో: సాయినాథస్య కృపాపాత్రం భవేద్భవం
+                </div>
+            </section>
+
+            <!-- Section 8: Guru Prasad Yachanadashakam -->
+            <section class="section">
+                <h2 class="section-title">8౤ గురు ప్రసాద యాచనాదశకం</h2>
+                
+                <div class="prayer-text">
+                    (శేషం సర్వ గురుప్రసాద యాచనాదశకం వివరాలు కొనసాగుతాయి...)
+                </div>
+            </section>
+        </div>
+
+        <div class="closing">
+            <span class="emphasis">శ్రీ సచ్చిదానంద సద్గురు సాయినాధ మహరాజ్ కీ జై౤</span>
+        </div>
+    </div>
+</body>
+</html>
 
 రుసోమమప్రియాంబికా మజవరీపితాహీరుసో
 రుసోమమప్రియాంగనా ప్రియసుతాత్మజాహీరుసో
