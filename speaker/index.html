@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surya Rao Rayarao - AI & Data Modernization Speaker</title>
+    <meta name="description" content="Surya Rao Rayarao - Accomplished speaker and expert in AI, Machine Learning, and Data Modernization for financial and insurance services.">
+    <meta name="keywords" content="AI speaker, machine learning, data modernization, keynote speaker, artificial intelligence">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --accent-gold: #f59e0b;
+            --dark-gray: #1f2937;
+            --medium-gray: #6b7280;
+            --light-gray: #f3f4f6;
+            --white: #ffffff;
+            --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-gold) 0%, #ef4444 100%);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Header Section */
+        .header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--white) 0%, #e5e7eb 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header .subtitle {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .header .description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--white);
+            padding: 60px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--light-gray);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, var(--light-gray) 100%);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--medium-gray);
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+            box-shadow: var(--shadow-xl);
+            border: 8px solid var(--white);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--dark-gray);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* Speaking Engagements Section */
+        .engagements-section {
+            padding: 80px 0;
+            background: var(--white);
+        }
+
+        .engagement-grid {
+            display: grid;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .engagement-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid #e5e7eb;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engagement-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
+        .engagement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .engagement-type {
+            display: inline-block;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .engagement-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .engagement-details {
+            color: var(--medium-gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .engagement-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+
+        .meta-item i {
+            color: var(--accent-gold);
+        }
+
+        /* Recognition Section */
+        .recognition-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--white);
+        }
+
+        .recognition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .recognition-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .recognition-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .recognition-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent-gold);
+        }
+
+        .recognition-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 80px 0;
+            background: var(--light-gray);
+            text-align: center;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .profile-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .engagement-card {
+                padding: 30px 20px;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 250px;
+                justify-content: center;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content animate-fade-in">
+                <h1>Surya Rao Rayarao</h1>
+                <p class="subtitle">AI & Data Modernization Speaker</p>
+                <p class="description">
+                    Accomplished expert transforming enterprises through Artificial Intelligence, Machine Learning, 
+                    and Data Modernization with specialized focus on financial and insurance services sectors.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Speaking Engagements</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">International Conferences</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Certificates of Excellence</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Keynote Presentations</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Surya Rao</h2>
+            <p class="section-subtitle">
+                Bridging the gap between cutting-edge AI technology and practical business applications
+            </p>
+            
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="../img/profile.jpg" alt="Surya Rao Rayarao - AI & Data Modernization Speaker" class="profile-image">
+                </div>
+                
+                <div class="about-text">
+                    <p>
+                        <strong>Surya Rao Rayarao</strong> is a <span class="highlight">distinguished thought leader</span> 
+                        at the forefront of artificial intelligence and data modernization. With deep expertise in 
+                        machine learning applications and enterprise transformation, he specializes in helping 
+                        organizations navigate the complex landscape of digital evolution.
+                    </p>
+                    
+                    <p>
+                        His work particularly focuses on the <span class="highlight">financial and insurance sectors</span>, 
+                        where he has pioneered innovative approaches to hyperautomation, anomaly detection, and 
+                        intelligent data processing. Through his speaking engagements, Surya shares practical insights 
+                        on implementing AI solutions that drive real business value.
+                    </p>
+                    
+                    <p>
+                        Known for his <span class="highlight">"enlightening" and "inspiring"</span> presentations, 
+                        Surya combines technical depth with accessible communication, making complex AI concepts 
+                        understandable for diverse audiences from technical teams to executive leadership.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speaking Engagements Section -->
+    <section class="engagements-section">
+        <div class="container">
+            <h2 class="section-title">Speaking Engagements</h2>
+            <p class="section-subtitle">
+                Delivering impactful presentations at leading international conferences and industry events
+            </p>
+            
+            <div class="engagement-grid">
+                <!-- Keynote Speaker -->
+                <div class="engagement-card">
+                    <span class="engagement-type">Keynote Speaker</span>
+                    <h3 class="engagement-title">
+                        International Conference on Transforming Tomorrow: AI and ML at the Nexus
+                    </h3>
+                    <p class="engagement-details">
+                        Awarded Certificate of Excellence as Keynote Speaker, delivering insights on the transformative 
+                        power of AI and Machine Learning in shaping the future of business operations and decision-making.
+                    </p>
+                    <div class="engagement-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>August 3-4, 2024</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-award"></i>
+                            <span>Certificate of Excellence</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Modernization Conference -->
+                <div class="engagement-card">
+                    <span class="engagement-type">Invited Speaker</span>
+                    <h3 class="engagement-title">
+                        International Conference on Data Modernization: Transforming Enterprises for the Digital Age
+                    </h3>
+                    <p class="engagement-details">
+                        Delivered an "enlightening" and "inspiring" presentation on enterprise transformation strategies, 
+                        focusing on practical approaches to data modernization and digital evolution. Organized by 
+                        Sciforce Publications in Plano, TX.
+                    </p>
+                    <div class="engagement-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>January 25-26, 2025</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Plano, TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ICCCT 2025 -->
+                <div class="engagement-card">
+                    <span class="engagement-type">Invited Speaker</span>
+                    <h3 class="engagement-title">
+                        7th International Conference on Communication and Computational Technologies (ICCCT 2025)
+                    </h3>
+                    <p class="engagement-details">
+                        Presented "Hyperautomation in Retirement Services: The Impact of Agentic AI on 401(k) Administration" 
+                        at the National Forensic Sciences University Goa Campus, India. Explored cutting-edge applications 
+                        of AI in financial services automation.
+                    </p>
+                    <div class="engagement-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>February 14-15, 2025</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Goa, India</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PCCDA 2025 -->
+                <div class="engagement-card">
+                    <span class="engagement-type">Presenter</span>
+                    <h3 class="engagement-title">
+                        Pathways to Smart Detection and Notification of Anomalies in Financial and Insurance Datasets
+                    </h3>
+                    <p class="engagement-details">
+                        Presented innovative research on anomaly detection methodologies specifically designed for 
+                        financial and insurance datasets, demonstrating practical applications of machine learning 
+                        in risk assessment and fraud detection.
+                    </p>
+                    <div class="engagement-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>PCCDA 2025</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Research Presentation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recognition Section -->
+    <section class="recognition-section">
+        <div class="container">
+            <h2 class="section-title">Recognition & Awards</h2>
+            <p class="section-subtitle">
+                Acknowledged expertise and outstanding contributions to the field of AI and data modernization
+            </p>
+            
+            <div class="recognition-grid">
+                <div class="recognition-item">
+                    <div class="recognition-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="recognition-title">Certificate of Excellence</h3>
+                    <p>Keynote Speaker Achievement</p>
+                </div>
+                
+                <div class="recognition-item">
+                    <div class="recognition-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3 class="recognition-title">Presentation Certificate</h3>
+                    <p>Outstanding Technical Presentation</p>
+                </div>
+                
+                <div class="recognition-item">
+                    <div class="recognition-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h3 class="recognition-title">Certificate of Invited Speaker</h3>
+                    <p>International Conference Recognition</p>
+                </div>
+                
+                <div class="recognition-item">
+                    <div class="recognition-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="recognition-title">Certificate of Appreciation</h3>
+                    <p>Industry Contribution Recognition</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title">Let's Connect</h2>
+                <p class="section-subtitle">
+                    Ready to transform your organization with AI? Let's discuss how innovative technology 
+                    can drive your business forward.
+                </p>
+                
+                <div class="contact-buttons">
+                    <a href="mailto:contact@suryarao.com" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i>
+                        Speaking Inquiries
+                    </a>
+                    <a href="../index.html" class="btn btn-secondary">
+                        <i class="fas fa-user"></i>
+                        View Full Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add smooth scrolling animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all sections
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+
+            // Smooth scrolling for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
