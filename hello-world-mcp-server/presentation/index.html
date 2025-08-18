@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCP Server Tutorial - Interactive Presentation</title>
+    <title>MCP Server Tutorial - Introduction</title>
     <style>
         * {
             margin: 0;
@@ -16,6 +16,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             overflow: hidden;
             height: 100vh;
+            color: #2c3e50;
         }
 
         .presentation-container {
@@ -33,7 +34,7 @@
             max-width: 1000px;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             padding: 60px;
             text-align: center;
             position: relative;
@@ -57,89 +58,91 @@
 
         .slide-number {
             position: absolute;
-            top: 20px;
+            top: 25px;
             right: 30px;
-            background: #3498db;
+            background: #667eea;
             color: white;
-            padding: 8px 15px;
+            padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         h1 {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             color: #2c3e50;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            font-weight: 700;
+            line-height: 1.2;
         }
 
         h2 {
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             color: #2c3e50;
             margin-bottom: 25px;
+            font-weight: 600;
+            line-height: 1.3;
         }
 
         h3 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #34495e;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-weight: 500;
         }
 
         p {
             font-size: 1.3rem;
-            line-height: 1.6;
+            line-height: 1.7;
             color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #7f8c8d;
+            margin-bottom: 35px;
+            font-weight: 400;
         }
 
         .highlight {
-            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             padding: 30px;
             border-radius: 15px;
-            margin: 25px 0;
-            box-shadow: 0 10px 30px rgba(116, 185, 255, 0.3);
-        }
-
-        .highlight h3 {
-            color: white;
-            margin-bottom: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
         }
 
         .highlight p {
-            color: #f8f9fa;
-            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 0;
+            font-size: 1.25rem;
         }
 
-        .features-grid {
+        .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 25px;
-            margin: 30px 0;
+            margin: 35px 0;
         }
 
-        .feature-card {
+        .feature-item {
             background: #f8f9fa;
             padding: 25px;
             border-radius: 15px;
-            border-left: 5px solid #3498db;
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .feature-card:hover {
+        .feature-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .feature-title {
-            font-size: 1.3rem;
-            font-weight: bold;
+            font-size: 1.2rem;
+            font-weight: 700;
             color: #2c3e50;
             margin-bottom: 10px;
         }
@@ -150,39 +153,118 @@
             line-height: 1.5;
         }
 
+        .steps-list {
+            text-align: left;
+            max-width: 700px;
+            margin: 35px auto;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: transform 0.2s ease;
+        }
+
+        .step-item:hover {
+            transform: translateX(5px);
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 35px;
+            border-radius: 15px;
+            margin: 35px 0;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+        }
+
+        .cta-section h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .cta-btn {
+            background: white;
+            color: #27ae60;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
         .navigation {
             position: absolute;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
         }
 
         .nav-btn {
-            background: #3498db;
+            background: #667eea;
             color: white;
             border: none;
             padding: 12px 25px;
             border-radius: 25px;
             cursor: pointer;
             font-size: 1rem;
-            font-weight: bold;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
         .nav-btn:hover {
-            background: #2980b9;
+            background: #5a67d8;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
         }
 
         .nav-btn:disabled {
             background: #bdc3c7;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
         }
 
         .progress-indicator {
@@ -196,124 +278,30 @@
             height: 12px;
             border-radius: 50%;
             background: #bdc3c7;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .progress-dot.active {
-            background: #3498db;
+            background: #667eea;
+            transform: scale(1.2);
         }
 
-        .code-example {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 25px;
-            border-radius: 10px;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            text-align: left;
-            margin: 20px 0;
-            font-size: 1rem;
-            line-height: 1.4;
+        .progress-dot:hover {
+            background: #5a67d8;
         }
 
-        .big-emoji {
+        .large-number {
             font-size: 4rem;
-            margin: 20px 0;
+            font-weight: 700;
+            color: #667eea;
+            margin: 25px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .stat-item {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .timeline {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 30px 0;
-            position: relative;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #3498db;
-            z-index: 1;
-        }
-
-        .timeline-item {
-            background: white;
-            border: 3px solid #3498db;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
-            margin: 30px 0;
-        }
-
-        .cta-btn {
-            background: white;
-            color: #28a745;
-            padding: 15px 35px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 15px 10px;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .keyboard-hint {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9rem;
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
         }
 
         @media (max-width: 768px) {
@@ -330,360 +318,147 @@
                 font-size: 2rem;
             }
 
-            .features-grid {
+            .feature-grid {
                 grid-template-columns: 1fr;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            .large-number {
+                font-size: 3rem;
             }
 
-            .timeline {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .timeline::before {
-                display: none;
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="presentation-container">
-        <!-- Slide 1: Title -->
+        <!-- Slide 1: Welcome -->
         <div class="slide active">
-            <div class="slide-number">1/10</div>
-            <div class="big-emoji">🚀</div>
+            <div class="slide-number">1/5</div>
+            <div class="icon">🚀</div>
             <h1>Build Your First MCP Server</h1>
-            <p>A Complete Step-by-Step Tutorial for Beginners</p>
+            <p class="subtitle">A Simple Tutorial for Beginners</p>
+            
             <div class="highlight">
-                <h3>🌟 Welcome to the Future of AI Development</h3>
-                <p>Learn how to extend AI capabilities with custom tools using the Model Context Protocol</p>
+                <p>Learn to extend AI capabilities with custom tools in just 30 minutes</p>
             </div>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">30</div>
-                    <div class="stat-label">Minutes to Complete</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">3</div>
-                    <div class="stat-label">Custom Tools</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">Possibilities</div>
-                </div>
-            </div>
+
+            <div class="large-number">Ready?</div>
         </div>
 
         <!-- Slide 2: What is MCP? -->
         <div class="slide">
-            <div class="slide-number">2/10</div>
-            <h2>🤖 What is MCP?</h2>
-            <p><strong>Model Context Protocol</strong> - The bridge between AI and the real world</p>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔌</div>
-                    <div class="feature-title">Connect to External Systems</div>
-                    <div class="feature-desc">Databases, APIs, file systems, and more</div>
+            <div class="slide-number">2/5</div>
+            <div class="icon">🔧</div>
+            <h2>What is MCP?</h2>
+            <p>Model Context Protocol connects AI assistants to external tools</p>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-title">🎯 Dynamic Discovery</div>
+                    <div class="feature-desc">AI automatically finds and understands your tools</div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
-                    <div class="feature-title">Dynamic Tool Discovery</div>
-                    <div class="feature-desc">AI automatically finds and understands available tools</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <div class="feature-title">Real-time Execution</div>
+                <div class="feature-item">
+                    <div class="feature-title">⚡ Real-time Execution</div>
                     <div class="feature-desc">Execute actions and get live results instantly</div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛠️</div>
-                    <div class="feature-title">Custom Tools</div>
-                    <div class="feature-desc">Build exactly what your AI assistant needs</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 3: Real-World Example -->
-        <div class="slide">
-            <div class="slide-number">3/10</div>
-            <h2>💡 Real-World Magic</h2>
-            <div class="highlight">
-                <h3>Before MCP: Limited AI</h3>
-                <p>"What's the weather like?" → "I don't have access to current weather data"</p>
-            </div>
-            
-            <div class="big-emoji">⬇️</div>
-            
-            <div class="highlight" style="background: linear-gradient(135deg, #28a745, #20c997);">
-                <h3>After MCP: Superhuman AI</h3>
-                <p>"What's the weather like?" → AI uses weather tool → "It's 72°F and sunny in your location!"</p>
-            </div>
-
-            <p style="margin-top: 30px; font-size: 1.4rem; color: #2c3e50;">
-                <strong>🎯 MCP transforms static AI into dynamic, capable assistants</strong>
-            </p>
-        </div>
-
-        <!-- Slide 4: What You'll Build -->
-        <div class="slide">
-            <div class="slide-number">4/10</div>
-            <h2>🏗️ What You'll Build Today</h2>
-            <p>A complete MCP server with three powerful tools:</p>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">👋</div>
-                    <div class="feature-title">Say Hello Tool</div>
-                    <div class="feature-desc">Personalized greetings for any name</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⏰</div>
-                    <div class="feature-title">Get Time Tool</div>
-                    <div class="feature-desc">Real-time clock access</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧮</div>
-                    <div class="feature-title">Calculator Tool</div>
-                    <div class="feature-desc">Math operations with error handling</div>
-                </div>
-            </div>
-
-            <div class="code-example">
-// Your tools will be discoverable like this:
-{
-  "tools": [
-    { "name": "say_hello", "description": "Say hello to someone" },
-    { "name": "get_time", "description": "Get current time" },
-    { "name": "calculate", "description": "Perform math calculations" }
-  ]
-}
-            </div>
-        </div>
-
-        <!-- Slide 5: Learning Path -->
-        <div class="slide">
-            <div class="slide-number">5/10</div>
-            <h2>🎯 Your Learning Journey</h2>
-            <p>Step-by-step path to MCP mastery:</p>
-
-            <div class="timeline">
-                <div class="timeline-item">🛠️</div>
-                <div class="timeline-item">📁</div>
-                <div class="timeline-item">💻</div>
-                <div class="timeline-item">🧪</div>
-                <div class="timeline-item">🚀</div>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-title">1. Environment Setup</div>
-                    <div class="feature-desc">Install Node.js, TypeScript, and MCP SDK</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">2. Project Structure</div>
-                    <div class="feature-desc">Organize files and configuration</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">3. Implementation</div>
-                    <div class="feature-desc">Write server code and tool handlers</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">4. Testing</div>
-                    <div class="feature-desc">Automated, interactive, and comprehensive tests</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-title">5. Enhancement</div>
-                    <div class="feature-desc">Advanced features and deployment</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 6: Prerequisites -->
-        <div class="slide">
-            <div class="slide-number">6/10</div>
-            <h2>📋 What You Need</h2>
-            <p>Simple requirements to get started:</p>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📦</div>
-                    <div class="feature-title">Node.js v18+</div>
-                    <div class="feature-desc">Free download from nodejs.org</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <div class="feature-title">Code Editor</div>
-                    <div class="feature-desc">VS Code recommended (free)</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💻</div>
-                    <div class="feature-title">Basic Terminal</div>
-                    <div class="feature-desc">Run simple commands</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <div class="feature-title">Curiosity</div>
-                    <div class="feature-desc">No prior MCP experience needed!</div>
+                <div class="feature-item">
+                    <div class="feature-title">🔗 Standardized Protocol</div>
+                    <div class="feature-desc">JSON-RPC based communication that works everywhere</div>
                 </div>
             </div>
 
             <div class="highlight">
-                <h3>🎓 Beginner-Friendly</h3>
-                <p>This tutorial assumes no prior knowledge of MCP. We'll guide you through every step!</p>
+                <p>Transform "I don't have access to that" into "Here's your live data!"</p>
             </div>
         </div>
 
-        <!-- Slide 7: GitHub Repository -->
+        <!-- Slide 3: What You'll Build -->
         <div class="slide">
-            <div class="slide-number">7/10</div>
-            <h2>🐙 Complete Source Code</h2>
-            <p>Follow along with the working codebase on GitHub!</p>
+            <div class="slide-number">3/5</div>
+            <div class="icon">⚙️</div>
+            <h2>What You'll Build</h2>
+            <p>A complete MCP server with three useful tools</p>
+
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-text">Say Hello Tool - Personalized greetings</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-text">Get Time Tool - Current date and time</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-text">Calculator Tool - Math with error handling</div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <p>Complete with automated tests and comprehensive documentation</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Get the Code -->
+        <div class="slide">
+            <div class="slide-number">4/5</div>
+            <div class="icon">💻</div>
+            <h2>Get the Complete Code</h2>
+            <p>Everything you need to follow along</p>
 
             <div class="cta-section">
-                <h3 style="margin-bottom: 20px;">📦 Repository: hello-world-mcp-server</h3>
-                <p style="margin-bottom: 25px;">Get the complete working code, all test files, and documentation</p>
+                <h3>GitHub Repository</h3>
+                <p>Complete working code, tests, and step-by-step tutorial</p>
                 
                 <a href="https://github.com/suryaraor/hello-world-mcp-server" class="cta-btn" target="_blank">
-                    🍴 Fork Repository
+                    View on GitHub
                 </a>
                 <a href="https://github.com/suryaraor/hello-world-mcp-server/archive/refs/heads/main.zip" class="cta-btn" target="_blank">
-                    📥 Download ZIP
+                    Download ZIP
                 </a>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <div class="feature-title">Code Along</div>
-                    <div class="feature-desc">Build step-by-step or use the complete code</div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-title">📝 Complete Tutorial</div>
+                    <div class="feature-desc">Step-by-step guide with explanations</div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧪</div>
-                    <div class="feature-title">Test Scripts</div>
-                    <div class="feature-desc">Automated and interactive testing included</div>
+                <div class="feature-item">
+                    <div class="feature-title">🧪 Test Scripts</div>
+                    <div class="feature-desc">Automated and interactive testing</div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📚</div>
-                    <div class="feature-title">Documentation</div>
-                    <div class="feature-desc">Comprehensive README and comments</div>
+                <div class="feature-item">
+                    <div class="feature-title">📚 Documentation</div>
+                    <div class="feature-desc">Comprehensive guides and comments</div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 8: Key Concepts -->
+        <!-- Slide 5: Let's Start -->
         <div class="slide">
-            <div class="slide-number">8/10</div>
-            <h2>🧩 Key MCP Concepts</h2>
-            <p>Four essential components every MCP server needs:</p>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🖥️</div>
-                    <div class="feature-title">Server Instance</div>
-                    <div class="feature-desc">Main server handling all communication</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔧</div>
-                    <div class="feature-title">Tool Definitions</div>
-                    <div class="feature-desc">Describe available tools and parameters</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <div class="feature-title">Tool Handlers</div>
-                    <div class="feature-desc">Code that executes when tools are called</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔌</div>
-                    <div class="feature-title">Transport Layer</div>
-                    <div class="feature-desc">How the server communicates (stdio/HTTP)</div>
-                </div>
-            </div>
-
-            <div class="code-example">
-// MCP follows JSON-RPC protocol:
-{
-  "jsonrpc": "2.0",
-  "method": "tools/call",
-  "params": {
-    "name": "say_hello",
-    "arguments": { "name": "World" }
-  }
-}
-            </div>
-        </div>
-
-        <!-- Slide 9: What You'll Learn -->
-        <div class="slide">
-            <div class="slide-number">9/10</div>
-            <h2>🎓 Skills You'll Master</h2>
-            <p>Comprehensive knowledge for building production MCP servers:</p>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <div class="feature-title">Protocol Understanding</div>
-                    <div class="feature-desc">JSON-RPC communication and MCP standards</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔨</div>
-                    <div class="feature-title">TypeScript Development</div>
-                    <div class="feature-desc">Type-safe server development</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧪</div>
-                    <div class="feature-title">Testing Strategies</div>
-                    <div class="feature-desc">Automated, interactive, and performance testing</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚠️</div>
-                    <div class="feature-title">Error Handling</div>
-                    <div class="feature-desc">Robust error management and validation</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <div class="feature-title">Performance Optimization</div>
-                    <div class="feature-desc">Best practices for production deployment</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
-                    <div class="feature-title">Advanced Concepts</div>
-                    <div class="feature-desc">Resources, notifications, and scaling</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 10: Call to Action -->
-        <div class="slide">
-            <div class="slide-number">10/10</div>
-            <h1>🚀 Ready to Build?</h1>
-            <p>Transform from beginner to MCP developer in 30 minutes!</p>
+            <div class="slide-number">5/5</div>
+            <div class="icon">🎯</div>
+            <h1>Let's Build!</h1>
+            <p class="subtitle">Your journey to MCP mastery starts now</p>
 
             <div class="cta-section">
-                <h3 style="margin-bottom: 20px;">🎯 Start Your Journey Now</h3>
-                <p style="margin-bottom: 25px;">Choose your path to MCP mastery:</p>
+                <h3>Choose Your Path</h3>
+                <p>Start building your MCP server today</p>
                 
-                <a href="index.html" class="cta-btn">
-                    📚 Start Tutorial
-                </a>
-                <a href="https://github.com/suryaraor/hello-world-mcp-server" class="cta-btn" target="_blank">
-                    🐙 Get Code
-                </a>
+                <a href="index.html" class="cta-btn">Start Tutorial</a>
+                <a href="https://github.com/suryaraor/hello-world-mcp-server" class="cta-btn" target="_blank">Get Code</a>
             </div>
+
+            <div class="large-number">30 min</div>
+            <p>From zero to working MCP server</p>
 
             <div class="highlight">
-                <h3>🌟 What Awaits You</h3>
-                <p>By the end of this tutorial, you'll have a working MCP server, complete test suite, and the knowledge to build advanced AI integrations. The future of AI development is in your hands!</p>
+                <p>By the end, you'll have a working server and the knowledge to build advanced AI integrations</p>
             </div>
-
-            <div class="big-emoji">🎉</div>
-            <p style="font-size: 1.5rem; color: #2c3e50; font-weight: bold;">
-                Let's build the future of AI together!
-            </p>
         </div>
 
         <!-- Navigation -->
@@ -693,10 +468,6 @@
                 <!-- Progress dots will be generated by JavaScript -->
             </div>
             <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
-        </div>
-
-        <div class="keyboard-hint">
-            Use ← → arrow keys or click buttons to navigate
         </div>
     </div>
 
@@ -712,6 +483,7 @@
                 const dot = document.createElement('div');
                 dot.className = 'progress-dot';
                 if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
                 progressIndicator.appendChild(dot);
             }
         }
@@ -724,13 +496,17 @@
             });
         }
 
-        // Show specific slide
-        function showSlide(n) {
+        // Go to specific slide
+        function goToSlide(n) {
+            if (n >= 0 && n < totalSlides) {
+                currentSlide = n;
+                showSlide();
+            }
+        }
+
+        // Show current slide
+        function showSlide() {
             slides.forEach(slide => slide.classList.remove('active'));
-            
-            if (n >= totalSlides) currentSlide = 0;
-            if (n < 0) currentSlide = totalSlides - 1;
-            
             slides[currentSlide].classList.add('active');
             updateProgressIndicator();
             updateNavButtons();
@@ -738,8 +514,11 @@
 
         // Change slide
         function changeSlide(direction) {
-            currentSlide += direction;
-            showSlide(currentSlide);
+            const newSlide = currentSlide + direction;
+            if (newSlide >= 0 && newSlide < totalSlides) {
+                currentSlide = newSlide;
+                showSlide();
+            }
         }
 
         // Update navigation buttons
@@ -753,33 +532,37 @@
 
         // Keyboard navigation
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowLeft') {
-                changeSlide(-1);
-            } else if (event.key === 'ArrowRight') {
-                changeSlide(1);
-            } else if (event.key === 'Home') {
-                currentSlide = 0;
-                showSlide(currentSlide);
-            } else if (event.key === 'End') {
-                currentSlide = totalSlides - 1;
-                showSlide(currentSlide);
-            } else if (event.key >= '1' && event.key <= '9') {
-                const slideNumber = parseInt(event.key) - 1;
-                if (slideNumber < totalSlides) {
-                    currentSlide = slideNumber;
-                    showSlide(currentSlide);
-                }
+            switch(event.key) {
+                case 'ArrowLeft':
+                    changeSlide(-1);
+                    break;
+                case 'ArrowRight':
+                    changeSlide(1);
+                    break;
+                case 'Home':
+                    goToSlide(0);
+                    break;
+                case 'End':
+                    goToSlide(totalSlides - 1);
+                    break;
+                case ' ':
+                    event.preventDefault();
+                    changeSlide(1);
+                    break;
+                case 'Escape':
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen();
+                    }
+                    break;
+                default:
+                    if (event.key >= '1' && event.key <= '9') {
+                        const slideNumber = parseInt(event.key) - 1;
+                        if (slideNumber < totalSlides) {
+                            goToSlide(slideNumber);
+                        }
+                    }
             }
         });
-
-        // Auto-advance presentation (optional)
-        function startAutoAdvance(interval = 10000) {
-            setInterval(() => {
-                if (currentSlide < totalSlides - 1) {
-                    changeSlide(1);
-                }
-            }, interval);
-        }
 
         // Touch/swipe support for mobile
         let touchStartX = 0;
@@ -800,11 +583,9 @@
             
             if (Math.abs(diff) > swipeThreshold) {
                 if (diff > 0) {
-                    // Swipe left - next slide
-                    changeSlide(1);
+                    changeSlide(1); // Swipe left - next slide
                 } else {
-                    // Swipe right - previous slide
-                    changeSlide(-1);
+                    changeSlide(-1); // Swipe right - previous slide
                 }
             }
         }
@@ -814,34 +595,9 @@
             initProgressIndicator();
             updateNavButtons();
             
-            // Add click handlers for direct slide navigation
-            document.querySelectorAll('.progress-dot').forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    currentSlide = index;
-                    showSlide(currentSlide);
-                });
-            });
-
             console.log('🚀 MCP Server Tutorial Presentation');
-            console.log('📋 Navigation: Use arrow keys, buttons, or touch gestures');
-            console.log('🎯 Keyboard shortcuts: Home/End for first/last slide, 1-9 for direct navigation');
-        });
-
-        // Presentation fullscreen toggle
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        }
-
-        // Add F11 fullscreen support
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'F11') {
-                event.preventDefault();
-                toggleFullscreen();
-            }
+            console.log('📋 Navigation: Arrow keys, space, buttons, or touch gestures');
+            console.log('🎯 Shortcuts: Home/End, 1-5 for direct navigation, Esc to exit fullscreen');
         });
     </script>
 </body>
