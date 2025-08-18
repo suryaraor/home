@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Your First MCP Server - Complete Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .nav {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+
+        .nav h2 {
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+
+        .nav ul {
+            list-style: none;
+        }
+
+        .nav li {
+            margin: 8px 0;
+        }
+
+        .nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #3498db;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .section h3 {
+            color: #34495e;
+            font-size: 1.5rem;
+            margin: 25px 0 15px;
+        }
+
+        .section h4 {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin: 20px 0 10px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(116, 185, 255, 0.3);
+        }
+
+        .info-box {
+            background: #e8f4fd;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #d1edff;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            color: #e74c3c;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+        }
+
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .file-structure {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+
+        .file-structure .folder {
+            color: #f39c12;
+        }
+
+        .file-structure .file {
+            color: #2ecc71;
+        }
+
+        .command {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .command::before {
+            content: "$ ";
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .tool-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .tool-name {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .emoji {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .json-example {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Build Your First MCP Server</h1>
+            <p>A Complete Step-by-Step Tutorial for Beginners</p>
+        </div>
+
+        <div class="content">
+            <div class="nav">
+                <h2>📚 Tutorial Contents</h2>
+                <ul>
+                    <li><a href="#intro">Introduction to MCP</a></li>
+                    <li><a href="#setup">Environment Setup</a></li>
+                    <li><a href="#project">Project Structure</a></li>
+                    <li><a href="#implementation">Implementation</a></li>
+                    <li><a href="#testing">Testing Your Server</a></li>
+                    <li><a href="#deployment">Next Steps</a></li>
+                </ul>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #34495e;">
+                    <h3>🎯 What You'll Learn</h3>
+                    <ul style="margin-top: 15px;">
+                        <li>✅ What is MCP Protocol</li>
+                        <li>✅ Build Custom AI Tools</li>
+                        <li>✅ TypeScript Development</li>
+                        <li>✅ JSON-RPC Communication</li>
+                        <li>✅ Testing Strategies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <!-- Introduction Section -->
+                <div class="section" id="intro">
+                    <h2>🌟 What is MCP (Model Context Protocol)?</h2>
+                    
+                    <div class="highlight-box">
+                        <h3>🤖 Imagine if AI assistants could...</h3>
+                        <ul style="margin-top: 15px; font-size: 1.1rem;">
+                            <li>🔌 Connect to your databases</li>
+                            <li>📁 Access your file systems</li>
+                            <li>🌐 Call external APIs</li>
+                            <li>🧮 Perform custom calculations</li>
+                            <li>📊 Generate real-time reports</li>
+                        </ul>
+                        <p style="margin-top: 20px; font-size: 1.2rem;">
+                            <strong>That's exactly what MCP enables!</strong>
+                        </p>
+                    </div>
+
+                    <h3>🎯 Why MCP Matters</h3>
+                    <p>MCP is a standardized protocol that allows AI assistants to discover and use external tools dynamically. Instead of being limited to their training data, AI can now:</p>
+                    
+                    <div class="tool-card">
+                        <div class="tool-name">🔍 Discover Available Tools</div>
+                        <p>AI assistants can ask: "What tools are available?" and get a list of everything they can use.</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">📋 Understand Tool Capabilities</div>
+                        <p>Each tool comes with a schema describing what it does and what parameters it needs.</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">⚡ Execute Tools Dynamically</div>
+                        <p>AI can call tools with the right parameters and get results in real-time.</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>💡 Real-World Example</h4>
+                        <p>Imagine asking an AI: <em>"What's the weather in Tokyo and how much would a flight cost from New York?"</em></p>
+                        <p>With MCP, the AI could:</p>
+                        <ol>
+                            <li>Discover a weather tool and flight pricing tool</li>
+                            <li>Call the weather API for Tokyo</li>
+                            <li>Call the flight API for NYC to Tokyo prices</li>
+                            <li>Combine the results into a comprehensive answer</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Setup Section -->
+                <div class="section" id="setup">
+                    <h2>🛠️ Environment Setup</h2>
+                    
+                    <h3>📋 Prerequisites</h3>
+                    <p>Before we start building, make sure you have:</p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Node.js (v18 or higher)</strong>
+                        <p>Download from <a href="https://nodejs.org/" target="_blank">nodejs.org</a></p>
+                        <div class="command">node --version</div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>A Code Editor</strong>
+                        <p>We recommend <a href="https://code.visualstudio.com/" target="_blank">VS Code</a> for the best TypeScript experience</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Basic Terminal Knowledge</strong>
+                        <p>You should be comfortable running commands in Terminal/Command Prompt</p>
+                    </div>
+
+                    <h3>🏗️ Project Initialization</h3>
+                    <p>Let's create our project directory and initialize it:</p>
+
+                    <div class="command">mkdir hello-world-mcp-server</div>
+                    <div class="command">cd hello-world-mcp-server</div>
+                    <div class="command">npm init -y</div>
+
+                    <div class="success-box">
+                        <h4>✅ What Just Happened?</h4>
+                        <ul>
+                            <li>Created a new directory for our project</li>
+                            <li>Navigated into the directory</li>
+                            <li>Initialized a new Node.js project with package.json</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Project Structure Section -->
+                <div class="section" id="project">
+                    <h2>📁 Project Structure</h2>
+                    
+                    <h3>🏗️ Folder Organization</h3>
+                    <p>Here's how we'll organize our MCP server project:</p>
+
+                    <div class="file-structure">
+hello-world-mcp-server/
+├── <span class="folder">src/</span>
+│   └── <span class="file">index.ts</span>          # Main server code
+├── <span class="folder">dist/</span>                   # Compiled JavaScript (auto-generated)
+├── <span class="file">package.json</span>          # Project dependencies
+├── <span class="file">tsconfig.json</span>         # TypeScript configuration
+├── <span class="file">test-client.js</span>        # Automated test script
+├── <span class="file">interactive-test.js</span>   # Interactive testing
+├── <span class="file">comprehensive-test.js</span> # Detailed test suite
+└── <span class="file">README.md</span>             # Documentation
+                    </div>
+
+                    <h3>📦 Dependencies</h3>
+                    <p>First, let's install the required packages:</p>
+
+                    <div class="command">npm install @modelcontextprotocol/sdk</div>
+                    <div class="command">npm install --save-dev typescript @types/node ts-node</div>
+
+                    <div class="info-box">
+                        <h4>📚 What are these packages?</h4>
+                        <ul>
+                            <li><strong>@modelcontextprotocol/sdk</strong>: The official MCP SDK for building servers</li>
+                            <li><strong>typescript</strong>: Adds type safety and modern JavaScript features</li>
+                            <li><strong>@types/node</strong>: Type definitions for Node.js</li>
+                            <li><strong>ts-node</strong>: Runs TypeScript directly without compilation</li>
+                        </ul>
+                    </div>
+
+                    <h3>⚙️ Configuration Files</h3>
+                    
+                    <h4>📄 package.json</h4>
+                    <p>Update your package.json with these scripts:</p>
+                    <pre><code>{
+  "name": "hello-world-mcp-server",
+  "version": "1.0.0",
+  "description": "Simple Hello World MCP Server",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "node test-client.js",
+    "test:comprehensive": "node comprehensive-test.js",
+    "test:interactive": "node interactive-test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  }
+}</code></pre>
+
+                    <h4>📄 tsconfig.json</h4>
+                    <p>Create a TypeScript configuration file:</p>
+                    <pre><code>{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}</code></pre>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Important Note</h4>
+                        <p>Make sure to create the <code>src</code> directory before proceeding:</p>
+                        <div class="command">mkdir src</div>
+                    </div>
+                </div>
+
+                <!-- Implementation Section -->
+                <div class="section" id="implementation">
+                    <h2>💻 Implementation</h2>
+                    
+                    <h3>🧩 Understanding MCP Components</h3>
+                    <p>Every MCP server has these key components:</p>
+
+                    <div class="tool-card">
+                        <div class="tool-name">🖥️ Server Instance</div>
+                        <p>The main server that handles all communication</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">🔧 Tool Definitions</div>
+                        <p>Describes what tools are available and how to use them</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">⚡ Tool Handlers</div>
+                        <p>The actual code that executes when a tool is called</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">🔌 Transport Layer</div>
+                        <p>How the server communicates (we'll use stdio)</p>
+                    </div>
+
+                    <h3>📝 Step-by-Step Code Implementation</h3>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Import Required Modules</strong>
+                        <p>Create <code>src/index.ts</code> and start with imports:</p>
+                        <pre><code>import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from '@modelcontextprotocol/sdk/types.js';</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Create Server Instance</strong>
+                        <p>Initialize the MCP server with basic info:</p>
+                        <pre><code>const server = new Server(
+  {
+    name: 'hello-world-mcp-server',
+    version: '1.0.0',
+    capabilities: {
+      tools: {},
+    },
+  }
+);</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Define Available Tools</strong>
+                        <p>Tell AI assistants what tools are available:</p>
+                        <pre><code>// List available tools
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+  return {
+    tools: [
+      {
+        name: 'say_hello',
+        description: 'Say hello to someone',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              description: 'Name of the person to greet',
+            },
+          },
+          required: ['name'],
+        },
+      },
+      {
+        name: 'get_time',
+        description: 'Get current time',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+        },
+      },
+      {
+        name: 'calculate',
+        description: 'Perform basic math calculations',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            operation: {
+              type: 'string',
+              description: 'Math operation (add, subtract, multiply, divide)',
+              enum: ['add', 'subtract', 'multiply', 'divide'],
+            },
+            a: {
+              type: 'number',
+              description: 'First number',
+            },
+            b: {
+              type: 'number',
+              description: 'Second number',
+            },
+          },
+          required: ['operation', 'a', 'b'],
+        },
+      },
+    ],
+  };
+});</code></pre>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>🔍 Understanding Tool Schemas</h4>
+                        <p>Each tool definition includes:</p>
+                        <ul>
+                            <li><strong>name</strong>: Unique identifier for the tool</li>
+                            <li><strong>description</strong>: What the tool does (helps AI understand when to use it)</li>
+                            <li><strong>inputSchema</strong>: JSON Schema defining required parameters</li>
+                        </ul>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Implement Tool Handlers</strong>
+                        <p>Add the actual functionality for each tool:</p>
+                        <pre><code>// Handle tool calls
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  switch (request.params.name) {
+    case 'say_hello': {
+      const name = request.params.arguments?.name as string;
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `Hello, ${name}! Welcome to the MCP world! 🌟`,
+          },
+        ],
+      };
+    }
+
+    case 'get_time': {
+      const currentTime = new Date().toLocaleString();
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `Current time is: ${currentTime}`,
+          },
+        ],
+      };
+    }
+
+    case 'calculate': {
+      const { operation, a, b } = request.params.arguments as {
+        operation: string;
+        a: number;
+        b: number;
+      };
+
+      let result: number;
+      switch (operation) {
+        case 'add':
+          result = a + b;
+          break;
+        case 'subtract':
+          result = a - b;
+          break;
+        case 'multiply':
+          result = a * b;
+          break;
+        case 'divide':
+          if (b === 0) {
+            throw new Error('Cannot divide by zero');
+          }
+          result = a / b;
+          break;
+        default:
+          throw new Error(`Unknown operation: ${operation}`);
+      }
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `${a} ${operation} ${b} = ${result}`,
+          },
+        ],
+      };
+    }
+
+    default:
+      throw new Error(`Unknown tool: ${request.params.name}`);
+  }
+});</code></pre>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <strong>Start the Server</strong>
+                        <p>Add the main function to start the server:</p>
+                        <pre><code>async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error('Hello World MCP server running on stdio');
+}
+
+main().catch((error) => {
+  console.error('Server error:', error);
+  process.exit(1);
+});</code></pre>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>🎉 Congratulations!</h4>
+                        <p>You've just built a complete MCP server! Your server can now:</p>
+                        <ul>
+                            <li>✅ Greet people by name</li>
+                            <li>✅ Provide current time</li>
+                            <li>✅ Perform math calculations</li>
+                            <li>✅ Handle errors gracefully</li>
+                        </ul>
+                    </div>
+
+                    <h3>🔨 Build Your Server</h3>
+                    <p>Now let's compile and run your server:</p>
+
+                    <div class="command">npm run build</div>
+                    <div class="command">npm start</div>
+
+                    <div class="info-box">
+                        <h4>💡 What's Happening?</h4>
+                        <p>When you run <code>npm start</code>, your server:</p>
+                        <ol>
+                            <li>Starts listening on stdio (standard input/output)</li>
+                            <li>Waits for JSON-RPC requests</li>
+                            <li>Responds with available tools or executes them</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Testing Section -->
+                <div class="section" id="testing">
+                    <h2>🧪 Testing Your Server</h2>
+                    
+                    <h3>🎯 Why Testing Matters</h3>
+                    <p>Testing ensures your MCP server works correctly and helps you catch bugs early. We'll create three types of tests:</p>
+
+                    <div class="tool-card">
+                        <div class="tool-name">🤖 Automated Tests</div>
+                        <p>Run all tests automatically to verify functionality</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">🎮 Interactive Tests</div>
+                        <p>Manually test each tool with a user-friendly interface</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">📊 Comprehensive Tests</div>
+                        <p>Detailed testing with performance metrics and edge cases</p>
+                    </div>
+
+                    <h3>🔄 Running Tests</h3>
+                    <p>We've included several test scripts with your project:</p>
+
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Basic Automated Tests</strong>
+                        <div class="command">npm test</div>
+                        <p>Runs through all tools and verifies they work correctly</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Comprehensive Test Suite</strong>
+                        <div class="command">npm run test:comprehensive</div>
+                        <p>Includes performance metrics and error handling tests</p>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Interactive Testing</strong>
+                        <div class="command">npm run test:interactive</div>
+                        <p>Menu-driven testing where you can try each tool manually</p>
+                    </div>
+
+                    <h3>🔍 Manual Testing</h3>
+                    <p>You can also test manually by sending JSON-RPC requests:</p>
+
+                    <h4>📋 List Available Tools</h4>
+                    <div class="json-example">
+{"jsonrpc":"2.0","id":1,"method":"tools/list"}
+                    </div>
+
+                    <h4>👋 Test Say Hello</h4>
+                    <div class="json-example">
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"say_hello","arguments":{"name":"World"}}}
+                    </div>
+
+                    <h4>⏰ Test Get Time</h4>
+                    <div class="json-example">
+{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_time","arguments":{}}}
+                    </div>
+
+                    <h4>🧮 Test Calculator</h4>
+                    <div class="json-example">
+{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"calculate","arguments":{"operation":"add","a":15,"b":25}}}
+                    </div>
+
+                    <div class="success-box">
+                        <h4>🎉 Expected Results</h4>
+                        <p>If everything works correctly, you should see:</p>
+                        <ul>
+                            <li>✅ All tests pass</li>
+                            <li>✅ Response times under 10ms</li>
+                            <li>✅ Proper error handling for invalid inputs</li>
+                            <li>✅ Correct JSON-RPC formatted responses</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Next Steps Section -->
+                <div class="section" id="deployment">
+                    <h2>🚀 Next Steps & Advanced Topics</h2>
+                    
+                    <h3>🎯 What You've Accomplished</h3>
+                    <div class="highlight-box">
+                        <h4>🏆 Congratulations! You've Built Your First MCP Server!</h4>
+                        <p>You now understand:</p>
+                        <ul style="margin-top: 15px;">
+                            <li>✅ How MCP enables AI to use external tools</li>
+                            <li>✅ JSON-RPC communication protocols</li>
+                            <li>✅ Tool discovery and execution patterns</li>
+                            <li>✅ Error handling in distributed systems</li>
+                            <li>✅ Testing strategies for API servers</li>
+                        </ul>
+                    </div>
+
+                    <h3>🌟 Ideas for Enhancement</h3>
+                    <p>Ready to take your MCP server to the next level? Try these ideas:</p>
+
+                    <div class="tool-card">
+                        <div class="tool-name">📁 File Operations Tool</div>
+                        <p>Add tools to read, write, and list files. Perfect for document processing!</p>
+                        <pre><code>// Example: Read file tool
+{
+  name: 'read_file',
+  description: 'Read contents of a file',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      filepath: { type: 'string', description: 'Path to file' }
+    },
+    required: ['filepath']
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">🌐 Weather API Tool</div>
+                        <p>Connect to a weather API to provide real-time weather data!</p>
+                        <pre><code>// Example: Weather tool
+{
+  name: 'get_weather',
+  description: 'Get current weather for a city',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      city: { type: 'string', description: 'City name' }
+    },
+    required: ['city']
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-name">🗄️ Database Operations</div>
+                        <p>Add database connectivity for data retrieval and storage!</p>
+                        <pre><code>// Example: Database query tool
+{
+  name: 'query_database',
+  description: 'Execute a database query',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      query: { type: 'string', description: 'SQL query' }
+    },
+    required: ['query']
+  }
+}</code></pre>
+                    </div>
+
+                    <h3>📚 Advanced MCP Concepts</h3>
+                    
+                    <h4>🔄 Resource Providers</h4>
+                    <p>Beyond tools, MCP servers can provide dynamic resources like:</p>
+                    <ul>
+                        <li>📄 Document contents that change over time</li>
+                        <li>📊 Live data feeds and dashboards</li>
+                        <li>🗂️ Directory listings and file trees</li>
+                    </ul>
+
+                    <h4>🔔 Notifications</h4>
+                    <p>MCP servers can send notifications to AI assistants about:</p>
+                    <ul>
+                        <li>📨 New data availability</li>
+                        <li>⚠️ System alerts and warnings</li>
+                        <li>✅ Task completion status</li>
+                    </ul>
+
+                    <h4>🔧 Configuration Management</h4>
+                    <p>Add configuration files for:</p>
+                    <ul>
+                        <li>🔑 API keys and credentials</li>
+                        <li>🌍 Environment-specific settings</li>
+                        <li>📊 Logging and monitoring setup</li>
+                    </ul>
+
+                    <h3>🛠️ Production Deployment Tips</h3>
+                    
+                    <div class="warning-box">
+                        <h4>🔒 Security Best Practices</h4>
+                        <ul>
+                            <li>Never hardcode API keys or passwords</li>
+                            <li>Validate all input parameters</li>
+                            <li>Implement rate limiting for expensive operations</li>
+                            <li>Use HTTPS for any network communications</li>
+                            <li>Add authentication for sensitive tools</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>⚡ Performance Optimization</h4>
+                        <ul>
+                            <li>Cache frequently accessed data</li>
+                            <li>Use connection pooling for databases</li>
+                            <li>Implement timeout handling for external APIs</li>
+                            <li>Add monitoring and logging</li>
+                            <li>Consider using a process manager like PM2</li>
+                        </ul>
+                    </div>
+
+                    <h3>🌍 Community & Resources</h3>
+                    <p>Join the MCP community and continue learning:</p>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="https://github.com/modelcontextprotocol" class="btn" target="_blank">🐙 MCP GitHub</a>
+                        <a href="https://modelcontextprotocol.io/docs" class="btn" target="_blank">📖 Official Docs</a>
+                        <a href="https://discord.gg/mcp" class="btn" target="_blank">💬 Discord Community</a>
+                    </div>
+
+                    <div class="highlight-box" style="text-align: center;">
+                        <h3>🎉 You're Now an MCP Developer!</h3>
+                        <p style="font-size: 1.2rem; margin-bottom: 20px;">
+                            You've successfully built, tested, and understood a complete MCP server.
+                        </p>
+                        <p style="font-size: 1.1rem;">
+                            The future of AI is in your hands - go build amazing tools that extend AI capabilities!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('.nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add copy-to-clipboard functionality for code blocks
+        document.querySelectorAll('pre code').forEach(block => {
+            const button = document.createElement('button');
+            button.textContent = '📋 Copy';
+            button.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: #3498db;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 5px 10px;
+                cursor: pointer;
+                font-size: 12px;
+            `;
+            
+            block.parentNode.style.position = 'relative';
+            block.parentNode.appendChild(button);
+            
+            button.addEventListener('click', () => {
+                navigator.clipboard.writeText(block.textContent).then(() => {
+                    button.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        button.textContent = '📋 Copy';
+                    }, 2000);
+                });
+            });
+        });
+
+        // Add progress tracking
+        const sections = document.querySelectorAll('.section');
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar';
+        progressBar.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            z-index: 1000;
+        `;
+        
+        const progressFill = document.createElement('div');
+        progressFill.className = 'progress-fill';
+        progressFill.style.cssText = `
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.3s;
+        `;
+        
+        progressBar.appendChild(progressFill);
+        document.body.appendChild(progressBar);
+
+        // Update progress on scroll
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressFill.style.width = Math.min(scrollPercent, 100) + '%';
+        });
+
+        console.log('🚀 Welcome to the MCP Server Tutorial!');
+        console.log('📚 Follow along step by step to build your first MCP server.');
+        console.log('💡 Tip: Use the navigation menu to jump between sections.');
+    </script>
+</body>
+</html>
