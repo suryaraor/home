@@ -1,0 +1,138 @@
+{
+  "exportDate": "2025-08-20",
+  "program": "UT Austin MSDS",
+  "totalCourses": 10,
+  "semesterPlan": {
+    "spring 2026": [
+      {
+        "id": "data-structures",
+        "title": "Data Structures & Algorithms",
+        "code": "DSC 395T",
+        "type": "foundational",
+        "credits": 3,
+        "difficulty": 3,
+        "workload": 18,
+        "rating": 3,
+        "recommendation": "caution"
+      },
+      {
+        "id": "health-data",
+        "title": "Data Science in Healthcare Discovery and Innovation",
+        "code": "DSC 395T",
+        "type": "elective-1",
+        "credits": 3,
+        "difficulty": 3.5,
+        "workload": 16,
+        "rating": 3.5,
+        "recommendation": "caution"
+      }
+    ],
+    "fall 2024": [
+      {
+        "id": "probability-inference",
+        "title": "Probability & Simulation Based Inference for Data Science",
+        "code": "DSC 381",
+        "type": "foundational",
+        "credits": 3,
+        "difficulty": 3.5,
+        "workload": 18,
+        "rating": 3.5,
+        "recommendation": "recommend"
+      },
+      {
+        "id": "data-exploration",
+        "title": "Data Exploration, Visualization & Foundations of Unsupervised Learning",
+        "code": "DSC 385",
+        "type": "elective-1",
+        "credits": 3,
+        "difficulty": 2.5,
+        "workload": 12,
+        "rating": 4,
+        "recommendation": "recommend"
+      }
+    ],
+    "fall 2025": [
+      {
+        "id": "deep-learning",
+        "title": "Deep Learning",
+        "code": "DSC 394D",
+        "type": "required",
+        "credits": 3,
+        "difficulty": 4,
+        "workload": 24,
+        "rating": 4,
+        "recommendation": "recommend"
+      }
+    ],
+    "spring 2025": [
+      {
+        "id": "machine-learning",
+        "title": "Machine Learning",
+        "code": "DSC 391L",
+        "type": "required",
+        "credits": 3,
+        "difficulty": 3.5,
+        "workload": 18,
+        "rating": 3.5,
+        "recommendation": "recommend"
+      }
+    ],
+    "fall 2026": [
+      {
+        "id": "nlp",
+        "title": "Natural Language Processing",
+        "code": "DSC 395T",
+        "type": "elective-2",
+        "credits": 3,
+        "difficulty": 3.5,
+        "workload": 18,
+        "rating": 4,
+        "recommendation": "recommend"
+      }
+    ],
+    "summer 2026": [
+      {
+        "id": "advanced-predictive",
+        "title": "Advanced Predictive Models for Complex Data",
+        "code": "DSC 383",
+        "type": "elective-1",
+        "credits": 3,
+        "difficulty": 4,
+        "workload": 18,
+        "rating": 3.5,
+        "recommendation": "recommend"
+      }
+    ],
+    "spring 2027": [
+      {
+        "id": "generative-ai",
+        "title": "Advances in Deep Generative Models (Generative AI)",
+        "code": "DSC 395T",
+        "type": "elective-2",
+        "credits": 3,
+        "difficulty": 4.5,
+        "workload": 18,
+        "rating": 4.6,
+        "recommendation": "recommend"
+      }
+    ],
+    "summer 2025": [
+      {
+        "id": "regression-modeling",
+        "title": "Foundations of Regression & Modeling",
+        "code": "DSC 382",
+        "type": "foundational",
+        "credits": 3,
+        "difficulty": 3,
+        "workload": 16,
+        "rating": 3.5,
+        "recommendation": "recommend"
+      }
+    ]
+  },
+  "unplannedCourses": [],
+  "summary": {
+    "plannedCourses": 10,
+    "unplannedCourses": 0
+  }
+}
