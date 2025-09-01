@@ -191,9 +191,9 @@
             let lang = langSelect.value;
             let lyrics = lyricsSelect.value;
             let base = '';
-            if (lyrics === 'saibaba-arati') base = (lang === 'te') ? '/sai/' : '/saibaba-arati/';
+            if (lyrics === 'saibaba-arati') base = (lang === 'te') ? '/te/saibaba-arati/' : '/saibaba-arati/';
             if (lyrics === 'hanuman-chalisa') base = (lang === 'te') ? '/te/hanuman-chalisa/' : '/hanuman-chalisa/';
-            if (lyrics === 'vishnu') base = '/vishnu/';
+            if (lyrics === 'vishnu') base = (lang === 'te') ? '/te/vishnu/' : '/vishnu/';
             window.location.href = base;
         };
         // Make progress bar clickable to jump to a specific line
