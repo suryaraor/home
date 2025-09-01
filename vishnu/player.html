@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #222;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        #text {
+            font-size: 8vw;
+            word-break: break-word;
+            width: 90vw;
+        }
+        #tap-area {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="text"></div>
+        <div id="tap-area"></div>
+    </div>
+    <script>
+        let lines = [];
+        let idx = 0;
+        const textDiv = document.getElementById('text');
+        const tapArea = document.getElementById('tap-area');
+        function showLine(i) {
+            textDiv.textContent = lines[i] || '';
+        }
+        // Load lines from pronounciation.txt
+        fetch('pronounciation.txt')
+            .then(response => response.text())
+            .then(text => {
+                lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+                showLine(idx);
+            });
+        tapArea.addEventListener('click', function(e) {
+            if (idx < lines.length - 1) {
+                idx++;
+                showLine(idx);
+            }
+        });
+        // Optional: swipe support for mobile
+        let startX = null;
+        tapArea.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+        tapArea.addEventListener('touchend', function(e) {
+            if (startX !== null) {
+                let endX = e.changedTouches[0].clientX;
+                if (endX > startX && idx < lines.length - 1) {
+                    idx++;
+                    showLine(idx);
+                }
+                startX = null;
+            }
+        });
+    </script>
+</body>
+</html>
