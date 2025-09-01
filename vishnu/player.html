@@ -52,6 +52,14 @@
             height: 100vh;
             cursor: pointer;
         }
+        #tap-area-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50vw;
+            height: 100vh;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -60,8 +68,9 @@
         <button id="increase" style="font-size:2em;margin:0.5em;">+</button>
     </div>
     <div id="container" style="margin-top:3em;">
-        <div id="text"></div>
-        <div id="tap-area"></div>
+    <div id="text"></div>
+    <div id="tap-area"></div>
+    <div id="tap-area-left"></div>
     </div>
     <div id="progress-bar-container" style="position:fixed;bottom:0;left:0;width:100vw;height:2.5em;background:#333;z-index:10;">
         <div id="progress-bar" style="height:100%;background:#4caf50;width:0%;transition:width 0.3s;"></div>
@@ -73,10 +82,11 @@
         let fontSize = 10; // vw
         const textDiv = document.getElementById('text');
         const tapArea = document.getElementById('tap-area');
-        const increaseBtn = document.getElementById('increase');
-        const decreaseBtn = document.getElementById('decrease');
-        const progressBar = document.getElementById('progress-bar');
-        const progressLabel = document.getElementById('progress-label');
+    const increaseBtn = document.getElementById('increase');
+    const decreaseBtn = document.getElementById('decrease');
+    const progressBar = document.getElementById('progress-bar');
+    const progressLabel = document.getElementById('progress-label');
+    const tapAreaLeft = document.getElementById('tap-area-left');
         function showLine(i) {
             textDiv.textContent = lines[i] || '';
             updateProgressBar();
@@ -108,6 +118,12 @@
                 showLine(idx);
             }
         });
+        tapAreaLeft.addEventListener('click', function(e) {
+            if (idx > 0) {
+                idx--;
+                showLine(idx);
+            }
+        });
         // Optional: swipe support for mobile
         let startX = null;
         tapArea.addEventListener('touchstart', function(e) {
@@ -118,6 +134,19 @@
                 let endX = e.changedTouches[0].clientX;
                 if (endX > startX && idx < lines.length - 1) {
                     idx++;
+                    showLine(idx);
+                }
+                startX = null;
+            }
+        });
+        tapAreaLeft.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+        tapAreaLeft.addEventListener('touchend', function(e) {
+            if (startX !== null) {
+                let endX = e.changedTouches[0].clientX;
+                if (endX < startX && idx > 0) {
+                    idx--;
                     showLine(idx);
                 }
                 startX = null;
