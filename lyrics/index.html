@@ -2,44 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>🕉️ Sacred Lyrics Player | Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam</title>
+    <title>🕉️ Sacred Prompter | Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Experience divine devotion with our mobile-friendly Sacred Lyrics Player. Read Sai Baba Arati, Hanuman Chalisa, and Vishnu Sahasranamam in English & Telugu. Perfect for prayers, bhajans, and spiritual practice. Swipe to navigate, tap to read - your pocket temple companion.">
+    <meta name="description" content="Experience divine devotion with our mobile-friendly Sacred Prompter. Navigate through Sai Baba Arati, Hanuman Chalisa, and Vishnu Sahasranamam line-by-line in English & Telugu. Perfect for prayers, bhajans, and spiritual practice. Swipe to advance, tap to navigate - your pocket spiritual teleprompter.">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="apple-touch-icon" href="./logo.png">>
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yourdomain.com/lyrics/">
-    <meta property="og:title" content="🕉️ Sacred Lyrics Player | Divine Prayers & Bhajans">
-    <meta property="og:description" content="Mobile-friendly spiritual companion for Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam. Available in English & Telugu with easy swipe navigation.">
-    <meta property="og:image" content="https://yourdomain.com/assets/images/sacred-lyrics-og.jpg">
+    <meta property="og:title" content="🕉️ Sacred Prompter | Divine Prayer Teleprompter">
+    <meta property="og:description" content="Mobile-friendly spiritual teleprompter for Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam. Navigate line-by-line in English & Telugu with easy swipe controls.">
+    <meta property="og:image" content="./logo.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="Sacred Lyrics Player">
+    <meta property="og:site_name" content="Sacred Prompter">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://yourdomain.com/lyrics/">
-    <meta name="twitter:title" content="🕉️ Sacred Lyrics Player | Divine Prayers & Bhajans">
-    <meta name="twitter:description" content="Mobile-friendly spiritual companion for Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam. Available in English & Telugu with easy swipe navigation.">
-    <meta name="twitter:image" content="https://yourdomain.com/assets/images/sacred-lyrics-og.jpg">
+    <meta name="twitter:title" content="🕉️ Sacred Prompter | Divine Prayer Teleprompter">
+    <meta name="twitter:description" content="Mobile-friendly spiritual teleprompter for Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam. Navigate line-by-line in English & Telugu with easy swipe controls.">
+    <meta name="twitter:image" content="./logo.png">
     <meta name="twitter:creator" content="@yourusername">
     
     <!-- Additional SEO Meta Tags -->
-    <meta name="keywords" content="Sai Baba Arati, Hanuman Chalisa, Vishnu Sahasranamam, Hindu prayers, bhajans, devotional songs, Telugu lyrics, English lyrics, spiritual app, mobile prayer book, divine mantras, Om Sai Ram">
-    <meta name="author" content="Sacred Lyrics Team">
+    <meta name="keywords" content="teleprompter, prayer prompter, Sai Baba Arati, Hanuman Chalisa, Vishnu Sahasranamam, Hindu prayers, bhajans, devotional songs, Telugu lyrics, English lyrics, spiritual app, mobile prayer prompter, divine mantras, Om Sai Ram, lyrics helper">
+    <meta name="author" content="Sacred Prompter Team">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Sacred Lyrics">
+    <meta name="apple-mobile-web-app-title" content="Sacred Prompter">
     
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Sacred Lyrics Player",
-      "description": "Mobile-friendly spiritual companion for reading Sai Baba Arati, Hanuman Chalisa, and Vishnu Sahasranamam in English and Telugu",
+      "name": "Sacred Prompter",
+      "description": "Mobile-friendly spiritual teleprompter for line-by-line reading of Sai Baba Arati, Hanuman Chalisa, and Vishnu Sahasranamam in English and Telugu",
       "url": "https://yourdomain.com/lyrics/",
       "applicationCategory": "Religion & Spirituality",
       "operatingSystem": "Any",
@@ -50,7 +54,7 @@
       },
       "author": {
         "@type": "Organization",
-        "name": "Sacred Lyrics Team"
+        "name": "Sacred Prompter Team"
       },
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -351,6 +355,18 @@
         .loading {
             color: rgba(255, 255, 255, 0.6);
             font-style: italic;
+            transition: all 0.3s ease;
+        }
+        
+        .loading[style*="cursor: pointer"] {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: underline;
+            text-decoration-style: dashed;
+        }
+        
+        .loading[style*="cursor: pointer"]:hover {
+            color: #fff;
+            transform: scale(1.02);
         }
         
         /* Responsive */
@@ -387,7 +403,7 @@
 
     <!-- Main Content -->
     <div id="container">
-        <div id="text" class="loading">Select text and language to begin...</div>
+        <div id="text" class="loading" style="cursor: pointer;" onclick="openSettings()">Select text and language to begin...</div>
         <div id="tap-area"></div>
         <div id="tap-area-left"></div>
     </div>
@@ -477,6 +493,8 @@
             if (lines.length === 0) return;
             textDiv.textContent = lines[i] || '';
             textDiv.className = '';
+            textDiv.style.cursor = 'default';
+            textDiv.onclick = null;
             updateProgress();
         }
 
@@ -510,10 +528,16 @@
             }
         }
 
+        function openSettings() {
+            settingsModal.style.display = 'block';
+        }
+
         function loadLyrics() {
             if (!textSelect.value) {
                 textDiv.textContent = 'Please select a text first';
                 textDiv.className = 'loading';
+                textDiv.style.cursor = 'pointer';
+                textDiv.onclick = openSettings;
                 return;
             }
             
@@ -522,10 +546,14 @@
             
             textDiv.textContent = 'Loading...';
             textDiv.className = 'loading';
+            textDiv.style.cursor = 'default';
+            textDiv.onclick = null;
             
             if (!file) {
                 textDiv.textContent = 'Content not available for this selection.';
                 textDiv.className = 'loading';
+                textDiv.style.cursor = 'pointer';
+                textDiv.onclick = openSettings;
                 return;
             }
             
@@ -545,6 +573,8 @@
                 .catch(error => {
                     textDiv.textContent = 'Error loading content: ' + error.message;
                     textDiv.className = 'loading';
+                    textDiv.style.cursor = 'pointer';
+                    textDiv.onclick = openSettings;
                 });
         }
 
