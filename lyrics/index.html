@@ -317,6 +317,108 @@
             overflow-y: auto;
         }
         
+        /* Tutorial Overlay */
+        #tutorial-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .tutorial-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            color: white;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tutorial-content h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .tutorial-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .tutorial-step {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tutorial-icon {
+            font-size: 2rem;
+            min-width: 3rem;
+        }
+        
+        .tutorial-text {
+            text-align: left;
+            flex: 1;
+        }
+        
+        .tutorial-text strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #ffd700;
+        }
+        
+        .tap-demo {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+            gap: 1rem;
+        }
+        
+        .tap-area-demo {
+            flex: 1;
+            padding: 1rem;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .tutorial-close {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .tutorial-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+        
         .lyrics-content {
             max-width: 800px;
             margin: 2rem auto;
@@ -458,6 +560,61 @@
             <div id="lyrics-content"></div>
         </div>
     </div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay">
+        <div class="tutorial-content">
+            <h2>🙏 Welcome to Sacred Prompter!</h2>
+            <p>Learn how to navigate through your prayers and mantras:</p>
+            
+            <div class="tutorial-steps">
+                <div class="tutorial-step">
+                    <div class="tutorial-icon">👆</div>
+                    <div class="tutorial-text">
+                        <strong>Tap to Navigate</strong>
+                        Tap the right side of the screen to go to the next line, or the left side to go back.
+                    </div>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="tutorial-icon">⌨️</div>
+                    <div class="tutorial-text">
+                        <strong>Keyboard Support</strong>
+                        Use arrow keys (← →) or spacebar to navigate when using a keyboard.
+                    </div>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="tutorial-icon">📱</div>
+                    <div class="tutorial-text">
+                        <strong>Swipe Support</strong>
+                        On mobile, you can also swipe left or right to navigate between lines.
+                    </div>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="tutorial-icon">⚙️</div>
+                    <div class="tutorial-text">
+                        <strong>Customize</strong>
+                        Use the settings (⚙️) to adjust font size and the lyrics button (📋) to see all text.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tap-demo">
+                <div class="tap-area-demo">
+                    <div>← Previous Line</div>
+                    <small>Tap left side</small>
+                </div>
+                <div class="tap-area-demo">
+                    <div>Next Line →</div>
+                    <small>Tap right side</small>
+                </div>
+            </div>
+            
+            <button class="tutorial-close" id="tutorial-close">Got it, let's start! 🕉️</button>
+        </div>
+    </div>
     <script>
         // Map text/language to content file
         const contentFiles = {
@@ -489,6 +646,8 @@
         const lyricsContent = document.getElementById('lyrics-content');
         const tapArea = document.getElementById('tap-area');
         const tapAreaLeft = document.getElementById('tap-area-left');
+        const tutorialOverlay = document.getElementById('tutorial-overlay');
+        const tutorialClose = document.getElementById('tutorial-close');
 
         function showLine(i) {
             if (lines.length === 0) return;
@@ -531,6 +690,19 @@
 
         function openSettings() {
             settingsModal.style.display = 'block';
+        }
+
+        function isFirstTime() {
+            return !localStorage.getItem('sacred-prompter-tutorial-seen');
+        }
+
+        function showTutorial() {
+            tutorialOverlay.style.display = 'flex';
+        }
+
+        function hideTutorial() {
+            tutorialOverlay.style.display = 'none';
+            localStorage.setItem('sacred-prompter-tutorial-seen', 'true');
         }
 
         function loadLyrics() {
@@ -582,6 +754,10 @@
                     // Show tap areas when content is loaded
                     tapArea.style.display = 'block';
                     tapAreaLeft.style.display = 'block';
+                    // Show tutorial for first-time users
+                    if (isFirstTime()) {
+                        setTimeout(() => showTutorial(), 500); // Small delay for smooth transition
+                    }
                 })
                 .catch(error => {
                     textDiv.textContent = 'Error loading content: ' + error.message;
@@ -615,6 +791,12 @@
         // Modal click outside to close
         settingsModal.onclick = (e) => { 
             if (e.target === settingsModal) settingsModal.style.display = 'none'; 
+        };
+
+        // Tutorial event listeners
+        tutorialClose.onclick = hideTutorial;
+        tutorialOverlay.onclick = (e) => {
+            if (e.target === tutorialOverlay) hideTutorial();
         };
 
         // Tap navigation
@@ -706,6 +888,12 @@
         
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
+            // Close tutorial with ESC key
+            if (e.key === 'Escape' && tutorialOverlay.style.display === 'flex') {
+                hideTutorial();
+                return;
+            }
+            
             if (lines.length === 0) return;
             
             if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') { 
