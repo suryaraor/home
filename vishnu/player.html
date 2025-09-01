@@ -73,10 +73,21 @@
     <div id="tap-area-left"></div>
     </div>
     <div id="progress-bar-container" style="position:fixed;bottom:0;left:0;width:100vw;height:2.5em;background:#333;z-index:10;">
-        <div id="progress-bar" style="height:100%;background:#4caf50;width:0%;transition:width 0.3s;"></div>
-        <div id="progress-label" style="position:absolute;bottom:0;left:0;width:100vw;text-align:center;color:#fff;font-size:1em;line-height:2.5em;pointer-events:none;">0%</div>
+    <div id="progress-bar" style="height:100%;background:#4caf50;width:0%;transition:width 0.3s;"></div>
+    <div id="progress-label" style="position:absolute;bottom:0;left:0;width:100vw;text-align:center;color:#fff;font-size:1em;line-height:2.5em;pointer-events:none;">0%</div>
     </div>
     <script>
+        // Make progress bar clickable to jump to a specific line
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        progressBarContainer.addEventListener('click', function(e) {
+            if (!lines.length) return;
+            const rect = progressBarContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percent = x / rect.width;
+            const newIdx = Math.floor(percent * lines.length);
+            idx = Math.max(0, Math.min(lines.length - 1, newIdx));
+            showLine(idx);
+        });
         let lines = [];
         let idx = 0;
         let fontSize = 10; // vw
