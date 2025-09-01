@@ -64,19 +64,50 @@
 </head>
 <body>
     <div style="position:fixed;top:0;left:0;width:100vw;z-index:10;text-align:center;background:#222;">
-        <button id="decrease" style="font-size:2em;margin:0.5em;">-</button>
-        <button id="increase" style="font-size:2em;margin:0.5em;">+</button>
+    <button id="decrease" style="font-size:2em;margin:0.5em;">-</button>
+    <button id="increase" style="font-size:2em;margin:0.5em;">+</button>
+    <button id="show-lyrics" style="font-size:1.2em;margin:0.5em;">Show Lyrics</button>
     </div>
     <div id="container" style="margin-top:3em;">
     <div id="text"></div>
     <div id="tap-area"></div>
     <div id="tap-area-left"></div>
+    <!-- Lyrics Modal -->
+    <div id="lyrics-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);color:#fff;z-index:1000;overflow:auto;">
+        <div style="max-width:800px;margin:3em auto 2em auto;padding:2em;background:#222;border-radius:1em;box-shadow:0 0 20px #000;">
+            <button id="close-lyrics" style="float:right;font-size:2em;background:none;border:none;color:#fff;cursor:pointer;">&times;</button>
+            <h2 style="text-align:center;margin-top:0;">Lyrics</h2>
+            <pre id="lyrics-content" style="white-space:pre-wrap;font-size:1.1em;line-height:1.5em;background:none;border:none;color:#fff;"></pre>
+        </div>
+    </div>
     </div>
     <div id="progress-bar-container" style="position:fixed;bottom:0;left:0;width:100vw;height:2.5em;background:#333;z-index:10;">
     <div id="progress-bar" style="height:100%;background:#4caf50;width:0%;transition:width 0.3s;"></div>
     <div id="progress-label" style="position:absolute;bottom:0;left:0;width:100vw;text-align:center;color:#fff;font-size:1em;line-height:2.5em;pointer-events:none;">0%</div>
     </div>
     <script>
+        // Lyrics modal logic
+        const showLyricsBtn = document.getElementById('show-lyrics');
+        const lyricsModal = document.getElementById('lyrics-modal');
+        const closeLyricsBtn = document.getElementById('close-lyrics');
+        const lyricsContent = document.getElementById('lyrics-content');
+        showLyricsBtn.addEventListener('click', function() {
+            fetch('content.txt')
+                .then(response => response.text())
+                .then(text => {
+                    lyricsContent.textContent = text;
+                    lyricsModal.style.display = 'block';
+                });
+        });
+        closeLyricsBtn.addEventListener('click', function() {
+            lyricsModal.style.display = 'none';
+        });
+        // Close modal on background click
+        lyricsModal.addEventListener('click', function(e) {
+            if (e.target === lyricsModal) {
+                lyricsModal.style.display = 'none';
+            }
+        });
         // Make progress bar clickable to jump to a specific line
         const progressBarContainer = document.getElementById('progress-bar-container');
         progressBarContainer.addEventListener('click', function(e) {
