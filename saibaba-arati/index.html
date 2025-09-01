@@ -1,6 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .burger {
+            position: fixed;
+            top: 0.7em;
+            left: 0.7em;
+            z-index: 1001;
+            width: 2.2em;
+            height: 2.2em;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .burger span {
+            display: block;
+            height: 0.35em;
+            width: 100%;
+            background: #fff;
+            border-radius: 0.2em;
+        }
+        #settings-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.92);
+            z-index: 2000;
+            color: #fff;
+        }
+        #settings-content {
+            max-width: 400px;
+            margin: 5em auto;
+            background: #222;
+            border-radius: 1em;
+            padding: 2em;
+            box-shadow: 0 0 20px #000;
+        }
+        #settings-content h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+        #settings-content label {
+            display: block;
+            margin: 1em 0 0.5em 0;
+        }
+        #settings-content select, #settings-content button {
+            width: 100%;
+            font-size: 1.1em;
+            margin-bottom: 1em;
+            padding: 0.5em;
+            border-radius: 0.3em;
+            border: none;
+        }
+        #settings-close {
+            float: right;
+            font-size: 2em;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sai Baba Arati Lyrics Player | English Lyrics & Pronunciation</title>
@@ -73,6 +134,29 @@
     </style>
 </head>
 <body>
+    <div class="burger" id="burger-menu" title="Settings">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div id="settings-modal">
+        <div id="settings-content">
+            <button id="settings-close">&times;</button>
+            <h2>Settings</h2>
+            <label for="lang-select">Language:</label>
+            <select id="lang-select">
+                <option value="en">English</option>
+                <option value="te">Telugu</option>
+            </select>
+            <label for="lyrics-select">Lyrics:</label>
+            <select id="lyrics-select">
+                <option value="saibaba-arati">Sai Baba Arati</option>
+                <option value="hanuman-chalisa">Hanuman Chalisa</option>
+                <option value="vishnu">Vishnu Sahasranamam</option>
+            </select>
+            <button id="go-btn">Go</button>
+        </div>
+    </div>
     <div style="position:fixed;top:0;left:0;width:100vw;z-index:10;text-align:center;background:#222;">
     <button id="decrease" style="font-size:2em;margin:0.5em;">-</button>
     <button id="increase" style="font-size:2em;margin:0.5em;">+</button>
@@ -97,6 +181,31 @@
     <div id="progress-label" style="position:absolute;bottom:0;left:0;width:100vw;text-align:center;color:#fff;font-size:1em;line-height:2.5em;pointer-events:none;">0%</div>
     </div>
     <script>
+        // Burger/settings menu logic
+        const burger = document.getElementById('burger-menu');
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsClose = document.getElementById('settings-close');
+        const langSelect = document.getElementById('lang-select');
+        const lyricsSelect = document.getElementById('lyrics-select');
+        const goBtn = document.getElementById('go-btn');
+
+        // Set initial values based on current page
+        langSelect.value = 'en';
+        lyricsSelect.value = 'saibaba-arati';
+
+        burger.onclick = () => { settingsModal.style.display = 'block'; };
+        settingsClose.onclick = () => { settingsModal.style.display = 'none'; };
+        settingsModal.onclick = (e) => { if (e.target === settingsModal) settingsModal.style.display = 'none'; };
+
+        goBtn.onclick = () => {
+            let lang = langSelect.value;
+            let lyrics = lyricsSelect.value;
+            let base = '';
+            if (lyrics === 'saibaba-arati') base = (lang === 'te') ? '/sai/' : '/saibaba-arati/';
+            if (lyrics === 'hanuman-chalisa') base = (lang === 'te') ? '/te/hanuman-chalisa/' : '/hanuman-chalisa/';
+            if (lyrics === 'vishnu') base = '/vishnu/';
+            window.location.href = base;
+        };
         // Lyrics modal logic
         const showLyricsBtn = document.getElementById('show-lyrics');
         const lyricsModal = document.getElementById('lyrics-modal');
