@@ -18,8 +18,13 @@ def is_pronunciation(text):
         ('\u1E00' <= c <= '\u1EFF')
     ) for c in text)
 
+def is_telugu(text):
+    # Telugu Unicode range: \u0C00-\u0C7F
+    return any('\u0C00' <= c <= '\u0C7F' for c in text)
+
 def bucket_lines(input_file):
     hindi_lines = []
+    telugu_lines = []
     english_lines = []
     pronunciation_lines = []
     with open(input_file, encoding='utf-8') as f:
@@ -29,14 +34,17 @@ def bucket_lines(input_file):
                 continue
             if is_hindi(line):
                 hindi_lines.append(line)
+            elif is_telugu(line):
+                telugu_lines.append(line)
             elif is_pronunciation(line):
                 pronunciation_lines.append(line)
             elif is_english(line):
                 english_lines.append(line)
     Path('hindi.txt').write_text('\n'.join(hindi_lines), encoding='utf-8')
+    Path('telugu.txt').write_text('\n'.join(telugu_lines), encoding='utf-8')
     Path('pronounciation.txt').write_text('\n'.join(pronunciation_lines), encoding='utf-8')
     Path('english.txt').write_text('\n'.join(english_lines), encoding='utf-8')
     print('Bucketing complete.')
 
 if __name__ == "__main__":
-    bucket_lines('1.txt')
+    bucket_lines('2.txt')

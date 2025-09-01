@@ -95,7 +95,7 @@
             textDiv.style.fontSize = fontSize + 'vw';
         }
         // Load lines from pronounciation.txt
-        fetch('pronounciation.txt')
+        fetch('2.txt')
             .then(response => response.text())
             .then(text => {
                 lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
