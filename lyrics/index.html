@@ -14,107 +14,379 @@
     <meta name="twitter:image" content="/img/profile-pic.jpg">
     <style>
         /* Remove tap/click highlight color on mobile and desktop */
-        #tap-area, #tap-area-left {
+        * {
             -webkit-tap-highlight-color: transparent;
             outline: none;
             user-select: none;
+            box-sizing: border-box;
         }
         body {
             margin: 0;
             padding: 0;
-            background: #222;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             color: #fff;
             height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
         }
+        
+        /* Top bar with controls */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .top-bar h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .top-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn:hover, .btn:active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0.95);
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 8px;
+            font-size: 1.2rem;
+            border-radius: 50%;
+        }
+        
+        /* Main content area */
         #container {
-            width: 100vw;
-            height: 100vh;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            padding: 2rem;
         }
+        
         #text {
-            font-size: 10vw;
-            width: 96vw;
-            max-width: 96vw;
-            max-height: 80vh;
+            font-size: min(8vw, 3rem);
+            line-height: 1.4;
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        /* Invisible tap areas */
+        #tap-area, #tap-area-left {
+            position: absolute;
+            top: 60px;
+            bottom: 80px;
+            width: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        #tap-area-left { left: 0; }
+        #tap-area { right: 0; }
+        
+        /* Bottom controls */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+        
+        .progress-container {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 1rem;
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .bottom-controls {
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-            word-break: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
+            gap: 1rem;
+            height: 76px;
+            padding: 0 1rem;
         }
-        #tap-area {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 50vw;
-            height: 100vh;
-            cursor: pointer;
+        
+        .progress-text {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            min-width: 60px;
+            text-align: center;
         }
-        #tap-area-left {
-            position: absolute;
+        
+        /* Settings Modal */
+        #settings-modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 50vw;
-            height: 100vh;
-            cursor: pointer;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
         }
-        .header { text-align: center; padding: 1em 0; background: #222; position: fixed; top: 0; width: 100vw; z-index: 10; }
-        .controls { text-align: center; margin: 1em 0; }
-        select, button { font-size: 1.1em; margin: 0.5em; padding: 0.3em 1em; border-radius: 0.3em; border: none; }
-        #lyrics-modal { display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.95); color:#fff; z-index:1000; overflow:auto; }
-        #lyrics-modal-content { max-width:800px; margin:3em auto 2em auto; padding:2em; background:#222; border-radius:1em; box-shadow:0 0 20px #000; }
-        #close-lyrics { float:right; font-size:2em; background:none; border:none; color:#fff; cursor:pointer; }
-        #lyrics-content span { display:block; padding:0.2em 0; cursor:pointer; }
-        #progress-bar-container { position:fixed; bottom:0; left:0; width:100vw; height:2.5em; background:#333; z-index:10; }
-        #progress-bar { height:100%; background:#4caf50; width:0%; transition:width 0.3s; }
-        #progress-label { position:absolute; bottom:0; left:0; width:100vw; text-align:center; color:#fff; font-size:1em; line-height:2.5em; pointer-events:none; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            min-width: 320px;
+            max-width: 90vw;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+        }
+        
+        select option {
+            background: #2d3748;
+            color: #fff;
+        }
+        
+        /* Lyrics Modal */
+        #lyrics-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        
+        .lyrics-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .lyrics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        #lyrics-content {
+            white-space: pre-wrap;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        #lyrics-content span {
+            display: block;
+            padding: 0.3rem 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+        
+        #lyrics-content span:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Loading state */
+        .loading {
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 0 0.5rem;
+            }
+            .top-bar h1 {
+                font-size: 1rem;
+            }
+            .btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            #text {
+                font-size: min(10vw, 2.5rem);
+            }
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Lyrics Player</h1>
-        <div class="controls">
-            <label for="text-select">Text:</label>
-            <select id="text-select">
-                <option value="saibaba-arati">Sai Baba Arati</option>
-                <option value="hanuman-chalisa">Hanuman Chalisa</option>
-                <option value="vishnu">Vishnu Sahasranamam</option>
-            </select>
-            <label for="lang-select">Language:</label>
-            <select id="lang-select">
-                <option value="en">English</option>
-                <option value="te">Telugu</option>
-            </select>
-            <button id="show-lyrics">Show Lyrics</button>
-            <button id="decrease">-</button>
-            <button id="increase">+</button>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <h1 id="app-title">Lyrics Player</h1>
+        <div class="top-controls">
+            <button class="btn btn-icon" id="settings-btn">⚙️</button>
+            <button class="btn btn-icon" id="show-lyrics">📋</button>
         </div>
     </div>
-    <div id="container" style="margin-top:3em;">
-        <div id="text"></div>
+
+    <!-- Main Content -->
+    <div id="container">
+        <div id="text" class="loading">Select text and language to begin...</div>
         <div id="tap-area"></div>
         <div id="tap-area-left"></div>
     </div>
-    <div id="progress-bar-container">
-        <div id="progress-bar"></div>
-        <div id="progress-label">0%</div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="bottom-controls">
+            <div class="progress-text" id="progress-text">0 / 0</div>
+            <button class="btn btn-icon" id="decrease">A-</button>
+            <button class="btn btn-icon" id="increase">A+</button>
+        </div>
     </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-btn" id="settings-close">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="text-select">Choose Text:</label>
+                <select id="text-select">
+                    <option value="">Select...</option>
+                    <option value="saibaba-arati">Sai Baba Arati</option>
+                    <option value="hanuman-chalisa">Hanuman Chalisa</option>
+                    <option value="vishnu">Vishnu Sahasranamam</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lang-select">Language:</label>
+                <select id="lang-select">
+                    <option value="en">English</option>
+                    <option value="te">Telugu</option>
+                </select>
+            </div>
+            <button class="btn" id="load-btn" style="width: 100%; margin-top: 1rem;">Load Content</button>
+        </div>
+    </div>
+
     <!-- Lyrics Modal -->
     <div id="lyrics-modal">
-        <div id="lyrics-modal-content">
-            <button id="close-lyrics">&times;</button>
-            <h2 style="text-align:center;margin-top:0;">Lyrics</h2>
-            <pre id="lyrics-content" style="white-space:pre-wrap;font-size:1.1em;line-height:1.5em;background:none;border:none;color:#fff;cursor:pointer;"></pre>
+        <div class="lyrics-content">
+            <div class="lyrics-header">
+                <h2>All Lyrics</h2>
+                <button class="close-btn" id="close-lyrics">&times;</button>
+            </div>
+            <div id="lyrics-content"></div>
         </div>
     </div>
     <script>
@@ -129,48 +401,82 @@
         };
         let lines = [];
         let currentIdx = 0;
-        let fontSize = 10; // vw
+        let fontSize = 8; // vw
         const textDiv = document.getElementById('text');
         const progressBar = document.getElementById('progress-bar');
-        const progressLabel = document.getElementById('progress-label');
+        const progressText = document.getElementById('progress-text');
+        const appTitle = document.getElementById('app-title');
         const textSelect = document.getElementById('text-select');
         const langSelect = document.getElementById('lang-select');
         const decreaseBtn = document.getElementById('decrease');
         const increaseBtn = document.getElementById('increase');
         const showLyricsBtn = document.getElementById('show-lyrics');
+        const settingsBtn = document.getElementById('settings-btn');
+        const loadBtn = document.getElementById('load-btn');
         const lyricsModal = document.getElementById('lyrics-modal');
+        const settingsModal = document.getElementById('settings-modal');
         const closeLyricsBtn = document.getElementById('close-lyrics');
+        const settingsClose = document.getElementById('settings-close');
         const lyricsContent = document.getElementById('lyrics-content');
         const tapArea = document.getElementById('tap-area');
         const tapAreaLeft = document.getElementById('tap-area-left');
 
         function showLine(i) {
+            if (lines.length === 0) return;
             textDiv.textContent = lines[i] || '';
+            textDiv.className = '';
             updateProgress();
         }
 
         function updateProgress() {
             if (lines.length === 0) {
                 progressBar.style.width = '0%';
-                progressLabel.textContent = '0%';
+                progressText.textContent = '0 / 0';
                 return;
             }
             let percent = Math.round(((currentIdx + 1) / lines.length) * 100);
             progressBar.style.width = percent + '%';
-            progressLabel.textContent = percent + '%';
+            progressText.textContent = `${currentIdx + 1} / ${lines.length}`;
         }
 
         function updateFontSize() {
-            textDiv.style.fontSize = fontSize + 'vw';
+            textDiv.style.fontSize = `min(${fontSize}vw, 3rem)`;
+        }
+
+        function updateTitle() {
+            const textMap = {
+                'saibaba-arati': 'Sai Baba Arati',
+                'hanuman-chalisa': 'Hanuman Chalisa',
+                'vishnu': 'Vishnu Sahasranamam'
+            };
+            const langMap = { 'en': 'English', 'te': 'Telugu' };
+            
+            if (textSelect.value && langSelect.value) {
+                appTitle.textContent = `${textMap[textSelect.value]} (${langMap[langSelect.value]})`;
+            } else {
+                appTitle.textContent = 'Lyrics Player';
+            }
         }
 
         function loadLyrics() {
-            const key = textSelect.value + '_' + langSelect.value;
-            const file = contentFiles[key];
-            if (!file) {
-                textDiv.textContent = 'Content not available for this selection.';
+            if (!textSelect.value) {
+                textDiv.textContent = 'Please select a text first';
+                textDiv.className = 'loading';
                 return;
             }
+            
+            const key = textSelect.value + '_' + langSelect.value;
+            const file = contentFiles[key];
+            
+            textDiv.textContent = 'Loading...';
+            textDiv.className = 'loading';
+            
+            if (!file) {
+                textDiv.textContent = 'Content not available for this selection.';
+                textDiv.className = 'loading';
+                return;
+            }
+            
             fetch(file)
                 .then(response => {
                     if (!response.ok) throw new Error('File not found');
@@ -181,9 +487,12 @@
                     currentIdx = 0;
                     showLine(currentIdx);
                     updateFontSize();
+                    updateTitle();
+                    settingsModal.style.display = 'none';
                 })
                 .catch(error => {
                     textDiv.textContent = 'Error loading content: ' + error.message;
+                    textDiv.className = 'loading';
                 });
         }
 
@@ -191,16 +500,24 @@
             // This function is kept for compatibility but not used in single-line mode
             showLine(currentIdx);
         }
+        // Event listeners
         decreaseBtn.onclick = () => { 
-            if (fontSize > 4) fontSize -= 1; 
+            if (fontSize > 4) fontSize -= 0.5; 
             updateFontSize(); 
         };
         increaseBtn.onclick = () => { 
-            if (fontSize < 20) fontSize += 1; 
+            if (fontSize < 12) fontSize += 0.5; 
             updateFontSize(); 
         };
-        textSelect.onchange = loadLyrics;
-        langSelect.onchange = loadLyrics;
+        
+        settingsBtn.onclick = () => { settingsModal.style.display = 'block'; };
+        settingsClose.onclick = () => { settingsModal.style.display = 'none'; };
+        loadBtn.onclick = loadLyrics;
+        
+        // Modal click outside to close
+        settingsModal.onclick = (e) => { 
+            if (e.target === settingsModal) settingsModal.style.display = 'none'; 
+        };
 
         // Tap navigation
         tapArea.onclick = () => {
@@ -218,49 +535,64 @@
 
         // Touch/swipe support
         let startX = null;
-        tapArea.addEventListener('touchstart', (e) => {
+        let startY = null;
+        
+        function handleTouchStart(e) {
             startX = e.touches[0].clientX;
-        });
-        tapArea.addEventListener('touchend', (e) => {
-            if (startX !== null) {
-                let endX = e.changedTouches[0].clientX;
-                if (endX > startX && currentIdx < lines.length - 1) {
+            startY = e.touches[0].clientY;
+        }
+        
+        function handleTouchEnd(e, direction) {
+            if (startX === null || startY === null) return;
+            
+            let endX = e.changedTouches[0].clientX;
+            let endY = e.changedTouches[0].clientY;
+            let deltaX = endX - startX;
+            let deltaY = endY - startY;
+            
+            // Check if it's more horizontal than vertical swipe
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (direction === 'right' && deltaX > 0 && currentIdx < lines.length - 1) {
                     currentIdx++;
                     showLine(currentIdx);
-                }
-                startX = null;
-            }
-        });
-        tapAreaLeft.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-        });
-        tapAreaLeft.addEventListener('touchend', (e) => {
-            if (startX !== null) {
-                let endX = e.changedTouches[0].clientX;
-                if (endX < startX && currentIdx > 0) {
+                } else if (direction === 'left' && deltaX < 0 && currentIdx > 0) {
                     currentIdx--;
                     showLine(currentIdx);
                 }
-                startX = null;
             }
-        });
+            
+            startX = null;
+            startY = null;
+        }
+        
+        tapArea.addEventListener('touchstart', handleTouchStart);
+        tapArea.addEventListener('touchend', (e) => handleTouchEnd(e, 'right'));
+        tapAreaLeft.addEventListener('touchstart', handleTouchStart);
+        tapAreaLeft.addEventListener('touchend', (e) => handleTouchEnd(e, 'left'));
 
         // Progress bar click to jump
-        const progressBarContainer = document.getElementById('progress-bar-container');
-        progressBarContainer.onclick = (e) => {
+        const progressContainer = document.getElementById('progress-container');
+        progressContainer.onclick = (e) => {
             if (!lines.length) return;
-            const rect = progressBarContainer.getBoundingClientRect();
+            const rect = progressContainer.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const percent = x / rect.width;
             const newIdx = Math.floor(percent * lines.length);
             currentIdx = Math.max(0, Math.min(lines.length - 1, newIdx));
             showLine(currentIdx);
         };
-        // Modal logic
+        // Lyrics modal
         showLyricsBtn.onclick = () => {
-            lyricsContent.innerHTML = lines.map((line, i) => `<span data-line="${i}">${line.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`).join('');
+            if (lines.length === 0) {
+                alert('Please load content first');
+                return;
+            }
+            lyricsContent.innerHTML = lines.map((line, i) => 
+                `<span data-line="${i}" style="${i === currentIdx ? 'background: rgba(255,255,255,0.1);' : ''}">${line.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`
+            ).join('');
             lyricsModal.style.display = 'block';
         };
+        
         lyricsContent.onclick = (e) => {
             if (e.target && e.target.dataset && e.target.dataset.line) {
                 currentIdx = parseInt(e.target.dataset.line, 10);
@@ -268,27 +600,44 @@
                 lyricsModal.style.display = 'none';
             }
         };
+        
         closeLyricsBtn.onclick = () => { lyricsModal.style.display = 'none'; };
-        lyricsModal.onclick = (e) => { if (e.target === lyricsModal) lyricsModal.style.display = 'none'; };
+        lyricsModal.onclick = (e) => { 
+            if (e.target === lyricsModal) lyricsModal.style.display = 'none'; 
+        };
         
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { 
+            if (lines.length === 0) return;
+            
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') { 
+                e.preventDefault();
                 if (currentIdx < lines.length - 1) {
                     currentIdx++;
                     showLine(currentIdx);
                 }
             }
             if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { 
+                e.preventDefault();
                 if (currentIdx > 0) {
                     currentIdx--;
                     showLine(currentIdx);
                 }
             }
+            if (e.key === 'Home') {
+                e.preventDefault();
+                currentIdx = 0;
+                showLine(currentIdx);
+            }
+            if (e.key === 'End') {
+                e.preventDefault();
+                currentIdx = lines.length - 1;
+                showLine(currentIdx);
+            }
         });
         
-        // Initial load
-        loadLyrics();
+        // Initialize
+        updateProgress();
     </script>
 </body>
 </html>
