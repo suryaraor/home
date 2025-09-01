@@ -1,6 +1,33 @@
+# Enable Jekyll for GitHub Pages blog auto-listing
+
+# 1. Create a _config.yml file (if not present)
+# This file tells GitHub Pages to use Jekyll and sets up basic config.
+
+# 2. Move your blog posts to a _posts/ folder and rename them as:
+#   YYYY-MM-DD-title-of-post.md (or .html)
+#   Example: 2025-08-31-spring-transaction-management.html
+
+# 3. Create an index.html (or blog.html) with Jekyll/Liquid code to auto-list posts.
+
+# 4. Commit and push to GitHub Pages branch (gh-pages or main)
+
+# --- _config.yml ---
+
+# Minimal config for Jekyll
+markdown: kramdown
+permalink: pretty
+exclude: ["node_modules", "gulpfile.js", "package.json", "package-lock.json"]
+
+# --- _posts/2025-08-31-spring-transaction-management.html ---
+# (Move your existing .htm content here, add YAML front matter at the top)
 ---
-layout: none
+title: "Spring Transaction Management in Java EE"
 ---
+<!-- Your HTML content here -->
+
+# --- blog/index.html ---
+# (Replace with this Jekyll template for auto-listing)
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
