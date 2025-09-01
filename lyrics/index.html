@@ -537,6 +537,7 @@
                     <option value="saibaba-arati">Sai Baba Arati</option>
                     <option value="hanuman-chalisa">Hanuman Chalisa</option>
                     <option value="vishnu">Vishnu Sahasranamam</option>
+                    <option value="manudeepa-varnana">Manudeepa Varnana</option>
                 </select>
             </div>
             <div class="form-group">
@@ -544,6 +545,7 @@
                 <select id="lang-select">
                     <option value="en">English</option>
                     <option value="te">Telugu</option>
+                    <option value="ka">Kannada</option>
                 </select>
             </div>
             <button class="btn" id="load-btn" style="width: 100%; margin-top: 1rem;">Load Content</button>
@@ -620,10 +622,16 @@
         const contentFiles = {
             'saibaba-arati_en': 'sai-en.txt',
             'saibaba-arati_te': 'sai-te.txt',
+            'saibaba-arati_ka': 'sai-ka.txt',
             'hanuman-chalisa_en': 'hanuman-en.txt',
             'hanuman-chalisa_te': 'hanuman-te.txt',
+            'hanuman-chalisa_ka': 'hanuman-ka.txt',
             'vishnu_en': 'vishnu-en.txt',
-            'vishnu_te': 'vishnu-te.txt'
+            'vishnu_te': 'vishnu-te.txt',
+            'vishnu_ka': 'vishnu-ka.txt',
+            'manudeepa-varnana_en': 'manudeepa-en.txt',
+            'manudeepa-varnana_te': 'manudeepa-te.txt',
+            'manudeepa-varnana_ka': 'manudeepa-ka.txt'
         };
         let lines = [];
         let currentIdx = 0;
@@ -677,9 +685,10 @@
             const textMap = {
                 'saibaba-arati': 'Sai Baba Arati',
                 'hanuman-chalisa': 'Hanuman Chalisa',
-                'vishnu': 'Vishnu Sahasranamam'
+                'vishnu': 'Vishnu Sahasranamam',
+                'manudeepa-varnana': 'Manudeepa Varnana'
             };
-            const langMap = { 'en': 'English', 'te': 'Telugu' };
+            const langMap = { 'en': 'English', 'te': 'Telugu', 'ka': 'Kannada' };
             
             if (textSelect.value && langSelect.value) {
                 appTitle.textContent = `🕉️ ${textMap[textSelect.value]} (${langMap[langSelect.value]})`;
