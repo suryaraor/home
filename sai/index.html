@@ -96,9 +96,9 @@
             fetch('content.txt')
                 .then(response => response.text())
                 .then(text => {
-                    // Split into lines and wrap each in a span for clickability
-                    const linesArr = text.split(/\r?\n/);
-                    lyricsContent.innerHTML = linesArr.map((line, i) =>
+                    // Use the same filtering as the main player
+                    const filteredLines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+                    lyricsContent.innerHTML = filteredLines.map((line, i) =>
                         `<span data-line="${i}" style="display:block;padding:0.2em 0;">${line.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`
                     ).join('');
                     lyricsModal.style.display = 'block';
