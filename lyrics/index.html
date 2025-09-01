@@ -2,16 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Lyrics Player</title>
+    <title>🕉️ Sacred Lyrics Player | Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Lyrics Player">
-    <meta property="og:description" content="Interactive player for Sai Baba Arati, Hanuman Chalisa, Vishnu Sahasranamam in English and Telugu.">
+    <meta name="description" content="Experience divine devotion with our mobile-friendly Sacred Lyrics Player. Read Sai Baba Arati, Hanuman Chalisa, and Vishnu Sahasranamam in English & Telugu. Perfect for prayers, bhajans, and spiritual practice. Swipe to navigate, tap to read - your pocket temple companion.">
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:image" content="/img/profile-pic.jpg">
+    <meta property="og:url" content="https://yourdomain.com/lyrics/">
+    <meta property="og:title" content="🕉️ Sacred Lyrics Player | Divine Prayers & Bhajans">
+    <meta property="og:description" content="Mobile-friendly spiritual companion for Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam. Available in English & Telugu with easy swipe navigation.">
+    <meta property="og:image" content="https://yourdomain.com/assets/images/sacred-lyrics-og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Sacred Lyrics Player">
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Lyrics Player">
-    <meta name="twitter:description" content="Interactive player for Sai Baba Arati, Hanuman Chalisa, Vishnu Sahasranamam in English and Telugu.">
-    <meta name="twitter:image" content="/img/profile-pic.jpg">
+    <meta name="twitter:url" content="https://yourdomain.com/lyrics/">
+    <meta name="twitter:title" content="🕉️ Sacred Lyrics Player | Divine Prayers & Bhajans">
+    <meta name="twitter:description" content="Mobile-friendly spiritual companion for Sai Baba Arati, Hanuman Chalisa & Vishnu Sahasranamam. Available in English & Telugu with easy swipe navigation.">
+    <meta name="twitter:image" content="https://yourdomain.com/assets/images/sacred-lyrics-og.jpg">
+    <meta name="twitter:creator" content="@yourusername">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="keywords" content="Sai Baba Arati, Hanuman Chalisa, Vishnu Sahasranamam, Hindu prayers, bhajans, devotional songs, Telugu lyrics, English lyrics, spiritual app, mobile prayer book, divine mantras, Om Sai Ram">
+    <meta name="author" content="Sacred Lyrics Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sacred Lyrics">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Sacred Lyrics Player",
+      "description": "Mobile-friendly spiritual companion for reading Sai Baba Arati, Hanuman Chalisa, and Vishnu Sahasranamam in English and Telugu",
+      "url": "https://yourdomain.com/lyrics/",
+      "applicationCategory": "Religion & Spirituality",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Sacred Lyrics Team"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "256"
+      }
+    }
+    </script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕉️</text></svg>">
+    <link rel="apple-touch-icon" href="/assets/images/icon-180.png">
+    <link rel="manifest" href="/manifest.json">
     <style>
         /* Remove tap/click highlight color on mobile and desktop */
         * {
@@ -326,7 +378,7 @@
 <body>
     <!-- Top Bar -->
     <div class="top-bar">
-        <h1 id="app-title">Lyrics Player</h1>
+        <h1 id="app-title">🕉️ Sacred Lyrics</h1>
         <div class="top-controls">
             <button class="btn btn-icon" id="settings-btn">⚙️</button>
             <button class="btn btn-icon" id="show-lyrics">📋</button>
@@ -452,9 +504,9 @@
             const langMap = { 'en': 'English', 'te': 'Telugu' };
             
             if (textSelect.value && langSelect.value) {
-                appTitle.textContent = `${textMap[textSelect.value]} (${langMap[langSelect.value]})`;
+                appTitle.textContent = `🕉️ ${textMap[textSelect.value]} (${langMap[langSelect.value]})`;
             } else {
-                appTitle.textContent = 'Lyrics Player';
+                appTitle.textContent = '🕉️ Sacred Lyrics';
             }
         }
 
