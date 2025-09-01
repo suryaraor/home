@@ -6,7 +6,7 @@
     <title>Text Player</title>
     <style>
         /* Remove tap/click highlight color on mobile and desktop */
-        #tap-area {
+        #tap-area, #tap-area-left {
             -webkit-tap-highlight-color: transparent;
             outline: none;
             user-select: none;
@@ -104,8 +104,8 @@
         function updateFontSize() {
             textDiv.style.fontSize = fontSize + 'vw';
         }
-        // Load lines from content.txt
-        fetch('content.txt')
+        // Load lines from pronounciation.txt
+        fetch('2.txt')
             .then(response => response.text())
             .then(text => {
                 lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
