@@ -13,23 +13,71 @@
     <meta name="twitter:description" content="Interactive player for Sai Baba Arati, Hanuman Chalisa, Vishnu Sahasranamam in English and Telugu.">
     <meta name="twitter:image" content="/img/profile-pic.jpg">
     <style>
-        body { background: #181818; color: #fff; font-family: sans-serif; margin: 0; }
-        .header { text-align: center; padding: 1em 0; background: #222; }
+        /* Remove tap/click highlight color on mobile and desktop */
+        #tap-area, #tap-area-left {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            user-select: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: #222;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        #text {
+            font-size: 10vw;
+            width: 96vw;
+            max-width: 96vw;
+            max-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        #tap-area {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            cursor: pointer;
+        }
+        #tap-area-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50vw;
+            height: 100vh;
+            cursor: pointer;
+        }
+        .header { text-align: center; padding: 1em 0; background: #222; position: fixed; top: 0; width: 100vw; z-index: 10; }
         .controls { text-align: center; margin: 1em 0; }
         select, button { font-size: 1.1em; margin: 0.5em; padding: 0.3em 1em; border-radius: 0.3em; border: none; }
-        #lyrics-box { max-width: 700px; margin: 2em auto; background: #222; border-radius: 1em; box-shadow: 0 0 20px #000; padding: 2em; }
-        .line { display: block; padding: 0.5em 0; cursor: pointer; }
-        .line.active { background: #444; border-radius: 0.3em; }
-        #progress-bar { width: 100%; height: 8px; background: #333; border-radius: 4px; margin: 1em 0; }
-        #progress { height: 8px; background: #4caf50; border-radius: 4px; }
         #lyrics-modal { display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.95); color:#fff; z-index:1000; overflow:auto; }
         #lyrics-modal-content { max-width:800px; margin:3em auto 2em auto; padding:2em; background:#222; border-radius:1em; box-shadow:0 0 20px #000; }
         #close-lyrics { float:right; font-size:2em; background:none; border:none; color:#fff; cursor:pointer; }
         #lyrics-content span { display:block; padding:0.2em 0; cursor:pointer; }
-        @media (max-width: 600px) {
-            #lyrics-box { padding: 1em; }
-            #lyrics-modal-content { padding: 1em; }
-        }
+        #progress-bar-container { position:fixed; bottom:0; left:0; width:100vw; height:2.5em; background:#333; z-index:10; }
+        #progress-bar { height:100%; background:#4caf50; width:0%; transition:width 0.3s; }
+        #progress-label { position:absolute; bottom:0; left:0; width:100vw; text-align:center; color:#fff; font-size:1em; line-height:2.5em; pointer-events:none; }
     </style>
 </head>
 <body>
@@ -52,8 +100,15 @@
             <button id="increase">+</button>
         </div>
     </div>
-    <div id="lyrics-box"></div>
-    <div id="progress-bar"><div id="progress"></div></div>
+    <div id="container" style="margin-top:3em;">
+        <div id="text"></div>
+        <div id="tap-area"></div>
+        <div id="tap-area-left"></div>
+    </div>
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+        <div id="progress-label">0%</div>
+    </div>
     <!-- Lyrics Modal -->
     <div id="lyrics-modal">
         <div id="lyrics-modal-content">
@@ -74,9 +129,10 @@
         };
         let lines = [];
         let currentIdx = 0;
-        let fontSize = 1.1;
-        const lyricsBox = document.getElementById('lyrics-box');
-        const progressBar = document.getElementById('progress');
+        let fontSize = 10; // vw
+        const textDiv = document.getElementById('text');
+        const progressBar = document.getElementById('progress-bar');
+        const progressLabel = document.getElementById('progress-label');
         const textSelect = document.getElementById('text-select');
         const langSelect = document.getElementById('lang-select');
         const decreaseBtn = document.getElementById('decrease');
@@ -85,12 +141,34 @@
         const lyricsModal = document.getElementById('lyrics-modal');
         const closeLyricsBtn = document.getElementById('close-lyrics');
         const lyricsContent = document.getElementById('lyrics-content');
+        const tapArea = document.getElementById('tap-area');
+        const tapAreaLeft = document.getElementById('tap-area-left');
+
+        function showLine(i) {
+            textDiv.textContent = lines[i] || '';
+            updateProgress();
+        }
+
+        function updateProgress() {
+            if (lines.length === 0) {
+                progressBar.style.width = '0%';
+                progressLabel.textContent = '0%';
+                return;
+            }
+            let percent = Math.round(((currentIdx + 1) / lines.length) * 100);
+            progressBar.style.width = percent + '%';
+            progressLabel.textContent = percent + '%';
+        }
+
+        function updateFontSize() {
+            textDiv.style.fontSize = fontSize + 'vw';
+        }
 
         function loadLyrics() {
             const key = textSelect.value + '_' + langSelect.value;
             const file = contentFiles[key];
             if (!file) {
-                lyricsBox.innerHTML = '<p>Content not available for this selection.</p>';
+                textDiv.textContent = 'Content not available for this selection.';
                 return;
             }
             fetch(file)
@@ -101,35 +179,83 @@
                 .then(text => {
                     lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
                     currentIdx = 0;
-                    renderLyrics();
-                    updateProgress();
+                    showLine(currentIdx);
+                    updateFontSize();
                 })
                 .catch(error => {
-                    lyricsBox.innerHTML = '<p>Error loading content: ' + error.message + '</p>';
+                    textDiv.textContent = 'Error loading content: ' + error.message;
                 });
         }
+
         function renderLyrics() {
-            lyricsBox.innerHTML = '';
-            lines.forEach((line, i) => {
-                const span = document.createElement('span');
-                span.className = 'line' + (i === currentIdx ? ' active' : '');
-                span.textContent = line;
-                span.style.fontSize = fontSize + 'em';
-                span.onclick = () => { currentIdx = i; renderLyrics(); updateProgress(); };
-                lyricsBox.appendChild(span);
-            });
+            // This function is kept for compatibility but not used in single-line mode
+            showLine(currentIdx);
         }
-        function updateProgress() {
-            if (lines.length > 0) {
-                progressBar.style.width = ((currentIdx + 1) / lines.length * 100) + '%';
-            } else {
-                progressBar.style.width = '0%';
-            }
-        }
-        decreaseBtn.onclick = () => { fontSize = Math.max(0.7, fontSize - 0.1); renderLyrics(); };
-        increaseBtn.onclick = () => { fontSize = Math.min(2.5, fontSize + 0.1); renderLyrics(); };
+        decreaseBtn.onclick = () => { 
+            if (fontSize > 4) fontSize -= 1; 
+            updateFontSize(); 
+        };
+        increaseBtn.onclick = () => { 
+            if (fontSize < 20) fontSize += 1; 
+            updateFontSize(); 
+        };
         textSelect.onchange = loadLyrics;
         langSelect.onchange = loadLyrics;
+
+        // Tap navigation
+        tapArea.onclick = () => {
+            if (currentIdx < lines.length - 1) {
+                currentIdx++;
+                showLine(currentIdx);
+            }
+        };
+        tapAreaLeft.onclick = () => {
+            if (currentIdx > 0) {
+                currentIdx--;
+                showLine(currentIdx);
+            }
+        };
+
+        // Touch/swipe support
+        let startX = null;
+        tapArea.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        tapArea.addEventListener('touchend', (e) => {
+            if (startX !== null) {
+                let endX = e.changedTouches[0].clientX;
+                if (endX > startX && currentIdx < lines.length - 1) {
+                    currentIdx++;
+                    showLine(currentIdx);
+                }
+                startX = null;
+            }
+        });
+        tapAreaLeft.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        tapAreaLeft.addEventListener('touchend', (e) => {
+            if (startX !== null) {
+                let endX = e.changedTouches[0].clientX;
+                if (endX < startX && currentIdx > 0) {
+                    currentIdx--;
+                    showLine(currentIdx);
+                }
+                startX = null;
+            }
+        });
+
+        // Progress bar click to jump
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        progressBarContainer.onclick = (e) => {
+            if (!lines.length) return;
+            const rect = progressBarContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percent = x / rect.width;
+            const newIdx = Math.floor(percent * lines.length);
+            currentIdx = Math.max(0, Math.min(lines.length - 1, newIdx));
+            showLine(currentIdx);
+        };
         // Modal logic
         showLyricsBtn.onclick = () => {
             lyricsContent.innerHTML = lines.map((line, i) => `<span data-line="${i}">${line.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`).join('');
@@ -138,18 +264,29 @@
         lyricsContent.onclick = (e) => {
             if (e.target && e.target.dataset && e.target.dataset.line) {
                 currentIdx = parseInt(e.target.dataset.line, 10);
-                renderLyrics();
-                updateProgress();
+                showLine(currentIdx);
                 lyricsModal.style.display = 'none';
             }
         };
         closeLyricsBtn.onclick = () => { lyricsModal.style.display = 'none'; };
         lyricsModal.onclick = (e) => { if (e.target === lyricsModal) lyricsModal.style.display = 'none'; };
+        
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowDown') { currentIdx = Math.min(lines.length - 1, currentIdx + 1); renderLyrics(); updateProgress(); }
-            if (e.key === 'ArrowUp') { currentIdx = Math.max(0, currentIdx - 1); renderLyrics(); updateProgress(); }
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { 
+                if (currentIdx < lines.length - 1) {
+                    currentIdx++;
+                    showLine(currentIdx);
+                }
+            }
+            if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { 
+                if (currentIdx > 0) {
+                    currentIdx--;
+                    showLine(currentIdx);
+                }
+            }
         });
+        
         // Initial load
         loadLyrics();
     </script>
