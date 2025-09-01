@@ -539,6 +539,9 @@
                 textDiv.className = 'loading';
                 textDiv.style.cursor = 'pointer';
                 textDiv.onclick = openSettings;
+                // Hide tap areas when no content
+                tapArea.style.display = 'none';
+                tapAreaLeft.style.display = 'none';
                 return;
             }
             
@@ -549,12 +552,18 @@
             textDiv.className = 'loading';
             textDiv.style.cursor = 'default';
             textDiv.onclick = null;
+            // Hide tap areas while loading
+            tapArea.style.display = 'none';
+            tapAreaLeft.style.display = 'none';
             
             if (!file) {
                 textDiv.textContent = 'Content not available for this selection.';
                 textDiv.className = 'loading';
                 textDiv.style.cursor = 'pointer';
                 textDiv.onclick = openSettings;
+                // Hide tap areas when content not available
+                tapArea.style.display = 'none';
+                tapAreaLeft.style.display = 'none';
                 return;
             }
             
@@ -570,12 +579,18 @@
                     updateFontSize();
                     updateTitle();
                     settingsModal.style.display = 'none';
+                    // Show tap areas when content is loaded
+                    tapArea.style.display = 'block';
+                    tapAreaLeft.style.display = 'block';
                 })
                 .catch(error => {
                     textDiv.textContent = 'Error loading content: ' + error.message;
                     textDiv.className = 'loading';
                     textDiv.style.cursor = 'pointer';
                     textDiv.onclick = openSettings;
+                    // Hide tap areas on error
+                    tapArea.style.display = 'none';
+                    tapAreaLeft.style.display = 'none';
                 });
         }
 
