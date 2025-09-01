@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>హనుమాన్ చాలీసా లిరిక్స్ ప్లేయర్ | Hanuman Chalisa Telugu Lyrics Player</title>
+    <meta name="description" content="మొబైల్ ఫ్రెండ్లీ హనుమాన్ చాలీసా లిరిక్స్ ప్లేయర్. తెలుగు, హిందీ, ఇంగ్లీష్ ఉచ్చారణతో పూర్తి చాలీసా చదవండి, పఠించండి, షేర్ చేయండి.">
+    <meta property="og:title" content="హనుమాన్ చాలీసా లిరిక్స్ ప్లేయర్ | Hanuman Chalisa Telugu Lyrics Player" />
+    <meta property="og:description" content="మొబైల్ ఫ్రెండ్లీ హనుమాన్ చాలీసా లిరిక్స్ ప్లేయర్. తెలుగు, హిందీ, ఇంగ్లీష్ ఉచ్చారణతో పూర్తి చాలీసా చదవండి, పఠించండి, షేర్ చేయండి." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://yourdomain.com/te/hanuman-chalisa/" />
+    <meta property="og:image" content="https://yourdomain.com/assets/images/hanuman-chalisa-te-og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="హనుమాన్ చాలీసా లిరిక్స్ ప్లేయర్ | Hanuman Chalisa Telugu Lyrics Player" />
+    <meta name="twitter:description" content="మొబైల్ ఫ్రెండ్లీ హనుమాన్ చాలీసా లిరిక్స్ ప్లేయర్. తెలుగు, హిందీ, ఇంగ్లీష్ ఉచ్చారణతో పూర్తి చాలీసా చదవండి, పఠించండి, షేర్ చేయండి." />
+    <meta name="twitter:image" content="https://yourdomain.com/assets/images/hanuman-chalisa-te-og.jpg" />
+    <style>
+        /* Remove tap/click highlight color on mobile and desktop */
+        #tap-area, #tap-area-left {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            user-select: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: #222;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        #text {
+            font-size: 10vw;
+            width: 96vw;
+            max-width: 96vw;
+            max-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        #tap-area {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            cursor: pointer;
+        }
+        #tap-area-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50vw;
+            height: 100vh;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div style="position:fixed;top:0;left:0;width:100vw;z-index:10;text-align:center;background:#222;">
+    <button id="decrease" style="font-size:2em;margin:0.5em;">-</button>
+    <button id="increase" style="font-size:2em;margin:0.5em;">+</button>
+    <button id="show-lyrics" style="font-size:1.2em;margin:0.5em;">Show Lyrics</button>
+    </div>
+    <div id="container" style="margin-top:3em;">
+    <div id="text"></div>
+    <div id="tap-area"></div>
+    <div id="tap-area-left"></div>
+    <!-- Lyrics Modal -->
+    <div id="lyrics-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);color:#fff;z-index:1000;overflow:auto;">
+        <div style="max-width:800px;margin:3em auto 2em auto;padding:2em;background:#222;border-radius:1em;box-shadow:0 0 20px #000;">
+            <button id="close-lyrics" style="float:right;font-size:2em;background:none;border:none;color:#fff;cursor:pointer;">&times;</button>
+            <h2 style="text-align:center;margin-top:0;">Lyrics</h2>
+            <pre id="lyrics-content" style="white-space:pre-wrap;font-size:1.1em;line-height:1.5em;background:none;border:none;color:#fff;"></pre>
+            <pre id="lyrics-content" style="white-space:pre-wrap;font-size:1.1em;line-height:1.5em;background:none;border:none;color:#fff;cursor:pointer;"></pre>
+        </div>
+    </div>
+    </div>
+    <div id="progress-bar-container" style="position:fixed;bottom:0;left:0;width:100vw;height:2.5em;background:#333;z-index:10;">
+    <div id="progress-bar" style="height:100%;background:#4caf50;width:0%;transition:width 0.3s;"></div>
+    <div id="progress-label" style="position:absolute;bottom:0;left:0;width:100vw;text-align:center;color:#fff;font-size:1em;line-height:2.5em;pointer-events:none;">0%</div>
+    </div>
+    <script>
+        // Lyrics modal logic
+        const showLyricsBtn = document.getElementById('show-lyrics');
+        const lyricsModal = document.getElementById('lyrics-modal');
+        const closeLyricsBtn = document.getElementById('close-lyrics');
+        const lyricsContent = document.getElementById('lyrics-content');
+        showLyricsBtn.addEventListener('click', function() {
+            fetch('content.txt')
+                .then(response => response.text())
+                .then(text => {
+                    // Use the same filtering as the main player
+                    const filteredLines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+                    lyricsContent.innerHTML = filteredLines.map((line, i) =>
+                        `<span data-line="${i}" style="display:block;padding:0.2em 0;">${line.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`
+                    ).join('');
+                    lyricsModal.style.display = 'block';
+                });
+        });
+        // Click on a line in lyrics modal to jump to that line in player
+        lyricsContent.addEventListener('click', function(e) {
+            if (e.target && e.target.dataset && e.target.dataset.line) {
+                idx = parseInt(e.target.dataset.line, 10);
+                showLine(idx);
+                lyricsModal.style.display = 'none';
+            }
+        });
+        closeLyricsBtn.addEventListener('click', function() {
+            lyricsModal.style.display = 'none';
+        });
+        // Close modal on background click
+        lyricsModal.addEventListener('click', function(e) {
+            if (e.target === lyricsModal) {
+                lyricsModal.style.display = 'none';
+            }
+        });
+        // Make progress bar clickable to jump to a specific line
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        progressBarContainer.addEventListener('click', function(e) {
+            if (!lines.length) return;
+            const rect = progressBarContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percent = x / rect.width;
+            const newIdx = Math.floor(percent * lines.length);
+            idx = Math.max(0, Math.min(lines.length - 1, newIdx));
+            showLine(idx);
+        });
+        let lines = [];
+        let idx = 0;
+        let fontSize = 10; // vw
+        const textDiv = document.getElementById('text');
+        const tapArea = document.getElementById('tap-area');
+    const increaseBtn = document.getElementById('increase');
+    const decreaseBtn = document.getElementById('decrease');
+    const progressBar = document.getElementById('progress-bar');
+    const progressLabel = document.getElementById('progress-label');
+    const tapAreaLeft = document.getElementById('tap-area-left');
+        function showLine(i) {
+            textDiv.textContent = lines[i] || '';
+            updateProgressBar();
+        }
+        function updateProgressBar() {
+            if (lines.length === 0) {
+                progressBar.style.width = '0%';
+                progressLabel.textContent = '0%';
+                return;
+            }
+            let percent = Math.round(((idx + 1) / lines.length) * 100);
+            progressBar.style.width = percent + '%';
+            progressLabel.textContent = percent + '%';
+        }
+        function updateFontSize() {
+            textDiv.style.fontSize = fontSize + 'vw';
+        }
+        // Load lines from pronounciation.txt
+        fetch('content.txt')
+            .then(response => response.text())
+            .then(text => {
+                lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+                showLine(idx);
+                updateFontSize();
+            });
+        tapArea.addEventListener('click', function(e) {
+            if (idx < lines.length - 1) {
+                idx++;
+                showLine(idx);
+            }
+        });
+        tapAreaLeft.addEventListener('click', function(e) {
+            if (idx > 0) {
+                idx--;
+                showLine(idx);
+            }
+        });
+        // Optional: swipe support for mobile
+        let startX = null;
+        tapArea.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+        tapArea.addEventListener('touchend', function(e) {
+            if (startX !== null) {
+                let endX = e.changedTouches[0].clientX;
+                if (endX > startX && idx < lines.length - 1) {
+                    idx++;
+                    showLine(idx);
+                }
+                startX = null;
+            }
+        });
+        tapAreaLeft.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+        tapAreaLeft.addEventListener('touchend', function(e) {
+            if (startX !== null) {
+                let endX = e.changedTouches[0].clientX;
+                if (endX < startX && idx > 0) {
+                    idx--;
+                    showLine(idx);
+                }
+                startX = null;
+            }
+        });
+        increaseBtn.addEventListener('click', function() {
+            if (fontSize < 20) fontSize += 1;
+            updateFontSize();
+        });
+        decreaseBtn.addEventListener('click', function() {
+            if (fontSize > 4) fontSize -= 1;
+            updateFontSize();
+        });
+    </script>
+</body>
+</html>
