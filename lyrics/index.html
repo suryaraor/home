@@ -65,12 +65,12 @@
     <script>
         // Map text/language to content file
         const contentFiles = {
-            'saibaba-arati_en': 'saibaba-arati/content.txt',
-            'saibaba-arati_te': 'te/saibaba-arati/content.txt',
-            'hanuman-chalisa_en': 'hanuman-chalisa/content.txt',
-            'hanuman-chalisa_te': 'te/hanuman-chalisa/content.txt',
-            'vishnu_en': 'vishnu/content.txt',
-            'vishnu_te': 'te/vishnu/content.txt'
+            'saibaba-arati_en': 'sai-en.txt',
+            'saibaba-arati_te': 'sai-te.txt',
+            'hanuman-chalisa_en': 'hanuman-en.txt',
+            'hanuman-chalisa_te': 'hanuman-te.txt',
+            'vishnu_en': 'vishnu-en.txt',
+            'vishnu_te': 'vishnu-te.txt'
         };
         let lines = [];
         let currentIdx = 0;
@@ -89,13 +89,23 @@
         function loadLyrics() {
             const key = textSelect.value + '_' + langSelect.value;
             const file = contentFiles[key];
+            if (!file) {
+                lyricsBox.innerHTML = '<p>Content not available for this selection.</p>';
+                return;
+            }
             fetch(file)
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) throw new Error('File not found');
+                    return response.text();
+                })
                 .then(text => {
                     lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
                     currentIdx = 0;
                     renderLyrics();
                     updateProgress();
+                })
+                .catch(error => {
+                    lyricsBox.innerHTML = '<p>Error loading content: ' + error.message + '</p>';
                 });
         }
         function renderLyrics() {
