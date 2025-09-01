@@ -49,17 +49,27 @@
     </style>
 </head>
 <body>
-    <div id="container">
+    <div style="position:fixed;top:0;left:0;width:100vw;z-index:10;text-align:center;background:#222;">
+        <button id="decrease" style="font-size:2em;margin:0.5em;">-</button>
+        <button id="increase" style="font-size:2em;margin:0.5em;">+</button>
+    </div>
+    <div id="container" style="margin-top:3em;">
         <div id="text"></div>
         <div id="tap-area"></div>
     </div>
     <script>
         let lines = [];
         let idx = 0;
+        let fontSize = 10; // vw
         const textDiv = document.getElementById('text');
         const tapArea = document.getElementById('tap-area');
+        const increaseBtn = document.getElementById('increase');
+        const decreaseBtn = document.getElementById('decrease');
         function showLine(i) {
             textDiv.textContent = lines[i] || '';
+        }
+        function updateFontSize() {
+            textDiv.style.fontSize = fontSize + 'vw';
         }
         // Load lines from pronounciation.txt
         fetch('pronounciation.txt')
@@ -67,6 +77,7 @@
             .then(text => {
                 lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
                 showLine(idx);
+                updateFontSize();
             });
         tapArea.addEventListener('click', function(e) {
             if (idx < lines.length - 1) {
@@ -88,6 +99,14 @@
                 }
                 startX = null;
             }
+        });
+        increaseBtn.addEventListener('click', function() {
+            if (fontSize < 20) fontSize += 1;
+            updateFontSize();
+        });
+        decreaseBtn.addEventListener('click', function() {
+            if (fontSize > 4) fontSize -= 1;
+            updateFontSize();
         });
     </script>
 </body>
