@@ -57,6 +57,10 @@
         <div id="text"></div>
         <div id="tap-area"></div>
     </div>
+    <div id="progress-bar-container" style="position:fixed;bottom:0;left:0;width:100vw;height:2.5em;background:#333;z-index:10;">
+        <div id="progress-bar" style="height:100%;background:#4caf50;width:0%;transition:width 0.3s;"></div>
+        <div id="progress-label" style="position:absolute;bottom:0;left:0;width:100vw;text-align:center;color:#fff;font-size:1em;line-height:2.5em;pointer-events:none;">0%</div>
+    </div>
     <script>
         let lines = [];
         let idx = 0;
@@ -65,8 +69,21 @@
         const tapArea = document.getElementById('tap-area');
         const increaseBtn = document.getElementById('increase');
         const decreaseBtn = document.getElementById('decrease');
+        const progressBar = document.getElementById('progress-bar');
+        const progressLabel = document.getElementById('progress-label');
         function showLine(i) {
             textDiv.textContent = lines[i] || '';
+            updateProgressBar();
+        }
+        function updateProgressBar() {
+            if (lines.length === 0) {
+                progressBar.style.width = '0%';
+                progressLabel.textContent = '0%';
+                return;
+            }
+            let percent = Math.round(((idx + 1) / lines.length) * 100);
+            progressBar.style.width = percent + '%';
+            progressLabel.textContent = percent + '%';
         }
         function updateFontSize() {
             textDiv.style.fontSize = fontSize + 'vw';
