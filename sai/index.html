@@ -78,6 +78,7 @@
             <button id="close-lyrics" style="float:right;font-size:2em;background:none;border:none;color:#fff;cursor:pointer;">&times;</button>
             <h2 style="text-align:center;margin-top:0;">Lyrics</h2>
             <pre id="lyrics-content" style="white-space:pre-wrap;font-size:1.1em;line-height:1.5em;background:none;border:none;color:#fff;"></pre>
+            <pre id="lyrics-content" style="white-space:pre-wrap;font-size:1.1em;line-height:1.5em;background:none;border:none;color:#fff;cursor:pointer;"></pre>
         </div>
     </div>
     </div>
@@ -95,9 +96,21 @@
             fetch('content.txt')
                 .then(response => response.text())
                 .then(text => {
-                    lyricsContent.textContent = text;
+                    // Split into lines and wrap each in a span for clickability
+                    const linesArr = text.split(/\r?\n/);
+                    lyricsContent.innerHTML = linesArr.map((line, i) =>
+                        `<span data-line="${i}" style="display:block;padding:0.2em 0;">${line.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`
+                    ).join('');
                     lyricsModal.style.display = 'block';
                 });
+        });
+        // Click on a line in lyrics modal to jump to that line in player
+        lyricsContent.addEventListener('click', function(e) {
+            if (e.target && e.target.dataset && e.target.dataset.line) {
+                idx = parseInt(e.target.dataset.line, 10);
+                showLine(idx);
+                lyricsModal.style.display = 'none';
+            }
         });
         closeLyricsBtn.addEventListener('click', function() {
             lyricsModal.style.display = 'none';
