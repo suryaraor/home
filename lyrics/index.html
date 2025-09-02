@@ -532,11 +532,66 @@
         .flower.jasmine { color: #ffffba; }
         .flower.marigold { color: #baffc9; }
         .flower.hibiscus { color: #bae1ff; }
+        
+        /* Sai Baba Image */
+        .sai-baba-image {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background-image: url('./img/saibaba.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            z-index: 500;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+        
+        .sai-baba-image.visible {
+            opacity: 0.8;
+        }
+        
+        /* Special flower animation for Sai Baba - flowers accumulate towards his image */
+        .flower.sai-offering {
+            animation: offerToSai 3s ease-out forwards;
+        }
+        
+        @keyframes offerToSai {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0.7;
+            }
+            60% {
+                transform: translateY(-200px) rotate(180deg) scale(1.1);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-400px) translateX(200px) rotate(360deg) scale(0.6);
+                opacity: 0.3;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sai-baba-image {
+                top: 15px;
+                right: 15px;
+                width: 60px;
+                height: 60px;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Flower Offering Container -->
     <div class="flower-container" id="flower-container"></div>
+    
+    <!-- Sai Baba Image (shown only during Sai Baba Arati) -->
+    <div class="sai-baba-image" id="sai-baba-image"></div>
     
     <!-- Top Bar -->
     <div class="top-bar">
@@ -716,10 +771,14 @@
         const tutorialOverlay = document.getElementById('tutorial-overlay');
         const tutorialClose = document.getElementById('tutorial-close');
         const flowerContainer = document.getElementById('flower-container');
+        const saiBabaImage = document.getElementById('sai-baba-image');
 
         function createFlowerOffering(x, y) {
             const flowers = ['🌸', '🌺', '🌼', '🌻', '🌷', '🪷', '🏵️', '🌹'];
             const colors = ['lotus', 'rose', 'jasmine', 'marigold', 'hibiscus'];
+            
+            // Check if we're currently showing Sai Baba content
+            const isSaiBabaContent = textSelect.value === 'saibaba-arati';
             
             // Create 2-4 flowers per click
             const numFlowers = Math.floor(Math.random() * 3) + 2;
@@ -727,6 +786,9 @@
             for (let i = 0; i < numFlowers; i++) {
                 const flower = document.createElement('div');
                 flower.className = `flower ${colors[Math.floor(Math.random() * colors.length)]}`;
+                if (isSaiBabaContent) {
+                    flower.className += ' sai-offering';
+                }
                 flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
                 
                 // Position flowers around the click point with some randomness
@@ -741,12 +803,13 @@
                 
                 flowerContainer.appendChild(flower);
                 
-                // Remove flower after animation completes
+                // Remove flower after animation completes - longer duration for Sai Baba offerings
+                const duration = isSaiBabaContent ? 3000 : 2000;
                 setTimeout(() => {
                     if (flower.parentNode) {
                         flower.parentNode.removeChild(flower);
                     }
-                }, 2000 + (i * 100));
+                }, duration + (i * 100));
             }
         }
 
@@ -792,6 +855,17 @@
             } else {
                 appTitle.textContent = '🕉️ Sacred Lyrics';
             }
+            
+            // Show/hide Sai Baba image based on selected text
+            updateSaiBabaImage();
+        }
+
+        function updateSaiBabaImage() {
+            if (textSelect.value === 'saibaba-arati') {
+                saiBabaImage.classList.add('visible');
+            } else {
+                saiBabaImage.classList.remove('visible');
+            }
         }
 
         function openSettings() {
@@ -820,6 +894,8 @@
                 // Hide tap areas when no content
                 tapArea.style.display = 'none';
                 tapAreaLeft.style.display = 'none';
+                // Hide Sai Baba image when no content
+                saiBabaImage.classList.remove('visible');
                 return;
             }
             
@@ -873,6 +949,8 @@
                     // Hide tap areas on error
                     tapArea.style.display = 'none';
                     tapAreaLeft.style.display = 'none';
+                    // Hide Sai Baba image on error
+                    saiBabaImage.classList.remove('visible');
                 });
         }
 
