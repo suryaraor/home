@@ -523,22 +523,22 @@
         .flower {
             position: absolute;
             font-size: 1.2rem;
-            opacity: 0.3;
+            opacity: 0.5;
             animation: offerFlower 2s ease-out forwards;
             pointer-events: none;
         }
         
         @keyframes offerFlower {
             0% {
-                transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translateY(-150px) rotate(180deg) scale(1.1);
+                transform: translateX(0) translateY(0) rotate(0deg) scale(1);
                 opacity: 0.5;
             }
+            50% {
+                transform: translateX(-20vw) translateY(-20vh) rotate(180deg) scale(1.1);
+                opacity: 0.7;
+            }
             100% {
-                transform: translateY(-300px) rotate(360deg) scale(0.6);
+                transform: translateX(-40vw) translateY(-40vh) rotate(360deg) scale(0.8);
                 opacity: 0;
             }
         }
@@ -580,16 +580,16 @@
         
         @keyframes offerToSai {
             0% {
-                transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 0.4;
-            }
-            60% {
-                transform: translateY(-250px) rotate(180deg) scale(1.0);
+                transform: translateX(0) translateY(0) rotate(0deg) scale(1);
                 opacity: 0.6;
             }
+            50% {
+                transform: translateX(-20vw) translateY(-20vh) rotate(180deg) scale(1.1);
+                opacity: 0.8;
+            }
             100% {
-                transform: translateY(-360px) translateX(calc(50vw - 50%)) rotate(270deg) scale(0.7);
-                opacity: 0.3;
+                transform: translateX(-40vw) translateY(-40vh) rotate(270deg) scale(0.9);
+                opacity: 0;
             }
         }
         
@@ -826,12 +826,12 @@
             // Random flower each time
             flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
             
-            // Position flower at click point with small randomness
-            const offsetX = (Math.random() - 0.5) * 30; // ±15px spread
-            const offsetY = (Math.random() - 0.5) * 20;  // ±10px spread
+            // Position flower at bottom right with small randomness
+            const startX = window.innerWidth - 100 + (Math.random() - 0.5) * 60; // Bottom right area
+            const startY = window.innerHeight - 150 + (Math.random() - 0.5) * 60; // Bottom right area
             
-            flower.style.left = (x + offsetX) + 'px';
-            flower.style.top = (y + offsetY) + 'px';
+            flower.style.left = startX + 'px';
+            flower.style.top = startY + 'px';
             
             flowerContainer.appendChild(flower);
             
@@ -840,10 +840,9 @@
             updateFlowerCounter();
             
             if (isSaiBabaContent) {
-                // For Sai Baba, make flower accumulate after animation
+                // For Sai Baba, flowers don't accumulate anymore since they vanish at center
                 setTimeout(() => {
                     if (flower.parentNode) {
-                        accumulateFlower(flower, flowers[Math.floor(Math.random() * flowers.length)]);
                         flower.parentNode.removeChild(flower);
                     }
                 }, 2500);
