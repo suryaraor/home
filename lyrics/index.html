@@ -517,13 +517,13 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 999;
+            z-index: 5;
         }
         
         .flower {
             position: absolute;
             font-size: 1.2rem;
-            opacity: 0.5;
+            opacity: 0.3;
             animation: offerFlower 2s ease-out forwards;
             pointer-events: none;
         }
@@ -531,11 +531,11 @@
         @keyframes offerFlower {
             0% {
                 transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 0.5;
+                opacity: 0.3;
             }
             50% {
                 transform: translateY(-150px) rotate(180deg) scale(1.1);
-                opacity: 0.7;
+                opacity: 0.5;
             }
             100% {
                 transform: translateY(-300px) rotate(360deg) scale(0.6);
@@ -581,15 +581,15 @@
         @keyframes offerToSai {
             0% {
                 transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 0.6;
+                opacity: 0.4;
             }
             60% {
                 transform: translateY(-250px) rotate(180deg) scale(1.0);
-                opacity: 0.8;
+                opacity: 0.6;
             }
             100% {
-                transform: translateY(-320px) translateX(calc(50vw - 50%)) rotate(270deg) scale(0.7);
-                opacity: 0.5;
+                transform: translateY(-360px) translateX(calc(50vw - 50%)) rotate(270deg) scale(0.7);
+                opacity: 0.3;
             }
         }
         
@@ -597,10 +597,10 @@
         .flower.accumulated {
             animation: none !important;
             position: absolute;
-            opacity: 0.4;
-            font-size: 1.0rem;
+            opacity: 0.25;
+            font-size: 0.9rem;
             pointer-events: none;
-            z-index: 600;
+            z-index: 3;
         }
         
         @media (max-width: 768px) {
@@ -864,26 +864,30 @@
         }
         
         function accumulateFlower(originalFlower, flowerEmoji) {
-            // Create a permanent flower that stays near Sai Baba
+            // Create a permanent flower that stays near bottom of Sai Baba image
             const accFlower = document.createElement('div');
             accFlower.className = 'flower accumulated';
             accFlower.textContent = flowerEmoji;
             
-            // Position around Sai Baba image in a circular pattern
+            // Position at the bottom of Sai Baba image in a horizontal spread
             const centerX = window.innerWidth / 2;
-            const centerY = 200; // Near Sai Baba image
-            const radius = 140 + (accumulatedFlowers.length * 6); // Expanding circle, smaller increment
-            const angle = (accumulatedFlowers.length * 30) % 360; // 30 degree increments for tighter pattern
+            const baseY = 380; // Bottom of Sai Baba image area
             
-            const x = centerX + Math.cos(angle * Math.PI / 180) * radius;
-            const y = centerY + Math.sin(angle * Math.PI / 180) * radius;
+            // Create horizontal spread with some vertical variation
+            const spreadWidth = 200; // Total width of flower accumulation area
+            const flowerIndex = accumulatedFlowers.length;
+            const xOffset = (flowerIndex % 15) * (spreadWidth / 14) - (spreadWidth / 2); // 15 flowers per row
+            const yOffset = Math.floor(flowerIndex / 15) * 25; // New row every 15 flowers
+            
+            const x = centerX + xOffset;
+            const y = baseY + yOffset;
             
             accFlower.style.left = x + 'px';
             accFlower.style.top = y + 'px';
             
-            // Add some randomness to avoid perfect circles
-            const randomX = (Math.random() - 0.5) * 20;
-            const randomY = (Math.random() - 0.5) * 20;
+            // Add some randomness for natural look
+            const randomX = (Math.random() - 0.5) * 15;
+            const randomY = (Math.random() - 0.5) * 10;
             accFlower.style.transform = `translate(${randomX}px, ${randomY}px)`;
             
             flowerContainer.appendChild(accFlower);
