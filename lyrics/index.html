@@ -492,9 +492,52 @@
                 padding: 1.5rem;
             }
         }
+        
+        /* Flower Offering Animation */
+        .flower-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        .flower {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: offerFlower 2s ease-out forwards;
+            pointer-events: none;
+        }
+        
+        @keyframes offerFlower {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-150px) rotate(180deg) scale(1.2);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-300px) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        .flower.lotus { color: #ffb3ba; }
+        .flower.rose { color: #ffdfba; }
+        .flower.jasmine { color: #ffffba; }
+        .flower.marigold { color: #baffc9; }
+        .flower.hibiscus { color: #bae1ff; }
     </style>
 </head>
 <body>
+    <!-- Flower Offering Container -->
+    <div class="flower-container" id="flower-container"></div>
+    
     <!-- Top Bar -->
     <div class="top-bar">
         <h1 id="app-title">🕉️ Sacred Lyrics</h1>
@@ -672,6 +715,40 @@
         const tapAreaLeft = document.getElementById('tap-area-left');
         const tutorialOverlay = document.getElementById('tutorial-overlay');
         const tutorialClose = document.getElementById('tutorial-close');
+        const flowerContainer = document.getElementById('flower-container');
+
+        function createFlowerOffering(x, y) {
+            const flowers = ['🌸', '🌺', '🌼', '🌻', '🌷', '🪷', '🏵️', '🌹'];
+            const colors = ['lotus', 'rose', 'jasmine', 'marigold', 'hibiscus'];
+            
+            // Create 2-4 flowers per click
+            const numFlowers = Math.floor(Math.random() * 3) + 2;
+            
+            for (let i = 0; i < numFlowers; i++) {
+                const flower = document.createElement('div');
+                flower.className = `flower ${colors[Math.floor(Math.random() * colors.length)]}`;
+                flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                
+                // Position flowers around the click point with some randomness
+                const offsetX = (Math.random() - 0.5) * 100; // ±50px spread
+                const offsetY = (Math.random() - 0.5) * 50;  // ±25px spread
+                
+                flower.style.left = (x + offsetX) + 'px';
+                flower.style.top = (y + offsetY) + 'px';
+                
+                // Add slight delay for each flower
+                flower.style.animationDelay = (i * 0.1) + 's';
+                
+                flowerContainer.appendChild(flower);
+                
+                // Remove flower after animation completes
+                setTimeout(() => {
+                    if (flower.parentNode) {
+                        flower.parentNode.removeChild(flower);
+                    }
+                }, 2000 + (i * 100));
+            }
+        }
 
         function showLine(i) {
             if (lines.length === 0) return;
@@ -829,14 +906,26 @@
         };
 
         // Tap navigation
-        tapArea.onclick = () => {
+        tapArea.onclick = (e) => {
             if (currentIdx < lines.length - 1) {
+                // Create flower offering at click location
+                const rect = tapArea.getBoundingClientRect();
+                const x = e.clientX || rect.left + rect.width / 2;
+                const y = e.clientY || rect.top + rect.height / 2;
+                createFlowerOffering(x, y);
+                
                 currentIdx++;
                 showLine(currentIdx);
             }
         };
-        tapAreaLeft.onclick = () => {
+        tapAreaLeft.onclick = (e) => {
             if (currentIdx > 0) {
+                // Create flower offering at click location
+                const rect = tapAreaLeft.getBoundingClientRect();
+                const x = e.clientX || rect.left + rect.width / 2;
+                const y = e.clientY || rect.top + rect.height / 2;
+                createFlowerOffering(x, y);
+                
                 currentIdx--;
                 showLine(currentIdx);
             }
@@ -928,6 +1017,11 @@
             if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') { 
                 e.preventDefault();
                 if (currentIdx < lines.length - 1) {
+                    // Create flower offering at center-right for forward navigation
+                    const centerX = window.innerWidth * 0.75;
+                    const centerY = window.innerHeight * 0.5;
+                    createFlowerOffering(centerX, centerY);
+                    
                     currentIdx++;
                     showLine(currentIdx);
                 }
@@ -935,6 +1029,11 @@
             if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { 
                 e.preventDefault();
                 if (currentIdx > 0) {
+                    // Create flower offering at center-left for backward navigation
+                    const centerX = window.innerWidth * 0.25;
+                    const centerY = window.innerHeight * 0.5;
+                    createFlowerOffering(centerX, centerY);
+                    
                     currentIdx--;
                     showLine(currentIdx);
                 }
