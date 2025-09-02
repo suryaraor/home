@@ -824,7 +824,8 @@
                 flower.className += ' sai-offering';
             }
             // Random flower each time
-            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            const flowerEmoji = flowers[Math.floor(Math.random() * flowers.length)];
+            flower.textContent = flowerEmoji;
             
             // Position flower at bottom right with small randomness
             const startX = window.innerWidth - 100 + (Math.random() - 0.5) * 60; // Bottom right area
@@ -840,11 +841,13 @@
             updateFlowerCounter();
             
             if (isSaiBabaContent) {
-                // For Sai Baba, flowers don't accumulate anymore since they vanish at center
+                // For Sai Baba, after animation completes, create an accumulated flower
                 setTimeout(() => {
                     if (flower.parentNode) {
                         flower.parentNode.removeChild(flower);
                     }
+                    // Create accumulated flower that stays
+                    accumulateFlower(flower, flowerEmoji);
                 }, 2500);
             } else {
                 // For other content, remove flower normally
