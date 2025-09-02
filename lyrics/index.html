@@ -522,8 +522,8 @@
         
         .flower {
             position: absolute;
-            font-size: 1.5rem;
-            opacity: 0.7;
+            font-size: 1.2rem;
+            opacity: 0.5;
             animation: offerFlower 2s ease-out forwards;
             pointer-events: none;
         }
@@ -531,14 +531,14 @@
         @keyframes offerFlower {
             0% {
                 transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 0.7;
+                opacity: 0.5;
             }
             50% {
-                transform: translateY(-150px) rotate(180deg) scale(1.2);
-                opacity: 0.9;
+                transform: translateY(-150px) rotate(180deg) scale(1.1);
+                opacity: 0.7;
             }
             100% {
-                transform: translateY(-300px) rotate(360deg) scale(0.8);
+                transform: translateY(-300px) rotate(360deg) scale(0.6);
                 opacity: 0;
             }
         }
@@ -575,21 +575,21 @@
         
         /* Special flower animation for Sai Baba - flowers accumulate towards his image */
         .flower.sai-offering {
-            animation: offerToSai 3s ease-out forwards;
+            animation: offerToSai 2.5s ease-out forwards;
         }
         
         @keyframes offerToSai {
             0% {
                 transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 0.9;
+                opacity: 0.6;
             }
-            70% {
-                transform: translateY(-300px) rotate(180deg) scale(1.1);
-                opacity: 1;
+            60% {
+                transform: translateY(-250px) rotate(180deg) scale(1.0);
+                opacity: 0.8;
             }
             100% {
-                transform: translateY(-380px) translateX(calc(50vw - 50%)) rotate(270deg) scale(0.8);
-                opacity: 0.7;
+                transform: translateY(-320px) translateX(calc(50vw - 50%)) rotate(270deg) scale(0.7);
+                opacity: 0.5;
             }
         }
         
@@ -597,8 +597,8 @@
         .flower.accumulated {
             animation: none !important;
             position: absolute;
-            opacity: 0.6;
-            font-size: 1.2rem;
+            opacity: 0.4;
+            font-size: 1.0rem;
             pointer-events: none;
             z-index: 600;
         }
@@ -851,7 +851,7 @@
                             accumulateFlower(flower, flowers[Math.floor(Math.random() * flowers.length)]);
                             flower.parentNode.removeChild(flower);
                         }
-                    }, 3000 + (i * 100));
+                    }, 2500 + (i * 100));
                 } else {
                     // For other content, remove flowers normally
                     setTimeout(() => {
@@ -872,8 +872,8 @@
             // Position around Sai Baba image in a circular pattern
             const centerX = window.innerWidth / 2;
             const centerY = 200; // Near Sai Baba image
-            const radius = 120 + (accumulatedFlowers.length * 8); // Expanding circle
-            const angle = (accumulatedFlowers.length * 45) % 360; // 45 degree increments
+            const radius = 140 + (accumulatedFlowers.length * 6); // Expanding circle, smaller increment
+            const angle = (accumulatedFlowers.length * 30) % 360; // 30 degree increments for tighter pattern
             
             const x = centerX + Math.cos(angle * Math.PI / 180) * radius;
             const y = centerY + Math.sin(angle * Math.PI / 180) * radius;
@@ -882,8 +882,8 @@
             accFlower.style.top = y + 'px';
             
             // Add some randomness to avoid perfect circles
-            const randomX = (Math.random() - 0.5) * 30;
-            const randomY = (Math.random() - 0.5) * 30;
+            const randomX = (Math.random() - 0.5) * 20;
+            const randomY = (Math.random() - 0.5) * 20;
             accFlower.style.transform = `translate(${randomX}px, ${randomY}px)`;
             
             flowerContainer.appendChild(accFlower);
