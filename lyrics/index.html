@@ -817,49 +817,43 @@
             // Check if we're currently showing Sai Baba content
             const isSaiBabaContent = textSelect.value === 'saibaba-arati';
             
-            // Create 2-4 flowers per click
-            const numFlowers = Math.floor(Math.random() * 3) + 2;
+            // Create only one flower per click
+            const flower = document.createElement('div');
+            flower.className = `flower ${colors[Math.floor(Math.random() * colors.length)]}`;
+            if (isSaiBabaContent) {
+                flower.className += ' sai-offering';
+            }
+            // Random flower each time
+            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
             
-            for (let i = 0; i < numFlowers; i++) {
-                const flower = document.createElement('div');
-                flower.className = `flower ${colors[Math.floor(Math.random() * colors.length)]}`;
-                if (isSaiBabaContent) {
-                    flower.className += ' sai-offering';
-                }
-                flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-                
-                // Position flowers around the click point with some randomness
-                const offsetX = (Math.random() - 0.5) * 100; // ±50px spread
-                const offsetY = (Math.random() - 0.5) * 50;  // ±25px spread
-                
-                flower.style.left = (x + offsetX) + 'px';
-                flower.style.top = (y + offsetY) + 'px';
-                
-                // Add slight delay for each flower
-                flower.style.animationDelay = (i * 0.1) + 's';
-                
-                flowerContainer.appendChild(flower);
-                
-                // Update flower counter
-                totalFlowersOffered++;
-                updateFlowerCounter();
-                
-                if (isSaiBabaContent) {
-                    // For Sai Baba, make flowers accumulate after animation
-                    setTimeout(() => {
-                        if (flower.parentNode) {
-                            accumulateFlower(flower, flowers[Math.floor(Math.random() * flowers.length)]);
-                            flower.parentNode.removeChild(flower);
-                        }
-                    }, 2500 + (i * 100));
-                } else {
-                    // For other content, remove flowers normally
-                    setTimeout(() => {
-                        if (flower.parentNode) {
-                            flower.parentNode.removeChild(flower);
-                        }
-                    }, 2000 + (i * 100));
-                }
+            // Position flower at click point with small randomness
+            const offsetX = (Math.random() - 0.5) * 30; // ±15px spread
+            const offsetY = (Math.random() - 0.5) * 20;  // ±10px spread
+            
+            flower.style.left = (x + offsetX) + 'px';
+            flower.style.top = (y + offsetY) + 'px';
+            
+            flowerContainer.appendChild(flower);
+            
+            // Update flower counter
+            totalFlowersOffered++;
+            updateFlowerCounter();
+            
+            if (isSaiBabaContent) {
+                // For Sai Baba, make flower accumulate after animation
+                setTimeout(() => {
+                    if (flower.parentNode) {
+                        accumulateFlower(flower, flowers[Math.floor(Math.random() * flowers.length)]);
+                        flower.parentNode.removeChild(flower);
+                    }
+                }, 2500);
+            } else {
+                // For other content, remove flower normally
+                setTimeout(() => {
+                    if (flower.parentNode) {
+                        flower.parentNode.removeChild(flower);
+                    }
+                }, 2000);
             }
         }
         
