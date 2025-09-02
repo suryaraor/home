@@ -539,14 +539,14 @@
             top: 15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 120px;
+            width: 360px;
+            height: 360px;
             background-image: url('./img/saibaba.png');
             background-size: cover;
             background-position: center;
             border-radius: 50%;
-            border: 4px solid rgba(255, 215, 0, 0.8);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            border: 6px solid rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
             z-index: 500;
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -554,35 +554,39 @@
         }
         
         .sai-baba-image.visible {
-            opacity: 0.8;
+            opacity: 0.4;
         }
         
         /* Special flower animation for Sai Baba - flowers accumulate towards his image */
         .flower.sai-offering {
-            animation: offerToSai 3s ease-out forwards;
+            animation: offerToSai 4s ease-out forwards;
         }
         
         @keyframes offerToSai {
             0% {
                 transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 0.7;
-            }
-            60% {
-                transform: translateY(-250px) rotate(180deg) scale(1.1);
                 opacity: 0.9;
             }
+            60% {
+                transform: translateY(-300px) rotate(180deg) scale(1.2);
+                opacity: 1;
+            }
+            85% {
+                transform: translateY(-450px) translateX(calc(50vw - 50%)) rotate(270deg) scale(0.6);
+                opacity: 0.8;
+            }
             100% {
-                transform: translateY(-400px) translateX(calc(50vw - 50%)) rotate(360deg) scale(0.4);
-                opacity: 0.2;
+                transform: translateY(-500px) translateX(calc(50vw - 50%)) rotate(360deg) scale(0.5);
+                opacity: 0.6;
             }
         }
         
         @media (max-width: 768px) {
             .sai-baba-image {
                 top: 12px;
-                width: 90px;
-                height: 90px;
-                border: 3px solid rgba(255, 215, 0, 0.8);
+                width: 270px;
+                height: 270px;
+                border: 4px solid rgba(255, 215, 0, 0.6);
             }
         }
     </style>
@@ -805,7 +809,7 @@
                 flowerContainer.appendChild(flower);
                 
                 // Remove flower after animation completes - longer duration for Sai Baba offerings
-                const duration = isSaiBabaContent ? 3000 : 2000;
+                const duration = isSaiBabaContent ? 4000 : 2000;
                 setTimeout(() => {
                     if (flower.parentNode) {
                         flower.parentNode.removeChild(flower);
