@@ -862,15 +862,15 @@
             accFlower.className = 'flower accumulated';
             accFlower.textContent = flowerEmoji;
             
-            // Position at the bottom of Sai Baba image in a horizontal spread
+            // Position 30% higher than before and wider spread
             const centerX = window.innerWidth / 2;
-            const baseY = 380; // Bottom of Sai Baba image area
+            const baseY = 265; // 30% higher than previous 380 (380 - 115 = 265)
             
-            // Create horizontal spread with some vertical variation
-            const spreadWidth = 200; // Total width of flower accumulation area
+            // Create wider horizontal spread with less vertical height
+            const spreadWidth = 320; // Wider spread (was 200)
             const flowerIndex = accumulatedFlowers.length;
-            const xOffset = (flowerIndex % 15) * (spreadWidth / 14) - (spreadWidth / 2); // 15 flowers per row
-            const yOffset = Math.floor(flowerIndex / 15) * 25; // New row every 15 flowers
+            const xOffset = (flowerIndex % 20) * (spreadWidth / 19) - (spreadWidth / 2); // 20 flowers per row (wider)
+            const yOffset = Math.floor(flowerIndex / 20) * 18; // Less height between rows (was 25)
             
             const x = centerX + xOffset;
             const y = baseY + yOffset;
