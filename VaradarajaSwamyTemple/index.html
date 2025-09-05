@@ -8,15 +8,65 @@
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-	<div class="header">
-		<h1>శ్రీ వరదరాజ స్వామి ఆలయం, వర్దరాజ్‌పూర్<br><span style="font-size:1.2rem; font-weight:normal;">Varadaraja Swamy Temple, Vardarajpur</span></h1>
-		<div class="lang-switch">
-			<button id="btn-te" class="active">తెలుగు</button>
-			<button id="btn-en">English</button>
+	<div class="hero-section">
+		<div class="header">
+			<h1>శ్రీ వరదరాజ స్వామి ఆలయం<br><span style="font-size:0.7em; font-weight:normal;">Varadaraja Swamy Temple</span></h1>
+			<p class="subtitle">వర్దరాజ్‌పూర్, తెలంగాణ | Vardarajpur, Telangana</p>
+			<div class="lang-switch">
+				<button id="btn-te" class="active">తెలుగు</button>
+				<button id="btn-en">English</button>
+			</div>
 		</div>
 	</div>
 	<div class="section">
 		<div id="temple-content" style="white-space:pre-line; font-size:1.1rem;"></div>
+	</div>
+	
+	<div class="gallery-section">
+		<h2 id="gallery-title">📸 ఆలయ చిత్రాలు</h2>
+		<div class="gallery-grid">
+			<div class="gallery-item" onclick="openLightbox('../img/portfolio/1.jpg')">
+				<img src="../img/portfolio/th_1.jpg" alt="Temple Image 1" loading="lazy">
+				<div class="gallery-overlay">
+					<h3 id="gallery-desc-1">ఆలయ ప్రధాన ద్వారం</h3>
+				</div>
+			</div>
+			<div class="gallery-item" onclick="openLightbox('../img/portfolio/2.jpg')">
+				<img src="../img/portfolio/th_2.jpg" alt="Temple Image 2" loading="lazy">
+				<div class="gallery-overlay">
+					<h3 id="gallery-desc-2">గర్భగుడి దర్శనం</h3>
+				</div>
+			</div>
+			<div class="gallery-item" onclick="openLightbox('../img/portfolio/3.jpg')">
+				<img src="../img/portfolio/th_3.jpg" alt="Temple Image 3" loading="lazy">
+				<div class="gallery-overlay">
+					<h3 id="gallery-desc-3">ఉత్సవ వేడుకలు</h3>
+				</div>
+			</div>
+			<div class="gallery-item" onclick="openLightbox('../img/portfolio/4.jpg')">
+				<img src="../img/portfolio/th_4.jpg" alt="Temple Image 4" loading="lazy">
+				<div class="gallery-overlay">
+					<h3 id="gallery-desc-4">రథోత్సవం</h3>
+				</div>
+			</div>
+			<div class="gallery-item" onclick="openLightbox('../img/portfolio/5.jpg')">
+				<img src="../img/portfolio/th_5.jpg" alt="Temple Image 5" loading="lazy">
+				<div class="gallery-overlay">
+					<h3 id="gallery-desc-5">భక్తుల సమ్మేళనం</h3>
+				</div>
+			</div>
+			<div class="gallery-item" onclick="openLightbox('../img/portfolio/6.jpg')">
+				<img src="../img/portfolio/th_6.jpg" alt="Temple Image 6" loading="lazy">
+				<div class="gallery-overlay">
+					<h3 id="gallery-desc-6">ఆలయ ప్రాంగణం</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+		<span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+		<img id="lightbox-img" src="" alt="Temple Image">
 	</div>
 	
 	<div class="location-section">

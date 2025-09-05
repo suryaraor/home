@@ -8,6 +8,15 @@ const locationContent = {
   te: {
     title: '📍 ఆలయ స్థానం మరియు దిశలు',
     openMaps: 'గూగుల్ మ్యాప్స్‌లో తెరవండి',
+    galleryTitle: '📸 ఆలయ చిత్రాలు',
+    galleryDescriptions: [
+      'ఆలయ ప్రధాన ద్వారం',
+      'గర్భగుడి దర్శనం', 
+      'ఉత్సవ వేడుకలు',
+      'రథోత్సవం',
+      'భక్తుల సమ్మేళనం',
+      'ఆలయ ప్రాంగణం'
+    ],
     address: `<strong>పూర్తి చిరునామా:</strong><br>
 శ్రీ వరదరాజ స్వామి ఆలయం, వర్దరాజ్‌పూర్<br>
 జగదేవ్‌పూర్ మండలం, సిద్దిపేట జిల్లా<br>
@@ -36,6 +45,15 @@ const locationContent = {
   en: {
     title: '📍 Temple Location & Directions',
     openMaps: 'Open in Google Maps',
+    galleryTitle: '📸 Temple Gallery',
+    galleryDescriptions: [
+      'Temple Main Entrance',
+      'Sanctum Sanctorum View',
+      'Festival Celebrations',
+      'Chariot Festival',
+      'Devotees Gathering', 
+      'Temple Courtyard'
+    ],
     address: `<strong>Complete Address:</strong><br>
 Sri Varadaraja Swamy Temple, Vardarajpur<br>
 Jagadevpur Mandal, Siddipet District<br>
@@ -77,6 +95,14 @@ function setContent(lang) {
   document.getElementById('location-title').innerText = loc.title;
   document.getElementById('address-text').innerHTML = loc.address;
   document.getElementById('open-maps-text').innerText = loc.openMaps;
+  
+  // Update gallery section
+  document.getElementById('gallery-title').innerText = loc.galleryTitle;
+  loc.galleryDescriptions.forEach((desc, index) => {
+    const element = document.getElementById(`gallery-desc-${index + 1}`);
+    if (element) element.innerText = desc;
+  });
+  
   document.getElementById('by-road-title').innerText = loc.byRoad.title;
   document.getElementById('by-road-content').innerHTML = loc.byRoad.content;
   document.getElementById('by-train-title').innerText = loc.byTrain.title;
@@ -95,4 +121,23 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('btn-te').addEventListener('click', () => setContent('te'));
   document.getElementById('btn-en').addEventListener('click', () => setContent('en'));
   setContent(getLang());
+});
+
+// Lightbox functionality
+function openLightbox(imageSrc) {
+  document.getElementById('lightbox-img').src = imageSrc;
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+// Close lightbox on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeLightbox();
+  }
 });
