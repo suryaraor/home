@@ -7,7 +7,7 @@ body {
 }
 
 .hero-section {
-  background: linear-gradient(rgba(78,84,200,0.8), rgba(143,148,251,0.8)), url('../../../img/header.jpg');
+  background: linear-gradient(rgba(78,84,200,0.8), rgba(143,148,251,0.8)), url('../img/1.webp');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

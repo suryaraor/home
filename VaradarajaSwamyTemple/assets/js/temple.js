@@ -15,7 +15,13 @@ const locationContent = {
       'ఉత్సవ వేడుకలు',
       'రథోత్సవం',
       'భక్తుల సమ్మేళనం',
-      'ఆలయ ప్రాంగణం'
+      'ఆలయ ప్రాంగణం',
+      'విగ్రహ దర్శనం',
+      'ఆలయ అలంకరణ',
+      'పూజా విధానం',
+      'స్వామి వారు',
+      'ఆలయ చరిత్ర',
+      'భక్తి భావన'
     ],
     address: `<strong>పూర్తి చిరునామా:</strong><br>
 శ్రీ వరదరాజ స్వామి ఆలయం, వర్దరాజ్‌పూర్<br>
@@ -52,7 +58,13 @@ const locationContent = {
       'Festival Celebrations',
       'Chariot Festival',
       'Devotees Gathering', 
-      'Temple Courtyard'
+      'Temple Courtyard',
+      'Deity Darshan',
+      'Temple Decoration',
+      'Worship Ritual',
+      'Lord Varadaraja',
+      'Temple History',
+      'Divine Devotion'
     ],
     address: `<strong>Complete Address:</strong><br>
 Sri Varadaraja Swamy Temple, Vardarajpur<br>
@@ -98,10 +110,12 @@ function setContent(lang) {
   
   // Update gallery section
   document.getElementById('gallery-title').innerText = loc.galleryTitle;
-  loc.galleryDescriptions.forEach((desc, index) => {
-    const element = document.getElementById(`gallery-desc-${index + 1}`);
-    if (element) element.innerText = desc;
-  });
+  for (let i = 1; i <= 12; i++) {
+    const element = document.getElementById(`gallery-desc-${i}`);
+    if (element && loc.galleryDescriptions[i-1]) {
+      element.innerText = loc.galleryDescriptions[i-1];
+    }
+  }
   
   document.getElementById('by-road-title').innerText = loc.byRoad.title;
   document.getElementById('by-road-content').innerHTML = loc.byRoad.content;
