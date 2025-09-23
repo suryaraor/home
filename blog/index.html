@@ -1,39 +1,19 @@
 ---
-layout: none
+layout: default
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>My Blog</title>
-  <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #faf9f7; color: #222; margin: 0; padding: 0; }
-    .container { max-width: 700px; margin: 2.5rem auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 16px #0001; padding: 2.5rem; }
-    h1 { font-size: 2.2rem; color: #BF5700; margin-bottom: 1.5rem; }
-    ul { list-style: none; padding: 0; }
-    li { margin-bottom: 1.5rem; }
-    a.blog-link { text-decoration: none; color: #BF5700; font-size: 1.25rem; font-weight: 600; }
-    a.blog-link:hover { text-decoration: underline; }
-    .blog-title { margin-bottom: 0.2rem; }
-    .blog-meta { color: #888; font-size: 0.95rem; margin-bottom: 0.5rem; }
-    .no-posts { color: #aaa; font-size: 1.1rem; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>My Blog Posts</h1>
-    <ul>
-      {% for post in site.posts %}
-        <li>
-          <div class="blog-title"><a class="blog-link" href="{{ post.url }}">{{ post.title }}</a></div>
-          <div class="blog-meta">{{ post.date | date: "%B %d, %Y" }}</div>
-        </li>
-      {% endfor %}
-    </ul>
-    {% if site.posts == empty %}
-      <div class="no-posts">No blog posts found.</div>
-    {% endif %}
-    <a href="../index.html" style="display:block; margin-top:2.5rem; color:#555;">&larr; Back to Home</a>
-  </div>
-</body>
-</html>
+<!-- Blog index page for posts under /blog/_posts -->
+<div class="container">
+  <h1>My Blog Posts</h1>
+  <ul>
+    {% for post in site.posts %}
+      <li>
+        <div class="blog-title"><a class="blog-link" href="{{ post.url }}">{{ post.title }}</a></div>
+        <div class="blog-meta">{{ post.date | date: "%B %d, %Y" }}</div>
+      </li>
+    {% endfor %}
+  </ul>
+  {% if site.posts == empty %}
+    <div class="no-posts">No blog posts found.</div>
+  {% endif %}
+  <a href="../index.html" style="display:block; margin-top:2.5rem; color:#555;">&larr; Back to Home</a>
+</div>

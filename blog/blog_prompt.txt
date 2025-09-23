@@ -1,0 +1,27 @@
+Prompt Template for Generating Detailed, Useful Blog Posts
+
+Write a comprehensive, beginner-friendly, and highly practical blog post about:
+[TOPIC NAME]
+
+Requirements:
+
+Auto-detect the most relevant category for the topic (e.g., JavaScript, Angular, Python, DevOps, etc.) and include it in the post metadata.
+Start with a clear, engaging introduction that explains what the topic is, why it matters, and what the reader will learn.
+Break down the topic into logical sections with clear headings (use Markdown or HTML as appropriate).
+If the topic is technical or code-related:
+Include well-formatted, easy-to-read code blocks.
+For each code block, provide a one-click copy button (if supported by the blog platform).
+Explain each code snippet in simple terms.
+Add practical tips, common pitfalls, and best practices.
+Use examples, analogies, or diagrams to make complex ideas easy to grasp.
+End with a summary or key takeaways that reinforce what the reader has learned.
+Optionally, suggest further reading or next steps for deeper exploration.
+Ensure the post is detailed, actionable, and leaves the reader with something genuinely useful they can apply.
+Format:
+
+Use YAML front matter for metadata (title, date, category).
+Use Markdown for content, with fenced code blocks for code.
+Use bullet points, numbered lists, and bold/italic for emphasis where helpful.
+Make sure the language is clear, friendly, and avoids jargon unless explained.
+Example usage:
+Write a blog post using the above template about: “How to use Angular Reactive Forms for Dynamic Validation”

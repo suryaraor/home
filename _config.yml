@@ -1,3 +1,12 @@
 markdown: kramdown
 permalink: pretty
 exclude: ["node_modules", "gulpfile.js", "package.json", "package-lock.json"]
+
+# Blog posts are now under blog/_posts
+collections:
+  posts:
+    output: true
+    permalink: /blog/:year/:month/:day/:title/
+    # Jekyll will look for posts in blog/_posts
+    posts:
+      - blog/_posts
