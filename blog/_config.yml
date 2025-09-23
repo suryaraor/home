@@ -1,4 +1,4 @@
 markdown: kramdown
 permalink: pretty
-baseurl: ""
+baseurl: "/blog"
 exclude: ["node_modules", "gulpfile.js", "package.json", "package-lock.json"]

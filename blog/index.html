@@ -7,7 +7,7 @@ layout: default
   <ul>
     {% for post in site.posts %}
       <li>
-        <div class="blog-title"><a class="blog-link" href="{{ post.url }}">{{ post.title }}</a></div>
+  <div class="blog-title"><a class="blog-link" href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></div>
         <div class="blog-meta">{{ post.date | date: "%B %d, %Y" }}</div>
       </li>
     {% endfor %}
@@ -15,5 +15,5 @@ layout: default
   {% if site.posts == empty %}
     <div class="no-posts">No blog posts found.</div>
   {% endif %}
-  <a href="../index.html" style="display:block; margin-top:2.5rem; color:#555;">&larr; Back to Home</a>
+  <a href="{{ site.baseurl }}/../index.html" style="display:block; margin-top:2.5rem; color:#555;">&larr; Back to Home</a>
 </div>

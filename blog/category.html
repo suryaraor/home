@@ -8,7 +8,7 @@ title: "Posts in category: {{ page.category }}"
   {% assign cat = page.category | downcase %}
   {% for post in site.categories[cat] %}
     <li>
-      <a class="blog-link" href="{{ post.url }}">{{ post.title }}</a>
+  <a class="blog-link" href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
       <span class="blog-meta">{{ post.date | date: "%B %d, %Y" }}</span>
     </li>
   {% endfor %}
