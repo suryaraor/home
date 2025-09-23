@@ -41,9 +41,20 @@
       z-index: 2;
     }
     .copy-btn:hover { opacity: 1; }
+    .navbar { margin-bottom: 2rem; }
+    .navbar ul { display: flex; gap: 1.5rem; list-style: none; padding: 0; }
+    .navbar a { color: #BF5700; font-weight: 600; text-decoration: none; }
+    .navbar a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
+  <nav class="navbar">
+    <ul>
+      {% for category in site.categories %}
+        <li><a href="{{ site.baseurl }}/category/{{ category[0] | slugify }}/">{{ category[0] | capitalize }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
   <div class="container">
     {{ content }}
   </div>
