@@ -1,7 +1,7 @@
 Prompt Template for Generating Detailed, Useful Blog Posts
 
 Write a comprehensive, beginner-friendly, and highly practical blog post about:
-[TOPIC NAME]
+Angular Interceptors
 
 Requirements:
 
@@ -25,3 +25,7 @@ Use bullet points, numbered lists, and bold/italic for emphasis where helpful.
 Make sure the language is clear, friendly, and avoids jargon unless explained.
 Example usage:
 Write a blog post using the above template about: “How to use Angular Reactive Forms for Dynamic Validation”
+
+Once ready save the blog post in it's respective html file.
+
+Update the blog/index.html to reflect this new blog post.
