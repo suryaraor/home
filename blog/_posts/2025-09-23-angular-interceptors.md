@@ -2,7 +2,7 @@
 layout: default
 title: "A Practical Guide to Angular Interceptors"
 date: 2025-09-23
-category: Angular
+categories: Angular
 ---
 
 # A Practical Guide to Angular Interceptors
