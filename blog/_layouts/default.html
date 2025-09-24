@@ -8,6 +8,10 @@
 </head>
 <body>
   <nav class="navbar">
+    <div style="display: flex; justify-content: flex-end; gap: 1.5rem; margin-bottom: 0.5rem;">
+      <a href="{{ site.baseurl }}/" style="font-weight:600;">Blog Home</a>
+      <a href="{{ site.baseurl }}/../index.html" style="font-weight:600;">Author Profile</a>
+    </div>
     <ul>
       {% for category in site.categories %}
         <li><a href="{{ site.baseurl }}/category/{{ category[0] | slugify }}/">{{ category[0] | capitalize }}</a></li>
