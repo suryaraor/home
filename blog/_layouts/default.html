@@ -9,10 +9,10 @@
 <body>
   <nav class="navbar">
     <div style="display: flex; justify-content: flex-end; gap: 1.5rem; margin-bottom: 0.5rem;">
-      <a href="{{ site.baseurl }}/" style="font-weight:600;">Blog Home</a>
+      <a href="{{ site.baseurl }}/" style="font-weight:600;">Blog Home t.1</a>
       <a href="{{ site.baseurl }}/../index.html" style="font-weight:600;">Author Profile</a>
       {% if page.category or page.categories %}
-        <span style="margin-left:2rem; font-weight:600;">Categories:</span>
+        <span style="margin-left:2rem; font-weight:600;">Categories: t.2</span>
         {% assign cats = page.categories | default: page.category | split: ' ' %}
         {% for cat in cats %}
           <a href="{{ site.baseurl }}/category/{{ cat | slugify }}/" style="font-weight:600;">{{ cat | capitalize }}</a>
