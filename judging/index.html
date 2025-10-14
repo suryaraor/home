@@ -46,6 +46,10 @@
             margin-bottom: 20px;
         }
 
+        /* Responsive PDF embed */
+        .pdf-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 1rem; }
+        .pdf-wrapper iframe, .pdf-wrapper object { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
         h2 {
             color: #0078d7;
             margin-bottom: 10px;
@@ -108,6 +112,20 @@
             <p>
                 <strong>Code & Coffee Philly Tech Week Hackathon 2025:</strong> I had the privilege of serving as a judge for the <a href="https://code-coffee-philly-tech-week.devpost.com/" target="_blank">Code & Coffee Philly Tech Week Hackathon 2025</a>. The event kicked off on Wednesday, May 7th, 2025, at 8:00 AM EDT and featured an in-person demo on Friday, May 9th, 2025, from 10:00 AM to 6:00 PM EDT. The submission deadline was Saturday, May 10th, 2025, at 12:00 PM EDT. This hackathon brought together talented participants to showcase innovative projects, and I provided constructive feedback to help refine their solutions.
             </p>
+            <p>
+                <strong>MEGA Hackathon 2026:</strong> Feb 28 – Mar 1, 2026 — A collaborative hackathon integrating computer science, STEM, economics, and infrastructure — aimed at advancing human development. <a href="https://mega-hackathon-2026-students.devpost.com/" target="_blank">Event page</a>
+            </p>
+            <p>
+                <strong>SOSE NextGen Hacks 2025:</strong> Oct 15 – 22, 2025 — A hackathon dedicated to building technology that solves real world problems and drives social good. <a href="https://sose-nextgen-hacks.devpost.com/" target="_blank">Event page</a>
+            </p>
+
+            <!-- Inline PDF preview with fallback -->
+            <div class="pdf-wrapper" aria-label="SOSE NextGen Hacks 2025 PDF">
+                <iframe src="{{ site.baseurl }}/assets/docs/sose-nextgen-hacks-2025.pdf" title="SOSE NextGen Hacks Oct 15–22 2025 (PDF)" width="100%" height="800" style="border:0;"></iframe>
+                <object data="{{ site.baseurl }}/assets/docs/sose-nextgen-hacks-2025.pdf" type="application/pdf" width="100%" height="800">
+                    <p>Your browser doesn't support embedded PDFs. <a href="{{ site.baseurl }}/assets/docs/sose-nextgen-hacks-2025.pdf" target="_blank" rel="noopener">Download the PDF</a>.</p>
+                </object>
+            </div>
         </section>
 
         <section>
