@@ -225,6 +225,51 @@
             background: linear-gradient(135deg, rgba(109, 40, 217, 0.05) 0%, rgba(236, 72, 153, 0.06) 100%);
         }
 
+        .eb1a-section {
+            background: var(--white);
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+            font-size: 0.96rem;
+            background: var(--white);
+        }
+
+        .summary-table thead {
+            background: rgba(109, 40, 217, 0.08);
+        }
+
+        .summary-table th,
+        .summary-table td {
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            padding: 14px 16px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .summary-table th {
+            font-weight: 600;
+            color: var(--primary-purple);
+            font-size: 0.95rem;
+        }
+
+        .summary-table tbody tr:nth-child(even) {
+            background: rgba(243, 244, 246, 0.6);
+        }
+
+        .summary-table a {
+            color: var(--primary-purple);
+            text-decoration: none;
+        }
+
+        .summary-table a:hover {
+            text-decoration: underline;
+        }
+
         .about-grid {
             display: grid;
             grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
@@ -569,6 +614,68 @@
                 justify-content: center;
             }
         }
+
+        @media print {
+            body {
+                font-family: 'Inter', sans-serif;
+                background: #ffffff !important;
+                color: #111827 !important;
+                font-size: 11pt;
+            }
+
+            .hero,
+            .hero::before,
+            .contact-section::before {
+                background: none !important;
+            }
+
+            .hero,
+            .stats-section,
+            .section,
+            .mentorship-section,
+            .contact-section {
+                padding: 32px 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+            }
+
+            .container {
+                max-width: 100% !important;
+                padding: 0 12px !important;
+            }
+
+            .hero-actions,
+            .btn,
+            .contact-methods {
+                display: none !important;
+            }
+
+            .experience-card,
+            .mentorship-card,
+            .mentorship-primary,
+            .stat-card {
+                border: 1px solid #d1d5db !important;
+                box-shadow: none !important;
+                background: #ffffff !important;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .experience-card::before {
+                display: none;
+            }
+
+            .card-links a::after,
+            .mentorship-links a::after,
+            .summary-table a::after {
+                content: " (" attr(href) ")";
+                font-size: 9pt;
+            }
+
+            @page {
+                margin: 0.6in;
+            }
+        }
     </style>
 </head>
 <body>
@@ -615,6 +722,111 @@
         </div>
     </section>
 
+    <section class="section eb1a-section" id="eb1a-summary">
+        <div class="container">
+            <p class="section-title reveal">USCIS EB-1A Judging Evidence Summary</p>
+            <p class="section-subtitle reveal">
+                The tables below consolidate my judging and mentoring record in support of the extraordinary ability criteria concerning service as a judge of the work of others. Each entry includes scope, responsibilities, and independently verifiable references.
+            </p>
+
+            <h3 class="reveal" style="font-size:1.3rem; margin-bottom:12px; color: var(--dark-gray);">Judging Appointments</h3>
+            <table class="summary-table reveal">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Dates &amp; Format</th>
+                        <th>Role &amp; Responsibilities</th>
+                        <th>Evidence Links</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Globee Awards 2025</td>
+                        <td>Dec 2025 &bull; Global virtual jury</td>
+                        <td>Evaluated cross-industry innovation submissions, provided scoring rubrics, and drafted qualitative feedback for finalists.</td>
+                        <td>Organizer confirmation available upon request</td>
+                    </tr>
+                    <tr>
+                        <td>SWECCathon 2025</td>
+                        <td>Apr 29, 2025 &bull; Hybrid hackathon</td>
+                        <td>Served on finals panel, questioning teams on feasibility, technical depth, and go-to-market alignment.</td>
+                        <td><a href="https://sweccathon-2025.devpost.com/" target="_blank" rel="noopener">Devpost Listing</a></td>
+                    </tr>
+                    <tr>
+                        <td>Hack for Humanity 2026</td>
+                        <td>Feb 2026 &bull; Month-long online program</td>
+                        <td>Selected as judge for humanitarian tech initiatives; reviewed project updates and evaluated impact narratives.</td>
+                        <td><a href="https://hack-for-humanity-26.devpost.com/" target="_blank" rel="noopener">Devpost Listing</a></td>
+                    </tr>
+                    <tr>
+                        <td>Code &amp; Coffee Philly Tech Week Hackathon 2025</td>
+                        <td>May 7&ndash;10, 2025 &bull; Philadelphia, PA</td>
+                        <td>Led demo-day assessments, coached storytellers, and participated in award deliberations for in-person showcase.</td>
+                        <td><a href="https://code-coffee-philly-tech-week.devpost.com/" target="_blank" rel="noopener">Devpost Listing</a></td>
+                    </tr>
+                    <tr>
+                        <td>MEGA Hackathon 2026</td>
+                        <td>Feb 28 &ndash; Mar 1, 2026 &bull; Interdisciplinary hackathon</td>
+                        <td>Reviewed multi-track submissions integrating computing, STEM, infrastructure, and social impact; applied scoring matrix.</td>
+                        <td><a href="https://mega-hackathon-2026-students.devpost.com/" target="_blank" rel="noopener">Event Page</a></td>
+                    </tr>
+                    <tr>
+                        <td>SOSE NextGen Hacks 2025</td>
+                        <td>Oct 15&ndash;22, 2025 &bull; Virtual competition</td>
+                        <td>Judged social good projects, provided narrative coaching, and assisted with rubric calibration for remote judges.</td>
+                        <td><a href="https://sose-nextgen-hacks.devpost.com/" target="_blank" rel="noopener">Event Page</a></td>
+                    </tr>
+                    <tr>
+                        <td>Studiio Hacks 2025</td>
+                        <td>Nov 1&ndash;30, 2025 &bull; EdTech innovation challenge</td>
+                        <td>Scored submissions on instructional design, learner impact, and product readiness; mentored finalist teams.</td>
+                        <td><a href="https://studiio-hacks.devpost.com/" target="_blank" rel="noopener">Event Page</a></td>
+                    </tr>
+                    <tr>
+                        <td>HackMars 1.0</td>
+                        <td>Nov 20 &ndash; Dec 20, 2025 &bull; Remote hackathon</td>
+                        <td>Evaluated productivity-focused learning tools, compiled judge notes, and recommended award distribution.</td>
+                        <td><a href="https://hackmars-1.devpost.com/" target="_blank" rel="noopener">Devpost Listing</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="reveal" style="font-size:1.3rem; margin:40px 0 12px; color: var(--dark-gray);">Mentorship &amp; Additional Contributions</h3>
+            <table class="summary-table reveal">
+                <thead>
+                    <tr>
+                        <th>Program</th>
+                        <th>Dates &amp; Participation</th>
+                        <th>Contribution Summary</th>
+                        <th>Evidence Links</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>UWB Hacks 2025 – Save the World!</td>
+                        <td>Mar &ndash; Apr 2025 &bull; University of Washington Bothell</td>
+                        <td>Mentored 500+ participants, facilitated technical workshops (DALLE API, cybersecurity, soldering), and served on judging panel with 46 industry partners.</td>
+                        <td>
+                            <a href="https://uwb-hacks-save-the-world.devpost.com/" target="_blank" rel="noopener">Devpost</a><br>
+                            <a href="https://www.uwbhacks.com/" target="_blank" rel="noopener">Official Site</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HackIllinois 2025</td>
+                        <td>Feb 2025 &bull; University of Illinois Urbana-Champaign</td>
+                        <td>Provided project feedback during judging reviews, emphasizing impact, technical execution, and user research validation.</td>
+                        <td>Organizer confirmation available upon request</td>
+                    </tr>
+                    <tr>
+                        <td>CougarHacks 2025</td>
+                        <td>Apr 26&ndash;27, 2025 &bull; University event</td>
+                        <td>Mentored cross-disciplinary teams, resolved technical blockers, and shaped final demo narratives.</td>
+                        <td><a href="https://cougarhacks2025.devpost.com/" target="_blank" rel="noopener">Devpost Listing</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
     <section class="section about-section" id="about">
         <div class="container">
