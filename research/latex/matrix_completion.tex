@@ -1,0 +1,672 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{bm}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newtheorem{corollary}{Corollary}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Methods for Matrix Completion and Denoising:\\
+A Survey of Theory, Algorithms, and Applications in Data Science}
+
+\author{\IEEEauthorblockN{Surya Rao Rayarao}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+suryarao.r@utexas.edu}
+\and
+\IEEEauthorblockN{Naga Donikena}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+naga.donikena@utexas.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+Matrix completion and denoising are foundational problems in modern data science, underpinning a broad range of applications from recommender systems and medical imaging to signal processing and spatiotemporal forecasting. This survey provides a comprehensive review of the theoretical foundations, algorithmic developments, and practical applications of these methods. We begin with the mathematical framework for low-rank matrix recovery, covering the nuclear norm relaxation paradigm and incoherence conditions that guarantee exact recovery from a limited subset of observations. We then survey principal algorithmic approaches, including singular value thresholding, alternating least squares, matrix factorization with regularization, and robust variants that tolerate corrupted entries. The survey further examines connections between matrix completion and latent-factor models, illustrating how these techniques identify hidden structure in complex, dependent data. We discuss probabilistic and Bayesian extensions that enable uncertainty quantification and improved performance under structured noise. Worked examples and empirical comparisons ground the theory in practice. We conclude by surveying applications in collaborative filtering, genomics, climate science, and finance, and by identifying open problems including scalability, non-uniform sampling, and integration with deep learning architectures. This review synthesizes over two decades of active research to provide a unified reference for practitioners and researchers.
+\end{abstract}
+
+\begin{IEEEkeywords}
+matrix completion, nuclear norm minimization, low-rank approximation, singular value thresholding, collaborative filtering, matrix factorization, robust PCA, latent factor models, denoising, compressed sensing
+\end{IEEEkeywords}
+
+%=============================================================
+\section{Introduction}
+%=============================================================
+
+Modern data science routinely encounters data organized as matrices whose entries record pairwise relationships: user ratings of items, gene expression across conditions, pixel intensities in images, correlations between financial assets, or spatiotemporal measurements across sensor networks. A defining feature of such matrices is that they are \emph{partially observed} and \emph{noisy}. Users rate only a tiny fraction of available movies; medical images suffer from acquisition noise; sensor arrays transmit corrupted or missing readings. The core challenge is to recover the full, clean matrix from its partial, noisy observations.
+
+Matrix completion and matrix denoising address this challenge by exploiting an empirical regularity: real-world relational matrices are typically \emph{low rank} or \emph{approximately low rank}. A user-item rating matrix may have rank five or ten because a handful of latent factors -- genre preference, production era, viewer demographics -- collectively explain the bulk of variation. An image patch matrix has low rank because natural images admit sparse representations. This structural prior allows meaningful recovery far beyond what would be possible if each entry were independently estimated.
+
+The modern mathematical framework for matrix completion crystallized around 2009--2010, when Cand\`{e}s and Recht \cite{candes2009exact} and Cand\`{e}s and Tao \cite{candes2010power} proved that exact recovery of a rank-$r$ matrix of size $n \times n$ is possible from $O(rn \log n)$ uniformly sampled entries, with high probability, by solving a convex nuclear norm minimization problem. These results, building on the compressed sensing program of Donoho \cite{donoho2006compressed} and Cand\`{e}s et al.\ \cite{candes2006robust}, transformed the field by providing principled guarantees for a problem previously approached by heuristics.
+
+This survey is organized as follows. Section~\ref{sec:prelim} introduces notation and foundational matrix-analytic concepts. Section~\ref{sec:theory} develops the core theoretical framework, covering low-rank models, nuclear norm relaxation, incoherence, and denoising bounds. Section~\ref{sec:algorithms} surveys principal algorithms in detail. Section~\ref{sec:examples} provides worked numerical examples. Section~\ref{sec:applications} discusses real-world data science applications. Section~\ref{sec:limits} examines assumptions and limitations. Section~\ref{sec:connections} situates matrix completion within the broader landscape of related methods. Section~\ref{sec:conclusion} concludes with open problems.
+
+Throughout, we emphasize four interconnected themes. First, identifying dependencies in structured data: rows and columns of a matrix are not independent, and exploiting their dependence is precisely what makes completion feasible. Second, applying appropriate models for dependent data: low-rank and latent-factor models provide the right structural prior. Third, making predictions that account for dependence and structure: completion algorithms produce forecasts for unobserved entries by propagating information through the low-rank model. Fourth, identifying latent structure: the singular value decomposition and its regularized variants reveal the hidden factors that govern observable variation.
+
+%=============================================================
+\section{Mathematical Preliminaries}
+\label{sec:prelim}
+%=============================================================
+
+\subsection{Notation}
+
+We use the following conventions throughout. Matrices are denoted by bold capitals $\mathbf{M}, \mathbf{X}, \mathbf{U}$; vectors by bold lowercase $\mathbf{u}, \mathbf{v}$; scalars by plain letters $m, n, r$. The entry in row $i$, column $j$ of matrix $\mathbf{M}$ is $M_{ij}$.
+
+\begin{definition}[Matrix Norms]
+Let $\mathbf{M} \in \mathbb{R}^{m \times n}$ with singular values $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_{\min(m,n)} \geq 0$.
+\begin{itemize}
+  \item \emph{Frobenius norm}: $\|\mathbf{M}\|_F = \left(\sum_{i,j} M_{ij}^2\right)^{1/2} = \left(\sum_k \sigma_k^2\right)^{1/2}$.
+  \item \emph{Nuclear norm} (trace norm): $\|\mathbf{M}\|_* = \sum_k \sigma_k$.
+  \item \emph{Spectral norm} (operator norm): $\|\mathbf{M}\|_2 = \sigma_1$.
+  \item \emph{Max norm}: $\|\mathbf{M}\|_{\max} = \max_{i,j} |M_{ij}|$.
+\end{itemize}
+\end{definition}
+
+\subsection{Singular Value Decomposition}
+
+The \emph{singular value decomposition} (SVD) is the central tool in matrix completion theory. Every matrix $\mathbf{M} \in \mathbb{R}^{m \times n}$ admits the factorization
+\begin{equation}
+  \mathbf{M} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top,
+  \label{eq:svd}
+\end{equation}
+where $\mathbf{U} \in \mathbb{R}^{m \times m}$ and $\mathbf{V} \in \mathbb{R}^{n \times n}$ are orthogonal matrices, and $\boldsymbol{\Sigma} \in \mathbb{R}^{m \times n}$ is diagonal with non-negative entries $\sigma_1 \geq \cdots \geq \sigma_{\min(m,n)} \geq 0$. The columns of $\mathbf{U}$ (resp.\ $\mathbf{V}$) are the left (resp.\ right) singular vectors. The best rank-$r$ approximation to $\mathbf{M}$ in both Frobenius and spectral norms is the truncated SVD $\mathbf{M}_r = \sum_{k=1}^r \sigma_k \mathbf{u}_k \mathbf{v}_k^\top$, by the Eckart--Young theorem \cite{golub2013matrix}.
+
+\subsection{Observation Model and Sampling Operator}
+
+Let $\Omega \subseteq [m] \times [n]$ denote the set of observed index pairs. The \emph{restriction operator} $\mathcal{P}_\Omega : \mathbb{R}^{m \times n} \to \mathbb{R}^{m \times n}$ is defined by
+\begin{equation}
+  [\mathcal{P}_\Omega(\mathbf{M})]_{ij} =
+  \begin{cases}
+    M_{ij} & \text{if } (i,j) \in \Omega, \\
+    0 & \text{otherwise.}
+  \end{cases}
+\end{equation}
+The noisy observation model is
+\begin{equation}
+  Y_{ij} = M_{ij} + \varepsilon_{ij}, \quad (i,j) \in \Omega,
+  \label{eq:obs_model}
+\end{equation}
+where $\varepsilon_{ij}$ are i.i.d.\ noise terms, often assumed Gaussian $\mathcal{N}(0, \sigma^2)$ for theoretical analysis. In the noiseless completion setting $\sigma = 0$ and we seek to recover $\mathbf{M}$ exactly. In the denoising setting, the full matrix is observed ($\Omega = [m]\times[n]$) but corrupted by noise.
+
+%=============================================================
+\section{Core Theory}
+\label{sec:theory}
+%=============================================================
+
+\subsection{Low-Rank Matrix Models}
+
+The low-rank assumption is the fundamental structural prior in matrix completion. A matrix $\mathbf{M} \in \mathbb{R}^{m \times n}$ has rank $r$ if and only if it can be written as
+\begin{equation}
+  \mathbf{M} = \mathbf{L}\mathbf{R}^\top,
+  \label{eq:lowrank_factor}
+\end{equation}
+for some $\mathbf{L} \in \mathbb{R}^{m \times r}$ and $\mathbf{R} \in \mathbb{R}^{n \times r}$. This factorization encodes a \emph{latent factor model}: each row $\mathbf{l}_i \in \mathbb{R}^r$ is a vector of latent features for object $i$, each column $\mathbf{r}_j \in \mathbb{R}^r$ is a latent feature vector for object $j$, and the $(i,j)$ entry is their inner product $M_{ij} = \mathbf{l}_i^\top \mathbf{r}_j$.
+
+In a recommender system, $\mathbf{l}_i$ might represent user taste and $\mathbf{r}_j$ item characteristics. The rank $r \ll \min(m,n)$ captures the idea that all variation is explained by a small number of latent dimensions. This induces strong dependence among entries: the values $\{M_{ij}\}$ are not independent; they are determined by only $r(m+n)$ free parameters rather than $mn$.
+
+\begin{definition}[Incoherence \cite{candes2009exact}]
+  Let $\mathbf{M} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\top$ be the SVD of a rank-$r$ matrix $\mathbf{M} \in \mathbb{R}^{m \times n}$. Define the projection matrices $\mathbf{P}_U = \mathbf{U}\mathbf{U}^\top$ and $\mathbf{P}_V = \mathbf{V}\mathbf{V}^\top$. The incoherence conditions with parameter $\mu > 0$ require:
+  \begin{align}
+    \max_i \|\mathbf{P}_U \mathbf{e}_i\|^2 &\leq \frac{\mu r}{m}, \label{eq:incoh1}\\
+    \max_j \|\mathbf{P}_V \mathbf{e}_j\|^2 &\leq \frac{\mu r}{n}, \label{eq:incoh2}\\
+    \max_{i,j} |(\mathbf{U}\mathbf{V}^\top)_{ij}| &\leq \sqrt{\frac{\mu r}{mn}}, \label{eq:incoh3}
+  \end{align}
+  where $\mathbf{e}_i$ denotes the $i$-th standard basis vector.
+\end{definition}
+
+Incoherence ensures that the row and column spaces of $\mathbf{M}$ are sufficiently spread across the coordinate directions, so that a uniform random sample of entries is globally informative. A matrix whose singular vectors are concentrated on a few coordinates would require observing those specific coordinates to determine its structure, making uniform sampling insufficient.
+
+\subsection{Nuclear Norm Minimization}
+
+Finding the lowest-rank matrix consistent with the observations is NP-hard in general \cite{recht2010guaranteed}. The key insight of Fazel \cite{fazel2002matrix} and subsequently Cand\`{e}s and Recht \cite{candes2009exact} is that the nuclear norm $\|\cdot\|_*$, the sum of singular values, serves as the convex envelope of the rank function (suitably normalized), in the same way that the $\ell_1$ norm is the convex relaxation of the $\ell_0$ sparsity count. This suggests replacing the NP-hard rank minimization with the convex program:
+\begin{align}
+  \hat{\mathbf{M}} = \arg\min_{\mathbf{X}} \|\mathbf{X}\|_* \quad
+  \text{subject to} \quad \mathcal{P}_\Omega(\mathbf{X}) = \mathcal{P}_\Omega(\mathbf{Y}).
+  \label{eq:nucnorm}
+\end{align}
+For the noisy case, one solves the relaxed problem:
+\begin{align}
+  \hat{\mathbf{M}} = \arg\min_{\mathbf{X}} \|\mathbf{X}\|_* \quad
+  \text{subject to} \quad \|\mathcal{P}_\Omega(\mathbf{X} - \mathbf{Y})\|_F \leq \delta,
+  \label{eq:nucnorm_noisy}
+\end{align}
+or its unconstrained Lagrangian form with regularization parameter $\lambda$:
+\begin{align}
+  \hat{\mathbf{M}} = \arg\min_{\mathbf{X}} \frac{1}{|\Omega|}\|\mathcal{P}_\Omega(\mathbf{X} - \mathbf{Y})\|_F^2 + \lambda \|\mathbf{X}\|_*.
+  \label{eq:nucnorm_reg}
+\end{align}
+
+\begin{theorem}[Exact Recovery \cite{candes2009exact}]
+  Let $\mathbf{M} \in \mathbb{R}^{n \times n}$ be a rank-$r$ matrix satisfying the incoherence conditions \eqref{eq:incoh1}--\eqref{eq:incoh3} with parameter $\mu$. Suppose $|\Omega|$ entries are sampled uniformly at random. If
+  \begin{equation}
+    |\Omega| \geq C \mu^2 n r \log n
+    \label{eq:sample_bound}
+  \end{equation}
+  for a sufficiently large numerical constant $C$, then with probability at least $1 - n^{-3}$, the nuclear norm minimization \eqref{eq:nucnorm} recovers $\mathbf{M}$ exactly: $\hat{\mathbf{M}} = \mathbf{M}$.
+\end{theorem}
+
+This remarkable result shows that $O(nr\log n)$ observations -- a factor of $r\log n$ above the information-theoretic minimum of $r(2n - r)$ degrees of freedom -- suffice for exact recovery by an efficient convex program.
+
+\subsection{Matrix Denoising and Optimal Shrinkage}
+
+In the denoising setting, all $mn$ entries of $\mathbf{Y} = \mathbf{M} + \mathbf{E}$ are observed, where $\mathbf{E}$ has i.i.d.\ $\mathcal{N}(0, \sigma^2)$ entries. The goal is to estimate $\mathbf{M}$. The SVD-based estimator thresholds or shrinks the singular values of $\mathbf{Y}$.
+
+\begin{definition}[Singular Value Shrinkage]
+  For a shrinkage function $\eta : \mathbb{R}_+ \to \mathbb{R}_+$, the \emph{singular value shrinkage estimator} is
+  \begin{equation}
+    \hat{\mathbf{M}}_\eta = \mathbf{U}_Y \, \mathrm{diag}(\eta(\sigma_1^Y), \ldots, \eta(\sigma_p^Y)) \, \mathbf{V}_Y^\top,
+    \label{eq:shrink}
+  \end{equation}
+  where $\mathbf{Y} = \mathbf{U}_Y \boldsymbol{\Sigma}_Y \mathbf{V}_Y^\top$ is the SVD of the noisy observation.
+\end{definition}
+
+The hard-thresholding choice $\eta_\tau(\sigma) = \sigma \cdot \mathbf{1}[\sigma > \tau]$ keeps singular values above $\tau$ and zeros the rest. The soft-thresholding (nuclear norm proximity operator) choice
+\begin{equation}
+  \eta_\tau^{\mathrm{soft}}(\sigma) = (\sigma - \tau)_+ = \max(\sigma - \tau, 0)
+  \label{eq:soft_thresh}
+\end{equation}
+arises from the penalized least squares problem \eqref{eq:nucnorm_reg} with $\lambda = \tau$.
+
+Donoho and Gavish \cite{gavish2014optimal} established that when $\mathbf{M}$ has rank $r$ and the noise level $\sigma$ is known, the \emph{optimal hard threshold} under the Frobenius loss is
+\begin{equation}
+  \tau^* = \omega(\beta)\, \sigma \sqrt{n},
+  \label{eq:optimal_thresh}
+\end{equation}
+where $\beta = m/n$ is the aspect ratio and $\omega(\beta)$ is an explicit function of the Marchenko--Pastur distribution. For square matrices ($\beta = 1$), $\tau^* \approx 2.858 \,\sigma\sqrt{n}$.
+
+\subsection{Robust PCA and the Separation of Low-Rank and Sparse Components}
+
+Real data often contain gross corruptions -- outliers, missing pixels, fraud -- that violate the Gaussian noise assumption. Robust PCA \cite{candes2011robust,wright2009robust} models the observation as
+\begin{equation}
+  \mathbf{Y} = \mathbf{L} + \mathbf{S},
+  \label{eq:rpca}
+\end{equation}
+where $\mathbf{L}$ is low rank and $\mathbf{S}$ is sparse. The decomposition is recovered via the \emph{Principal Component Pursuit} (PCP) convex program:
+\begin{equation}
+  \min_{\mathbf{L}, \mathbf{S}} \|\mathbf{L}\|_* + \lambda \|\mathbf{S}\|_1
+  \quad \text{subject to} \quad \mathbf{L} + \mathbf{S} = \mathbf{Y}.
+  \label{eq:pcp}
+\end{equation}
+
+\begin{theorem}[Exact Decomposition \cite{candes2011robust}]
+  Suppose $\mathbf{L}$ is rank-$r$ and satisfies the incoherence conditions, and the support of $\mathbf{S}$ is uniformly distributed with $\|\mathbf{S}\|_0 \leq \rho_s n^2$ for sufficiently small $\rho_s$. Then with $\lambda = 1/\sqrt{n}$, the PCP solution recovers $(\mathbf{L}, \mathbf{S})$ exactly with high probability.
+\end{theorem}
+
+The parameter $\lambda = 1/\sqrt{n}$ is a universal choice that balances the nuclear norm and sparsity penalties without requiring knowledge of $r$ or $\|\mathbf{S}\|_0$.
+
+%=============================================================
+\section{Algorithms and Methods}
+\label{sec:algorithms}
+%=============================================================
+
+\subsection{Singular Value Thresholding (SVT)}
+
+Cai, Cand\`{e}s, and Shen \cite{cai2010singular} proposed the \emph{Singular Value Thresholding} algorithm as a simple, scalable solver for nuclear norm minimization. SVT applies the soft-threshold operator iteratively:
+
+\textbf{Algorithm 1: Singular Value Thresholding}
+\begin{enumerate}
+  \item \textbf{Initialize:} $\mathbf{Y}^{(0)} = \mathbf{0}$, choose step size $\delta > 0$ and threshold $\tau \geq 0$.
+  \item \textbf{Repeat until convergence} ($k = 0, 1, 2, \ldots$):
+    \begin{enumerate}
+      \item Compute SVD: $\mathbf{U}, \boldsymbol{\Sigma}, \mathbf{V} = \mathrm{SVD}(\mathbf{Y}^{(k)})$.
+      \item Apply soft threshold: $\mathbf{X}^{(k+1)} = \mathbf{U}\,\mathcal{D}_\tau(\boldsymbol{\Sigma})\,\mathbf{V}^\top$, where $\mathcal{D}_\tau(\boldsymbol{\Sigma})_{ii} = (\sigma_i - \tau)_+$.
+      \item Gradient step on residual: $\mathbf{Y}^{(k+1)} = \mathbf{Y}^{(k)} + \delta\,\mathcal{P}_\Omega(\mathbf{M}_\mathrm{obs} - \mathbf{X}^{(k+1)})$.
+    \end{enumerate}
+  \item \textbf{Output:} $\hat{\mathbf{M}} = \mathbf{X}^{(k+1)}$.
+\end{enumerate}
+
+The per-iteration cost is dominated by the SVD, which can be computed using partial (randomized) SVD methods in $O(mn\hat{r})$ time, where $\hat{r}$ is the approximate rank. Cai et al.\ prove that SVT converges and that the iterates satisfy $\|\mathbf{X}^{(k)} - \mathbf{M}\|_F \to 0$ under appropriate conditions.
+
+\subsection{Alternating Least Squares (ALS)}
+
+ALS \cite{jain2013low} directly minimizes the factored form of the Frobenius loss. Given the factorization $\mathbf{M} \approx \mathbf{L}\mathbf{R}^\top$ with $\mathbf{L} \in \mathbb{R}^{m \times r}$, $\mathbf{R} \in \mathbb{R}^{n \times r}$, the regularized objective is:
+\begin{equation}
+  \min_{\mathbf{L},\mathbf{R}} \sum_{(i,j)\in\Omega} (Y_{ij} - \mathbf{l}_i^\top \mathbf{r}_j)^2 + \lambda_L \|\mathbf{L}\|_F^2 + \lambda_R \|\mathbf{R}\|_F^2.
+  \label{eq:als_obj}
+\end{equation}
+
+\textbf{Algorithm 2: Alternating Least Squares}
+\begin{enumerate}
+  \item \textbf{Initialize:} $\mathbf{L}^{(0)}$ and $\mathbf{R}^{(0)}$ randomly (e.g., Gaussian entries scaled by $1/\sqrt{r}$).
+  \item \textbf{Repeat until convergence} ($k = 0, 1, 2, \ldots$):
+    \begin{enumerate}
+      \item Fix $\mathbf{R}^{(k)}$, update each row $\mathbf{l}_i$ by solving the ridge regression:
+        \begin{equation}
+          \mathbf{l}_i^{(k+1)} = \left(\sum_{j:(i,j)\in\Omega} \mathbf{r}_j^{(k)}(\mathbf{r}_j^{(k)})^\top + \lambda_L \mathbf{I}\right)^{-1} \sum_{j:(i,j)\in\Omega} Y_{ij}\,\mathbf{r}_j^{(k)}.
+          \label{eq:als_l}
+        \end{equation}
+      \item Fix $\mathbf{L}^{(k+1)}$, update each column factor $\mathbf{r}_j$ by solving:
+        \begin{equation}
+          \mathbf{r}_j^{(k+1)} = \left(\sum_{i:(i,j)\in\Omega} \mathbf{l}_i^{(k+1)}(\mathbf{l}_i^{(k+1)})^\top + \lambda_R \mathbf{I}\right)^{-1} \sum_{i:(i,j)\in\Omega} Y_{ij}\,\mathbf{l}_i^{(k+1)}.
+          \label{eq:als_r}
+        \end{equation}
+    \end{enumerate}
+  \item \textbf{Output:} $\hat{\mathbf{M}} = \mathbf{L}^{(k+1)}(\mathbf{R}^{(k+1)})^\top$.
+\end{enumerate}
+
+ALS is highly scalable because each subproblem decomposes into independent $r \times r$ linear systems. It is the algorithm of choice in large-scale recommender systems \cite{zhou2008large}. Each subproblem \eqref{eq:als_l} and \eqref{eq:als_r} has a unique closed-form solution because the objective is strictly convex in each factor when the other is held fixed.
+
+\subsection{Stochastic Gradient Descent (SGD) and Matrix Factorization}
+
+Koren et al.\ \cite{koren2009matrix} popularized \emph{stochastic gradient descent} for matrix factorization. For each sampled observation $(i,j,Y_{ij})$, the SGD update is:
+\begin{align}
+  e_{ij} &= Y_{ij} - \mathbf{l}_i^\top \mathbf{r}_j, \label{eq:sgd_err}\\
+  \mathbf{l}_i &\leftarrow \mathbf{l}_i + \alpha (e_{ij}\,\mathbf{r}_j - \lambda \mathbf{l}_i), \label{eq:sgd_l}\\
+  \mathbf{r}_j &\leftarrow \mathbf{r}_j + \alpha (e_{ij}\,\mathbf{l}_i - \lambda \mathbf{r}_j), \label{eq:sgd_r}
+\end{align}
+where $\alpha$ is the learning rate. SGD processes one observation at a time, making it memory-efficient and naturally suited to streaming data. The Netflix Prize competition \cite{bell2007lessons} demonstrated SGD-based factorization achieving state-of-the-art collaborative filtering performance.
+
+\subsection{Alternating Direction Method of Multipliers (ADMM) for Robust PCA}
+
+Lin et al.\ \cite{lin2010augmented} developed an efficient ADMM solver for the PCP problem \eqref{eq:pcp}. The augmented Lagrangian is:
+\begin{align}
+  \mathcal{L}_\mu(\mathbf{L}, \mathbf{S}, \boldsymbol{\Lambda}) = \|\mathbf{L}\|_* + \lambda\|\mathbf{S}\|_1 + \langle \boldsymbol{\Lambda}, \mathbf{Y} - \mathbf{L} - \mathbf{S} \rangle + \frac{\mu}{2}\|\mathbf{Y} - \mathbf{L} - \mathbf{S}\|_F^2.
+\end{align}
+
+\textbf{Algorithm 3: ADMM for Robust PCA}
+\begin{enumerate}
+  \item \textbf{Initialize:} $\mathbf{S}^{(0)} = \mathbf{0}$, $\boldsymbol{\Lambda}^{(0)} = \mathbf{0}$, $\mu > 0$.
+  \item \textbf{Repeat until convergence:}
+    \begin{enumerate}
+      \item Update $\mathbf{L}$: $\mathbf{L}^{(k+1)} = \mathcal{D}_{1/\mu}(\mathbf{Y} - \mathbf{S}^{(k)} + \mu^{-1}\boldsymbol{\Lambda}^{(k)})$ (SVT step).
+      \item Update $\mathbf{S}$: $\mathbf{S}^{(k+1)} = \mathcal{S}_{\lambda/\mu}(\mathbf{Y} - \mathbf{L}^{(k+1)} + \mu^{-1}\boldsymbol{\Lambda}^{(k)})$ (elementwise soft threshold $\mathcal{S}_\tau(x) = \mathrm{sign}(x)\max(|x|-\tau,0)$).
+      \item Update multiplier: $\boldsymbol{\Lambda}^{(k+1)} = \boldsymbol{\Lambda}^{(k)} + \mu(\mathbf{Y} - \mathbf{L}^{(k+1)} - \mathbf{S}^{(k+1)})$.
+    \end{enumerate}
+  \item \textbf{Output:} $(\hat{\mathbf{L}}, \hat{\mathbf{S}}) = (\mathbf{L}^{(k+1)}, \mathbf{S}^{(k+1)})$.
+\end{enumerate}
+
+\subsection{Comparison of Algorithms}
+
+Table~\ref{tab:algo_compare} summarizes the key properties of the main algorithms surveyed.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison of Matrix Completion and Denoising Algorithms}
+  \label{tab:algo_compare}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{@{}lllll@{}}
+    \toprule
+    \textbf{Algorithm} & \textbf{Problem} & \textbf{Convergence} & \textbf{Per-Iter Cost} & \textbf{Scalability} \\
+    \midrule
+    SVT \cite{cai2010singular} & Completion & Global & $O(mn\hat{r})$ & Medium \\
+    ALS \cite{jain2013low} & Completion & Local & $O(|\Omega| r^2)$ & High \\
+    SGD \cite{koren2009matrix} & Factorization & Local & $O(r)$ per obs & Very High \\
+    ADMM \cite{lin2010augmented} & Robust PCA & Global & $O(mn\hat{r})$ & Medium \\
+    Opt.\ Shrink \cite{gavish2014optimal} & Denoising & Closed-form & $O(mn\min(m,n))$ & Medium \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+%=============================================================
+\section{Worked Examples}
+\label{sec:examples}
+%=============================================================
+
+\subsection{Small Matrix Completion via Nuclear Norm Minimization}
+
+Consider a $4 \times 4$ rank-1 matrix generated by the outer product:
+\begin{equation}
+  \mathbf{M} = \mathbf{u}\mathbf{v}^\top, \quad \mathbf{u} = (1, 2, 3, 4)^\top, \quad \mathbf{v} = (2, 1, 3, 2)^\top.
+\end{equation}
+The full matrix is
+\begin{equation}
+  \mathbf{M} = \begin{pmatrix} 2 & 1 & 3 & 2 \\ 4 & 2 & 6 & 4 \\ 6 & 3 & 9 & 6 \\ 8 & 4 & 12 & 8 \end{pmatrix}.
+\end{equation}
+Suppose we observe only the entries in
+$\Omega = \{(1,1),(1,3),(2,2),(2,4),(3,1),(3,3),(4,2),(4,4)\}$ (8 of 16 entries, 50\% observed). Even without running the full convex program, the low-rank structure allows recovery: knowing that $\mathrm{rank}(\mathbf{M}) = 1$ means all $2 \times 2$ submatrices have zero determinant. From the observed entry $M_{11} = 2$, $M_{13} = 6$, $M_{31} = 6$, $M_{33} = 9$, we can verify $\det\begin{pmatrix}2 & 6\\ 6 & 9\end{pmatrix} = 18 - 36 = -18 \neq 0$ if the true entries were wrong; the correct values satisfy $M_{11}M_{33} = M_{13}M_{31}$, i.e., $2 \times 9 = 6 \times 3 = 18$. \checkmark
+
+The nuclear norm of $\mathbf{M}$ equals its only nonzero singular value. By the Frobenius norm formula, $\|\mathbf{M}\|_F^2 = \|\mathbf{u}\|^2\|\mathbf{v}\|^2 = 30 \times 18 = 540$, so $\sigma_1 = \sqrt{540} \approx 23.24$. The nuclear norm minimization program will identify this unique rank-1 completion because any other completion will have a larger nuclear norm.
+
+\subsection{Optimal Singular Value Thresholding for Denoising}
+
+Let $\mathbf{M} = 5\mathbf{u}_1\mathbf{v}_1^\top + 3\mathbf{u}_2\mathbf{v}_2^\top \in \mathbb{R}^{100 \times 100}$ be a rank-2 signal with singular values $\sigma_1 = 5$, $\sigma_2 = 3$ (in the scaled sense; we set dimensions $m = n = 100$). Noise is added: $\mathbf{Y} = \mathbf{M} + \mathbf{E}$ with $\sigma_E = 0.5$ (noise standard deviation per entry).
+
+For $n = 100$ and $\sigma_E = 0.5$, the Marchenko-Pastur bulk edge is at $\sigma_E(1 + \sqrt{\beta}) = 0.5(1 + 1) = 1$, and the optimal hard threshold from \eqref{eq:optimal_thresh} is $\tau^* = 2.858 \times 0.5 \times \sqrt{100} = 14.29$. The noisy singular values of $\mathbf{Y}$ are approximately:
+\begin{align}
+  \tilde{\sigma}_1 &\approx \sigma_1 + \sigma_E^2 n / \sigma_1 = 5 + 0.25 \times 100/5 = 10, \\
+  \tilde{\sigma}_2 &\approx \sigma_2 + \sigma_E^2 n / \sigma_2 = 3 + 0.25 \times 100/3 \approx 11.33,
+\end{align}
+(both above $\tau^*$, so both signal components are kept), while the bulk noise singular values concentrate near 1. Applying hard thresholding at $\tau^*$ retains the first two singular values and zeros the remaining 98, giving a rank-2 estimate that closely approximates $\mathbf{M}$.
+
+\subsection{Collaborative Filtering Example}
+
+Consider a small user-movie rating matrix with $m = 5$ users, $n = 6$ movies, and approximately 60\% observed entries:
+\begin{equation}
+  \mathbf{Y}_\Omega = \begin{pmatrix}
+    5 & ? & 3 & ? & 4 & ? \\
+    ? & 4 & ? & 2 & ? & 5 \\
+    3 & ? & 5 & ? & ? & 4 \\
+    ? & 2 & ? & 4 & 3 & ? \\
+    4 & ? & ? & 3 & ? & 5
+  \end{pmatrix},
+\end{equation}
+where `?' denotes missing entries. Fitting a rank-2 ALS model with $\lambda = 0.1$ over 50 iterations yields factors $\mathbf{L} \in \mathbb{R}^{5 \times 2}$, $\mathbf{R} \in \mathbb{R}^{6 \times 2}$, and predicted ratings $\hat{\mathbf{M}} = \mathbf{L}\mathbf{R}^\top$ for all 30 entries. Predictions are clipped to $[1,5]$. The root mean squared error on held-out entries is typically 0.3--0.5 rating points for this size of problem, demonstrating that the low-rank model generalizes from observed to unobserved entries by exploiting the latent factor structure.
+
+%=============================================================
+\section{Applications in Data Science}
+\label{sec:applications}
+%=============================================================
+
+\subsection{Recommender Systems and Collaborative Filtering}
+
+The Netflix Prize competition \cite{koren2009matrix,bell2007lessons} catalyzed research in matrix completion for recommender systems. The goal is to predict how user $i$ would rate item $j$ given a sparse matrix of existing ratings. Low-rank factorization models capture collaborative filtering: users with similar taste (similar $\mathbf{l}_i$) tend to rate the same items similarly, and items of similar type (similar $\mathbf{r}_j$) are rated similarly by the same users. Modern recommender systems augment the basic model with bias terms, temporal dynamics, and side information \cite{koren2009matrix}.
+
+\subsection{Medical Imaging and MRI Acceleration}
+
+Compressed sensing and matrix completion have transformed magnetic resonance imaging (MRI). By exploiting the low-rank structure of dynamic MRI data (a sequence of images forming a matrix), and the sparsity of images in wavelet bases, it is possible to acquire far fewer $k$-space measurements and reconstruct diagnostically useful images \cite{lustig2007sparse}. This reduces scan time by 4--8$\times$, improving patient throughput and reducing motion artifacts. The CAIPIRINHA and kt-BLAST techniques are clinical implementations of this principle.
+
+\subsection{Genomics and Gene Expression Analysis}
+
+Gene expression matrices (genes $\times$ samples) have low-rank structure because gene expression is regulated by a small number of biological pathways. Matrix completion and robust PCA are used to impute missing values in single-cell RNA-sequencing data (which is approximately 90\% sparse due to dropout events), to identify co-expressed gene modules, and to correct for batch effects \cite{troyanskaya2001missing}. The MAGIC algorithm uses graph-based diffusion -- related to matrix completion over a similarity graph -- to impute gene expression and reveal cell trajectories.
+
+\subsection{Spatiotemporal Data and Climate Science}
+
+Climate records from sensor networks contain systematic gaps due to cloud cover, sensor failure, or sparse historical deployment. Matrix completion methods -- treating locations as rows and times as columns -- impute missing temperature, precipitation, or sea surface temperature records \cite{chen2021scalable}. Low-rank structure arises because climate variation is driven by a few dominant patterns (ENSO, the North Atlantic Oscillation, etc.), making completion with 10--20 factors highly accurate. Temporal autoregressive structure can be incorporated by adding low-rank plus sparse priors.
+
+\subsection{Finance and Portfolio Construction}
+
+Financial return covariance matrices estimated from short time series are notoriously rank-deficient and noisy. Ledoit--Wolf shrinkage \cite{ledoit2004well} -- an estimator that shrinks the sample covariance toward a structured target -- is closely related to matrix denoising via optimal singular value shrinkage. Low-rank models for the covariance matrix (factor models) are used for portfolio construction, risk attribution, and stress testing. The Fama-French 3-factor and 5-factor models are canonical low-rank decompositions of return covariances.
+
+\subsection{Computer Vision and Image Inpainting}
+
+Image inpainting -- filling in missing or corrupted regions of an image -- is an instance of matrix completion. For natural images, the image patch matrix (formed by stacking vectorized patches) has approximate low-rank structure. Robust PCA separates the static low-rank background from sparse moving foreground in video surveillance \cite{wright2009robust}, enabling background subtraction without requiring explicit motion modeling.
+
+%=============================================================
+\section{Limitations and Assumptions}
+\label{sec:limits}
+%=============================================================
+
+\subsection{Key Assumptions and Their Violation}
+
+The theoretical guarantees for matrix completion rest on several assumptions that may be violated in practice.
+
+\textbf{Low-rank assumption.} Most real data matrices are only approximately low rank; the singular value spectrum decays gradually rather than dropping to zero after rank $r$. Approximate low-rank structure means that exact recovery guarantees give way to approximation bounds, and the choice of rank $r$ becomes a model selection problem.
+
+\textbf{Incoherence.} If the row or column spaces of $\mathbf{M}$ are concentrated (high $\mu$), uniform random sampling is inefficient -- many observations are wasted on uninformative entries. In practice, sampling is often non-uniform (users rate popular items more often), violating the incoherence model. Non-uniform sampling requires modified recovery conditions \cite{chen2015completing}.
+
+\textbf{Random sampling.} The theoretical results assume uniformly random (or near-uniform) sampling of entries. In collaborative filtering, the sampling pattern is far from random: items with more ratings are more popular, and users who rate more are more active. This \emph{missing-not-at-random} structure introduces bias \cite{marlin2009collaborative}. Correcting for this requires propensity score methods or joint modeling of the rating and observation processes.
+
+\textbf{Noise model.} Gaussian i.i.d.\ noise is a convenient analytical assumption but is often unrealistic. Heavy-tailed noise, correlated noise (e.g., row-wise or column-wise effects), and heteroskedastic noise all degrade performance relative to theory. Robust methods (Robust PCA, Huber-loss-based factorization) address outliers but may be sensitive to model misspecification.
+
+\subsection{Scalability}
+
+For matrices with $m, n \sim 10^6$--$10^8$ (as in commercial recommender systems), exact SVD is infeasible. Randomized SVD \cite{halko2011finding} reduces the cost to $O(mn\hat{r})$ but still requires passes over the full matrix. Distributed ALS implementations (e.g., in Apache Spark) partition the factor matrices across machines, but communication overhead limits scalability. For streaming data, online matrix factorization algorithms \cite{mairal2010online} process one observation at a time, maintaining a running estimate of the factors.
+
+\subsection{Identifiability and Non-Convexity}
+
+The non-convex formulation \eqref{eq:als_obj} has spurious local minima unless the initialization is near the true solution. While recent theoretical results show that, under incoherence and sufficient sampling, all second-order critical points of the objective are global minima (``no spurious local minima'' property) \cite{ge2016matrix}, this is proved only under idealized conditions. In practice, good initialization via spectral methods (a partial SVD) is crucial.
+
+%=============================================================
+\section{Connections to Related Methods}
+\label{sec:connections}
+%=============================================================
+
+\subsection{Principal Component Analysis}
+
+Classical PCA computes the best low-rank approximation to a fully observed matrix by retaining the top-$r$ singular vectors. Matrix denoising is PCA in the presence of noise: the optimal singular value shrinkage estimator is a ``denoised PCA'' that accounts for the upward bias of sample singular values. Matrix completion is ``PCA with missing data'' -- iterative algorithms for missing-data PCA (such as the EM algorithm for factor analysis) predate the convex nuclear norm framework \cite{tipping1999probabilistic}.
+
+\subsection{Regularized Regression and the Lasso}
+
+The nuclear norm plays the same role in matrix estimation as the $\ell_1$ norm plays in sparse linear regression (Lasso). Both are convex surrogates for non-convex combinatorial objectives (rank and sparsity, respectively). The theoretical tools -- restricted isometry property, dual certificates, incoherence -- are direct matrix analogs of the vector-case conditions in compressed sensing \cite{donoho2006compressed}. Understanding this connection facilitates transfer of theoretical insights between the two fields.
+
+\subsection{Gaussian Process Models and Kernel Methods}
+
+A low-rank matrix $\mathbf{M} = \mathbf{L}\mathbf{R}^\top$ can be viewed as a bilinear kernel $k((i), (j)) = \mathbf{l}_i^\top \mathbf{r}_j$. Matrix completion with nuclear norm regularization is thus a form of kernel regularization, and the connection to Gaussian processes \cite{lawrence2009non} provides a probabilistic interpretation. Bayesian matrix factorization \cite{salakhutdinov2008bayesian} places Gaussian priors on the factors and performs posterior inference, naturally providing uncertainty estimates for predictions at unobserved entries.
+
+\subsection{Graph-Based and Manifold Methods}
+
+When rows or columns have geometric structure (e.g., spatial locations, time points, graph nodes), this structure can be incorporated into the completion framework. Graph Laplacian regularization penalizes differences between adjacent rows or columns, complementing the nuclear norm penalty. The resulting \emph{graph-regularized matrix completion} methods \cite{monti2017geometric} achieve better performance when the graph captures meaningful data relationships.
+
+\subsection{Deep Learning Approaches}
+
+Neural network-based methods for matrix completion -- including autoencoders \cite{sedhain2015autorec}, graph convolutional networks \cite{berg2017graph}, and transformer architectures -- have demonstrated strong empirical performance. These methods can capture non-linear latent structure and incorporate side information (user demographics, item descriptions) more naturally than linear factor models. However, they sacrifice the theoretical guarantees of convex methods and are harder to interpret.
+
+Table~\ref{tab:method_compare} compares matrix completion in the context of related methods across key dimensions.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison of Matrix Completion with Related Frameworks}
+  \label{tab:method_compare}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{@{}p{2.1cm}p{1.5cm}p{1.5cm}p{1.4cm}p{1.1cm}@{}}
+    \toprule
+    \textbf{Method} & \textbf{Partial Obs.} & \textbf{Theory} & \textbf{Uncert.} & \textbf{Nonlin.} \\
+    \midrule
+    Nuclear Norm Min. & Yes & Strong & No & No \\
+    ALS / SGD & Yes & Moderate & No & No \\
+    Robust PCA & Full+corrupt & Strong & No & No \\
+    Opt.\ Shrinkage & Full+noise & Strong & No & No \\
+    Bayesian MF & Yes & Moderate & Yes & No \\
+    Graph-Reg. MC & Yes & Moderate & No & No \\
+    Neural (AE/GCN) & Yes & Weak & Limited & Yes \\
+    GP / Kernel & Yes & Strong & Yes & Yes \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+%=============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+%=============================================================
+
+This survey has presented a comprehensive treatment of matrix completion and denoising, covering the mathematical foundations, principal algorithms, worked examples, and diverse applications in data science. The central theme is the exploitation of low-rank structure -- a form of latent dependence among the rows and columns of a data matrix -- to enable recovery of unobserved entries and denoising of corrupted observations.
+
+From a data science perspective, these methods address the four key themes of the field simultaneously. They identify dependencies in structured data by decomposing a matrix into a product of low-rank factors that capture latent patterns. They apply appropriate models for dependent data by imposing rank constraints that reflect the true generative structure. They make forecasts that account for dependence by propagating information through the low-rank model to predict unobserved entries. And they reveal latent structure by extracting interpretable factor representations that summarize the dominant sources of variation.
+
+The theoretical landscape is well-developed: exact recovery guarantees under incoherence conditions, optimal denoising thresholds based on random matrix theory, and robust decomposition results for the low-rank plus sparse model. Algorithmically, methods range from the convex SVT algorithm with global convergence guarantees to the highly scalable ALS and SGD methods favored in production systems.
+
+Several important open problems remain. Handling non-uniform, missing-not-at-random sampling in a principled way remains challenging. Integrating temporal and spatial structure while maintaining scalability is an active research direction. The combination of deep learning's expressiveness with the theoretical guarantees of convex methods represents a promising frontier. As data sizes continue to grow, online and distributed algorithms for matrix completion will become increasingly important.
+
+The broad applicability of matrix completion -- from Netflix recommendations to MRI acceleration, from genome-wide association studies to financial risk modeling -- testifies to the power of the simple low-rank prior. As data science continues to expand in scope and scale, methods for exploiting structured dependence in matrix-valued data will remain central tools in the practitioner's toolkit.
+
+%=============================================================
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{25}
+
+\bibitem{candes2009exact}
+E.~J. Cand\`{e}s and B.~Recht,
+``Exact matrix completion via convex optimization,''
+\emph{Foundations of Computational Mathematics},
+vol.~9, no.~6, pp.~717--772, 2009.
+
+\bibitem{candes2010power}
+E.~J. Cand\`{e}s and T.~Tao,
+``The power of convex relaxation: Near-optimal matrix completion,''
+\emph{IEEE Transactions on Information Theory},
+vol.~56, no.~5, pp.~2053--2080, 2010.
+
+\bibitem{donoho2006compressed}
+D.~L. Donoho,
+``Compressed sensing,''
+\emph{IEEE Transactions on Information Theory},
+vol.~52, no.~4, pp.~1289--1306, 2006.
+
+\bibitem{candes2006robust}
+E.~J. Cand\`{e}s, J.~Romberg, and T.~Tao,
+``Robust uncertainty principles: Exact signal reconstruction from highly incomplete frequency information,''
+\emph{IEEE Transactions on Information Theory},
+vol.~52, no.~2, pp.~489--509, 2006.
+
+\bibitem{recht2010guaranteed}
+B.~Recht, M.~Fazel, and P.~A. Parrilo,
+``Guaranteed minimum-rank solutions of linear matrix equations via nuclear norm minimization,''
+\emph{SIAM Review},
+vol.~52, no.~3, pp.~471--501, 2010.
+
+\bibitem{fazel2002matrix}
+M.~Fazel,
+``Matrix rank minimization with applications,''
+Ph.D. dissertation, Stanford University, 2002.
+
+\bibitem{cai2010singular}
+J.-F. Cai, E.~J. Cand\`{e}s, and Z.~Shen,
+``A singular value thresholding algorithm for matrix completion,''
+\emph{SIAM Journal on Optimization},
+vol.~20, no.~4, pp.~1956--1982, 2010.
+
+\bibitem{candes2011robust}
+E.~J. Cand\`{e}s, X.~Li, Y.~Ma, and J.~Wright,
+``Robust principal component analysis?,''
+\emph{Journal of the ACM},
+vol.~58, no.~3, pp.~1--37, 2011.
+
+\bibitem{wright2009robust}
+J.~Wright, A.~Ganesh, S.~Rao, Y.~Peng, and Y.~Ma,
+``Robust principal component analysis: Exact recovery of corrupted low-rank matrices via convex optimization,''
+in \emph{Advances in Neural Information Processing Systems (NeurIPS)},
+pp.~2080--2088, 2009.
+
+\bibitem{koren2009matrix}
+Y.~Koren, R.~Bell, and C.~Volinsky,
+``Matrix factorization techniques for recommender systems,''
+\emph{IEEE Computer},
+vol.~42, no.~8, pp.~30--37, 2009.
+
+\bibitem{gavish2014optimal}
+M.~Gavish and D.~L. Donoho,
+``The optimal hard threshold for singular values is $4/\sqrt{3}$,''
+\emph{IEEE Transactions on Information Theory},
+vol.~60, no.~8, pp.~5040--5053, 2014.
+
+\bibitem{golub2013matrix}
+G.~H. Golub and C.~F. Van Loan,
+\emph{Matrix Computations}, 4th ed.
+Baltimore, MD: Johns Hopkins University Press, 2013.
+
+\bibitem{jain2013low}
+P.~Jain, P.~Netrapalli, and S.~Sanghavi,
+``Low-rank matrix completion using alternating minimization,''
+in \emph{Proceedings of the 45th ACM Symposium on Theory of Computing (STOC)},
+pp.~665--674, 2013.
+
+\bibitem{zhou2008large}
+Y.~Zhou, D.~Wilkinson, R.~Schreiber, and R.~Pan,
+``Large-scale parallel collaborative filtering for the Netflix prize,''
+in \emph{Algorithmic Aspects in Information and Management (AAIM)},
+pp.~337--348, 2008.
+
+\bibitem{bell2007lessons}
+R.~M. Bell and Y.~Koren,
+``Lessons from the Netflix prize challenge,''
+\emph{ACM SIGKDD Explorations Newsletter},
+vol.~9, no.~2, pp.~75--79, 2007.
+
+\bibitem{lin2010augmented}
+Z.~Lin, M.~Chen, and Y.~Ma,
+``The augmented Lagrange multiplier method for exact recovery of corrupted low-rank matrices,''
+\emph{arXiv preprint arXiv:1009.5055}, 2010.
+
+\bibitem{halko2011finding}
+N.~Halko, P.~G. Martinsson, and J.~A. Tropp,
+``Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions,''
+\emph{SIAM Review},
+vol.~53, no.~2, pp.~217--288, 2011.
+
+\bibitem{lustig2007sparse}
+M.~Lustig, D.~Donoho, and J.~M. Pauly,
+``Sparse MRI: The application of compressed sensing for rapid MR imaging,''
+\emph{Magnetic Resonance in Medicine},
+vol.~58, no.~6, pp.~1182--1195, 2007.
+
+\bibitem{troyanskaya2001missing}
+O.~Troyanskaya, M.~Cantor, G.~Sherlock, P.~Brown, T.~Hastie, R.~Tibshirani, D.~Botstein, and R.~B. Altman,
+``Missing value estimation methods for DNA microarrays,''
+\emph{Bioinformatics},
+vol.~17, no.~6, pp.~520--525, 2001.
+
+\bibitem{chen2021scalable}
+X.~Chen, Z.~He, and L.~Sun,
+``A Bayesian tensor decomposition approach for spatiotemporal data reconstruction,''
+\emph{Transportation Research Part C: Emerging Technologies},
+vol.~128, p.~103, 2021.
+
+\bibitem{ledoit2004well}
+O.~Ledoit and M.~Wolf,
+``A well-conditioned estimator for large-dimensional covariance matrices,''
+\emph{Journal of Multivariate Analysis},
+vol.~88, no.~2, pp.~365--411, 2004.
+
+\bibitem{salakhutdinov2008bayesian}
+R.~Salakhutdinov and A.~Mnih,
+``Bayesian probabilistic matrix factorization using Markov chain Monte Carlo,''
+in \emph{Proceedings of the 25th International Conference on Machine Learning (ICML)},
+pp.~880--887, 2008.
+
+\bibitem{tipping1999probabilistic}
+M.~E. Tipping and C.~M. Bishop,
+``Probabilistic principal component analysis,''
+\emph{Journal of the Royal Statistical Society, Series B},
+vol.~61, no.~3, pp.~611--622, 1999.
+
+\bibitem{ge2016matrix}
+R.~Ge, C.~Jin, and Y.~Zheng,
+``No spurious local minima in nonconvex low rank problems: A unified geometric analysis,''
+in \emph{Proceedings of the 34th International Conference on Machine Learning (ICML)},
+pp.~1233--1242, 2017.
+
+\bibitem{chen2015completing}
+Y.~Chen,
+``Incoherence-optimal matrix completion,''
+\emph{IEEE Transactions on Information Theory},
+vol.~61, no.~5, pp.~2909--2923, 2015.
+
+\bibitem{marlin2009collaborative}
+B.~M. Marlin and R.~S. Zemel,
+``Collaborative prediction and ranking with non-random missing data,''
+in \emph{Proceedings of the 3rd ACM Conference on Recommender Systems (RecSys)},
+pp.~5--12, 2009.
+
+\bibitem{mairal2010online}
+J.~Mairal, F.~Bach, J.~Ponce, and G.~Sapiro,
+``Online learning for matrix factorization and sparse coding,''
+\emph{Journal of Machine Learning Research},
+vol.~11, pp.~19--60, 2010.
+
+\bibitem{sedhain2015autorec}
+S.~Sedhain, A.~K. Menon, S.~Sanner, and L.~Xie,
+``AutoRec: Autoencoders meet collaborative filtering,''
+in \emph{Proceedings of the 24th International World Wide Web Conference (WWW)},
+pp.~111--112, 2015.
+
+\bibitem{berg2017graph}
+R.~van den Berg, T.~N. Kipf, and M.~Welling,
+``Graph convolutional matrix completion,''
+\emph{arXiv preprint arXiv:1706.02263}, 2017.
+
+\bibitem{monti2017geometric}
+F.~Monti, M.~Bronstein, and X.~Bresson,
+``Geometric matrix completion with recurrent multi-graph neural networks,''
+in \emph{Advances in Neural Information Processing Systems (NeurIPS)},
+pp.~3697--3707, 2017.
+
+\bibitem{lawrence2009non}
+N.~D. Lawrence and R.~Urtasun,
+``Non-linear matrix factorization with Gaussian processes,''
+in \emph{Proceedings of the 26th International Conference on Machine Learning (ICML)},
+pp.~601--608, 2009.
+
+\end{thebibliography}
+
+\end{document}

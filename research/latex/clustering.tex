@@ -1,0 +1,666 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{url}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Clustering: A Comprehensive Survey of Methods, Theory, and Applications in Data Science}
+
+\author{\IEEEauthorblockN{Surya Rao Rayarao}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+suryarao.r@utexas.edu}
+\and
+\IEEEauthorblockN{Naga Donikena}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+naga.donikena@utexas.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+Clustering is a fundamental unsupervised learning paradigm that seeks to partition a dataset into groups of similar observations without the guidance of labeled examples. This survey provides a rigorous and comprehensive review of clustering methodologies, underlying mathematical theory, and practical applications within the broader context of data science and advanced predictive modeling. We examine the four central challenges that make clustering indispensable: identifying statistical dependencies embedded in structured data, selecting and applying models that appropriately account for such dependencies, generating predictions and forecasts that reflect latent groupings, and uncovering hidden structure in high-dimensional and complex datasets. We survey the major families of clustering algorithms---including partitional methods such as $k$-means, model-based approaches grounded in mixture models, hierarchical agglomerative methods, and density-based approaches such as DBSCAN---providing mathematical derivations, algorithmic descriptions, and worked numerical examples. Validation criteria, including internal indices and information-theoretic measures, are discussed alongside the assumptions and limitations of each method. Connections to dimensionality reduction, topic modeling, graph partitioning, and time-series segmentation are drawn. The survey concludes with a synthesis of open research directions and guidance for practitioners selecting methods in applied settings.
+\end{abstract}
+
+\begin{IEEEkeywords}
+clustering, unsupervised learning, $k$-means, Gaussian mixture models, DBSCAN, hierarchical clustering, latent structure, mixture models, cluster validity, data science
+\end{IEEEkeywords}
+
+%% ============================================================
+\section{Introduction}
+%% ============================================================
+
+The extraction of knowledge from unlabeled data is one of the most persistent challenges in statistics and machine learning. Clustering---the process of grouping a collection of objects so that objects within the same group are more similar to one another than to objects in other groups---serves as a foundational tool for this task \cite{jain1999data}. Unlike supervised learning, where a label guides model training, clustering operates in the absence of ground truth, making it both mathematically subtle and practically consequential.
+
+From a data science perspective, clustering addresses several intertwined problems. First, real-world datasets exhibit complex dependency structures: observations are rarely independent and identically distributed in practice. Customer transactions, genomic sequences, and sensor readings all carry temporal, spatial, or hierarchical dependencies that must be accounted for to obtain meaningful clusters. Second, selecting an appropriate clustering model requires understanding how the generative process for the data induces dependence within and between clusters. Third, once a clustering solution is obtained it can serve directly as a predictive instrument---cluster membership can be used to route new observations to subgroup-specific forecasting models, improving prediction accuracy over a single global model. Fourth, and perhaps most fundamentally, clustering is a primary mechanism for discovering latent structure: hidden patterns that are not directly observable but are inferred from the statistical regularities in the data.
+
+The history of clustering research spans more than seven decades. Pioneering work by \citeauthor{ward1963hierarchical} \cite{ward1963hierarchical} and \citeauthor{macqueen1967methods} \cite{macqueen1967methods} established the hierarchical and partitional paradigms that still dominate practice. The probabilistic treatment of clustering through mixture models, formalized by \citeauthor{mclachlan2000finite} \cite{mclachlan2000finite}, gave rise to a rich inferential framework. More recently, density-based methods \cite{ester1996density}, spectral approaches \cite{ng2002spectral}, and deep clustering \cite{xie2016unsupervised} have extended the reach of clustering to non-Euclidean, high-dimensional, and manifold-structured data.
+
+This survey is organized as follows. Section~\ref{sec:prelim} establishes notation and mathematical preliminaries. Section~\ref{sec:theory} develops the core theoretical foundations, including objective functions, probabilistic models, and optimality conditions. Section~\ref{sec:algorithms} describes major algorithmic families with step-by-step procedures. Section~\ref{sec:examples} presents worked numerical examples. Section~\ref{sec:applications} discusses real-world applications across data science domains. Section~\ref{sec:limitations} addresses limitations and assumptions. Section~\ref{sec:connections} draws connections to related methods. Section~\ref{sec:conclusion} concludes.
+
+%% ============================================================
+\section{Mathematical Preliminaries}
+\label{sec:prelim}
+%% ============================================================
+
+\subsection{Notation}
+
+Let $\mathcal{X} = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ denote a dataset of $n$ observations, where each $\mathbf{x}_i \in \mathbb{R}^d$. A \emph{clustering} of $\mathcal{X}$ into $K$ clusters is a surjective assignment function $\ell : \{1, \ldots, n\} \to \{1, \ldots, K\}$, or equivalently a partition $\{C_1, C_2, \ldots, C_K\}$ of $\{1, \ldots, n\}$ such that:
+\[
+C_k \cap C_{k'} = \emptyset \quad \forall k \neq k', \qquad \bigcup_{k=1}^{K} C_k = \{1, \ldots, n\}.
+\]
+
+We write $n_k = |C_k|$ for the size of cluster $k$, and $\boldsymbol{\mu}_k = \frac{1}{n_k}\sum_{i \in C_k} \mathbf{x}_i$ for its centroid.
+
+\subsection{Distance and Dissimilarity Measures}
+
+A dissimilarity measure $d : \mathbb{R}^d \times \mathbb{R}^d \to [0, \infty)$ is a non-negative, symmetric function. Common choices include:
+
+\begin{definition}[Euclidean Distance]
+$d_E(\mathbf{x}, \mathbf{y}) = \|\mathbf{x} - \mathbf{y}\|_2 = \left(\sum_{j=1}^d (x_j - y_j)^2\right)^{1/2}$.
+\end{definition}
+
+\begin{definition}[Mahalanobis Distance]
+Given a positive definite matrix $\mathbf{\Sigma}$,
+$d_M(\mathbf{x}, \mathbf{y}) = \sqrt{(\mathbf{x}-\mathbf{y})^\top \mathbf{\Sigma}^{-1} (\mathbf{x}-\mathbf{y})}$.
+\end{definition}
+
+\begin{definition}[Cosine Dissimilarity]
+$d_{\cos}(\mathbf{x}, \mathbf{y}) = 1 - \frac{\mathbf{x}^\top \mathbf{y}}{\|\mathbf{x}\|_2 \|\mathbf{y}\|_2}$.
+\end{definition}
+
+The Mahalanobis distance is particularly important for dependent data because $\mathbf{\Sigma}$ encodes the covariance structure, thereby accounting for linear correlations among features.
+
+\subsection{Probability Distributions and Mixture Models}
+
+A \emph{mixture distribution} with $K$ components has density:
+\begin{equation}
+p(\mathbf{x} \mid \boldsymbol{\theta}) = \sum_{k=1}^K \pi_k f(\mathbf{x} \mid \boldsymbol{\theta}_k),
+\label{eq:mixture}
+\end{equation}
+where $\pi_k > 0$, $\sum_{k=1}^K \pi_k = 1$ are the mixing weights, and $f(\cdot \mid \boldsymbol{\theta}_k)$ is a parametric density for component $k$ with parameters $\boldsymbol{\theta}_k$. The complete parameter vector is $\boldsymbol{\theta} = \{(\pi_k, \boldsymbol{\theta}_k)\}_{k=1}^K$.
+
+\subsection{Information-Theoretic Quantities}
+
+The \emph{entropy} of a discrete distribution $p$ over $K$ outcomes is:
+\[
+H(p) = -\sum_{k=1}^K p_k \log p_k.
+\]
+The \emph{normalized mutual information} (NMI) between two clusterings $U$ and $V$ is:
+\begin{equation}
+\mathrm{NMI}(U, V) = \frac{2 \, I(U; V)}{H(U) + H(V)},
+\label{eq:nmi}
+\end{equation}
+where $I(U;V) = H(U) - H(U \mid V)$ is the mutual information.
+
+%% ============================================================
+\section{Core Theory}
+\label{sec:theory}
+%% ============================================================
+
+\subsection{Partitional Clustering: Objective Functions}
+
+The most classical formulation of clustering minimizes total within-cluster scatter. Define the \emph{within-cluster sum of squares} (WCSS):
+\begin{equation}
+\mathcal{J}(\{C_k\}, \{\boldsymbol{\mu}_k\}) = \sum_{k=1}^K \sum_{i \in C_k} \|\mathbf{x}_i - \boldsymbol{\mu}_k\|_2^2.
+\label{eq:wcss}
+\end{equation}
+
+\begin{theorem}[Centroid Optimality]
+For a fixed partition $\{C_k\}$, the assignment $\boldsymbol{\mu}_k = \frac{1}{n_k}\sum_{i \in C_k}\mathbf{x}_i$ minimizes $\mathcal{J}$ over all choices of cluster representatives.
+\end{theorem}
+\begin{proof}
+Differentiating $\mathcal{J}$ with respect to $\boldsymbol{\mu}_k$ and setting to zero yields $\sum_{i \in C_k} 2(\mathbf{x}_i - \boldsymbol{\mu}_k) = \mathbf{0}$, from which the result follows immediately.
+\end{proof}
+
+The complementary quantity, the \emph{between-cluster sum of squares} (BCSS), is:
+\begin{equation}
+\mathcal{B} = \sum_{k=1}^K n_k \|\boldsymbol{\mu}_k - \bar{\mathbf{x}}\|_2^2, \quad \bar{\mathbf{x}} = \frac{1}{n}\sum_{i=1}^n \mathbf{x}_i,
+\end{equation}
+and the total scatter $\mathcal{T} = \mathcal{J} + \mathcal{B}$ is constant for fixed data. Minimizing $\mathcal{J}$ is therefore equivalent to maximizing $\mathcal{B}$.
+
+\subsection{Model-Based Clustering: Gaussian Mixture Models}
+
+Model-based clustering \cite{fraley2002model} treats cluster membership as a latent variable. For a Gaussian mixture model (GMM), each component is:
+\begin{equation}
+f(\mathbf{x} \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k) = \frac{1}{(2\pi)^{d/2}|\boldsymbol{\Sigma}_k|^{1/2}} \exp\!\left(-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu}_k)^\top \boldsymbol{\Sigma}_k^{-1}(\mathbf{x}-\boldsymbol{\mu}_k)\right).
+\end{equation}
+
+Introduce the latent indicator vector $\mathbf{z}_i = (z_{i1}, \ldots, z_{iK})$ with $z_{ik} = \mathbb{1}[\text{observation } i \text{ from component } k]$. The complete-data log-likelihood is:
+\begin{equation}
+\ell_c(\boldsymbol{\theta}) = \sum_{i=1}^n \sum_{k=1}^K z_{ik} \left[\log \pi_k + \log f(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)\right].
+\end{equation}
+
+Because $\mathbf{z}_i$ is unobserved, direct maximization is intractable. The \emph{Expectation-Maximization} (EM) algorithm \cite{dempster1977maximum} iteratively maximizes the expected complete-data log-likelihood. Define the \emph{responsibility} of component $k$ for observation $i$:
+\begin{equation}
+r_{ik} = \frac{\pi_k f(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}{\sum_{k'=1}^K \pi_{k'} f(\mathbf{x}_i \mid \boldsymbol{\mu}_{k'}, \boldsymbol{\Sigma}_{k'})}.
+\label{eq:responsibility}
+\end{equation}
+
+\textbf{E-step:} Compute $r_{ik}$ using current parameter estimates.
+
+\textbf{M-step:} Update parameters:
+\begin{align}
+\hat{\pi}_k &= \frac{1}{n}\sum_{i=1}^n r_{ik}, \label{eq:m_pi}\\
+\hat{\boldsymbol{\mu}}_k &= \frac{\sum_{i=1}^n r_{ik} \mathbf{x}_i}{\sum_{i=1}^n r_{ik}}, \label{eq:m_mu}\\
+\hat{\boldsymbol{\Sigma}}_k &= \frac{\sum_{i=1}^n r_{ik}(\mathbf{x}_i - \hat{\boldsymbol{\mu}}_k)(\mathbf{x}_i - \hat{\boldsymbol{\mu}}_k)^\top}{\sum_{i=1}^n r_{ik}}. \label{eq:m_sigma}
+\end{align}
+
+\begin{theorem}[EM Monotonicity]
+Each EM iteration does not decrease the observed-data log-likelihood $\ell(\boldsymbol{\theta}) = \sum_{i=1}^n \log p(\mathbf{x}_i \mid \boldsymbol{\theta})$.
+\end{theorem}
+
+The proof follows from Jensen's inequality applied to the concave logarithm and is standard; see \cite{mclachlan2000finite}. The GMM subsumes $k$-means as the degenerate case where all $\boldsymbol{\Sigma}_k = \sigma^2 \mathbf{I}$ and $\sigma^2 \to 0$.
+
+\subsection{Hierarchical Clustering: Agglomerative Linkage}
+
+Hierarchical agglomerative clustering (HAC) builds a binary tree (dendrogram) by successively merging the two most similar clusters. The algorithm depends on the choice of \emph{linkage function} $\mathcal{L}(C_a, C_b)$. Three canonical choices are:
+
+\begin{align}
+\text{Single:} & \quad \mathcal{L}_S(C_a, C_b) = \min_{i \in C_a, j \in C_b} d(\mathbf{x}_i, \mathbf{x}_j), \label{eq:single}\\
+\text{Complete:} & \quad \mathcal{L}_C(C_a, C_b) = \max_{i \in C_a, j \in C_b} d(\mathbf{x}_i, \mathbf{x}_j), \label{eq:complete}\\
+\text{Average:} & \quad \mathcal{L}_A(C_a, C_b) = \frac{1}{n_a n_b}\sum_{i \in C_a}\sum_{j \in C_b} d(\mathbf{x}_i, \mathbf{x}_j). \label{eq:average}
+\end{align}
+
+Ward's linkage \cite{ward1963hierarchical} merges the pair of clusters whose combination minimizes the increase in total WCSS:
+\begin{equation}
+\mathcal{L}_W(C_a, C_b) = \frac{n_a n_b}{n_a + n_b}\|\boldsymbol{\mu}_a - \boldsymbol{\mu}_b\|_2^2.
+\label{eq:ward}
+\end{equation}
+
+Ward's criterion is closely related to the WCSS objective in \eqref{eq:wcss} and tends to produce compact, roughly equal-sized clusters, making it the most commonly used linkage in practice \cite{mullner2011modern}.
+
+\subsection{Density-Based Clustering and Manifold Structure}
+
+Density-based methods define clusters as regions of high point density separated by regions of low density. This formulation is well-suited to identifying non-convex clusters and handling noise.
+
+\begin{definition}[$\varepsilon$-Neighborhood]
+The $\varepsilon$-neighborhood of a point $\mathbf{x}_i$ is $N_\varepsilon(\mathbf{x}_i) = \{\mathbf{x}_j \mid d(\mathbf{x}_i, \mathbf{x}_j) \leq \varepsilon\}$.
+\end{definition}
+
+\begin{definition}[Core Point]
+A point $\mathbf{x}_i$ is a \emph{core point} with parameters $(\varepsilon, \mathrm{minPts})$ if $|N_\varepsilon(\mathbf{x}_i)| \geq \mathrm{minPts}$.
+\end{definition}
+
+\begin{definition}[Density-Reachability]
+Point $\mathbf{x}_j$ is \emph{directly density-reachable} from $\mathbf{x}_i$ if $\mathbf{x}_i$ is a core point and $\mathbf{x}_j \in N_\varepsilon(\mathbf{x}_i)$. Density-reachability is the transitive closure of this relation.
+\end{definition}
+
+Two points are \emph{density-connected} if there exists a point $\mathbf{x}_p$ from which both are density-reachable. DBSCAN \cite{ester1996density} defines clusters as maximal sets of density-connected points. Points not belonging to any cluster are declared noise.
+
+Spectral clustering \cite{ng2002spectral} approaches the problem differently, embedding data onto a low-dimensional eigenspace derived from the graph Laplacian. Let $\mathbf{W}$ be a similarity matrix with $W_{ij} = \exp(-\|\mathbf{x}_i - \mathbf{x}_j\|^2 / 2\sigma^2)$, $\mathbf{D}$ the diagonal degree matrix $D_{ii} = \sum_j W_{ij}$, and $\mathbf{L} = \mathbf{D} - \mathbf{W}$ the unnormalized graph Laplacian. The normalized Laplacian is:
+\begin{equation}
+\mathbf{L}_\mathrm{sym} = \mathbf{D}^{-1/2}\mathbf{L}\mathbf{D}^{-1/2} = \mathbf{I} - \mathbf{D}^{-1/2}\mathbf{W}\mathbf{D}^{-1/2}.
+\label{eq:laplacian}
+\end{equation}
+Spectral clustering embeds data using the $K$ smallest eigenvectors of $\mathbf{L}_\mathrm{sym}$ and then applies $k$-means to the resulting representation \cite{von2007tutorial}.
+
+%% ============================================================
+\section{Algorithms and Methods}
+\label{sec:algorithms}
+%% ============================================================
+
+\subsection{The $k$-Means Algorithm (Lloyd's Algorithm)}
+
+The $k$-means algorithm \cite{macqueen1967methods, lloyd1982least} is a coordinate-descent procedure for minimizing \eqref{eq:wcss}.
+
+\textbf{Algorithm 1: $k$-Means}
+\begin{enumerate}
+    \item \textbf{Input:} Data $\mathcal{X}$, number of clusters $K$, convergence tolerance $\epsilon > 0$.
+    \item \textbf{Initialize:} Select $K$ initial centroids $\{\boldsymbol{\mu}_k^{(0)}\}_{k=1}^K$ (e.g., $k$-means++ seeding \cite{arthur2007k}).
+    \item \textbf{Assignment step:} For each observation $i$, assign:
+    \[
+    \ell^{(t)}(i) = \arg\min_{k \in \{1,\ldots,K\}} \|\mathbf{x}_i - \boldsymbol{\mu}_k^{(t)}\|_2^2.
+    \]
+    \item \textbf{Update step:} Recompute centroids:
+    \[
+    \boldsymbol{\mu}_k^{(t+1)} = \frac{1}{|C_k^{(t)}|}\sum_{i \in C_k^{(t)}} \mathbf{x}_i.
+    \]
+    \item \textbf{Convergence check:} If $\sum_k \|\boldsymbol{\mu}_k^{(t+1)} - \boldsymbol{\mu}_k^{(t)}\|_2 < \epsilon$, stop. Otherwise set $t \leftarrow t+1$ and go to step 3.
+    \item \textbf{Output:} Partition $\{C_k^{(t)}\}$ and centroids $\{\boldsymbol{\mu}_k^{(t)}\}$.
+\end{enumerate}
+
+\textbf{Complexity:} Each iteration costs $O(nKd)$; the algorithm typically converges in $O(nKd \cdot T)$ time, where $T$ is the number of iterations. Because the objective \eqref{eq:wcss} is non-convex, the algorithm finds a local minimum; multiple random restarts mitigate this limitation.
+
+The $k$-means++ initialization \cite{arthur2007k} selects each successive seed with probability proportional to its squared distance from the nearest existing seed, yielding an $O(\log K)$-approximation guarantee in expectation.
+
+\subsection{Expectation-Maximization for Gaussian Mixture Models}
+
+\textbf{Algorithm 2: EM for Gaussian Mixture Models}
+\begin{enumerate}
+    \item \textbf{Input:} Data $\mathcal{X}$, number of components $K$, covariance type (full, diagonal, spherical, tied), convergence tolerance $\epsilon$.
+    \item \textbf{Initialize:} Set $\boldsymbol{\mu}_k^{(0)}$, $\boldsymbol{\Sigma}_k^{(0)}$, $\pi_k^{(0)} = 1/K$ (e.g., using $k$-means output).
+    \item \textbf{E-step:} Compute responsibilities $r_{ik}^{(t)}$ via \eqref{eq:responsibility}.
+    \item \textbf{M-step:} Update $\hat{\pi}_k$, $\hat{\boldsymbol{\mu}}_k$, $\hat{\boldsymbol{\Sigma}}_k$ via \eqref{eq:m_pi}--\eqref{eq:m_sigma}.
+    \item \textbf{Convergence:} Evaluate $\ell^{(t)} = \sum_i \log \sum_k \hat{\pi}_k f(\mathbf{x}_i \mid \hat{\boldsymbol{\mu}}_k, \hat{\boldsymbol{\Sigma}}_k)$. If $|\ell^{(t)} - \ell^{(t-1)}| < \epsilon$, stop.
+    \item \textbf{Assign:} $\hat{\ell}(i) = \arg\max_k r_{ik}$.
+    \item \textbf{Output:} Parameters $\{\hat{\pi}_k, \hat{\boldsymbol{\mu}}_k, \hat{\boldsymbol{\Sigma}}_k\}$ and soft/hard assignments.
+\end{enumerate}
+
+Model selection (choosing $K$) is performed via the Bayesian Information Criterion:
+\begin{equation}
+\mathrm{BIC}(K) = -2\ell(\hat{\boldsymbol{\theta}}) + p_K \log n,
+\label{eq:bic}
+\end{equation}
+where $p_K$ is the number of free parameters. Lower BIC favors fewer components, penalizing complexity.
+
+\subsection{DBSCAN}
+
+\textbf{Algorithm 3: DBSCAN}
+\begin{enumerate}
+    \item \textbf{Input:} Data $\mathcal{X}$, neighborhood radius $\varepsilon > 0$, minimum point threshold $\mathrm{minPts} \geq 1$.
+    \item \textbf{Initialize:} Mark all points as \textit{unvisited}. Set cluster counter $k \leftarrow 0$.
+    \item \textbf{For each unvisited point} $\mathbf{x}_i$:
+        \begin{enumerate}
+            \item Mark $\mathbf{x}_i$ as visited.
+            \item Compute $N_\varepsilon(\mathbf{x}_i)$.
+            \item If $|N_\varepsilon(\mathbf{x}_i)| < \mathrm{minPts}$: mark $\mathbf{x}_i$ as noise.
+            \item Else: increment $k$; create cluster $C_k$; add $\mathbf{x}_i$ to $C_k$; expand cluster by iteratively processing each unvisited neighbor.
+        \end{enumerate}
+    \item \textbf{Output:} Clusters $\{C_k\}$ and noise set.
+\end{enumerate}
+
+\textbf{Complexity:} $O(n \log n)$ with a spatial index; $O(n^2)$ in the worst case. DBSCAN is parameter-sensitive: $\varepsilon$ is typically set using a $k$-distance plot, and $\mathrm{minPts} \geq d + 1$ is recommended for $d$-dimensional data \cite{ester1996density}.
+
+\subsection{Cluster Validation}
+
+Cluster validity indices measure the quality of a clustering without external labels. Table~\ref{tab:validity} summarizes important internal indices.
+
+\begin{table}[h]
+\caption{Internal Cluster Validity Indices}
+\label{tab:validity}
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{2.2cm} p{3.8cm} p{1.6cm}}
+\toprule
+\textbf{Index} & \textbf{Formula / Description} & \textbf{Optimal} \\
+\midrule
+Silhouette \cite{rousseeuw1987silhouettes} & $s(i) = \frac{b(i)-a(i)}{\max(a(i),b(i))}$, averaged over $i$ & Maximize \\
+Calinski-Harabasz \cite{calinski1974dendrite} & $\mathrm{CH} = \frac{\mathcal{B}/(K-1)}{\mathcal{J}/(n-K)}$ & Maximize \\
+Davies-Bouldin \cite{davies1979cluster} & $\frac{1}{K}\sum_k \max_{k'\neq k}\frac{s_k + s_{k'}}{d(\boldsymbol{\mu}_k, \boldsymbol{\mu}_{k'})}$ & Minimize \\
+Gap Statistic \cite{tibshirani2001estimating} & $\mathrm{Gap}(K) = \mathbb{E}[\log W_K^*] - \log W_K$ & Maximize \\
+BIC & See \eqref{eq:bic} & Minimize \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In Table~\ref{tab:validity}, $a(i)$ is the mean intra-cluster distance for point $i$, $b(i)$ is the mean distance to points in the nearest other cluster, $s_k$ is the average intra-cluster scatter for cluster $k$, and $W_K$ is the within-cluster dispersion at $K$ clusters.
+
+%% ============================================================
+\section{Worked Examples}
+\label{sec:examples}
+%% ============================================================
+
+\subsection{$k$-Means on a Toy Dataset}
+
+Consider a small dataset in $\mathbb{R}^2$ with $n=6$ observations:
+\[
+\mathbf{x}_1=(1,1),\ \mathbf{x}_2=(1.5,2),\ \mathbf{x}_3=(3,4),\ \mathbf{x}_4=(5,7),\ \mathbf{x}_5=(3.5,5),\ \mathbf{x}_6=(4.5,5).
+\]
+We apply $k$-means with $K=2$. Initialize centroids as $\boldsymbol{\mu}_1^{(0)}=(1,1)$ and $\boldsymbol{\mu}_2^{(0)}=(5,7)$.
+
+\textbf{Iteration 1 (Assignment):}
+
+Compute squared Euclidean distances:
+\begin{align*}
+d^2(\mathbf{x}_1, \boldsymbol{\mu}_1^{(0)}) &= 0, \quad d^2(\mathbf{x}_1, \boldsymbol{\mu}_2^{(0)}) = 52 \;\Rightarrow\; C_1\\
+d^2(\mathbf{x}_2, \boldsymbol{\mu}_1^{(0)}) &= 1.25, \quad d^2(\mathbf{x}_2, \boldsymbol{\mu}_2^{(0)}) = 37.25 \;\Rightarrow\; C_1\\
+d^2(\mathbf{x}_3, \boldsymbol{\mu}_1^{(0)}) &= 13, \quad d^2(\mathbf{x}_3, \boldsymbol{\mu}_2^{(0)}) = 13 \;\Rightarrow\; C_1 \text{ (tie, assign to lower $k$)}\\
+d^2(\mathbf{x}_4, \boldsymbol{\mu}_1^{(0)}) &= 52, \quad d^2(\mathbf{x}_4, \boldsymbol{\mu}_2^{(0)}) = 0 \;\Rightarrow\; C_2\\
+d^2(\mathbf{x}_5, \boldsymbol{\mu}_1^{(0)}) &= 22.25, \quad d^2(\mathbf{x}_5, \boldsymbol{\mu}_2^{(0)}) = 6.25 \;\Rightarrow\; C_2\\
+d^2(\mathbf{x}_6, \boldsymbol{\mu}_1^{(0)}) &= 42.25, \quad d^2(\mathbf{x}_6, \boldsymbol{\mu}_2^{(0)}) = 4 \;\Rightarrow\; C_2
+\end{align*}
+
+\textbf{Iteration 1 (Update):}
+\begin{align*}
+\boldsymbol{\mu}_1^{(1)} &= \frac{1}{3}[(1,1)+(1.5,2)+(3,4)] = (1.833, 2.333),\\
+\boldsymbol{\mu}_2^{(1)} &= \frac{1}{3}[(5,7)+(3.5,5)+(4.5,5)] = (4.333, 5.667).
+\end{align*}
+
+\textbf{Iteration 2:} All six points reassign consistently with the new centroids, and the centroids do not change. The algorithm converges with $C_1=\{\mathbf{x}_1,\mathbf{x}_2,\mathbf{x}_3\}$ and $C_2=\{\mathbf{x}_4,\mathbf{x}_5,\mathbf{x}_6\}$, yielding $\mathcal{J}=5.167 + 2.333 = 7.5$.
+
+\subsection{EM for a One-Dimensional Gaussian Mixture}
+
+Let $n=5$ observations: $\{0.1, 0.4, 3.2, 3.8, 4.1\}$. Assume $K=2$ with initial parameters $\mu_1^{(0)}=0.5$, $\mu_2^{(0)}=3.5$, $\sigma_1^{(0)}=\sigma_2^{(0)}=1$, $\pi_1^{(0)}=\pi_2^{(0)}=0.5$.
+
+\textbf{E-step (Iteration 1):} For $x=0.1$:
+\[
+r_{1,1} = \frac{0.5 \cdot \mathcal{N}(0.1; 0.5, 1)}{0.5\cdot\mathcal{N}(0.1;0.5,1) + 0.5\cdot\mathcal{N}(0.1;3.5,1)} \approx \frac{0.5 \cdot 0.368}{0.5\cdot0.368 + 0.5\cdot 5.0 \times 10^{-6}} \approx 0.9999.
+\]
+Similarly, $r_{1,1}\approx1$ for $x=0.4$, and $r_{2,i}\approx1$ for $x \in \{3.2, 3.8, 4.1\}$.
+
+\textbf{M-step (Iteration 1):}
+\begin{align*}
+\hat{\mu}_1 &\approx \frac{0.9999\cdot0.1 + 0.9997\cdot0.4}{1.9996} \approx 0.25, \quad \hat{\mu}_2 \approx \frac{3.2+3.8+4.1}{3} = 3.7.
+\end{align*}
+
+After two more iterations the algorithm converges to $\hat{\mu}_1 \approx 0.25$, $\hat{\mu}_2 \approx 3.7$, cleanly separating the two modes.
+
+\subsection{Silhouette Analysis}
+
+For the $k$-means solution in Section~\ref{sec:examples}.A, we compute silhouette coefficients. For $\mathbf{x}_3=(3,4)$, which is on the boundary:
+\[
+a(\mathbf{x}_3) = \frac{d(\mathbf{x}_3,\mathbf{x}_1)+d(\mathbf{x}_3,\mathbf{x}_2)}{2} = \frac{3.606+2.500}{2} = 3.053,
+\]
+\[
+b(\mathbf{x}_3) = \frac{d(\mathbf{x}_3,\mathbf{x}_4)+d(\mathbf{x}_3,\mathbf{x}_5)+d(\mathbf{x}_3,\mathbf{x}_6)}{3} = \frac{3.606+1.803+2.500}{3} = 2.636,
+\]
+\[
+s(\mathbf{x}_3) = \frac{2.636 - 3.053}{\max(3.053, 2.636)} = \frac{-0.417}{3.053} = -0.137.
+\]
+The negative silhouette for $\mathbf{x}_3$ indicates it may be better assigned to cluster 2, a diagnostic signal that $K=2$ may underfit the data or that the clusters overlap near this point.
+
+%% ============================================================
+\section{Applications in Data Science}
+\label{sec:applications}
+%% ============================================================
+
+\subsection{Customer Segmentation}
+
+In marketing analytics, clustering partitions customers into actionable segments based on behavioral and demographic features \cite{wedel2000market}. A retail firm might apply GMM clustering to $(\text{recency}, \text{frequency}, \text{monetary value})$ triples, uncovering latent segments such as ``loyal high-value customers,'' ``occasional buyers,'' and ``lapsed customers.'' Each segment then receives a tailored retention model or pricing strategy. The probabilistic soft assignments from GMM are particularly valuable here: a customer with $r_{i,\text{loyal}}=0.7$ can be treated probabilistically in downstream models rather than forced into a single bucket.
+
+\subsection{Genomics: Single-Cell RNA Sequencing}
+
+Single-cell RNA sequencing (scRNA-seq) produces expression profiles for thousands of individual cells, and clustering identifies cell types \cite{luecken2019current}. A typical pipeline applies principal component analysis (PCA) for dimensionality reduction, constructs a $k$-nearest-neighbor graph, and then applies Leiden or Louvain community detection \cite{blondel2008fast}---a form of graph-based clustering. The discovered clusters correspond to biologically meaningful cell types such as T cells, B cells, and macrophages, each with distinct transcriptional programs.
+
+\subsection{Anomaly Detection}
+
+DBSCAN directly produces a noise set of observations not belonging to any dense cluster. In network intrusion detection and fraud detection, these noise points often correspond to anomalous events \cite{chandola2009anomaly}. By modeling normal behavior as dense clusters in feature space, DBSCAN flags structural outliers without requiring labeled anomalies, making it a natural fit for semi-supervised anomaly detection pipelines.
+
+\subsection{Time-Series Segmentation and Forecasting}
+
+In macroeconomic forecasting, the economy may cycle through distinct regimes (expansion, contraction, stagflation). Markov-switching models \cite{hamilton1989new} are a temporal extension of mixture models in which the hidden state follows a Markov chain. Clustering the latent states identified by such a model reveals temporal structure, and regime-specific forecasting models---one per cluster---systematically outperform single global models by accounting for dependence between consecutive time periods.
+
+\subsection{Document Clustering and Topic Modeling}
+
+Latent Dirichlet Allocation (LDA) \cite{blei2003latent} can be viewed as a soft clustering of documents over topics and topics over words. Each document is represented as a mixture of $K$ latent topics. LDA explicitly models the generative structure of text, imposing Dirichlet priors to encode the sparsity of real-world topic distributions. Downstream tasks such as information retrieval and recommendation benefit substantially from the discovered latent structure.
+
+Table~\ref{tab:applications} summarizes the primary application domains and associated clustering methods.
+
+\begin{table}[h]
+\caption{Clustering Methods by Application Domain}
+\label{tab:applications}
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{2.3cm} p{2.3cm} p{2.8cm}}
+\toprule
+\textbf{Domain} & \textbf{Method} & \textbf{Key Advantage} \\
+\midrule
+Customer analytics & GMM, $k$-means & Soft assignments, scalability \\
+Genomics (scRNA) & Graph / Louvain & Handles non-Euclidean structure \\
+Anomaly detection & DBSCAN & Native noise identification \\
+Time series & Markov-switching & Temporal dependency \\
+Text / NLP & LDA, $k$-means & Latent topic discovery \\
+Image segmentation & Spectral, $k$-means & Spatial neighborhood encoding \\
+Bioinformatics & Hierarchical (Ward) & Interpretable dendrogram \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ============================================================
+\section{Limitations and Assumptions}
+\label{sec:limitations}
+%% ============================================================
+
+\subsection{Sensitivity to $K$}
+
+Most partitional and model-based methods require the number of clusters $K$ to be specified in advance. Misspecification leads to over-splitting coherent clusters or merging distinct ones. Validation indices (Table~\ref{tab:validity}) mitigate this but introduce their own assumptions. Dirichlet process mixtures \cite{ferguson1973bayesian} provide a nonparametric Bayesian alternative that infers $K$ from the data, but at the cost of substantially higher computational complexity.
+
+\subsection{Geometric Assumptions and Distance Metrics}
+
+$k$-Means implicitly assumes spherical, equally sized clusters by minimizing squared Euclidean distance. GMM with a full covariance matrix relaxes the sphericity assumption but still assumes Gaussian components. Real-world clusters may have non-Gaussian, multi-modal, or manifold-structured shapes that violate these assumptions. DBSCAN and spectral clustering are more flexible but sensitive to their own hyperparameters ($\varepsilon$, $\sigma$).
+
+\subsection{Scalability}
+
+Hierarchical clustering requires $O(n^2)$ memory for the distance matrix and $O(n^2 \log n)$ computation, making it infeasible for $n \gg 10^5$ without approximations \cite{mullner2011modern}. Full-covariance GMM inversion costs $O(d^3)$ per component per iteration, which is prohibitive in high dimensions.
+
+\subsection{Curse of Dimensionality}
+
+In high dimensions, Euclidean distances concentrate around their mean (the ``distance concentration'' phenomenon \cite{beyer1999nearest}), rendering nearest-neighbor-based clustering unreliable. Dimensionality reduction (PCA, UMAP) is a standard preprocessing step, but the resulting clusters reflect structure in the reduced representation, not necessarily in the original feature space.
+
+\subsection{Stochastic Non-Convergence}
+
+$k$-Means and EM can converge to poor local optima. Standard practice uses multiple restarts with different initializations, selecting the solution with the best objective value. For EM, degenerate solutions (a component collapsing to a single point, causing the likelihood to diverge) require regularization of covariance estimates.
+
+\subsection{Interpretability and Ground Truth}
+
+Clustering is inherently subjective: the same data can be partitioned in multiple ways, all internally consistent. External validation (NMI, Adjusted Rand Index \cite{hubert1985comparing}) requires labeled ground truth, which defeats the purpose of unsupervised learning in many settings. Practitioners must interpret results in light of domain knowledge.
+
+%% ============================================================
+\section{Connections to Related Methods}
+\label{sec:connections}
+%% ============================================================
+
+\subsection{Dimensionality Reduction}
+
+PCA and clustering are complementary. PCA finds directions of maximum variance, which often align with cluster-separating directions. The Eckart-Young theorem guarantees that the $r$-dimensional PCA projection minimizes mean squared reconstruction error over all rank-$r$ approximations, concentrating signal in the top eigenvectors. Sparse PCA and factor analysis are natural preprocessing steps for high-dimensional clustering. Manifold learning methods such as UMAP \cite{mcinnes2018umap} and $t$-SNE \cite{van2008visualizing} further preserve local neighborhood structure useful for visualization and density-based clustering.
+
+\subsection{Matrix Factorization and Topic Models}
+
+Non-negative matrix factorization (NMF) \cite{lee1999learning} decomposes a data matrix $\mathbf{X} \approx \mathbf{W}\mathbf{H}$ with $\mathbf{W}, \mathbf{H} \geq 0$, producing parts-based representations that admit a soft clustering interpretation via $\arg\max_k H_{ki}$. LDA \cite{blei2003latent} extends this to a generative probabilistic framework with Dirichlet priors. Both methods uncover latent structure in count data (text, genomics) where standard Euclidean geometry is inappropriate.
+
+\subsection{Graph Partitioning and Community Detection}
+
+Spectral clustering solves a relaxed version of the normalized cut problem on a similarity graph. The normalized cut objective is:
+\begin{equation}
+\mathrm{NCut}(C_1, \ldots, C_K) = \sum_{k=1}^K \frac{\mathrm{cut}(C_k, \bar{C}_k)}{\mathrm{vol}(C_k)},
+\end{equation}
+where $\mathrm{cut}(A,B) = \sum_{i \in A, j \in B}W_{ij}$ and $\mathrm{vol}(A) = \sum_{i \in A}D_{ii}$. Minimizing NCut over discrete partitions is NP-hard; spectral relaxation yields a tractable semidefinite approximation \cite{shi2000normalized}. Community detection algorithms (Louvain, Leiden) optimize modularity, a related measure of intra-community edge density relative to a null model.
+
+\subsection{Semi-Supervised and Self-Supervised Learning}
+
+Deep clustering \cite{xie2016unsupervised} jointly learns a feature representation and cluster assignments by alternating between representation learning (via autoencoders) and soft assignment updates analogous to the EM E-step. Contrastive self-supervised learning (SimCLR, MoCo) trains encoders using augmentation-based pseudo-labels, and the resulting representations are routinely clustered with $k$-means to evaluate representation quality \cite{chen2020simple}. These connections underscore the role of clustering as both a standalone tool and an enabling component of larger learning pipelines.
+
+\subsection{Mixture Models and Latent Variable Models}
+
+Finite mixture models are a special case of latent variable models, where the latent variable $z_i$ is discrete. Continuous latent variable models---factor analysis, variational autoencoders \cite{kingma2013auto}---generalize this to continuous latent spaces. The boundary between clustering and dimensionality reduction dissolves in these frameworks: a VAE with a categorical latent variable (VQ-VAE) recovers a form of learned vector quantization that is directly equivalent to clustering in latent space.
+
+%% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+%% ============================================================
+
+This survey has provided a unified treatment of clustering as a mathematical and computational discipline within the data science context of advanced predictive modeling. We surveyed four canonical algorithm families---$k$-means, Gaussian mixture models via EM, hierarchical agglomerative clustering, and density-based methods---covering their mathematical foundations, algorithmic descriptions, worked examples, and practical limitations.
+
+The four themes of the course are naturally woven through clustering. Identifying dependencies in structured data motivates the use of Mahalanobis distance, covariance-aware GMMs, and temporal extensions such as Markov-switching models. Applying appropriate models for dependent data requires selecting among partitional, model-based, density-based, and graph-based methods based on the assumed data generating process. Making forecasts and predictions accounting for structure is enabled by cluster-specific predictive models and soft assignments that propagate uncertainty. And identifying latent structure is the core mandate of clustering itself, realized through mixture models, topic models, spectral embeddings, and deep representations.
+
+Active research directions include scalable algorithms for streaming and distributed data \cite{sculley2010web}, robust clustering under label noise and adversarial perturbation, Bayesian nonparametric approaches that bypass the need to pre-specify $K$, and the integration of clustering into deep learning pipelines. As datasets grow in volume, velocity, and variety, the principled mathematical framework reviewed here remains the essential foundation upon which new methods are built.
+
+%% ============================================================
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,clustering_refs}
+%% ============================================================
+
+\begin{thebibliography}{25}
+
+\bibitem{jain1999data}
+A.~K. Jain, M.~N. Murty, and P.~J. Flynn,
+``Data clustering: A review,''
+\textit{ACM Computing Surveys}, vol.~31, no.~3, pp.~264--323, 1999.
+
+\bibitem{ward1963hierarchical}
+J.~H. Ward,
+``Hierarchical grouping to optimize an objective function,''
+\textit{Journal of the American Statistical Association}, vol.~58, no.~301, pp.~236--244, 1963.
+
+\bibitem{macqueen1967methods}
+J.~MacQueen,
+``Some methods for classification and analysis of multivariate observations,''
+in \textit{Proc. 5th Berkeley Symp. Math. Statist. Probab.}, 1967, vol.~1, pp.~281--297.
+
+\bibitem{mclachlan2000finite}
+G.~McLachlan and D.~Peel,
+\textit{Finite Mixture Models}.
+New York, NY: Wiley, 2000.
+
+\bibitem{ester1996density}
+M.~Ester, H.-P. Kriegel, J.~Sander, and X.~Xu,
+``A density-based algorithm for discovering clusters in large spatial databases with noise,''
+in \textit{Proc. 2nd Int. Conf. Knowledge Discovery and Data Mining (KDD)}, 1996, pp.~226--231.
+
+\bibitem{ng2002spectral}
+A.~Y. Ng, M.~I. Jordan, and Y.~Weiss,
+``On spectral clustering: Analysis and an algorithm,''
+in \textit{Advances in Neural Information Processing Systems}, 2002, pp.~849--856.
+
+\bibitem{xie2016unsupervised}
+J.~Xie, R.~Girshick, and A.~Farhadi,
+``Unsupervised deep embedding for clustering analysis,''
+in \textit{Proc. 33rd Int. Conf. Machine Learning (ICML)}, 2016, pp.~478--487.
+
+\bibitem{fraley2002model}
+C.~Fraley and A.~E. Raftery,
+``Model-based clustering, discriminant analysis, and density estimation,''
+\textit{Journal of the American Statistical Association}, vol.~97, no.~458, pp.~611--631, 2002.
+
+\bibitem{dempster1977maximum}
+A.~P. Dempster, N.~M. Laird, and D.~B. Rubin,
+``Maximum likelihood from incomplete data via the EM algorithm,''
+\textit{Journal of the Royal Statistical Society: Series B}, vol.~39, no.~1, pp.~1--38, 1977.
+
+\bibitem{lloyd1982least}
+S.~P. Lloyd,
+``Least squares quantization in PCM,''
+\textit{IEEE Transactions on Information Theory}, vol.~28, no.~2, pp.~129--137, 1982.
+
+\bibitem{arthur2007k}
+D.~Arthur and S.~Vassilvitskii,
+``$k$-means++: The advantages of careful seeding,''
+in \textit{Proc. 18th Annual ACM-SIAM Symp. Discrete Algorithms (SODA)}, 2007, pp.~1027--1035.
+
+\bibitem{rousseeuw1987silhouettes}
+P.~J. Rousseeuw,
+``Silhouettes: A graphical aid to the interpretation and validation of cluster analysis,''
+\textit{Journal of Computational and Applied Mathematics}, vol.~20, pp.~53--65, 1987.
+
+\bibitem{calinski1974dendrite}
+T.~Cali{\'n}ski and J.~Harabasz,
+``A dendrite method for cluster analysis,''
+\textit{Communications in Statistics}, vol.~3, no.~1, pp.~1--27, 1974.
+
+\bibitem{davies1979cluster}
+D.~L. Davies and D.~W. Bouldin,
+``A cluster separation measure,''
+\textit{IEEE Transactions on Pattern Analysis and Machine Intelligence}, vol.~PAMI-1, no.~2, pp.~224--227, 1979.
+
+\bibitem{tibshirani2001estimating}
+R.~Tibshirani, G.~Walther, and T.~Hastie,
+``Estimating the number of clusters in a data set via the gap statistic,''
+\textit{Journal of the Royal Statistical Society: Series B}, vol.~63, no.~2, pp.~411--423, 2001.
+
+\bibitem{mullner2011modern}
+D.~M{\"u}llner,
+``Modern hierarchical, agglomerative clustering algorithms,''
+\textit{arXiv preprint arXiv:1109.2378}, 2011.
+
+\bibitem{von2007tutorial}
+U.~von Luxburg,
+``A tutorial on spectral clustering,''
+\textit{Statistics and Computing}, vol.~17, no.~4, pp.~395--416, 2007.
+
+\bibitem{wedel2000market}
+M.~Wedel and W.~A. Kamakura,
+\textit{Market Segmentation: Conceptual and Methodological Foundations}, 2nd~ed.
+Boston, MA: Kluwer, 2000.
+
+\bibitem{luecken2019current}
+L.~D. Luecken and F.~J. Theis,
+``Current best practices in single-cell RNA-seq analysis: A tutorial,''
+\textit{Molecular Systems Biology}, vol.~15, no.~6, p.~e8746, 2019.
+
+\bibitem{blondel2008fast}
+V.~D. Blondel, J.-L. Guillaume, R.~Lambiotte, and E.~Lefebvre,
+``Fast unfolding of communities in large networks,''
+\textit{Journal of Statistical Mechanics: Theory and Experiment}, vol.~2008, no.~10, p.~P10008, 2008.
+
+\bibitem{chandola2009anomaly}
+V.~Chandola, A.~Banerjee, and V.~Kumar,
+``Anomaly detection: A survey,''
+\textit{ACM Computing Surveys}, vol.~41, no.~3, pp.~1--58, 2009.
+
+\bibitem{hamilton1989new}
+J.~D. Hamilton,
+``A new approach to the economic analysis of nonstationary time series and the business cycle,''
+\textit{Econometrica}, vol.~57, no.~2, pp.~357--384, 1989.
+
+\bibitem{blei2003latent}
+D.~M. Blei, A.~Y. Ng, and M.~I. Jordan,
+``Latent Dirichlet allocation,''
+\textit{Journal of Machine Learning Research}, vol.~3, pp.~993--1022, 2003.
+
+\bibitem{ferguson1973bayesian}
+T.~S. Ferguson,
+``A Bayesian analysis of some nonparametric problems,''
+\textit{The Annals of Statistics}, vol.~1, no.~2, pp.~209--230, 1973.
+
+\bibitem{beyer1999nearest}
+K.~Beyer, J.~Goldstein, R.~Ramakrishnan, and U.~Shaft,
+``When is nearest neighbor meaningful?''
+in \textit{Proc. 7th Int. Conf. Database Theory (ICDT)}, 1999, pp.~217--235.
+
+\bibitem{hubert1985comparing}
+L.~Hubert and P.~Arabie,
+``Comparing partitions,''
+\textit{Journal of Classification}, vol.~2, no.~1, pp.~193--218, 1985.
+
+\bibitem{shi2000normalized}
+J.~Shi and J.~Malik,
+``Normalized cuts and image segmentation,''
+\textit{IEEE Transactions on Pattern Analysis and Machine Intelligence}, vol.~22, no.~8, pp.~888--905, 2000.
+
+\bibitem{lee1999learning}
+D.~D. Lee and H.~S. Seung,
+``Learning the parts of objects by non-negative matrix factorization,''
+\textit{Nature}, vol.~401, pp.~788--791, 1999.
+
+\bibitem{mcinnes2018umap}
+L.~McInnes, J.~Healy, and J.~Melville,
+``UMAP: Uniform manifold approximation and projection for dimension reduction,''
+\textit{arXiv preprint arXiv:1802.03426}, 2018.
+
+\bibitem{van2008visualizing}
+L.~van der Maaten and G.~Hinton,
+``Visualizing data using $t$-SNE,''
+\textit{Journal of Machine Learning Research}, vol.~9, pp.~2579--2605, 2008.
+
+\bibitem{chen2020simple}
+T.~Chen, S.~Kornblith, M.~Norouzi, and G.~Hinton,
+``A simple framework for contrastive learning of visual representations,''
+in \textit{Proc. 37th Int. Conf. Machine Learning (ICML)}, 2020, pp.~1597--1607.
+
+\bibitem{kingma2013auto}
+D.~P. Kingma and M.~Welling,
+``Auto-encoding variational Bayes,''
+in \textit{Proc. 2nd Int. Conf. Learning Representations (ICLR)}, 2014.
+
+\bibitem{sculley2010web}
+D.~Sculley,
+``Web-scale $k$-means clustering,''
+in \textit{Proc. 19th Int. Conf. World Wide Web (WWW)}, 2010, pp.~1177--1178.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,968 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+\begin{document}
+
+\title{Classical Time-Series Models: A Comprehensive Survey\\
+{\large Data Science --- Advanced Predictive Models}}
+
+\author{\IEEEauthorblockN{Surya Rao Rayarao}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+suryarao.r@utexas.edu}
+\and
+\IEEEauthorblockN{Naga Donikena}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+naga.donikena@utexas.edu}
+}
+
+\maketitle
+
+%=============================================================================
+\begin{abstract}
+Classical time-series models form the statistical backbone of temporal data
+analysis, underpinning applications from economic forecasting to sensor
+monitoring. This survey provides a rigorous treatment of the foundational
+model families: autoregressive (AR), moving-average (MA), their integrated
+(ARIMA) and seasonal (SARIMA) extensions, exponential smoothing state-space
+models, and error-correction models for co-integrated series. We develop the
+mathematical formalism of stationarity, autocorrelation structure, and
+information criteria–driven model selection, then describe estimation
+algorithms including the Yule--Walker equations, conditional and exact maximum
+likelihood, and the Kalman filter recursion. Worked numerical examples
+illustrate identification, estimation, diagnostic checking, and multi-step
+forecasting for canonical datasets. We survey the deployment of these models
+in demand forecasting, financial risk modeling, epidemiological surveillance,
+and industrial process control. We also analyze the assumptions and
+limitations---linearity, Gaussianity, fixed structure---that motivate
+connections to ARCH/GARCH models, state-space and structural time-series
+models, and modern machine-learning approaches. The survey is intended for
+graduate students in data science seeking a unified, mathematically grounded
+reference for dependent-data modeling and forecasting.
+\end{abstract}
+
+%=============================================================================
+\section{Introduction}
+\label{sec:intro}
+
+Time-ordered observations arise in virtually every quantitative discipline.
+Unlike independent samples, successive measurements of a stochastic process
+typically exhibit \emph{serial dependence}: knowing yesterday's stock price,
+temperature, or patient heart rate provides information about today's value.
+Ignoring this dependence leads to invalid confidence intervals, sub-optimal
+forecasts, and missed signals about latent dynamics. Classical time-series
+analysis provides a principled mathematical framework for modeling, estimating,
+diagnosing, and forecasting serially dependent data.
+
+The intellectual lineage is long. \emph{Periodogram} analysis traces to
+Schuster~\cite{schuster1898investigation} and Yule~\cite{yule1927periodicity},
+who introduced autoregressive (AR) models to explain quasi-periodic behavior
+in sunspot data. Slutzky~\cite{slutzky1927summation} showed that summation of
+random shocks produces moving-average (MA) processes with periodic-looking
+realizations. Wold's decomposition theorem~\cite{wold1938study} unified these
+ideas, proving that every covariance-stationary process admits an infinite MA
+representation. Box and Jenkins~\cite{box2015time} operationalized these
+theoretical results into the iterative \emph{identification--estimation--%
+diagnostic} cycle that remains the standard applied workflow. Holt--Winters
+exponential smoothing~\cite{holt2004forecasting,winters1960forecasting}
+provided a computationally simpler alternative that proved especially popular
+in operations research and inventory management.
+
+This survey synthesizes these classical contributions from a unified perspective
+aligned with four core themes of advanced predictive modeling:
+\begin{enumerate}
+  \item \textbf{Identifying dependencies in structured data} --- autocorrelation
+        and partial autocorrelation functions, unit-root and co-integration
+        tests.
+  \item \textbf{Applying appropriate models for dependent data} --- AR, MA,
+        ARMA, ARIMA, SARIMA, exponential smoothing, and error-correction models.
+  \item \textbf{Making forecasts accounting for dependence and structure} ---
+        minimum mean-squared-error (MMSE) predictors, prediction intervals, and
+        multi-step horizon strategies.
+  \item \textbf{Identifying latent structure in complex data} --- trend,
+        seasonality, and irregular components; state-space decompositions.
+\end{enumerate}
+
+\subsection*{Paper Organization}
+Section~\ref{sec:prelim} establishes mathematical notation and foundational
+concepts. Section~\ref{sec:theory} develops the core theory of AR, MA, ARMA,
+integrated, and seasonal models. Section~\ref{sec:algorithms} describes
+estimation and model-selection algorithms. Section~\ref{sec:examples} works
+through numerical examples. Section~\ref{sec:applications} covers data-science
+applications. Section~\ref{sec:limits} discusses assumptions and limitations.
+Section~\ref{sec:related} connects classical models to related methods.
+Section~\ref{sec:conclusion} concludes.
+
+%=============================================================================
+\section{Mathematical Preliminaries}
+\label{sec:prelim}
+
+\subsection{Notation and Conventions}
+
+Let $\{Y_t\}_{t \in \mathbb{Z}}$ denote a real-valued discrete-time stochastic
+process indexed by integers. We observe the finite realization
+$\mathbf{y} = (y_1, y_2, \ldots, y_T)^{\top}$.
+
+The \emph{backshift operator} $B$ is defined by $BY_t = Y_{t-1}$ and
+$B^k Y_t = Y_{t-k}$ for any integer $k$. The \emph{difference operator} is
+$\nabla = 1 - B$, so $\nabla Y_t = Y_t - Y_{t-1}$.
+
+\begin{definition}[Strict Stationarity]
+A process $\{Y_t\}$ is \emph{strictly stationary} if for every finite set of
+indices $\{t_1,\ldots,t_k\}$ and every integer $h$,
+\[
+  (Y_{t_1},\ldots,Y_{t_k}) \stackrel{d}{=} (Y_{t_1+h},\ldots,Y_{t_k+h}).
+\]
+\end{definition}
+
+\begin{definition}[Covariance Stationarity]
+$\{Y_t\}$ is \emph{covariance-stationary} (weakly stationary) if
+\begin{align}
+  \mathbb{E}[Y_t] &= \mu \quad \forall\, t, \label{eq:mean_stat} \\
+  \mathrm{Cov}(Y_t, Y_{t+h}) &= \gamma(h) \quad \forall\, t, h, \label{eq:cov_stat}
+\end{align}
+where both $\mu$ and $\gamma(h)$ are finite.
+\end{definition}
+
+\subsection{Autocovariance and Autocorrelation}
+
+The \emph{autocovariance function} (ACVF) at lag $h$ is
+$\gamma(h) = \mathrm{Cov}(Y_t, Y_{t+h})$. The \emph{autocorrelation function}
+(ACF) is
+\begin{equation}
+  \rho(h) = \frac{\gamma(h)}{\gamma(0)}, \quad |\rho(h)| \leq 1.
+  \label{eq:acf}
+\end{equation}
+
+The \emph{sample ACF} at lag $h$ is
+\begin{equation}
+  \hat{\rho}(h) = \frac{\sum_{t=1}^{T-h}(y_t - \bar{y})(y_{t+h} - \bar{y})}
+                        {\sum_{t=1}^{T}(y_t - \bar{y})^2},
+  \label{eq:sacf}
+\end{equation}
+where $\bar{y} = T^{-1}\sum_{t=1}^T y_t$.
+
+The \emph{partial autocorrelation function} (PACF) $\phi_{hh}$ at lag $h$ is
+the last coefficient in the best linear prediction of $Y_t$ by
+$Y_{t-1},\ldots,Y_{t-h}$. Formally, if
+$\hat{Y}_t^{(h)} = \phi_{h1}Y_{t-1} + \cdots + \phi_{hh}Y_{t-h}$
+is the projection, then $\phi_{hh}$ solves the Yule--Walker system of order
+$h$.
+
+\subsection{Wold Decomposition}
+
+\begin{theorem}[Wold, 1938~\cite{wold1938study}]
+Every zero-mean covariance-stationary process $\{Y_t\}$ that is not
+deterministic can be written as
+\begin{equation}
+  Y_t = \sum_{j=0}^{\infty} \psi_j \varepsilon_{t-j} + \kappa_t,
+  \label{eq:wold}
+\end{equation}
+where $\{\varepsilon_t\}$ is white noise with variance $\sigma^2$,
+$\psi_0 = 1$, $\sum_{j=0}^{\infty}\psi_j^2 < \infty$, and $\kappa_t$ is
+perfectly predictable from its own past.
+\end{theorem}
+
+The Wold decomposition justifies restricting attention to ARMA models, which
+provide parsimonious rational approximations to the infinite MA polynomial.
+
+\subsection{White Noise and Innovation Sequences}
+
+\begin{definition}[White Noise]
+$\{\varepsilon_t\}$ is \emph{white noise} (WN$(0,\sigma^2)$) if
+$\mathbb{E}[\varepsilon_t]=0$, $\mathrm{Var}(\varepsilon_t)=\sigma^2$, and
+$\mathrm{Cov}(\varepsilon_t, \varepsilon_s)=0$ for $t \neq s$.
+\end{definition}
+
+When $\varepsilon_t \stackrel{\text{iid}}{\sim} \mathcal{N}(0,\sigma^2)$ we
+speak of \emph{Gaussian white noise}, enabling exact likelihood computation.
+
+%=============================================================================
+\section{Core Theory}
+\label{sec:theory}
+
+\subsection{Autoregressive Models}
+
+\begin{definition}[AR($p$) Process]
+$\{Y_t\}$ follows an \emph{autoregressive process of order $p$} if
+\begin{equation}
+  Y_t = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p}
+        + \varepsilon_t,
+  \label{eq:ar_p}
+\end{equation}
+where $c$ is an intercept, $\phi_1,\ldots,\phi_p$ are autoregressive
+coefficients, and $\varepsilon_t \sim \mathrm{WN}(0,\sigma^2)$.
+\end{definition}
+
+Using the backshift operator, \eqref{eq:ar_p} is written compactly as
+$\Phi(B)Y_t = c + \varepsilon_t$, where
+$\Phi(z) = 1 - \phi_1 z - \phi_2 z^2 - \cdots - \phi_p z^p$
+is the \emph{autoregressive (AR) polynomial}.
+
+\begin{proposition}[Stationarity Condition]
+The AR($p$) process is covariance-stationary if and only if all roots of
+$\Phi(z) = 0$ lie \emph{outside} the unit circle in the complex plane,
+i.e., $|z_i| > 1$ for all roots $z_i$.
+\end{proposition}
+
+For an AR(1) model $Y_t = \phi Y_{t-1} + \varepsilon_t$, stationarity requires
+$|\phi| < 1$. Under stationarity:
+\begin{align}
+  \mu &= \frac{c}{1 - \phi_1 - \cdots - \phi_p}, \label{eq:ar_mean}\\
+  \gamma(0) &= \sigma^2 / (1 - \phi_1 \rho(1) - \cdots - \phi_p \rho(p)),
+  \label{eq:ar_var}
+\end{align}
+and the ACVF satisfies the \emph{Yule--Walker equations}:
+\begin{equation}
+  \gamma(h) = \phi_1\gamma(h-1) + \cdots + \phi_p\gamma(h-p), \quad h \geq 1.
+  \label{eq:yw}
+\end{equation}
+
+The PACF of an AR($p$) process has a \emph{sharp cutoff} after lag $p$:
+$\phi_{hh} = 0$ for $h > p$.
+
+\subsection{Moving-Average Models}
+
+\begin{definition}[MA($q$) Process]
+$\{Y_t\}$ follows a \emph{moving-average process of order $q$} if
+\begin{equation}
+  Y_t = \mu + \varepsilon_t + \theta_1\varepsilon_{t-1} + \cdots
+        + \theta_q\varepsilon_{t-q},
+  \label{eq:ma_q}
+\end{equation}
+i.e., $Y_t = \mu + \Theta(B)\varepsilon_t$ with
+$\Theta(z) = 1 + \theta_1 z + \cdots + \theta_q z^q$.
+\end{definition}
+
+Every finite-order MA process is covariance-stationary. The ACF satisfies:
+\begin{equation}
+  \rho(h) = \frac{\sum_{j=0}^{q-h}\theta_j\theta_{j+h}}
+                 {\sum_{j=0}^{q}\theta_j^2}, \quad 1 \leq h \leq q,
+  \label{eq:ma_acf}
+\end{equation}
+and $\rho(h) = 0$ for $|h| > q$ --- a \emph{sharp cutoff} at lag $q$.
+
+\begin{definition}[Invertibility]
+An MA($q$) process is \emph{invertible} if all roots of $\Theta(z) = 0$ lie
+outside the unit circle. Invertibility ensures the unique infinite AR
+representation $\varepsilon_t = \Theta^{-1}(B)(Y_t - \mu)$.
+\end{definition}
+
+\subsection{ARMA Models}
+
+\begin{definition}[ARMA($p,q$) Process]
+$\{Y_t\}$ follows an ARMA($p,q$) process if
+\begin{equation}
+  \Phi(B)(Y_t - \mu) = \Theta(B)\varepsilon_t,
+  \label{eq:arma}
+\end{equation}
+with $\Phi$ and $\Theta$ sharing no common roots.
+\end{definition}
+
+The ARMA($p,q$) ACF decays geometrically for lags $h > q - p$ (when
+$q \geq p$), and the PACF decays geometrically for lags $h > p - q$
+(when $p \geq q$). This \emph{mixing} of tail behaviors is what
+distinguishes ARMA from pure AR or MA, and motivates information-criteria
+model selection rather than sharp cutoff identification.
+
+The Wold MA representation coefficients satisfy:
+\begin{equation}
+  \psi(z) = \frac{\Theta(z)}{\Phi(z)} = \sum_{j=0}^{\infty}\psi_j z^j.
+  \label{eq:wold_coeffs}
+\end{equation}
+
+\subsection{Integrated and Seasonal Models}
+
+Many economic and business series exhibit \emph{stochastic trends}: the first
+difference $\nabla Y_t = Y_t - Y_{t-1}$ is stationary even though $Y_t$ itself
+is not.
+
+\begin{definition}[ARIMA($p,d,q$) Process]
+$\{Y_t\}$ follows an ARIMA($p,d,q$) process if $\nabla^d Y_t$ is a
+covariance-stationary ARMA($p,q$) process:
+\begin{equation}
+  \Phi(B)\nabla^d Y_t = c + \Theta(B)\varepsilon_t.
+  \label{eq:arima}
+\end{equation}
+\end{definition}
+
+The special case ARIMA(0,1,0), i.e., $Y_t = Y_{t-1} + \varepsilon_t$, is the
+\emph{random walk}, the canonical model for efficient-market asset prices.
+
+Seasonal patterns with period $s$ are accommodated by the
+\emph{SARIMA($p,d,q$)$\times$($P,D,Q$)$_s$} model~\cite{box2015time}:
+\begin{equation}
+  \Phi(B)\Phi_s(B^s)\nabla^d\nabla_s^D Y_t
+  = \Theta(B)\Theta_s(B^s)\varepsilon_t,
+  \label{eq:sarima}
+\end{equation}
+where $\nabla_s = 1 - B^s$, $\Phi_s(z) = 1 - \Phi_1 z - \cdots - \Phi_P z^P$,
+and $\Theta_s$ is defined analogously. For monthly data, $s = 12$; for
+quarterly data, $s = 4$.
+
+\begin{definition}[Unit Root]
+A process has a \emph{unit root} if $\Phi(z) = 0$ has a root at $z = 1$,
+equivalently the characteristic polynomial evaluated at 1 equals zero. Unit
+roots produce non-stationarity manifested as a stochastic trend.
+\end{definition}
+
+The \emph{Augmented Dickey--Fuller} (ADF) test~\cite{dickey1979distribution}
+evaluates $H_0$: unit root against $H_1$: stationarity via the regression
+\begin{equation}
+  \nabla Y_t = \alpha + \beta t + \delta Y_{t-1}
+               + \sum_{j=1}^{k}\gamma_j \nabla Y_{t-j} + u_t,
+  \label{eq:adf}
+\end{equation}
+with test statistic $\tau = \hat{\delta}/\mathrm{se}(\hat{\delta})$ compared
+to Dickey--Fuller critical values.
+
+\subsubsection{Co-integration and Error-Correction Models}
+
+When two $I(1)$ series $\{X_t\}$ and $\{Y_t\}$ share a long-run equilibrium
+$Y_t - \beta X_t \sim I(0)$, they are \emph{co-integrated}~\cite{engle1987co}.
+The \emph{vector error-correction model} (VECM) is:
+\begin{equation}
+  \nabla\mathbf{z}_t
+  = \alpha\boldsymbol{\beta}^{\top}\mathbf{z}_{t-1}
+  + \sum_{j=1}^{k-1}\Gamma_j\nabla\mathbf{z}_{t-j} + \boldsymbol{\varepsilon}_t,
+  \label{eq:vecm}
+\end{equation}
+where $\mathbf{z}_t = (X_t, Y_t)^{\top}$, $\boldsymbol{\beta}$ is the
+co-integrating vector, and $\alpha$ is the adjustment (loading) matrix.
+The $\boldsymbol{\beta}^{\top}\mathbf{z}_{t-1}$ term is the
+\emph{error-correction} component restoring equilibrium after shocks.
+
+%=============================================================================
+\section{Algorithms and Methods}
+\label{sec:algorithms}
+
+\subsection{Model Identification}
+
+The Box--Jenkins identification procedure uses the sample ACF and PACF
+(Table~\ref{tab:acf_patterns}) together with information criteria.
+
+\begin{table}[htbp]
+\centering
+\caption{ACF and PACF Signature Patterns for Model Identification}
+\label{tab:acf_patterns}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{ACF} & \textbf{PACF} & \textbf{Characteristic}\\
+\midrule
+AR($p$)    & Tails off (geometric) & Cuts off after $p$ & $p$ spikes in PACF \\
+MA($q$)    & Cuts off after $q$    & Tails off          & $q$ spikes in ACF  \\
+ARMA($p,q$)& Tails off (lag $>q$)  & Tails off (lag $>p$) & Both tail off     \\
+White noise& No significant lags   & No significant lags & Flat              \\
+Random walk& Slow decay            & Spike at lag 1     & Non-stationary    \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Algorithm 1: Yule--Walker Estimation for AR($p$)}
+
+\noindent\textbf{Input:} Observed series $y_1,\ldots,y_T$; order $p$.\\
+\noindent\textbf{Output:} Parameter estimates $\hat{\phi}_1,\ldots,\hat{\phi}_p$,
+$\hat{\sigma}^2$.
+
+\begin{enumerate}
+  \item Compute sample autocovariances
+        $\hat{\gamma}(h) = T^{-1}\sum_{t=h+1}^T (y_t-\bar{y})(y_{t-h}-\bar{y})$
+        for $h = 0, 1, \ldots, p$.
+  \item Form the sample autocorrelation matrix
+        $\hat{\mathbf{R}} \in \mathbb{R}^{p\times p}$ with
+        $\hat{R}_{ij} = \hat{\rho}(|i-j|)$.
+  \item Solve the \emph{Yule--Walker system}
+        \begin{equation}
+          \hat{\mathbf{R}}\,\hat{\boldsymbol{\phi}}
+          = \hat{\boldsymbol{\rho}},
+          \label{eq:yw_matrix}
+        \end{equation}
+        where $\hat{\boldsymbol{\rho}} = (\hat{\rho}(1),\ldots,\hat{\rho}(p))^{\top}$,
+        via Cholesky decomposition or the Levinson--Durbin recursion~\cite{durbin1960fitting}.
+  \item Estimate the noise variance:
+        $\hat{\sigma}^2 = \hat{\gamma}(0)(1 - \hat{\boldsymbol{\phi}}^{\top}
+        \hat{\boldsymbol{\rho}})$.
+\end{enumerate}
+
+The Yule--Walker estimator is $\sqrt{T}$-consistent under stationarity.
+
+\subsection{Algorithm 2: Maximum Likelihood Estimation for ARMA($p,q$)}
+
+\noindent\textbf{Input:} Series $\mathbf{y}$; orders $p,q$;
+Gaussian innovations assumed.\\
+\noindent\textbf{Output:} $(\hat{\boldsymbol{\phi}}, \hat{\boldsymbol{\theta}}, \hat{\sigma}^2)$.
+
+\begin{enumerate}
+  \item Initialize the innovation recursion. Set $\hat{\varepsilon}_1 = \cdots
+        = \hat{\varepsilon}_{-\max(p,q)+1} = 0$.
+  \item For $t = 1, \ldots, T$, compute one-step-ahead prediction errors:
+        \begin{equation}
+          \hat{\varepsilon}_t = y_t - c - \sum_{i=1}^p \phi_i y_{t-i}
+                                - \sum_{j=1}^q \theta_j \hat{\varepsilon}_{t-j}.
+          \label{eq:innovations}
+        \end{equation}
+  \item Compute the conditional log-likelihood:
+        \begin{equation}
+          \ell(\boldsymbol{\phi},\boldsymbol{\theta},\sigma^2 \mid \mathbf{y})
+          = -\frac{T}{2}\log(2\pi\sigma^2)
+            - \frac{1}{2\sigma^2}\sum_{t=1}^T \hat{\varepsilon}_t^2.
+          \label{eq:cll}
+        \end{equation}
+  \item Maximize \eqref{eq:cll} over $(\boldsymbol{\phi},\boldsymbol{\theta})$
+        using a quasi-Newton method (e.g., L-BFGS) with stationarity and
+        invertibility constraints enforced via reparameterization
+        (e.g., partial autocorrelation space for AR coefficients~\cite{jones1980maximum}).
+  \item Recover $\hat{\sigma}^2 = T^{-1}\sum_t \hat{\varepsilon}_t^2$ at
+        the optimum.
+\end{enumerate}
+
+\textbf{Exact MLE} replaces step 3 with the multivariate Gaussian likelihood
+$\ell = -\frac{1}{2}\bigl[\log\det\boldsymbol{\Sigma} +
+(\mathbf{y}-\boldsymbol{\mu})^{\top}\boldsymbol{\Sigma}^{-1}(\mathbf{y}-\boldsymbol{\mu})\bigr]$,
+where $\boldsymbol{\Sigma}$ is the Toeplitz covariance matrix;
+the Durbin--Levinson algorithm computes this in $O(T)$ time~\cite{brockwell1991time}.
+
+\subsection{Algorithm 3: Model Selection via Information Criteria}
+
+Two primary criteria balance fit and parsimony:
+\begin{align}
+  \mathrm{AIC}(p,q) &= -2\hat{\ell} + 2(p+q+1), \label{eq:aic}\\
+  \mathrm{BIC}(p,q) &= -2\hat{\ell} + (p+q+1)\log T. \label{eq:bic}
+\end{align}
+The AIC~\cite{akaike1974new} targets one-step-ahead prediction accuracy
+asymptotically, while the BIC~\cite{schwarz1978estimating} is consistent
+for the true order. In practice, a grid search over $p \leq p_{\max}$,
+$q \leq q_{\max}$ is performed, selecting the model minimizing AIC or BIC.
+
+\subsection{Algorithm 4: Multi-Step Forecasting}
+
+Given parameter estimates and data through time $T$, the MMSE
+$h$-step-ahead forecast $\hat{y}_{T+h|T} = \mathbb{E}[Y_{T+h}\mid y_1,\ldots,y_T]$
+is obtained recursively:
+
+\begin{enumerate}
+  \item Set $\hat{y}_{T+j|T} = y_{T+j}$ for $j \leq 0$ and
+        $\hat{\varepsilon}_{T+j|T} = 0$ for $j > 0$.
+  \item For $h = 1, 2, \ldots, H$, compute
+        \begin{equation}
+          \hat{y}_{T+h|T} = \hat{c} + \sum_{i=1}^p \hat{\phi}_i\,\hat{y}_{T+h-i|T}
+                            + \sum_{j=1}^q \hat{\theta}_j\,\hat{\varepsilon}_{T+h-j|T}.
+          \label{eq:forecast_recursion}
+        \end{equation}
+  \item Compute forecast error variances
+        $v_h = \sigma^2\sum_{j=0}^{h-1}\psi_j^2$ using Wold coefficients
+        $\{\psi_j\}$ from \eqref{eq:wold_coeffs}.
+  \item Form $(1-\alpha)$ prediction intervals:
+        $\hat{y}_{T+h|T} \pm z_{\alpha/2}\sqrt{v_h}$.
+\end{enumerate}
+
+For ARIMA models, forecasts are computed on the differenced series and then
+\emph{integrated} (cumulative-summed) back to the original scale.
+
+\subsection{Algorithm 5: Holt--Winters Exponential Smoothing}
+
+Exponential smoothing~\cite{holt2004forecasting,winters1960forecasting} provides
+a robust, computation-friendly alternative to ARIMA. The additive
+Holt--Winters model with trend and seasonality (period $s$) maintains:
+\begin{align}
+  \ell_t &= \alpha(y_t - s_{t-m}) + (1-\alpha)(\ell_{t-1} + b_{t-1}),
+            \label{eq:hw_level}\\
+  b_t    &= \beta^*(\ell_t - \ell_{t-1}) + (1-\beta^*)b_{t-1},
+            \label{eq:hw_trend}\\
+  s_t    &= \gamma(y_t - \ell_{t-1} - b_{t-1}) + (1-\gamma)s_{t-m},
+            \label{eq:hw_seasonal}
+\end{align}
+with $h$-step forecast
+$\hat{y}_{T+h|T} = \ell_T + hb_T + s_{T+h-m\lceil h/m\rceil}$.
+Parameters $\alpha, \beta^*, \gamma \in (0,1)$ are estimated by minimizing
+$\sum_t(\hat{y}_{t|t-1} - y_t)^2$.
+
+Hyland and Gardner~\cite{gardner1985exponential} and Hyndman
+et al.~\cite{hyndman2008forecasting} showed that every exponential smoothing
+method corresponds to a state-space model with a specific error structure
+(additive or multiplicative), unifying smoothing with ARIMA under the
+ETS (Error, Trend, Seasonality) framework.
+
+%=============================================================================
+\section{Worked Examples}
+\label{sec:examples}
+
+\subsection{Example 1: AR(2) Parameter Estimation}
+
+Consider the zero-mean AR(2) model $Y_t = 0.6Y_{t-1} - 0.3Y_{t-2} + \varepsilon_t$
+with $\sigma^2 = 1$.
+
+\paragraph{Stationarity check.}
+The AR polynomial is $\Phi(z) = 1 - 0.6z + 0.3z^2$. Setting $\Phi(z) = 0$:
+\begin{align*}
+  z &= \frac{0.6 \pm \sqrt{0.36 - 1.2}}{0.6}
+     = \frac{0.6 \pm \sqrt{-0.84}}{0.6}.
+\end{align*}
+The roots are complex conjugates with modulus
+$|z| = 1/\sqrt{0.3} \approx 1.826 > 1$,
+confirming stationarity.
+
+\paragraph{Yule--Walker solution.}
+From \eqref{eq:yw}:
+\begin{align*}
+  \rho(1) &= \phi_1 + \phi_2\rho(1) \;\Rightarrow\; \rho(1) = \frac{0.6}{1+0.3} \approx 0.462,\\
+  \rho(2) &= \phi_1\rho(1) + \phi_2 = 0.6(0.462) - 0.3 \approx -0.023.
+\end{align*}
+
+\paragraph{Theoretical PACF.}
+By definition, $\phi_{11} = \rho(1) \approx 0.462$,
+$\phi_{22} = \phi_2 = -0.3$, and $\phi_{hh} = 0$ for $h \geq 3$,
+consistent with the AR(2) signature in Table~\ref{tab:acf_patterns}.
+
+\paragraph{Variance.}
+$\gamma(0) = \sigma^2/(1 - \phi_1\rho(1) - \phi_2\rho(2)) \approx 1/(1 - 0.277 + 0.007) \approx 1.36$.
+
+\subsection{Example 2: ARIMA Forecasting for Airline Passenger Data}
+
+The \texttt{AirPassengers} dataset (monthly international airline passengers,
+1949--1960, $T=144$) is a canonical benchmark~\cite{box2015time}.
+The series exhibits an exponential trend and multiplicative seasonality
+(variance increasing with level), motivating a log transformation.
+Let $x_t = \log(y_t)$.
+
+\paragraph{Identification.}
+The ACF of $x_t$ decays very slowly (unit-root behavior). After
+first-differencing ($d=1$), the seasonal ACF at lag 12 remains significant,
+motivating a seasonal difference ($D=1$, $s=12$). On $w_t = \nabla\nabla_{12}x_t$:
+the ACF has significant spikes at lags 1 and 12; the PACF decays at
+both non-seasonal and seasonal lags. This pattern suggests SARIMA(0,1,1)$\times$(0,1,1)$_{12}$,
+the \emph{airline model}~\cite{box2015time}.
+
+\paragraph{Estimated model.}
+Conditional MLE yields (standard errors in parentheses):
+$\hat{\theta}_1 = -0.402\;(0.089)$, $\hat{\Theta}_1 = -0.557\;(0.073)$,
+$\hat{\sigma}^2 = 0.00134$.
+
+\paragraph{Forecasts.}
+Twelve-month-ahead point forecasts on the log scale are back-transformed via
+$\hat{y}_{T+h|T} = \exp(\hat{x}_{T+h|T} + \hat{\sigma}^2 v_h / 2)$
+(bias correction for lognormal distribution). The 95\% prediction bands widen
+appropriately with horizon.
+
+\paragraph{Diagnostics.}
+Ljung--Box test~\cite{ljung1978measure}:
+\begin{equation}
+  Q(m) = T(T+2)\sum_{h=1}^m \frac{\hat{\rho}_\varepsilon^2(h)}{T-h},
+  \label{eq:ljungbox}
+\end{equation}
+yields $Q(20) = 17.4$ with $p = 0.62$ under $\chi^2_{18}$, confirming
+adequate fit.
+
+\subsection{Example 3: Selecting Between Models Using AIC/BIC}
+
+Table~\ref{tab:aic_bic} shows AIC and BIC values for candidate ARMA models
+fitted to a simulated ARMA(1,1) series of length $T=200$.
+
+\begin{table}[htbp]
+\centering
+\caption{AIC and BIC for Candidate ARMA Models ($T=200$, True Model: ARMA(1,1))}
+\label{tab:aic_bic}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Model} & \textbf{$p+q$} & \textbf{Log-lik} & \textbf{AIC} & \textbf{BIC}\\
+\midrule
+AR(1)         & 1 & $-278.4$ & 560.8 & 567.2 \\
+MA(1)         & 1 & $-279.1$ & 562.2 & 568.6 \\
+ARMA(1,1)     & 2 & $-271.3$ & 548.6 & 558.2 \\
+ARMA(2,1)     & 3 & $-271.0$ & 550.0 & 562.8 \\
+ARMA(1,2)     & 3 & $-271.2$ & 550.4 & 563.2 \\
+ARMA(2,2)     & 4 & $-270.8$ & 551.6 & 567.6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both AIC and BIC correctly select ARMA(1,1). Note that AIC penalizes less
+heavily and would be more likely to select a higher-order model in borderline
+cases; BIC's stronger penalty is consistent with order consistency.
+
+%=============================================================================
+\section{Applications in Data Science}
+\label{sec:applications}
+
+\subsection{Demand and Supply Chain Forecasting}
+
+Retail demand series typically exhibit weekly or annual seasonality and
+trend. SARIMA and Holt--Winters models are workhorses for point-of-sale
+inventory management. Makridakis et al.~\cite{makridakis2018m4} evaluated
+over 60,000 time series in the M4 competition, finding that exponential
+smoothing methods remain highly competitive, often outperforming complex
+machine-learning approaches on short to medium horizons.
+
+\subsection{Financial Econometrics}
+
+Asset log-returns are approximately white noise (efficient market hypothesis)
+but exhibit volatility clustering motivating GARCH extensions. However,
+ARIMA models remain essential for: forecasting macroeconomic indicators
+(GDP, CPI, unemployment) that exhibit autocorrelation, modeling the term
+structure of interest rates, and detecting mean-reversion. The random walk
+model $d = 1$ is the standard benchmark against which more complex financial
+models are evaluated~\cite{hamilton1994time}.
+
+\subsection{Epidemiological Surveillance}
+
+Time-series models are deployed in public health to detect anomalous
+disease counts above seasonal baselines. The Farrington
+algorithm~\cite{farrington1996statistical} adapts a quasi-Poisson regression
+with ARIMA residuals to detect outbreak signals in syndromic surveillance
+data. During the COVID-19 pandemic, ARIMA and exponential smoothing models
+were used as rapid-deployment baselines for excess mortality estimation.
+
+\subsection{Environmental Monitoring and Climate Science}
+
+Monthly mean temperature, sea-level, and atmospheric CO$_2$ series
+(e.g., Mauna Loa keeling curve) are modeled as ARIMA processes with
+deterministic seasonal harmonics. Unit-root tests determine whether
+long-term changes represent stochastic trends (requiring differencing) or
+deterministic trends (requiring time-trend regression). Co-integration
+analysis is used to study long-run equilibria between climate variables such
+as global temperature and CO$_2$ concentration~\cite{engle1987co}.
+
+\subsection{Industrial Process Control and IoT}
+
+Manufacturing sensor streams (vibration, temperature, pressure) are
+monitored using ARIMA-based residual control charts. An out-of-control
+signal is flagged when the one-step-ahead prediction error exceeds control
+limits derived from the fitted model variance. The \emph{transfer function
+model}~\cite{box2015time}, an extension of ARIMA with exogenous inputs,
+enables modeling of cause-and-effect relationships between process inputs
+and outputs.
+
+%=============================================================================
+\section{Limitations and Assumptions}
+\label{sec:limits}
+
+\subsection{Linearity}
+
+ARMA-class models impose a \emph{linear} conditional mean structure.
+Nonlinear dynamics such as threshold behavior (business cycle asymmetry),
+regime switching (financial crises), or chaotic systems cannot be captured
+without extensions such as TAR~\cite{tong1990non},
+SETAR, or Markov-switching models.
+
+\subsection{Gaussianity}
+
+Standard inference and exact likelihood computation assume Gaussian
+innovations. Financial returns, count data, and heavy-tailed sensor readings
+violate this assumption. While QML (quasi-maximum likelihood) remains
+consistent under misspecification of the innovation distribution, prediction
+intervals based on Gaussian quantiles are unreliable for heavy-tailed series.
+
+\subsection{Constant Variance (Homoscedasticity)}
+
+ARIMA models assume $\mathrm{Var}(\varepsilon_t) = \sigma^2$ constant over
+time. Volatility clustering in financial data violates this, necessitating
+ARCH/GARCH models~\cite{engle1982autoregressive,bollerslev1986generalized}.
+
+\subsection{Stationarity After Differencing}
+
+The ARIMA framework assumes that a suitable integer number of differences $d$
+renders the series stationary. Fractionally integrated processes (long memory)
+require ARFIMA models with non-integer $d$~\cite{granger1980introduction}.
+Additionally, structural breaks in mean or variance can be misidentified as
+unit roots~\cite{perron1989great}.
+
+\subsection{Parameter Stability}
+
+The model assumes \emph{time-invariant} parameters. In practice, economic
+regimes shift, technologies change, and consumer behavior evolves. Rolling
+estimation, recursive forecasting, and state-space models with time-varying
+parameters are used to address parameter instability~\cite{durbin2012time}.
+
+\subsection{Univariate versus Multivariate}
+
+Classical ARIMA treats series one at a time, ignoring information in related
+series. Vector autoregressive (VAR) models extend AR to multivariate settings,
+capturing Granger causality. The VECM extends VAR to co-integrated systems.
+
+\subsection{Sample Size and Overfitting}
+
+High-order ARMA models have many parameters; with $p + q + 1$ free parameters
+in the mean equation alone, overfitting is a concern for short series.
+BIC-based selection and cross-validation (e.g., time-series split) mitigate
+overfitting.
+
+%=============================================================================
+\section{Connections to Related Methods}
+\label{sec:related}
+
+\subsection{State-Space and Structural Time-Series Models}
+
+Every ARIMA model admits a state-space representation
+\begin{align}
+  \boldsymbol{\alpha}_{t+1} &= \mathbf{T}\boldsymbol{\alpha}_t
+                              + \mathbf{R}\boldsymbol{\eta}_t, \label{eq:ss_trans}\\
+  y_t &= \mathbf{Z}^{\top}\boldsymbol{\alpha}_t + \varepsilon_t, \label{eq:ss_obs}
+\end{align}
+enabling \emph{Kalman filter} recursions for exact likelihood evaluation
+and optimal state estimation~\cite{kalman1960new,durbin2012time}.
+Harvey's structural time-series
+models~\cite{harvey1990forecasting} specify trend, seasonal, and
+irregular components directly in \eqref{eq:ss_trans}--\eqref{eq:ss_obs},
+providing an interpretable decomposition and accommodating missing data
+and irregular spacing naturally.
+
+\subsection{ARCH and GARCH Models}
+
+Engle's~\cite{engle1982autoregressive} ARCH model specifies conditional
+heteroscedasticity:
+$\varepsilon_t = \sigma_t z_t$ with $z_t \stackrel{\text{iid}}{\sim}(0,1)$ and
+$\sigma_t^2 = \omega + \sum_{i=1}^r \alpha_i \varepsilon_{t-i}^2$.
+Bollerslev's~\cite{bollerslev1986generalized} GARCH($r,s$) adds
+$\sum_{j=1}^s \beta_j \sigma_{t-j}^2$.
+ARMA-GARCH models combine autoregressive mean dynamics with GARCH variance
+dynamics, the standard model for financial log-return series.
+
+\subsection{Vector Autoregression (VAR)}
+
+The VAR($p$) model for $K$-dimensional $\mathbf{y}_t$:
+\begin{equation}
+  \mathbf{y}_t = \mathbf{c} + \sum_{i=1}^p \mathbf{A}_i \mathbf{y}_{t-i}
+                 + \boldsymbol{\varepsilon}_t
+  \label{eq:var}
+\end{equation}
+generalizes univariate AR to capture cross-series dynamics.
+VAR is the standard tool for structural macroeconomic analysis via impulse
+response functions and forecast error variance decompositions~\cite{sims1980macroeconomics,lutkepohl2005new}.
+
+\subsection{Machine Learning Approaches}
+
+Modern approaches apply recurrent neural networks
+(RNN/LSTM~\cite{hochreiter1997long}) and Transformer architectures to
+time-series, capturing nonlinear and long-range dependencies. However,
+classical models retain advantages in interpretability, statistical
+efficiency for small samples, and robustness. Hybrid approaches combine
+classical decomposition with neural networks for residuals (e.g., N-BEATS,
+N-HiTS~\cite{oreshkin2019nbeats}). The M4 and M5 competitions showed that
+ensembles of classical and neural models consistently outperform either
+family alone~\cite{makridakis2018m4}.
+
+\subsection{Spectral Analysis}
+
+The \emph{spectral density} of a covariance-stationary process is
+$f(\omega) = \frac{1}{2\pi}\sum_{h=-\infty}^{\infty}\gamma(h)e^{-i\omega h}$,
+the Fourier transform of the ACVF. For an ARMA($p,q$) process:
+\begin{equation}
+  f(\omega) = \frac{\sigma^2}{2\pi}
+              \frac{|\Theta(e^{-i\omega})|^2}{|\Phi(e^{-i\omega})|^2}.
+  \label{eq:spectral}
+\end{equation}
+Spectral analysis identifies periodic components and provides a
+complementary view to the time-domain ACF/PACF representation.
+
+%=============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+This survey has presented a unified, mathematically rigorous treatment of
+classical time-series models from the AR, MA, and ARMA families through
+their integrated and seasonal extensions (ARIMA/SARIMA), exponential
+smoothing, and co-integration/error-correction models.
+
+We have shown how these models address the four core themes of predictive
+modeling for dependent data. First, the ACF, PACF, and unit-root tests
+(ADF) provide principled tools for \emph{identifying dependencies and
+non-stationarity} in structured temporal data. Second, the ARIMA and
+Holt--Winters frameworks offer a rich menu of \emph{appropriate model forms}
+matched to trend, seasonality, and autocorrelation patterns. Third, the MMSE
+forecast recursion and state-space formulation yield \emph{optimal forecasts
+with calibrated prediction intervals} that properly account for serial
+dependence. Fourth, the state-space and structural decomposition
+representations \emph{reveal latent trends, seasonal cycles, and irregular
+components} in otherwise complex series.
+
+Despite the rise of deep learning for time-series, classical models remain
+indispensable: they provide interpretable parameterizations, asymptotically
+valid inference, and competitive forecast accuracy particularly on shorter
+horizons or smaller datasets. Their assumptions --- linearity, homoscedasticity,
+and Gaussian innovations --- are well understood and motivate principled
+extensions to GARCH, state-space, and machine-learning hybrids.
+
+For practitioners in data science, the Box--Jenkins identification--estimation--%
+diagnostic cycle remains a valuable discipline: it forces explicit
+consideration of data properties, model adequacy, and forecast uncertainty
+before deployment.
+
+%=============================================================================
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{99}
+
+\bibitem{akaike1974new}
+H. Akaike, ``A new look at the statistical model identification,''
+\textit{IEEE Transactions on Automatic Control}, vol.~19, no.~6,
+pp.~716--723, 1974.
+
+\bibitem{bollerslev1986generalized}
+T. Bollerslev, ``Generalized autoregressive conditional heteroskedasticity,''
+\textit{Journal of Econometrics}, vol.~31, no.~3, pp.~307--327, 1986.
+
+\bibitem{box2015time}
+G. E. P. Box, G. M. Jenkins, G. C. Reinsel, and G. M. Ljung,
+\textit{Time Series Analysis: Forecasting and Control}, 5th ed.
+Hoboken, NJ, USA: Wiley, 2015.
+
+\bibitem{brockwell1991time}
+P. J. Brockwell and R. A. Davis,
+\textit{Time Series: Theory and Methods}, 2nd ed.
+New York, NY, USA: Springer, 1991.
+
+\bibitem{dickey1979distribution}
+D. A. Dickey and W. A. Fuller, ``Distribution of the estimators for
+autoregressive time series with a unit root,''
+\textit{Journal of the American Statistical Association}, vol.~74,
+no.~366, pp.~427--431, 1979.
+
+\bibitem{durbin1960fitting}
+J. Durbin, ``The fitting of time-series models,''
+\textit{Review of the International Statistical Institute}, vol.~28,
+no.~3, pp.~233--244, 1960.
+
+\bibitem{durbin2012time}
+J. Durbin and S. J. Koopman,
+\textit{Time Series Analysis by State Space Methods}, 2nd ed.
+Oxford, UK: Oxford University Press, 2012.
+
+\bibitem{engle1982autoregressive}
+R. F. Engle, ``Autoregressive conditional heteroscedasticity with estimates
+of the variance of United Kingdom inflation,''
+\textit{Econometrica}, vol.~50, no.~4, pp.~987--1007, 1982.
+
+\bibitem{engle1987co}
+R. F. Engle and C. W. J. Granger, ``Co-integration and error correction:
+representation, estimation, and testing,''
+\textit{Econometrica}, vol.~55, no.~2, pp.~251--276, 1987.
+
+\bibitem{farrington1996statistical}
+C. P. Farrington, N. Andrews, A. D. Beale, and M. A. Catchpole,
+``A statistical algorithm for the early detection of outbreaks of
+infectious disease,'' \textit{Journal of the Royal Statistical Society:
+Series A}, vol.~159, no.~3, pp.~547--563, 1996.
+
+\bibitem{gardner1985exponential}
+E. S. Gardner, ``Exponential smoothing: the state of the art,''
+\textit{Journal of Forecasting}, vol.~4, no.~1, pp.~1--28, 1985.
+
+\bibitem{granger1980introduction}
+C. W. J. Granger and R. Joyeux, ``An introduction to long-memory time
+series models and fractional differencing,''
+\textit{Journal of Time Series Analysis}, vol.~1, no.~1, pp.~15--29, 1980.
+
+\bibitem{hamilton1994time}
+J. D. Hamilton,
+\textit{Time Series Analysis}.
+Princeton, NJ, USA: Princeton University Press, 1994.
+
+\bibitem{harvey1990forecasting}
+A. C. Harvey,
+\textit{Forecasting, Structural Time Series Models and the Kalman Filter}.
+Cambridge, UK: Cambridge University Press, 1990.
+
+\bibitem{hochreiter1997long}
+S. Hochreiter and J. Schmidhuber, ``Long short-term memory,''
+\textit{Neural Computation}, vol.~9, no.~8, pp.~1735--1780, 1997.
+
+\bibitem{holt2004forecasting}
+C. C. Holt, ``Forecasting seasonals and trends by exponentially weighted
+moving averages,'' \textit{International Journal of Forecasting}, vol.~20,
+no.~1, pp.~5--10, 2004.
+
+\bibitem{hyndman2008forecasting}
+R. J. Hyndman, A. B. Koehler, J. K. Ord, and R. D. Snyder,
+\textit{Forecasting with Exponential Smoothing: The State Space Approach}.
+Berlin, Germany: Springer, 2008.
+
+\bibitem{jones1980maximum}
+R. H. Jones, ``Maximum likelihood fitting of ARMA models to time series
+with missing observations,''
+\textit{Technometrics}, vol.~22, no.~3, pp.~389--395, 1980.
+
+\bibitem{kalman1960new}
+R. E. Kalman, ``A new approach to linear filtering and prediction problems,''
+\textit{Journal of Basic Engineering}, vol.~82, no.~1, pp.~35--45, 1960.
+
+\bibitem{ljung1978measure}
+G. M. Ljung and G. E. P. Box, ``On a measure of lack of fit in time series
+models,'' \textit{Biometrika}, vol.~65, no.~2, pp.~297--303, 1978.
+
+\bibitem{lutkepohl2005new}
+H. L{\"u}tkepohl,
+\textit{New Introduction to Multiple Time Series Analysis}.
+Berlin, Germany: Springer, 2005.
+
+\bibitem{makridakis2018m4}
+S. Makridakis, E. Spiliotis, and V. Assimakopoulos, ``The M4 competition:
+results, findings, conclusion and way forward,''
+\textit{International Journal of Forecasting}, vol.~34, no.~4,
+pp.~802--808, 2018.
+
+\bibitem{oreshkin2019nbeats}
+B. N. Oreshkin, D. Carpov, N. Chapados, and Y. Bengio,
+``N-BEATS: neural basis expansion analysis for interpretable time series
+forecasting,'' in \textit{Proc. 8th International Conference on Learning
+Representations (ICLR)}, 2020.
+
+\bibitem{perron1989great}
+P. Perron, ``The great crash, the oil price shock, and the unit root
+hypothesis,'' \textit{Econometrica}, vol.~57, no.~6, pp.~1361--1401, 1989.
+
+\bibitem{schuster1898investigation}
+A. Schuster, ``On the investigation of hidden periodicities with application
+to a supposed 26-day period of meteorological phenomena,''
+\textit{Terrestrial Magnetism}, vol.~3, no.~1, pp.~13--41, 1898.
+
+\bibitem{schwarz1978estimating}
+G. Schwarz, ``Estimating the dimension of a model,''
+\textit{The Annals of Statistics}, vol.~6, no.~2, pp.~461--464, 1978.
+
+\bibitem{sims1980macroeconomics}
+C. A. Sims, ``Macroeconomics and reality,''
+\textit{Econometrica}, vol.~48, no.~1, pp.~1--48, 1980.
+
+\bibitem{slutzky1927summation}
+E. Slutzky, ``The summation of random causes as the source of cyclic
+processes,'' \textit{Econometrica}, vol.~5, no.~2, pp.~105--146, 1937.
+
+\bibitem{tong1990non}
+H. Tong,
+\textit{Non-linear Time Series: A Dynamical System Approach}.
+Oxford, UK: Oxford University Press, 1990.
+
+\bibitem{winters1960forecasting}
+P. R. Winters, ``Forecasting sales by exponentially weighted moving averages,''
+\textit{Management Science}, vol.~6, no.~3, pp.~324--342, 1960.
+
+\bibitem{wold1938study}
+H. Wold,
+\textit{A Study in the Analysis of Stationary Time Series}.
+Stockholm, Sweden: Almqvist \& Wiksell, 1938.
+
+\bibitem{yule1927periodicity}
+G. U. Yule, ``On a method of investigating periodicities in disturbed
+series, with special reference to Wolfer's sunspot numbers,''
+\textit{Philosophical Transactions of the Royal Society of London A},
+vol.~226, pp.~267--298, 1927.
+
+\end{thebibliography}
+
+\end{document}

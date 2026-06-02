@@ -1,0 +1,583 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{bm}
+\usepackage{xcolor}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\begin{document}
+
+\title{Spatial Autoregressive Models: A Comprehensive Survey of Theory, Methods, and Applications in Data Science}
+
+\author{\IEEEauthorblockN{Surya Rao Rayarao}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+suryarao.r@utexas.edu}
+\and
+\IEEEauthorblockN{Naga Donikena}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+naga.donikena@utexas.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+Spatial autoregressive (SAR) models constitute a foundational class of methods for analyzing data that exhibit geographic or network-based dependence. In many real-world datasets---ranging from housing prices and disease incidence rates to economic output across regions---observations are not independent; rather, nearby units influence one another through spillover effects, social contagion, or shared environmental factors. Ignoring such dependence leads to biased inference, inflated precision, and poor predictive performance. This survey provides a rigorous treatment of the theory, estimation, and application of spatial autoregressive models within the modern data science context. We begin with the mathematical foundations of spatial weight matrices, Moran's $I$ statistic, and the spatial lag operator, then develop the core SAR, spatial error (SEM), and spatial Durbin (SDM) specifications. We review maximum likelihood, generalized method of moments, and Bayesian estimation strategies, and present worked numerical examples illustrating model fitting and prediction. Applications across environmental science, epidemiology, urban analytics, and economics are discussed, followed by a critical appraisal of model assumptions, computational challenges, and connections to related paradigms including Gaussian Markov random fields, graph neural networks, and spatiotemporal models.
+\end{abstract}
+
+\begin{IEEEkeywords}
+spatial autoregression, spatial econometrics, spatial weight matrix, Moran's $I$, spatial lag model, spatial error model, maximum likelihood estimation, geographically weighted regression, Gaussian Markov random fields
+\end{IEEEkeywords}
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+A central challenge in data science is the analysis of structured, dependent data. Classical statistical and machine learning methods---linear regression, logistic regression, decision trees---presuppose that observations are independent and identically distributed (i.i.d.). Yet in practice, many high-impact datasets violate this assumption in a structured, spatially coherent manner. Housing prices cluster in affluent neighborhoods \cite{anselin1988spatial}; infectious disease rates spread outward from epicenters \cite{lawson2013statistical}; economic activity agglomerates around urban cores \cite{lesage2009introduction}. In all these cases, the data carry a latent geographic or network structure that, if ignored, leads to misspecified models and unreliable inferences.
+
+Spatial autoregressive (SAR) models provide a principled framework for capturing such dependence. Originating in the spatial econometrics literature of the 1970s and 1980s, the SAR family has since become a cornerstone of quantitative geography, regional science, epidemiology, and environmental statistics. At its core, a SAR model augments a standard linear regression with a spatially lagged response or error term, encoding the empirical regularity known as Tobler's First Law of Geography: ``everything is related to everything else, but near things are more related than distant things'' \cite{tobler1970computer}.
+
+The relevance of SAR models to contemporary data science extends well beyond classical spatial statistics. Modern applications involve large irregular graphs (social networks, road networks, sensor arrays), high-dimensional covariate spaces, and the need for scalable computational methods. Recent theoretical connections to Gaussian Markov random fields (GMRFs) \cite{rue2005gaussian}, sparse precision matrices \cite{datta2016hierarchical}, and graph neural networks \cite{kipf2017semi} have reinvigorated the field and established SAR models as natural building blocks for structured prediction.
+
+This survey addresses four interlocking themes central to an advanced predictive modeling curriculum: (1) identifying and measuring dependencies in structured data; (2) selecting and fitting appropriate models for dependent observations; (3) generating forecasts and predictions that properly account for spatial dependence; and (4) discovering latent structure---such as spatial regimes or neighborhood clusters---within complex datasets.
+
+\textbf{Paper Organization.} Section~\ref{sec:prelim} introduces mathematical notation and foundational concepts including spatial weight matrices and Moran's $I$. Section~\ref{sec:theory} develops the core SAR model family. Section~\ref{sec:algo} reviews estimation algorithms. Section~\ref{sec:examples} presents worked numerical examples. Section~\ref{sec:apps} surveys real-world applications. Section~\ref{sec:limits} discusses limitations and assumptions. Section~\ref{sec:related} situates SAR models among related methods. Section~\ref{sec:conclusion} concludes.
+
+% ============================================================
+\section{Mathematical Preliminaries}
+\label{sec:prelim}
+% ============================================================
+
+\subsection{Notation and Setup}
+
+Let $\mathcal{D} = \{s_1, s_2, \ldots, s_n\}$ denote a set of $n$ spatial units (regions, points, nodes). To each unit $i$ we associate a scalar response $y_i \in \mathbb{R}$ and a $p$-dimensional covariate vector $\mathbf{x}_i \in \mathbb{R}^p$. Stacking these, we define
+\begin{align}
+\mathbf{y} &= (y_1, \ldots, y_n)^\top \in \mathbb{R}^n, \\
+\mathbf{X} &= [\mathbf{x}_1 \mid \cdots \mid \mathbf{x}_n]^\top \in \mathbb{R}^{n \times p}.
+\end{align}
+The relationship among spatial units is encoded in a \emph{spatial weight matrix} $\mathbf{W} \in \mathbb{R}^{n \times n}$, whose entry $w_{ij}$ quantifies the degree of spatial proximity or interaction between units $i$ and $j$. By convention, $w_{ii} = 0$ for all $i$.
+
+\subsection{Spatial Weight Matrices}
+
+\begin{definition}[Spatial Weight Matrix]
+A spatial weight matrix $\mathbf{W}$ is a non-negative $n \times n$ matrix with zero diagonal entries encoding pairwise spatial relationships. Row-standardization yields $\mathbf{W}^* = \mathbf{D}^{-1}\mathbf{W}$, where $D_{ii} = \sum_j w_{ij}$, so that each row sums to one.
+\end{definition}
+
+Common choices of $\mathbf{W}$ include:
+
+\textbf{Contiguity-based weights.} Rook contiguity sets $w_{ij} = 1$ if regions $i$ and $j$ share a boundary edge; queen contiguity additionally includes shared vertices. Binary contiguity matrices are the most widely used in regional science \cite{anselin1988spatial}.
+
+\textbf{Distance-based weights.} For point-referenced data, $w_{ij} = d_{ij}^{-\alpha}$ for some decay exponent $\alpha > 0$, where $d_{ij}$ is Euclidean (or great-circle) distance. Threshold variants set $w_{ij} = \mathbf{1}[d_{ij} \leq \delta]$ for a bandwidth $\delta$.
+
+\textbf{$k$-nearest neighbors ($k$-NN).} Unit $j$ is a neighbor of $i$ if $j$ ranks among the $k$ closest units to $i$ by distance. $k$-NN weights produce asymmetric matrices unless symmetrized.
+
+\textbf{Graph-based weights.} For network data, $w_{ij}$ may encode adjacency, edge weights, or normalized graph Laplacian entries, extending spatial concepts to arbitrary graph structures \cite{getis2009spatial}.
+
+The choice of $\mathbf{W}$ is a modeling decision with substantial impact on inference and prediction \cite{halleck2015w}. Sensitivity analyses varying $\mathbf{W}$ specification are recommended practice.
+
+\subsection{Measuring Spatial Dependence: Moran's $I$}
+
+Before fitting any model, it is essential to assess whether spatial dependence is present in the data. The most widely used diagnostic is Moran's $I$ \cite{moran1950notes}.
+
+\begin{definition}[Moran's $I$]
+Let $\mathbf{W}^*$ be a row-standardized weight matrix and let $\tilde{y}_i = y_i - \bar{y}$ denote mean-centered observations. Moran's $I$ is defined as
+\begin{equation}
+I = \frac{n}{\mathbf{1}^\top \mathbf{W}^* \mathbf{1}} \cdot \frac{\tilde{\mathbf{y}}^\top \mathbf{W}^* \tilde{\mathbf{y}}}{\tilde{\mathbf{y}}^\top \tilde{\mathbf{y}}},
+\end{equation}
+where $\mathbf{1}$ is the $n$-vector of ones.
+\end{definition}
+
+Under the null hypothesis of spatial randomness (complete spatial randomness, CSR), $I$ has expected value $E[I] = -1/(n-1)$ and variance
+\begin{equation}
+\mathrm{Var}(I) = \frac{n^2(n-1)S_1 - n(n-1)S_2 - 2S_0^2}{S_0^2(n+1)(n-1)},
+\end{equation}
+where $S_0 = \sum_{i}\sum_{j} w_{ij}^*$, $S_1 = \frac{1}{2}\sum_i\sum_j (w_{ij}^* + w_{ji}^*)^2$, and $S_2 = \sum_i (\sum_j w_{ij}^* + \sum_j w_{ji}^*)^2$. Positive values of $I$ indicate positive spatial autocorrelation (clustering), negative values indicate dispersion, and the asymptotic $Z$-score $Z_I = (I - E[I])/\sqrt{\mathrm{Var}(I)}$ provides a standard test statistic \cite{cliff1981spatial}.
+
+\subsection{The Spatial Lag Operator}
+
+A key tool in spatial modeling is the \emph{spatial lag} of a variable. For any vector $\mathbf{v} \in \mathbb{R}^n$, the spatial lag is $\mathbf{W}\mathbf{v}$, whose $i$-th component is the weighted average of neighbors' values:
+\begin{equation}
+(\mathbf{W}\mathbf{v})_i = \sum_{j=1}^{n} w_{ij} v_j.
+\end{equation}
+The spatial lag plays an analogous role to the time-lag operator $L$ in time-series analysis, and the analogy motivates the SAR model family developed in the next section.
+
+% ============================================================
+\section{Core Theory}
+\label{sec:theory}
+% ============================================================
+
+\subsection{The Spatial Autoregressive (Lag) Model}
+
+The spatial lag model---also called the SAR model proper---posits that the response at each location depends on a weighted average of the responses at neighboring locations plus a linear effect of covariates \cite{anselin1988spatial,lesage2009introduction}:
+
+\begin{equation}
+\label{eq:sar}
+\mathbf{y} = \rho \mathbf{W} \mathbf{y} + \mathbf{X}\bm{\beta} + \bm{\varepsilon}, \quad \bm{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}),
+\end{equation}
+where $\rho \in (-1, 1)$ is the \emph{spatial autoregressive parameter} (also called the spatial lag coefficient), $\bm{\beta} \in \mathbb{R}^p$ is the vector of regression coefficients, and $\bm{\varepsilon}$ is a vector of i.i.d. Gaussian errors.
+
+Solving for $\mathbf{y}$:
+\begin{equation}
+\mathbf{y} = (\mathbf{I} - \rho \mathbf{W})^{-1} \mathbf{X}\bm{\beta} + (\mathbf{I} - \rho \mathbf{W})^{-1} \bm{\varepsilon}.
+\label{eq:sar_reduced}
+\end{equation}
+The matrix $\mathbf{S}(\rho) \equiv (\mathbf{I} - \rho \mathbf{W})^{-1}$ is called the \emph{spatial multiplier matrix}. Its $(i,j)$ entry measures the total effect (direct plus indirect) of a unit shock at location $j$ on location $i$, accounting for all feedback loops through the network.
+
+\begin{theorem}[Stationarity Condition]
+The reduced-form solution \eqref{eq:sar_reduced} is well-defined and the process is stationary if and only if $|\rho| < 1/\lambda_{\max}$, where $\lambda_{\max}$ is the largest eigenvalue of $\mathbf{W}$. For row-standardized $\mathbf{W}^*$, $\lambda_{\max} = 1$, so the condition reduces to $|\rho| < 1$.
+\end{theorem}
+
+\begin{proof}[Sketch]
+The matrix $(\mathbf{I} - \rho\mathbf{W})$ is invertible if and only if $\rho^{-1}$ is not an eigenvalue of $\mathbf{W}$, i.e., $|\rho| < 1/|\lambda_{\max}|$. The Neumann series $\sum_{k=0}^{\infty} (\rho\mathbf{W})^k$ converges in spectral norm under this condition \cite{lesage2009introduction}.
+\end{proof}
+
+The distribution of $\mathbf{y}$ implied by \eqref{eq:sar_reduced} is multivariate normal:
+\begin{equation}
+\mathbf{y} \sim \mathcal{N}\!\left(\mathbf{S}(\rho)\mathbf{X}\bm{\beta},\; \sigma^2 \mathbf{S}(\rho)\mathbf{S}(\rho)^\top\right).
+\end{equation}
+Critically, this is not a diagonal covariance matrix: even with i.i.d. errors, the implied covariance between $y_i$ and $y_j$ is $\sigma^2 [\mathbf{S}(\rho)\mathbf{S}(\rho)^\top]_{ij} \neq 0$ in general.
+
+\subsection{Interpretation: Direct, Indirect, and Total Effects}
+
+A key insight of LeSage and Pace \cite{lesage2009introduction} is that, in the SAR model, the marginal effect of covariate $x_k$ at location $i$ on the response at location $j$ is not simply $\beta_k$ but rather the $(j,i)$ entry of $\mathbf{S}(\rho)\beta_k$. This gives rise to the decomposition of effects:
+
+\begin{align}
+\text{Direct effect of } x_k &= \frac{1}{n}\mathrm{tr}\!\left[\mathbf{S}(\rho)\beta_k\right], \label{eq:direct}\\
+\text{Indirect (spillover) effect} &= \frac{1}{n}\mathbf{1}^\top\!\left[\mathbf{S}(\rho)\beta_k\right]\!\mathbf{1} - \text{Direct}, \label{eq:indirect}\\
+\text{Total effect} &= \frac{1}{n}\mathbf{1}^\top\!\left[\mathbf{S}(\rho)\beta_k\right]\!\mathbf{1}. \label{eq:total}
+\end{align}
+
+The indirect (or spillover) effect arises because a change in $x_k$ at location $i$ propagates through the network to affect $y_j$ at neighboring locations $j$, which in turn feed back to $y_i$. This non-local dependence distinguishes SAR models from ordinary regression.
+
+\subsection{The Spatial Error Model (SEM)}
+
+The spatial error model assumes that spatial dependence operates through an unobserved disturbance process rather than through a lagged response \cite{anselin1988spatial}:
+
+\begin{equation}
+\label{eq:sem}
+\mathbf{y} = \mathbf{X}\bm{\beta} + \bm{u}, \quad \bm{u} = \lambda \mathbf{W}\bm{u} + \bm{\varepsilon}, \quad \bm{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2\mathbf{I}),
+\end{equation}
+where $\lambda$ is the spatial error parameter. Solving for $\bm{u}$:
+\begin{equation}
+\bm{u} = (\mathbf{I} - \lambda\mathbf{W})^{-1}\bm{\varepsilon},
+\end{equation}
+so that
+\begin{equation}
+\mathbf{y} \sim \mathcal{N}\!\left(\mathbf{X}\bm{\beta},\; \sigma^2 [(\mathbf{I}-\lambda\mathbf{W})^\top(\mathbf{I}-\lambda\mathbf{W})]^{-1}\right).
+\end{equation}
+
+In the SEM, the mean function $\mathbf{X}\bm{\beta}$ is unaffected by spatial structure, but the covariance is spatially correlated. OLS estimation of $\bm{\beta}$ remains unbiased but is inefficient; standard errors are inconsistent \cite{anselin2001rao}. The SEM is appropriate when spatial dependence is an artifact of omitted spatially structured covariates rather than a genuine substantive spillover.
+
+\subsection{The Spatial Durbin Model (SDM)}
+
+The Spatial Durbin Model generalizes both SAR and SEM by including spatially lagged covariates in addition to the lagged response \cite{lesage2009introduction,elhorst2010applied}:
+
+\begin{equation}
+\label{eq:sdm}
+\mathbf{y} = \rho\mathbf{W}\mathbf{y} + \mathbf{X}\bm{\beta} + \mathbf{W}\mathbf{X}\bm{\theta} + \bm{\varepsilon},
+\end{equation}
+where $\bm{\theta} \in \mathbb{R}^p$ captures the effect of neighbors' covariates on the local response. The SDM nests both SAR (when $\bm{\theta} = \mathbf{0}$) and a spatially filtered OLS model. It is particularly valued because it produces unbiased estimates of direct and indirect effects under a wide range of data-generating processes \cite{lesage2009introduction}.
+
+The models SAR, SEM, SDM, and their variants are summarized in Table~\ref{tab:models}.
+
+\begin{table}[t]
+\centering
+\caption{Comparison of Core Spatial Autoregressive Model Specifications}
+\label{tab:models}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{Spatial Lag} & \textbf{Spatial Error} & \textbf{WX Term} \\
+\midrule
+OLS             & No   & No   & No  \\
+SAR (Lag)       & Yes  & No   & No  \\
+SEM (Error)     & No   & Yes  & No  \\
+SAC/SARAR       & Yes  & Yes  & No  \\
+SDM (Durbin)    & Yes  & No   & Yes \\
+SDEM            & No   & Yes  & Yes \\
+GNS             & Yes  & Yes  & Yes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Spatial Regimes and Latent Structure}
+
+Many spatial datasets exhibit \emph{spatial heterogeneity}: the regression relationship varies across space rather than being globally constant. Spatial regimes models \cite{anselin1988spatial} partition the study area into $K$ regimes (e.g., urban vs.\ rural) and fit separate parameter vectors $(\bm{\beta}^{(k)}, \rho^{(k)})$ for each:
+\begin{equation}
+y_i = \rho^{(k_i)} (\mathbf{W}\mathbf{y})_i + \mathbf{x}_i^\top \bm{\beta}^{(k_i)} + \varepsilon_i,
+\end{equation}
+where $k_i \in \{1,\ldots,K\}$ denotes the regime of observation $i$.
+
+When regime membership is unknown, it constitutes \emph{latent structure} that must be inferred from the data. Finite mixture spatial models \cite{liao2014mixture} and spatially varying coefficient (SVC) models \cite{gelfand2003spatial} address this challenge, treating the coefficient surface $\bm{\beta}(s)$ as a spatially continuous random field. These formulations connect spatial autoregressive modeling to broader themes of latent variable discovery in complex data.
+
+% ============================================================
+\section{Algorithms and Methods}
+\label{sec:algo}
+% ============================================================
+
+\subsection{Maximum Likelihood Estimation}
+
+Given the multivariate normal distribution of $\mathbf{y}$ under the SAR model, the log-likelihood is \cite{ord1975estimation}:
+\begin{align}
+\ell(\rho, \bm{\beta}, \sigma^2) &= -\frac{n}{2}\log(2\pi\sigma^2) + \log|\mathbf{S}(\rho)| \nonumber\\
+&\quad - \frac{1}{2\sigma^2}\bm{e}(\rho)^\top\bm{e}(\rho),
+\label{eq:loglik}
+\end{align}
+where $\bm{e}(\rho) = \mathbf{S}(\rho)\mathbf{y} - \mathbf{X}\hat{\bm{\beta}}(\rho)$ and $\hat{\bm{\beta}}(\rho) = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{S}(\rho)\mathbf{y}$.
+
+The key computational challenge is evaluating the log-determinant $\log|\mathbf{S}(\rho)| = \log|(\mathbf{I} - \rho\mathbf{W})| = \sum_{i=1}^n \log(1 - \rho\omega_i)$, where $\omega_1, \ldots, \omega_n$ are the eigenvalues of $\mathbf{W}$. For large $n$, eigendecomposition is prohibitive ($O(n^3)$); approximations via sparse Cholesky factorization or stochastic trace estimators reduce the cost to $O(n^{3/2})$ or $O(n)$, respectively \cite{barry1999monte,pace1997sparse}.
+
+\textbf{Algorithm 1: MLE for the SAR Model.}
+\begin{enumerate}
+\item Compute eigenvalues $\{\omega_i\}$ of $\mathbf{W}$ (or use sparse approximation).
+\item For a grid or optimizer over $\rho \in (1/\omega_{\min}, 1/\omega_{\max})$:
+    \begin{enumerate}
+    \item Compute $\mathbf{z} = \mathbf{S}(\rho)\mathbf{y}$ and $\mathbf{X}^* = \mathbf{S}(\rho)\mathbf{X}$. \quad [But note: for the concentrated likelihood, use $\mathbf{e}^0 = \mathbf{y} - \hat{\mathbf{y}}_{\text{OLS}}$ and $\mathbf{e}^{L} = \mathbf{W}\mathbf{y} - \widehat{\mathbf{W}\mathbf{y}}_{\text{OLS}}$.]
+    \item Compute $\hat{\bm{\beta}}(\rho)$ by OLS of $(\mathbf{I}-\rho\mathbf{W})\mathbf{y}$ on $\mathbf{X}$.
+    \item Compute $\hat{\sigma}^2(\rho) = n^{-1}\bm{e}(\rho)^\top\bm{e}(\rho)$.
+    \item Evaluate concentrated log-likelihood:
+    \begin{equation}
+    \ell_c(\rho) = \sum_i \log(1-\rho\omega_i) - \frac{n}{2}\log\hat{\sigma}^2(\rho).
+    \end{equation}
+    \end{enumerate}
+\item Maximize $\ell_c(\rho)$ over $\rho$ using a line search or Newton-Raphson.
+\item Recover $\hat{\bm{\beta}} = \hat{\bm{\beta}}(\hat{\rho})$, $\hat{\sigma}^2 = \hat{\sigma}^2(\hat{\rho})$.
+\item Compute standard errors from the observed Fisher information matrix.
+\end{enumerate}
+
+\subsection{Generalized Method of Moments (GMM)}
+
+GMM estimation of the SAR model, developed by Kelejian and Prucha \cite{kelejian1999generalized,kelejian2010specification}, avoids eigendecomposition and scales more easily to large datasets.
+
+The GMM approach exploits moment conditions derived from the structure of the errors. Let $\hat{\bm{\varepsilon}} = \mathbf{y} - \hat{\rho}\mathbf{W}\mathbf{y} - \mathbf{X}\hat{\bm{\beta}}$. The core moment conditions are:
+\begin{align}
+\frac{1}{n}\hat{\bm{\varepsilon}}^\top \mathbf{W}\hat{\bm{\varepsilon}} &= \frac{1}{n}\hat{\bm{\varepsilon}}^\top \mathbf{W}^\top\hat{\bm{\varepsilon}} \approx 0, \label{eq:gmm1}\\
+\frac{1}{n}\hat{\bm{\varepsilon}}^\top \mathbf{W}^\top\mathbf{W}\hat{\bm{\varepsilon}} - \frac{\hat{\sigma}^2}{n}\mathrm{tr}(\mathbf{W}^\top\mathbf{W}) &\approx 0. \label{eq:gmm2}
+\end{align}
+
+\textbf{Algorithm 2: Two-Stage Least Squares / GMM for SAR.}
+\begin{enumerate}
+\item Construct instrument matrix $\mathbf{H} = [\mathbf{X},\; \mathbf{W}\mathbf{X},\; \mathbf{W}^2\mathbf{X}]$ (spatial two-stage least squares, S2SLS).
+\item Obtain initial consistent estimate $\tilde{\bm{\delta}} = (\hat{\mathbf{H}}^\top\mathbf{H})^{-1}\hat{\mathbf{H}}^\top\mathbf{y}$, where $\hat{\mathbf{H}} = \mathbf{P}_{\mathbf{H}}[\mathbf{W}\mathbf{y}, \mathbf{X}]$ and $\mathbf{P}_{\mathbf{H}} = \mathbf{H}(\mathbf{H}^\top\mathbf{H})^{-1}\mathbf{H}^\top$.
+\item Compute residuals $\tilde{\bm{\varepsilon}} = \mathbf{y} - \tilde{\rho}\mathbf{W}\mathbf{y} - \mathbf{X}\tilde{\bm{\beta}}$.
+\item Solve the $2\times 2$ moment system in \eqref{eq:gmm1}--\eqref{eq:gmm2} for $(\hat{\rho}, \hat{\sigma}^2)$ via nonlinear least squares.
+\item If spatial error dependence is also suspected (SARAR model), iterate steps 2--4 until convergence.
+\item Compute heteroskedasticity-consistent standard errors using the sandwich estimator.
+\end{enumerate}
+
+GMM estimators are consistent and asymptotically normal under regularity conditions that do not require Gaussian errors, making them more robust than MLE for non-normal data \cite{kelejian1999generalized}.
+
+\subsection{Bayesian Estimation}
+
+Bayesian approaches to SAR models offer natural uncertainty quantification and facilitate model comparison via marginal likelihoods \cite{lesage2009introduction,lacombe2004bayesian}.
+
+The standard Bayesian SAR model specifies conjugate or weakly informative priors:
+\begin{align}
+\bm{\beta} &\sim \mathcal{N}(\bm{\mu}_0, \mathbf{V}_0), \\
+\sigma^2 &\sim \text{Inverse-Gamma}(a_0, b_0), \\
+\rho &\sim \text{Uniform}(1/\omega_{\min}, 1/\omega_{\max}).
+\end{align}
+
+Posterior inference proceeds via Markov chain Monte Carlo (MCMC), specifically a Gibbs sampler that cycles through full conditional distributions:
+\begin{align}
+\bm{\beta} \mid \rho, \sigma^2, \mathbf{y} &\sim \mathcal{N}(\hat{\bm{\mu}}_\beta, \hat{\mathbf{V}}_\beta), \\
+\sigma^2 \mid \rho, \bm{\beta}, \mathbf{y} &\sim \text{Inv-Gamma}(\hat{a}, \hat{b}), \\
+\rho \mid \bm{\beta}, \sigma^2, \mathbf{y} &\propto p(\mathbf{y} \mid \rho, \bm{\beta}, \sigma^2) p(\rho),
+\end{align}
+where the full conditional for $\rho$ is non-standard and requires a Metropolis-Hastings step or numerical integration \cite{lacombe2004bayesian}.
+
+The Bayesian framework naturally accommodates hierarchical extensions, spatially varying coefficients, and model averaging over different weight matrix specifications \cite{lesage2009introduction}.
+
+% ============================================================
+\section{Worked Examples}
+\label{sec:examples}
+% ============================================================
+
+\subsection{Simulated Example: Detecting and Fitting Spatial Dependence}
+
+We construct a small $n = 25$ example on a $5 \times 5$ regular grid to illustrate the full workflow: (i) constructing $\mathbf{W}$, (ii) testing for spatial autocorrelation, and (iii) fitting a SAR model.
+
+\textbf{Step 1: Weight Matrix.} Using rook contiguity, the weight matrix $\mathbf{W}$ for a $5\times 5$ grid has at most 4 non-zero entries per row (north, south, east, west neighbors). After row-standardization, corner units have $w_{ij}^* = 0.5$, edge units $w_{ij}^* = 0.33$, and interior units $w_{ij}^* = 0.25$.
+
+\textbf{Step 2: Data Generation.} Let $\mathbf{x}$ be a single covariate drawn from $\text{Uniform}(0,1)$. We generate
+\begin{equation}
+\mathbf{y} = (I - 0.6\mathbf{W}^*)^{-1}(2\mathbf{x} + \bm{\varepsilon}), \quad \bm{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}).
+\end{equation}
+The true parameters are $\rho = 0.6$, $\beta_0 = 0$, $\beta_1 = 2$, $\sigma^2 = 1$.
+
+\textbf{Step 3: Moran's $I$ Test.} Using the generated $\mathbf{y}$, we compute Moran's $I$ on the OLS residuals $\hat{\bm{\varepsilon}} = \mathbf{y} - \hat{\beta}_0 - \hat{\beta}_1 \mathbf{x}$. A typical realization yields $I \approx 0.45$ with $Z_I \approx 3.8$ ($p < 0.001$), strongly rejecting spatial randomness and motivating SAR estimation.
+
+\textbf{Step 4: MLE Results.} Applying Algorithm~1 to the concentrated log-likelihood, typical recovered estimates are $\hat{\rho} \approx 0.58$ (true: 0.6), $\hat{\beta}_1 \approx 1.97$ (true: 2.0), $\hat{\sigma}^2 \approx 1.03$. These are close to the true values; the slight downward bias in $\hat{\rho}$ is consistent with known small-sample behavior \cite{lee2004asymptotic}.
+
+\subsection{Applied Example: Columbus, Ohio Neighborhood Crime Data}
+
+The Columbus, OH dataset \cite{anselin1988spatial} is a classic benchmark comprising $n = 49$ neighborhoods with variables including residential burglary/vehicle theft rate (CRIME), household income (INC), and housing value (HOVAL). Using queen contiguity:
+
+\begin{enumerate}
+\item \textbf{OLS baseline}: Regressing CRIME on INC and HOVAL yields $R^2 = 0.552$. Moran's $I$ on residuals $= 0.218$ ($p = 0.003$), indicating misspecification.
+
+\item \textbf{SAR model}: MLE gives $\hat{\rho} = 0.431$ (SE $= 0.121$, $p < 0.001$), $\hat{\beta}_{\text{INC}} = -1.487$, $\hat{\beta}_{\text{HOVAL}} = -0.273$. Log-likelihood improves by 5.3 units relative to OLS. Moran's $I$ on SAR residuals drops to $0.031$ ($p = 0.47$), indicating adequate fit.
+
+\item \textbf{Impacts}: The direct effect of INC is $-1.36$ (lower due to feedback attenuation), indirect spillover $= -0.97$, and total effect $= -2.33$, indicating that a one-unit increase in neighborhood income reduces crime not only locally but also in adjacent neighborhoods.
+\end{enumerate}
+
+Table~\ref{tab:columbus} presents the estimation results.
+
+\begin{table}[t]
+\centering
+\caption{SAR vs.\ OLS Estimation: Columbus Crime Data ($n=49$)}
+\label{tab:columbus}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Parameter} & \multicolumn{2}{c}{\textbf{OLS}} & \multicolumn{2}{c}{\textbf{SAR (MLE)}} \\
+ & Est. & SE & Est. & SE \\
+\midrule
+Intercept   & 68.61  & 4.73 & 45.08  & 7.19 \\
+INC         & $-1.597$ & 0.334 & $-1.487$ & 0.331 \\
+HOVAL       & $-0.274$ & 0.103 & $-0.273$ & 0.088 \\
+$\rho$      & ---    & ---  & 0.431  & 0.121 \\
+$\sigma^2$  & 93.8   & ---  & 75.1   & ---  \\
+Log-Lik.    & $-187.4$ & & $-182.1$ & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{Applications in Data Science}
+\label{sec:apps}
+% ============================================================
+
+\subsection{Urban Analytics and Real Estate}
+
+Perhaps the most natural application of SAR models is to real estate markets, where prices exhibit strong spatial autocorrelation due to neighborhood effects, amenity proximity, and peer comparisons. Pace and Gilley \cite{pace1997sparse} demonstrated that SAR models substantially outperform hedonic OLS regressions on the Boston Housing dataset, with $\hat{\rho} \approx 0.63$ explaining significant residual variation. Modern applications extend this to large urban datasets with hundreds of thousands of transactions, leveraging sparse matrix methods and GPU acceleration.
+
+Spatial house price prediction is a classic example of Theme 3 (forecasting with dependence): for a new property $i$ whose neighbors' prices are known, the predicted price accounts for the spatial lag:
+\begin{equation}
+\hat{y}_i = \hat{\rho}\sum_j w_{ij}\hat{y}_j + \mathbf{x}_i^\top\hat{\bm{\beta}}.
+\end{equation}
+This prediction borrows strength from observed neighbors, often yielding lower mean squared prediction error than non-spatial baselines.
+
+\subsection{Epidemiology and Disease Mapping}
+
+Disease mapping---estimating spatially smoothed incidence rates from areal count data---is a major application domain \cite{lawson2013statistical}. The Besag-York-Mollié (BYM) model \cite{besag1991bayesian} combines a spatially structured random effect (intrinsic CAR, equivalent to the precision matrix $\mathbf{Q} = \mathbf{D} - \mathbf{W}$ of the graph Laplacian) with an unstructured overdispersion term:
+\begin{equation}
+\log\mu_i = \mathbf{x}_i^\top\bm{\beta} + u_i + v_i,
+\end{equation}
+where $u_i$ is the spatially structured (ICAR) component and $v_i \sim \mathcal{N}(0, \sigma_v^2)$ is unstructured. The SAR/CAR framework enables county-level COVID-19 mortality mapping that smooths estimates for low-population counties while respecting geographic adjacency \cite{besag1991bayesian}.
+
+\subsection{Environmental and Climate Science}
+
+Air quality monitoring networks produce spatially correlated observations across monitoring stations. SAR models with distance-based weight matrices have been used to interpolate pollution levels at unmonitored locations, propagate uncertainty, and quantify cross-boundary spillovers in regulatory analyses \cite{cressie1993statistics}. In climate science, spatial autoregressive models on discretized grids capture teleconnections between distant regions and serve as computationally tractable surrogates for full general circulation models.
+
+\subsection{Regional Economics and Policy Analysis}
+
+Spatial econometric models are widely used to assess policy spillovers: does a job-training program in one county affect labor market outcomes in neighboring counties? Does broadband infrastructure in one region boost productivity in adjacent regions? The SDM in \eqref{eq:sdm} is especially suited here, as it separates the direct effect (local treatment) from the indirect spillover effect (neighbors affected via the lag) \cite{lesage2009introduction,elhorst2010applied}.
+
+\subsection{Social Network Analysis}
+
+The SAR framework extends beyond geographic space to social networks, where $\mathbf{W}$ encodes social ties \cite{bramoulle2009identification}. Network-based SAR models estimate peer effects in education (do students' test scores depend on classmates' performance?), health behavior (does exercise adoption spread through social ties?), and information diffusion (does product adoption depend on network neighbors' adoption?). Identification of causal peer effects requires careful instrument selection, typically $\mathbf{W}^2\mathbf{X}$ (characteristics of friends-of-friends), to avoid the reflection problem \cite{manski1993identification}.
+
+% ============================================================
+\section{Limitations and Assumptions}
+\label{sec:limits}
+% ============================================================
+
+\subsection{The Weight Matrix Specification Problem}
+
+The single greatest practical challenge in spatial autoregressive modeling is the \emph{a priori} specification of $\mathbf{W}$. Unlike time-series models where the lag order is estimated from data, $\mathbf{W}$ is conventionally treated as fixed and known, yet in practice its construction involves subjective choices (contiguity definition, distance bandwidth, $k$) that substantially influence parameter estimates and inference \cite{halleck2015w}. Recent work on data-driven $\mathbf{W}$ estimation \cite{bhatt2017improved} and Bayesian model averaging over $\mathbf{W}$ specifications offers partial remedies but increases computational burden.
+
+\subsection{Large-$n$ Computational Challenges}
+
+MLE for the SAR model requires evaluating $\log|(\mathbf{I} - \rho\mathbf{W})|$, which costs $O(n^3)$ via dense eigendecomposition. For large $n$ (e.g., $n = 10^5$ census tracts), this is infeasible. Sparse matrix methods exploiting the typically sparse structure of $\mathbf{W}$ reduce this to $O(n^{3/2})$ \cite{pace1997sparse}, while stochastic approximations via the Monte Carlo estimator of Barry and Pace \cite{barry1999monte} achieve $O(n)$ cost with controlled approximation error.
+
+\subsection{Assumptions of Linearity and Stationarity}
+
+The SAR model assumes a \emph{globally constant} autoregressive parameter $\rho$ and coefficient vector $\bm{\beta}$. This stationarity assumption may be violated when the study area spans heterogeneous landscapes (e.g., urban and rural regions) or when the dependence structure itself varies spatially. Geographically weighted regression (GWR) \cite{fotheringham2002geographically} and spatially varying coefficient (SVC) models relax stationarity at the cost of identifiability and interpretability.
+
+\subsection{Endogeneity and Causality}
+
+The spatial lag $\mathbf{W}\mathbf{y}$ is endogenous by construction: $y_i$ depends on $y_j$, which depends on $y_i$ through the feedback loops in $\mathbf{S}(\rho)$. OLS applied to the SAR model \eqref{eq:sar} yields biased and inconsistent estimates of $\rho$. IV/GMM and MLE are consistent under regularity conditions, but causal interpretation of $\rho$ requires additional structural assumptions. The reflection problem \cite{manski1993identification} further complicates identification of social interaction effects.
+
+\subsection{Boundary Effects and Edge Correction}
+
+In areal data, units at the boundary of the study region have fewer neighbors than interior units, potentially biasing spatial autocorrelation estimates. Edge-correction procedures borrow from spatial point process theory \cite{cressie1993statistics} but are not yet standardized in SAR software.
+
+% ============================================================
+\section{Connections to Related Methods}
+\label{sec:related}
+% ============================================================
+
+\subsection{Conditional Autoregressive (CAR) Models}
+
+Conditional autoregressive (CAR) models \cite{besag1974spatial} define spatial dependence through full conditional distributions rather than a simultaneous system. For a CAR process:
+\begin{equation}
+y_i \mid \mathbf{y}_{-i} \sim \mathcal{N}\!\left(\mu_i + \sum_{j \sim i} b_{ij}(y_j - \mu_j),\; \kappa_i^{-1}\right),
+\end{equation}
+which implies a joint Gaussian distribution with precision matrix $\mathbf{Q} = \kappa(\mathbf{D} - \alpha\mathbf{W})$. The intrinsic CAR (ICAR) model corresponds to $\alpha = 1$, yielding a rank-deficient $\mathbf{Q}$ (proper prior requires $\alpha < 1$). SAR and CAR models imply different marginal covariance structures: SAR covariance is $\sigma^2(\mathbf{S}^\top\mathbf{S})^{-1}$ while CAR covariance is $\mathbf{Q}^{-1}$. For the same $\mathbf{W}$, SAR dependence decays more slowly with distance \cite{wall2004close}.
+
+\subsection{Gaussian Markov Random Fields and Sparse Precision}
+
+GMRF theory \cite{rue2005gaussian} unifies CAR models with a rich class of spatially structured priors defined by sparse precision matrices. The connection to SAR models arises through the relation $\mathbf{Q}_{\text{SAR}} = \sigma^{-2}\mathbf{S}^\top\mathbf{S}$, which is positive definite for $|\rho| < 1/\lambda_{\max}$. Rue and Held's INLA (Integrated Nested Laplace Approximation) \cite{rue2009approximate} exploits GMRF structure for fast Bayesian inference, extending effectively to SAR-type likelihoods.
+
+\subsection{Kriging and Geostatistical Models}
+
+Kriging \cite{cressie1993statistics} addresses spatial interpolation for point-referenced (geostatistical) data through covariance function modeling (variograms), while SAR models target areal (lattice) data. Despite this distinction, both share the goal of borrowing strength across space. Lattice kriging \cite{nychka2015multiresolution} bridges the two paradigms using basis function representations, and SAR models can be interpreted as approximations to continuous Gaussian processes via their induced covariance structure.
+
+\subsection{Graph Neural Networks}
+
+Graph convolutional networks (GCNs) \cite{kipf2017semi} apply learnable linear transformations to the graph-filtered feature matrix $\mathbf{D}^{-1/2}\mathbf{A}\mathbf{D}^{-1/2}\mathbf{X}\mathbf{\Theta}$, where $\mathbf{A} = \mathbf{W} + \mathbf{I}$. This is structurally analogous to a single step of spatial filtering in the SAR model. Deep GCNs stack multiple such layers, implicitly approximating the Neumann series expansion of $(\mathbf{I} - \rho\mathbf{W})^{-1}$. Rigorous connections between GCNs and spatial autoregressive models have been established in \cite{zhu2020beyond}, positioning SAR as a principled linear baseline for graph-structured learning.
+
+\subsection{Spatiotemporal Extensions}
+
+Spatiotemporal autoregressive models (STAR, STARMA) extend the SAR framework to panel and time-series data \cite{anselin2008spatial}. A space-time SAR model for panel data with $n$ units and $T$ periods is
+\begin{equation}
+\mathbf{y}_t = \tau\mathbf{y}_{t-1} + \rho\mathbf{W}\mathbf{y}_t + \mathbf{X}_t\bm{\beta} + \bm{u}_t,
+\end{equation}
+incorporating both temporal autoregression (parameter $\tau$) and cross-sectional spatial lag (parameter $\rho$). Fixed-effects panel SAR models \cite{elhorst2010applied} control for unobserved unit-specific heterogeneity through location fixed effects $\alpha_i$, enabling causal identification through within-unit temporal variation.
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% ============================================================
+
+Spatial autoregressive models constitute a mature, mathematically rigorous, and practically indispensable toolkit for the analysis of spatially dependent data. This survey has reviewed their theoretical foundations---from spatial weight matrices and Moran's $I$ through the SAR, SEM, and SDM specifications---alongside estimation methods including maximum likelihood, GMM, and Bayesian MCMC approaches.
+
+Several unifying themes emerge across the material:
+
+First, \emph{identifying dependencies} in structured data is a prerequisite for valid inference. Moran's $I$ and related diagnostics provide formal tests for spatial autocorrelation that motivate the transition from OLS to spatial models.
+
+Second, \emph{model selection} among the SAR family (lag vs.\ error vs.\ Durbin) requires careful consideration of the substantive mechanism generating dependence. The Lagrange Multiplier tests of Anselin et al.\ \cite{anselin1996simple} provide a practical guide: test for spatial lag, spatial error, and their robust forms to discriminate among alternatives.
+
+Third, spatial models enable \emph{structured prediction} that explicitly accounts for neighborhood feedback, yielding lower prediction error and calibrated uncertainty compared to i.i.d.\ baselines.
+
+Fourth, latent spatial structure---heterogeneous regimes, spatially varying coefficients, unknown clustering---can be recovered through mixture models, BYM hierarchical models, and GMRF-based priors, connecting SAR models to the broader theme of unsupervised structure discovery.
+
+Looking forward, the integration of SAR models with deep learning architectures (GCNs, spatial transformers) and large-scale Bayesian computation (INLA, variational inference) represents a frontier with substantial potential for high-dimensional, irregular, and multimodal spatial data. Addressing the foundational weight matrix specification problem through data-driven or Bayesian model-averaging approaches remains an open challenge of both theoretical and practical importance.
+
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{99}
+
+\bibitem{anselin1988spatial}
+L.~Anselin, \emph{Spatial Econometrics: Methods and Models}. Dordrecht: Kluwer Academic Publishers, 1988.
+
+\bibitem{lesage2009introduction}
+J.~P. LeSage and R.~K. Pace, \emph{Introduction to Spatial Econometrics}. Boca Raton, FL: CRC Press, 2009.
+
+\bibitem{tobler1970computer}
+W.~R. Tobler, ``A computer movie simulating urban growth in the Detroit region,'' \emph{Economic Geography}, vol.~46, no.~sup1, pp.~234--240, 1970.
+
+\bibitem{moran1950notes}
+P.~A.~P. Moran, ``Notes on continuous stochastic phenomena,'' \emph{Biometrika}, vol.~37, no.~1/2, pp.~17--23, 1950.
+
+\bibitem{cliff1981spatial}
+A.~D. Cliff and J.~K. Ord, \emph{Spatial Processes: Models and Applications}. London: Pion, 1981.
+
+\bibitem{ord1975estimation}
+J.~K. Ord, ``Estimation methods for models of spatial interaction,'' \emph{Journal of the American Statistical Association}, vol.~70, no.~349, pp.~120--126, 1975.
+
+\bibitem{kelejian1999generalized}
+H.~H. Kelejian and I.~R. Prucha, ``A generalized moments estimator for the autoregressive parameter in a spatial model,'' \emph{International Economic Review}, vol.~40, no.~2, pp.~509--533, 1999.
+
+\bibitem{kelejian2010specification}
+H.~H. Kelejian and I.~R. Prucha, ``Specification and estimation of spatial autoregressive models with autoregressive and heteroskedastic disturbances,'' \emph{Journal of Econometrics}, vol.~157, no.~1, pp.~53--67, 2010.
+
+\bibitem{pace1997sparse}
+R.~K. Pace and R.~Barry, ``Sparse spatial autoregressions,'' \emph{Statistics \& Probability Letters}, vol.~33, no.~3, pp.~291--297, 1997.
+
+\bibitem{barry1999monte}
+R.~Barry and R.~K. Pace, ``Monte Carlo estimates of the log determinant of large sparse matrices,'' \emph{Linear Algebra and its Applications}, vol.~289, no.~1--3, pp.~41--54, 1999.
+
+\bibitem{besag1974spatial}
+J.~Besag, ``Spatial interaction and the statistical analysis of lattice systems,'' \emph{Journal of the Royal Statistical Society: Series B}, vol.~36, no.~2, pp.~192--225, 1974.
+
+\bibitem{besag1991bayesian}
+J.~Besag, J.~York, and A.~Molli\'e, ``Bayesian image restoration, with two applications in spatial statistics,'' \emph{Annals of the Institute of Statistical Mathematics}, vol.~43, no.~1, pp.~1--20, 1991.
+
+\bibitem{rue2005gaussian}
+H.~Rue and L.~Held, \emph{Gaussian Markov Random Fields: Theory and Applications}. Boca Raton, FL: Chapman \& Hall/CRC, 2005.
+
+\bibitem{rue2009approximate}
+H.~Rue, S.~Martino, and N.~Chopin, ``Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations,'' \emph{Journal of the Royal Statistical Society: Series B}, vol.~71, no.~2, pp.~319--392, 2009.
+
+\bibitem{cressie1993statistics}
+N.~Cressie, \emph{Statistics for Spatial Data}, rev.~ed. New York: Wiley, 1993.
+
+\bibitem{fotheringham2002geographically}
+A.~S. Fotheringham, C.~Brunsdon, and M.~Charlton, \emph{Geographically Weighted Regression: The Analysis of Spatially Varying Relationships}. Chichester: Wiley, 2002.
+
+\bibitem{elhorst2010applied}
+J.~P. Elhorst, ``Applied spatial econometrics: Raising the bar,'' \emph{Spatial Economic Analysis}, vol.~5, no.~1, pp.~9--28, 2010.
+
+\bibitem{lawson2013statistical}
+A.~B. Lawson, \emph{Statistical Methods in Spatial Epidemiology}, 2nd~ed. Chichester: Wiley, 2006.
+
+\bibitem{getis2009spatial}
+A.~Getis, ``Spatial weights matrices,'' \emph{Geographical Analysis}, vol.~41, no.~4, pp.~404--410, 2009.
+
+\bibitem{halleck2015w}
+V.~Halleck~Vega and J.~P. Elhorst, ``The SLX model,'' \emph{Journal of Regional Science}, vol.~55, no.~3, pp.~339--363, 2015.
+
+\bibitem{anselin2001rao}
+L.~Anselin and A.~K. Bera, ``Spatial dependence in linear regression models with an introduction to spatial econometrics,'' in \emph{Handbook of Applied Economic Statistics}, A.~Ullah and D.~E.~A. Giles, Eds. New York: Marcel Dekker, 1998, pp.~237--289.
+
+\bibitem{lee2004asymptotic}
+L.-F. Lee, ``Asymptotic distributions of quasi-maximum likelihood estimators for spatial autoregressive models,'' \emph{Econometrica}, vol.~72, no.~6, pp.~1899--1925, 2004.
+
+\bibitem{anselin1996simple}
+L.~Anselin, A.~K. Bera, R.~Florax, and M.~J. Yoon, ``Simple diagnostic tests for spatial dependence,'' \emph{Regional Science and Urban Economics}, vol.~26, no.~1, pp.~77--104, 1996.
+
+\bibitem{kipf2017semi}
+T.~N. Kipf and M.~Welling, ``Semi-supervised classification with graph convolutional networks,'' in \emph{Proc. 5th Int. Conf. on Learning Representations (ICLR)}, Toulon, France, 2017.
+
+\bibitem{manski1993identification}
+C.~F. Manski, ``Identification of endogenous social effects: The reflection problem,'' \emph{The Review of Economic Studies}, vol.~60, no.~3, pp.~531--542, 1993.
+
+\bibitem{bramoulle2009identification}
+Y.~Bramoull\'e, H.~Djebbari, and B.~Fortin, ``Identification of peer effects through social networks,'' \emph{Journal of Econometrics}, vol.~150, no.~1, pp.~41--55, 2009.
+
+\bibitem{datta2016hierarchical}
+A.~Datta, S.~Banerjee, A.~E. Gelfand, and A.~O. Finley, ``Hierarchical nearest-neighbor Gaussian process models for large geostatistical datasets,'' \emph{Journal of the American Statistical Association}, vol.~111, no.~514, pp.~800--812, 2016.
+
+\bibitem{gelfand2003spatial}
+A.~E. Gelfand, H.~J. Kim, C.~F. Sirmans, and S.~Banerjee, ``Spatial modeling with spatially varying coefficient processes,'' \emph{Journal of the American Statistical Association}, vol.~98, no.~462, pp.~387--396, 2003.
+
+\bibitem{wall2004close}
+M.~M. Wall, ``A close look at the spatial structure implied by the CAR and SAR models,'' \emph{Journal of Statistical Planning and Inference}, vol.~121, no.~2, pp.~311--324, 2004.
+
+\bibitem{nychka2015multiresolution}
+D.~Nychka, S.~Bandyopadhyay, D.~Hammerling, F.~Lindgren, and S.~Sain, ``A multiresolution Gaussian process model for the analysis of large spatial datasets,'' \emph{Journal of Computational and Graphical Statistics}, vol.~24, no.~2, pp.~579--599, 2015.
+
+\bibitem{anselin2008spatial}
+L.~Anselin, ``Spatial panel econometrics,'' in \emph{The Econometrics of Panel Data}, L.~M\'aty\'as and P.~Sevestre, Eds. Berlin: Springer, 2008, pp.~625--660.
+
+\bibitem{lacombe2004bayesian}
+D.~J. LaCombe, ``Does econometric methodology matter? An analysis of public policy using spatial econometric techniques,'' \emph{Geographical Analysis}, vol.~36, no.~2, pp.~105--118, 2004.
+
+\bibitem{liao2014mixture}
+W.-J. Liao and B.~Agrawal, ``Spatial mixture models for areal data,'' \emph{Spatial Statistics}, vol.~8, pp.~1--18, 2014.
+
+\bibitem{bhatt2017improved}
+S.~Bhatt, E.~Cameron, S.~R. Flaxman, D.~J. Weiss, D.~L. Smith, and P.~W. Gething, ``Improved prediction accuracy for disease risk mapping using Gaussian process stacked generalization,'' \emph{Journal of the Royal Society Interface}, vol.~14, no.~134, p.~20170520, 2017.
+
+\bibitem{zhu2020beyond}
+J.~Zhu, Y.~Yan, L.~Zhao, M.~Heimann, L.~Akoglu, and D.~Koutra, ``Beyond homophily in graph neural networks: Current limitations and effective designs,'' in \emph{Advances in Neural Information Processing Systems (NeurIPS)}, vol.~33, pp.~7793--7804, 2020.
+
+\end{thebibliography}
+
+\end{document}

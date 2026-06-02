@@ -1,0 +1,573 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\usepackage{bm}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Principal Component Analysis and Singular Value Decomposition:\\A Comprehensive Survey for Advanced Predictive Modeling}
+
+\author{\IEEEauthorblockN{Surya Rao Rayarao}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+suryarao.r@utexas.edu}
+\and
+\IEEEauthorblockN{Naga Donikena}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+naga.donikena@utexas.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+Principal Component Analysis (PCA) and Singular Value Decomposition (SVD) are two of the most foundational and widely deployed techniques in modern data science and machine learning. Despite their distinct mathematical origins, PCA and SVD are intimately connected: PCA is most efficiently computed through SVD, and both methods serve as cornerstones for dimensionality reduction, latent structure discovery, and noise filtering in high-dimensional datasets. This survey provides a rigorous and self-contained treatment of both methods, covering their mathematical underpinnings, algorithmic implementations, and practical applications within the context of advanced predictive modeling. We examine how these techniques expose linear dependencies in structured data, enable the construction of lower-dimensional representations that preserve maximum variance, and support downstream prediction tasks by accounting for correlation structure. We further survey their application in areas including genomics, image compression, natural language processing, collaborative filtering, and time-series analysis. Connections to related methods such as factor analysis, kernel PCA, independent component analysis, and truncated SVD are explored. Limitations, assumptions, and practical considerations for numerical stability are also discussed. This survey synthesizes the extensive existing literature and is intended as a comprehensive reference for graduate students and practitioners in data science.
+\end{abstract}
+
+\begin{IEEEkeywords}
+principal component analysis, singular value decomposition, dimensionality reduction, latent structure, eigendecomposition, low-rank approximation, predictive modeling
+\end{IEEEkeywords}
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+The explosion of high-dimensional data in modern science and industry has made dimensionality reduction an essential preprocessing step for virtually every predictive modeling pipeline. When features number in the thousands or millions, na\"{i}ve regression and classification approaches suffer from the \emph{curse of dimensionality}: distances become uninformative, covariance estimates become singular, and overfitting becomes severe \cite{bellman1957}. The need for methods that extract parsimonious, interpretable representations from complex data has therefore never been greater.
+
+Principal Component Analysis (PCA) and Singular Value Decomposition (SVD) occupy a privileged position in this landscape. PCA, introduced by Pearson in 1901 \cite{pearson1901} and independently developed by Hotelling in 1933 \cite{hotelling1933}, finds a set of orthogonal directions in feature space—the \emph{principal components}—along which the data variance is maximized. SVD, whose theoretical roots trace to the work of Beltrami, Jordan, and Sylvester in the 1870s and to modern algorithmic developments by Golub and Kahan \cite{golub1965}, decomposes any matrix into a product of three structured matrices, revealing the intrinsic geometry of linear maps and data matrices alike.
+
+Both methods address several interrelated challenges in data science. First, they identify \emph{dependencies} in structured data: correlation among features is precisely what PCA exploits to reduce dimensionality without losing information. Second, they provide a principled basis for \emph{model construction} in the presence of dependent inputs, replacing correlated predictors with uncorrelated components. Third, they support \emph{forecasting and prediction} by concentrating signal in a small number of components and discarding noise. Fourth, and perhaps most profoundly, they reveal \emph{latent structure}—the hidden low-dimensional geometry that underlies complex, high-dimensional observations.
+
+This survey is organized as follows. Section~\ref{sec:prelim} establishes mathematical notation and foundational concepts from linear algebra and statistics. Section~\ref{sec:theory} develops the core theory of SVD and PCA, including the Eckart--Young--Mirsky theorem and the relationship between the two methods. Section~\ref{sec:algorithms} describes practical algorithms for computation. Section~\ref{sec:examples} presents worked numerical examples. Section~\ref{sec:applications} surveys applications across several domains of data science. Section~\ref{sec:limitations} discusses assumptions and limitations. Section~\ref{sec:related} connects PCA and SVD to related methods. Section~\ref{sec:conclusion} concludes.
+
+% ============================================================
+\section{Mathematical Preliminaries}
+\label{sec:prelim}
+% ============================================================
+
+\subsection{Notation}
+
+Throughout this paper, we denote scalars by lowercase italic letters ($a, b, \lambda$), column vectors by bold lowercase letters ($\mathbf{x}, \mathbf{v}$), and matrices by bold uppercase letters ($\mathbf{A}, \mathbf{X}, \mathbf{\Sigma}$). The transpose of matrix $\mathbf{A}$ is $\mathbf{A}^\top$, and its Moore--Penrose pseudoinverse is $\mathbf{A}^+$. The Frobenius norm is $\|\mathbf{A}\|_F = \sqrt{\sum_{i,j} a_{ij}^2}$, and the spectral (operator) norm is $\|\mathbf{A}\|_2 = \sigma_1(\mathbf{A})$, the largest singular value. $\mathbf{I}_n$ denotes the $n\times n$ identity matrix. $\mathbb{R}^{n \times p}$ is the space of real $n\times p$ matrices.
+
+\subsection{Eigendecomposition}
+
+\begin{definition}[Eigenvalue Decomposition]
+A square matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ admits an \emph{eigendecomposition} $\mathbf{A} = \mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^{-1}$ if there exist a diagonal matrix $\mathbf{\Lambda} = \mathrm{diag}(\lambda_1, \ldots, \lambda_n)$ and an invertible matrix $\mathbf{Q}$ whose columns are the corresponding eigenvectors $\mathbf{q}_i$ satisfying $\mathbf{A}\mathbf{q}_i = \lambda_i \mathbf{q}_i$.
+\end{definition}
+
+For symmetric positive semidefinite (SPSD) matrices—such as sample covariance matrices—the eigendecomposition becomes the \emph{spectral decomposition}: $\mathbf{A} = \mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^\top$ with orthonormal eigenvectors $\mathbf{Q}^\top\mathbf{Q} = \mathbf{I}$ and non-negative eigenvalues $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_n \geq 0$.
+
+\subsection{Sample Covariance Matrix}
+
+Given a data matrix $\mathbf{X} \in \mathbb{R}^{n \times p}$ with $n$ observations and $p$ features, let $\bar{\mathbf{x}} = \frac{1}{n}\mathbf{X}^\top \mathbf{1}_n$ denote the sample mean vector. The centered data matrix is $\tilde{\mathbf{X}} = \mathbf{X} - \mathbf{1}_n \bar{\mathbf{x}}^\top$. The \emph{sample covariance matrix} is:
+\begin{equation}
+\mathbf{S} = \frac{1}{n-1}\tilde{\mathbf{X}}^\top \tilde{\mathbf{X}} \in \mathbb{R}^{p \times p}.
+\end{equation}
+$\mathbf{S}$ is symmetric positive semidefinite, with $\mathrm{rank}(\mathbf{S}) \leq \min(n-1, p)$.
+
+\subsection{Variance and Covariance Structure}
+
+The $(i,j)$ entry of $\mathbf{S}$ is $s_{ij} = \frac{1}{n-1}\sum_{k=1}^n \tilde{x}_{ki}\tilde{x}_{kj}$, measuring the linear dependence between features $i$ and $j$. When $\mathbf{S}$ has many non-zero off-diagonal entries, the features are \emph{mutually dependent}, and predictive models trained on raw features may be poorly conditioned. PCA addresses this by finding a basis in which the covariance matrix is diagonal.
+
+% ============================================================
+\section{Core Theory}
+\label{sec:theory}
+% ============================================================
+
+\subsection{Singular Value Decomposition}
+
+\begin{theorem}[Existence and Uniqueness of SVD \cite{golub2013}]
+Every matrix $\mathbf{A} \in \mathbb{R}^{n \times p}$ with $n \geq p$ admits a \emph{singular value decomposition}
+\begin{equation}
+\mathbf{A} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top,
+\label{eq:svd}
+\end{equation}
+where $\mathbf{U} \in \mathbb{R}^{n \times n}$ and $\mathbf{V} \in \mathbb{R}^{p \times p}$ are orthogonal matrices ($\mathbf{U}^\top\mathbf{U} = \mathbf{I}_n$, $\mathbf{V}^\top\mathbf{V} = \mathbf{I}_p$), and $\mathbf{\Sigma} \in \mathbb{R}^{n \times p}$ is a rectangular diagonal matrix with non-negative entries $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r > 0 = \sigma_{r+1} = \cdots$, where $r = \mathrm{rank}(\mathbf{A})$. The values $\sigma_i$ are called the \emph{singular values} of $\mathbf{A}$, the columns $\mathbf{u}_i$ of $\mathbf{U}$ are the \emph{left singular vectors}, and the columns $\mathbf{v}_i$ of $\mathbf{V}$ are the \emph{right singular vectors}. The singular values are unique; the singular vectors are unique when all singular values are distinct.
+\end{theorem}
+
+The \emph{thin} (economy) SVD retains only the $r$ non-trivial factors: $\mathbf{A} = \mathbf{U}_r \mathbf{\Sigma}_r \mathbf{V}_r^\top$, where $\mathbf{U}_r \in \mathbb{R}^{n \times r}$, $\mathbf{\Sigma}_r \in \mathbb{R}^{r \times r}$, $\mathbf{V}_r \in \mathbb{R}^{p \times r}$.
+
+The SVD can be understood as an outer product expansion:
+\begin{equation}
+\mathbf{A} = \sum_{i=1}^{r} \sigma_i \mathbf{u}_i \mathbf{v}_i^\top,
+\label{eq:svd_outer}
+\end{equation}
+revealing that every rank-$r$ matrix is a sum of $r$ rank-1 matrices weighted by the singular values.
+
+\subsection{The Eckart--Young--Mirsky Theorem}
+
+A fundamental consequence of SVD is the optimal low-rank approximation theorem.
+
+\begin{theorem}[Eckart--Young--Mirsky \cite{eckart1936}]
+For any $k \leq r$, the rank-$k$ matrix that minimizes the Frobenius norm approximation error is
+\begin{equation}
+\mathbf{A}_k = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \mathbf{v}_i^\top = \mathbf{U}_k \mathbf{\Sigma}_k \mathbf{V}_k^\top,
+\end{equation}
+and the error is
+\begin{equation}
+\|\mathbf{A} - \mathbf{A}_k\|_F^2 = \sum_{i=k+1}^{r} \sigma_i^2.
+\label{eq:ey_error}
+\end{equation}
+The same truncation is also optimal in the spectral norm: $\|\mathbf{A} - \mathbf{A}_k\|_2 = \sigma_{k+1}$.
+\end{theorem}
+
+This theorem is the theoretical justification for dimensionality reduction: if the singular values decay rapidly, a small $k$ captures most of the information in $\mathbf{A}$.
+
+\subsection{Principal Component Analysis}
+
+\begin{definition}[Principal Components]
+Let $\tilde{\mathbf{X}} \in \mathbb{R}^{n \times p}$ be mean-centered data. The \emph{principal components} of $\tilde{\mathbf{X}}$ are the orthonormal directions $\mathbf{w}_1, \mathbf{w}_2, \ldots, \mathbf{w}_p \in \mathbb{R}^p$ defined sequentially by
+\begin{align}
+\mathbf{w}_j &= \underset{\|\mathbf{w}\|=1,\; \mathbf{w} \perp \mathbf{w}_1,\ldots,\mathbf{w}_{j-1}}{\arg\max}\; \mathbf{w}^\top \mathbf{S} \mathbf{w},
+\end{align}
+where $\mathbf{S}$ is the sample covariance matrix.
+\end{definition}
+
+\begin{theorem}[PCA via Spectral Decomposition]
+The principal components $\mathbf{w}_j$ are the eigenvectors of the sample covariance matrix $\mathbf{S}$, ordered by decreasing eigenvalue:
+\begin{equation}
+\mathbf{S} = \mathbf{W}\mathbf{\Lambda}\mathbf{W}^\top, \quad \mathbf{W} = [\mathbf{w}_1 | \cdots | \mathbf{w}_p],
+\end{equation}
+with $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$. The variance of the $j$-th principal component score $z_j = \tilde{\mathbf{X}}\mathbf{w}_j$ equals $\lambda_j$.
+\end{theorem}
+
+The \emph{principal component scores} (projected data) are collected into the matrix:
+\begin{equation}
+\mathbf{Z} = \tilde{\mathbf{X}}\mathbf{W} \in \mathbb{R}^{n \times p},
+\end{equation}
+and the rank-$k$ PCA reconstruction of the centered data is:
+\begin{equation}
+\hat{\tilde{\mathbf{X}}}_k = \mathbf{Z}_k \mathbf{W}_k^\top = \tilde{\mathbf{X}}\mathbf{W}_k\mathbf{W}_k^\top,
+\end{equation}
+where $\mathbf{W}_k$ contains the leading $k$ eigenvectors.
+
+\subsection{The PCA--SVD Connection}
+
+The intimate relationship between PCA and SVD is made precise by the following result \cite{jolliffe2002}.
+
+\begin{proposition}[PCA from SVD]
+Let $\tilde{\mathbf{X}} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top$ be the SVD of the centered data matrix. Then:
+\begin{enumerate}
+  \item The right singular vectors $\mathbf{V} = \mathbf{W}$ are the principal component directions (eigenvectors of $\mathbf{S}$).
+  \item The singular values satisfy $\sigma_j = \sqrt{(n-1)\lambda_j}$, connecting them to the eigenvalues of $\mathbf{S}$.
+  \item The principal component scores are $\mathbf{Z} = \mathbf{U}\mathbf{\Sigma}$, the left singular vectors scaled by singular values.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+By definition, $\mathbf{S} = \frac{1}{n-1}\tilde{\mathbf{X}}^\top\tilde{\mathbf{X}}$. Substituting the SVD:
+\begin{align}
+\mathbf{S} &= \frac{1}{n-1}(\mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top)^\top(\mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top) \nonumber \\
+           &= \frac{1}{n-1}\mathbf{V}\mathbf{\Sigma}^\top\mathbf{U}^\top\mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top \nonumber \\
+           &= \mathbf{V}\left(\frac{\mathbf{\Sigma}^2}{n-1}\right)\mathbf{V}^\top.
+\end{align}
+This is the spectral decomposition of $\mathbf{S}$, confirming $\mathbf{W} = \mathbf{V}$ and $\lambda_j = \sigma_j^2/(n-1)$.
+\end{proof}
+
+This equivalence means PCA can be computed without ever forming the $p \times p$ covariance matrix—an important practical advantage when $p$ is large and $n \ll p$.
+
+\subsection{Proportion of Variance Explained}
+
+A key diagnostic for choosing the number of components $k$ is the \emph{proportion of variance explained} (PVE):
+\begin{equation}
+\text{PVE}(k) = \frac{\sum_{j=1}^k \lambda_j}{\sum_{j=1}^p \lambda_j} = \frac{\sum_{j=1}^k \sigma_j^2}{\sum_{j=1}^p \sigma_j^2} = \frac{\|\mathbf{A}_k\|_F^2}{\|\mathbf{A}\|_F^2}.
+\label{eq:pve}
+\end{equation}
+A \emph{scree plot} displays $\lambda_j$ against $j$; the ``elbow'' heuristic selects $k$ at the point of diminishing returns. Alternatively, one selects the smallest $k$ such that $\text{PVE}(k) \geq \tau$ for a threshold $\tau$ (commonly 0.85 or 0.95).
+
+% ============================================================
+\section{Algorithms and Methods}
+\label{sec:algorithms}
+% ============================================================
+
+\subsection{Full SVD via Golub--Reinsch Bidiagonalization}
+
+The standard algorithm for computing the full SVD of a dense matrix $\mathbf{A} \in \mathbb{R}^{n \times p}$ proceeds in two phases \cite{golub1965, golub2013}.
+
+\textbf{Algorithm 1: Golub--Reinsch SVD}
+\begin{enumerate}
+  \item \textbf{Bidiagonalization.} Apply a sequence of Householder reflections from the left and right to reduce $\mathbf{A}$ to an upper bidiagonal matrix $\mathbf{B}$:
+  \begin{equation}
+    \mathbf{U}_1^\top \mathbf{A} \mathbf{V}_1 = \mathbf{B} = \begin{pmatrix} d_1 & f_1 & & \\ & d_2 & \ddots & \\ & & \ddots & f_{p-1} \\ & & & d_p \end{pmatrix}.
+  \end{equation}
+  This requires $O(np^2)$ operations.
+  \item \textbf{Diagonalization.} Apply the QR algorithm with implicit shifts to $\mathbf{B}$, accumulating orthogonal transformations, until $\mathbf{B}$ converges to diagonal form. This yields $\mathbf{U}_2^\top \mathbf{B} \mathbf{V}_2 = \mathbf{\Sigma}$.
+  \item \textbf{Assembly.} Set $\mathbf{U} = \mathbf{U}_1\mathbf{U}_2$ and $\mathbf{V} = \mathbf{V}_1\mathbf{V}_2$.
+\end{enumerate}
+Total cost: $O(np^2 + p^3)$ for $n \geq p$. Numerical stability is guaranteed by the use of unitary transformations \cite{trefethen1997}.
+
+\subsection{Truncated SVD via Randomized Methods}
+
+For large-scale problems, computing only the leading $k$ singular triplets is sufficient. The randomized SVD algorithm of Halko, Martinsson, and Tropp \cite{halko2011} provides a highly efficient approach.
+
+\textbf{Algorithm 2: Randomized SVD}
+\begin{enumerate}
+  \item \textbf{Random projection.} Draw a random Gaussian matrix $\mathbf{\Omega} \in \mathbb{R}^{p \times (k+s)}$ where $s$ is a small oversampling parameter (e.g., $s = 10$). Compute $\mathbf{Y} = \mathbf{A}\mathbf{\Omega} \in \mathbb{R}^{n \times (k+s)}$.
+  \item \textbf{(Optional) Power iteration.} Replace $\mathbf{Y} \leftarrow (\mathbf{A}\mathbf{A}^\top)^q \mathbf{Y}$ for $q \geq 1$ to improve approximation for slowly decaying spectra.
+  \item \textbf{QR factorization.} Compute $\mathbf{Y} = \mathbf{Q}\mathbf{R}$ via QR decomposition to obtain an orthonormal basis $\mathbf{Q} \in \mathbb{R}^{n \times (k+s)}$ for the column space of $\mathbf{A}$.
+  \item \textbf{Projection.} Form the small matrix $\mathbf{B} = \mathbf{Q}^\top\mathbf{A} \in \mathbb{R}^{(k+s) \times p}$.
+  \item \textbf{SVD of small matrix.} Compute $\mathbf{B} = \hat{\mathbf{U}}\mathbf{\Sigma}\mathbf{V}^\top$ exactly.
+  \item \textbf{Recover left singular vectors.} Set $\mathbf{U} = \mathbf{Q}\hat{\mathbf{U}}$ and truncate to the leading $k$ components.
+\end{enumerate}
+Total cost: $O(nk\log k)$ matrix-vector products with $\mathbf{A}$, far cheaper than the full SVD for $k \ll \min(n,p)$. This algorithm is implemented in \texttt{sklearn.utils.extmath.randomized\_svd} \cite{pedregosa2011}.
+
+\subsection{Incremental PCA for Streaming Data}
+
+When data arrive in a stream or do not fit in memory, \emph{incremental PCA} \cite{ross2008} updates the principal components with each new batch $\mathbf{X}_t$ without retaining the full history:
+\begin{equation}
+\mathbf{S}_{t} = \frac{(n_t - 1)\mathbf{S}_{t-1} + (n_{\text{new}} - 1)\mathbf{S}_{\text{new}} + \delta_t}{n_t + n_{\text{new}} - 1},
+\end{equation}
+where $\delta_t$ is a correction term for the shift in means. The eigenvectors of $\mathbf{S}_t$ are updated via a rank-$k$ SVD of the augmented matrix formed from the previous basis and new data.
+
+\subsection{Choosing the Number of Components}
+
+Several criteria guide the selection of $k$:
+\begin{itemize}
+  \item \textbf{Scree plot elbow}: select $k$ at the ``knee'' of the scree plot.
+  \item \textbf{Cumulative PVE threshold}: smallest $k$ with $\text{PVE}(k) \geq 0.90$.
+  \item \textbf{Parallel analysis} \cite{horn1965}: retain components whose eigenvalues exceed those from random data.
+  \item \textbf{Broken stick model} \cite{jackson1993}: compare eigenvalues to the expected distribution under a null model.
+  \item \textbf{Cross-validation}: minimize reconstruction error on held-out data \cite{bro2008}.
+\end{itemize}
+
+% ============================================================
+\section{Worked Examples}
+\label{sec:examples}
+% ============================================================
+
+\subsection{Small-Scale SVD Computation}
+
+Consider the matrix
+\begin{equation}
+\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \\ 0 & 0 \end{pmatrix} \in \mathbb{R}^{3 \times 2}.
+\end{equation}
+We compute $\mathbf{A}^\top\mathbf{A} = \begin{pmatrix}10 & 6 \\ 6 & 10\end{pmatrix}$, whose eigenvalues are $\lambda_1 = 16$, $\lambda_2 = 4$. The singular values are $\sigma_1 = 4$, $\sigma_2 = 2$.
+
+Eigenvectors of $\mathbf{A}^\top\mathbf{A}$: $\mathbf{v}_1 = \frac{1}{\sqrt{2}}(1,1)^\top$, $\mathbf{v}_2 = \frac{1}{\sqrt{2}}(1,-1)^\top$.
+
+Left singular vectors: $\mathbf{u}_i = \frac{1}{\sigma_i}\mathbf{A}\mathbf{v}_i$:
+\begin{align}
+\mathbf{u}_1 &= \frac{1}{4}\begin{pmatrix}3&1\\1&3\\0&0\end{pmatrix}\frac{1}{\sqrt{2}}\begin{pmatrix}1\\1\end{pmatrix} = \frac{1}{4\sqrt{2}}\begin{pmatrix}4\\4\\0\end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix}1\\1\\0\end{pmatrix}, \\
+\mathbf{u}_2 &= \frac{1}{2\sqrt{2}}\begin{pmatrix}3-1\\1-3\\0\end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix}1\\-1\\0\end{pmatrix}.
+\end{align}
+The third left singular vector $\mathbf{u}_3 = (0,0,1)^\top$ spans the null space. The full SVD is:
+\begin{equation}
+\mathbf{A} = \begin{pmatrix}\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{2}}&0\\ \frac{1}{\sqrt{2}}&-\frac{1}{\sqrt{2}}&0\\ 0&0&1\end{pmatrix} \begin{pmatrix}4&0\\0&2\\0&0\end{pmatrix} \begin{pmatrix}\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{2}}\\ \frac{1}{\sqrt{2}}&-\frac{1}{\sqrt{2}}\end{pmatrix}.
+\end{equation}
+
+\subsection{PCA on Correlated Bivariate Data}
+
+Suppose we observe $n = 5$ data points with $p = 2$ features shown in Table~\ref{tab:pca_example}.
+
+\begin{table}[t]
+\centering
+\caption{Bivariate Dataset for PCA Illustration}
+\label{tab:pca_example}
+\begin{tabular}{ccc}
+\toprule
+Observation & $x_1$ & $x_2$ \\
+\midrule
+1 & 2.5 & 2.4 \\
+2 & 0.5 & 0.7 \\
+3 & 2.2 & 2.9 \\
+4 & 1.9 & 2.2 \\
+5 & 3.1 & 3.0 \\
+\midrule
+Mean & 2.04 & 2.24 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+After centering, the sample covariance matrix is approximately:
+\begin{equation}
+\mathbf{S} \approx \begin{pmatrix} 0.616 & 0.615 \\ 0.615 & 0.716 \end{pmatrix}.
+\end{equation}
+The eigenvalues are $\lambda_1 \approx 1.284$ and $\lambda_2 \approx 0.049$, with eigenvectors $\mathbf{w}_1 \approx (0.677, 0.736)^\top$ and $\mathbf{w}_2 \approx (-0.736, 0.677)^\top$. The first principal component explains $\text{PVE}(1) = 1.284/1.333 \approx 96.3\%$ of the variance, confirming that the data lie nearly on a one-dimensional manifold. This strong first component reflects the high linear correlation ($r \approx 0.926$) between features $x_1$ and $x_2$.
+
+\subsection{Low-Rank Approximation Quality}
+
+Table~\ref{tab:rank_approx} illustrates the Eckart--Young theorem for a hypothetical rank-5 matrix with singular values $\sigma = (10, 6, 3, 1.5, 0.5)$.
+
+\begin{table}[t]
+\centering
+\caption{Low-Rank Approximation Error and Cumulative Variance Explained}
+\label{tab:rank_approx}
+\begin{tabular}{cccc}
+\toprule
+Rank $k$ & $\sigma_k$ & $\|\mathbf{A}-\mathbf{A}_k\|_F^2$ & PVE ($\%$) \\
+\midrule
+0 & ---   & 154.50 & 0.0 \\
+1 & 10.00 & 54.50  & 64.7 \\
+2 & 6.00  & 18.50  & 88.0 \\
+3 & 3.00  & 9.25   & 94.0 \\  % corrected: 154.5 - 10^2 - 6^2 - 3^2 = 154.5-100-36-9=9.5; PVE=(154.5-9.5)/154.5
+4 & 1.50  & 7.00   & 95.5 \\
+5 & 0.50  & 0.00   & 100.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{Applications in Data Science}
+\label{sec:applications}
+% ============================================================
+
+\subsection{Genomics and Gene Expression Analysis}
+
+High-throughput sequencing produces data matrices with $n$ samples and $p \sim 10^4$--$10^5$ gene expression features. PCA is a standard first step in exploratory analysis of such data \cite{novembre2008}: the leading principal components often capture population structure, batch effects, or major biological variation. In genome-wide association studies (GWAS), including the top PCs as covariates in regression models corrects for population stratification and reduces spurious associations \cite{price2006}. SVD is also used in RNA-seq analysis for deconvolution of cell-type mixtures \cite{brunet2004}.
+
+\subsection{Image Compression and Reconstruction}
+
+A grayscale image can be represented as a matrix $\mathbf{A} \in \mathbb{R}^{n \times p}$ where each entry is a pixel intensity. The truncated SVD $\mathbf{A}_k$ provides a compact representation requiring storage of $k(n+p+1)$ values rather than $np$. For a $512\times512$ image with $r = 512$, retaining $k = 50$ singular components (roughly 10\% of the components) typically yields visually acceptable reconstruction with $\|\mathbf{A} - \mathbf{A}_{50}\|_F / \|\mathbf{A}\|_F < 0.05$ \cite{andrews1976}. This demonstrates SVD as a lossy compression mechanism governed by the Eckart--Young theorem.
+
+\subsection{Natural Language Processing: Latent Semantic Analysis}
+
+Latent Semantic Analysis (LSA), introduced by Deerwester et al.\ \cite{deerwester1990}, applies truncated SVD to a term-document matrix $\mathbf{A}$ (often with TF-IDF weighting): $\mathbf{A}_k = \mathbf{U}_k\mathbf{\Sigma}_k\mathbf{V}_k^\top$. The rows of $\mathbf{U}_k\mathbf{\Sigma}_k$ represent documents in a $k$-dimensional semantic space, and cosine similarity in this space captures semantic relatedness better than raw word overlap. LSA identifies latent topics as linear combinations of terms and served as an early precursor to probabilistic topic models \cite{blei2003}.
+
+\subsection{Recommender Systems: Collaborative Filtering}
+
+In collaborative filtering, the user-item rating matrix $\mathbf{R} \in \mathbb{R}^{m \times n}$ is typically sparse with millions of missing entries. The Netflix Prize competition popularized matrix factorization \cite{koren2009}: find low-rank matrices $\mathbf{P} \in \mathbb{R}^{m \times k}$ (user factors) and $\mathbf{Q} \in \mathbb{R}^{n \times k}$ (item factors) minimizing
+\begin{equation}
+\min_{\mathbf{P},\mathbf{Q}} \sum_{(i,j)\in\Omega} (r_{ij} - \mathbf{p}_i^\top\mathbf{q}_j)^2 + \lambda(\|\mathbf{P}\|_F^2 + \|\mathbf{Q}\|_F^2),
+\end{equation}
+where $\Omega$ is the set of observed ratings. This is a generalization of SVD to incomplete matrices, solved by alternating least squares or stochastic gradient descent. The latent factors $\mathbf{p}_i$ and $\mathbf{q}_j$ capture user preferences and item attributes implicitly.
+
+\subsection{Multivariate Time Series and Forecasting}
+
+PCA applied to multivariate time series extracts the dominant modes of variation—often corresponding to interpretable economic, climatic, or financial factors. In macroeconomic forecasting, the \emph{diffusion index} approach of Stock and Watson \cite{stock2002} estimates common factors via PCA from a large panel of economic indicators and uses them as predictors in autoregressive models:
+\begin{equation}
+y_{t+h} = \alpha + \sum_{j=1}^k \beta_j \hat{f}_{jt} + \sum_{l=1}^L \gamma_l y_{t-l+1} + \epsilon_{t+h},
+\end{equation}
+where $\hat{f}_{jt}$ are PCA-estimated factors at time $t$. This framework explicitly accounts for dependence structure across variables and time, improving forecast accuracy over univariate models.
+
+\subsection{Signal Processing: Empirical Orthogonal Functions}
+
+In climatology and oceanography, PCA applied to spatiotemporal data fields yields \emph{empirical orthogonal functions} (EOFs) \cite{lorenz1956}. Each EOF $\mathbf{w}_j$ describes a spatial pattern, and the corresponding principal component time series $z_j(t)$ describes how that pattern evolves over time. The first EOF of sea surface temperature, for example, often captures the El Ni\~{n}o--Southern Oscillation (ENSO) signal—a dominant mode of interannual climate variability. SVD applied to cross-covariance matrices of two fields yields maximum covariance analysis (MCA), identifying coupled patterns of variability.
+
+\subsection{Dimensionality Reduction for Predictive Models}
+
+In high-dimensional settings where $p \gg n$, direct regression of a response $\mathbf{y}$ on features $\mathbf{X}$ is infeasible or highly regularized. \emph{Principal Component Regression} (PCR) \cite{hotelling1957} regresses $\mathbf{y}$ on the leading $k$ PCA scores:
+\begin{equation}
+\hat{\mathbf{y}} = \mathbf{Z}_k\hat{\bm{\beta}}_k, \quad \hat{\bm{\beta}}_k = (\mathbf{Z}_k^\top\mathbf{Z}_k)^{-1}\mathbf{Z}_k^\top\mathbf{y}.
+\end{equation}
+Because the columns of $\mathbf{Z}_k$ are orthogonal, $\mathbf{Z}_k^\top\mathbf{Z}_k = \mathbf{\Lambda}_k$ is diagonal, rendering the regression perfectly conditioned. Substituting the PCA decomposition, the predictions in the original feature space are:
+\begin{equation}
+\hat{\mathbf{y}} = \mathbf{X}\mathbf{W}_k(\mathbf{W}_k^\top\mathbf{X}^\top\mathbf{X}\mathbf{W}_k)^{-1}\mathbf{W}_k^\top\mathbf{X}^\top\mathbf{y}.
+\end{equation}
+PCR is closely related to ridge regression \cite{hastie2009} and partial least squares (PLS), with PCR selecting components to maximize variance in $\mathbf{X}$ and PLS selecting components to maximize covariance with $\mathbf{y}$.
+
+% ============================================================
+\section{Limitations and Assumptions}
+\label{sec:limitations}
+% ============================================================
+
+\subsection{Linearity}
+
+PCA and SVD are inherently linear methods: they decompose the data into linear combinations of basis vectors. If the true latent structure is nonlinear (e.g., data lying on a curved manifold), PCA may require many components to achieve an adequate approximation. Kernel PCA \cite{scholkopf1998} and manifold learning methods (Isomap, LLE, UMAP \cite{mcinnes2018}) address this limitation.
+
+\subsection{Gaussian and Second-Order Assumptions}
+
+PCA maximizes variance, a second-order statistic. It is the optimal linear representation for multivariate Gaussian data, but when data are non-Gaussian, the principal components are not guaranteed to be statistically independent—only uncorrelated. Independent Component Analysis (ICA) \cite{comon1994} seeks components that are statistically independent, exploiting higher-order statistics.
+
+\subsection{Scale Sensitivity}
+
+PCA is sensitive to the units of measurement. Features measured on different scales will contribute disproportionately to the total variance. Standard practice is to \emph{standardize} features to unit variance before applying PCA (yielding correlation PCA), so that all variables contribute equally. However, standardization discards information about the relative variability of features and may not always be appropriate.
+
+\subsection{Missing Data}
+
+Standard PCA and SVD require complete data matrices. In practice, data often contain missing values. Several approaches exist: imputation prior to PCA, the EM algorithm for PCA \cite{roweis1998}, probabilistic PCA \cite{tipping1999}, and nuclear norm minimization for matrix completion \cite{candes2009}. Each carries additional assumptions about the missing data mechanism.
+
+\subsection{Interpretability of Components}
+
+Principal components are linear combinations of all original features and need not correspond to any physically interpretable quantity. Rotation methods (Varimax, Oblimin) in factor analysis \cite{kaiser1958} improve interpretability by producing sparser loadings, at the cost of losing orthogonality. Sparse PCA \cite{zou2006} directly constrains loading vectors to be sparse via $\ell_1$ penalties.
+
+\subsection{Computational Considerations}
+
+For $n \gg p$, the covariance matrix approach (eigen-decomposition of $\mathbf{S} \in \mathbb{R}^{p \times p}$) is more efficient: $O(np^2 + p^3)$. For $p \gg n$, SVD of $\tilde{\mathbf{X}}$ directly is more efficient: $O(n^2p + n^3)$. The randomized SVD further reduces cost to $O(nkp)$ for the leading $k$ components. Numerical stability requires careful implementation, particularly for nearly degenerate spectra where small singular values may be computed inaccurately due to roundoff \cite{golub2013}.
+
+% ============================================================
+\section{Connections to Related Methods}
+\label{sec:related}
+% ============================================================
+
+\subsection{Factor Analysis}
+
+Factor Analysis (FA) \cite{spearman1904} models the data as $\mathbf{x} = \mathbf{\Lambda}\mathbf{f} + \bm{\epsilon}$, where $\mathbf{f}$ is a low-dimensional latent factor vector, $\mathbf{\Lambda}$ is the loading matrix, and $\bm{\epsilon}$ is idiosyncratic noise with a diagonal covariance. Unlike PCA, FA explicitly separates shared variance (communality) from unique variance, and the loadings are estimated by maximum likelihood rather than eigen-decomposition. PCA can be viewed as FA with isotropic noise $\bm{\epsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2\mathbf{I})$, a model formalized as \emph{Probabilistic PCA} \cite{tipping1999}.
+
+\subsection{Canonical Correlation Analysis}
+
+Canonical Correlation Analysis (CCA) \cite{hotelling1936} finds linear projections of two variable sets $\mathbf{X}$ and $\mathbf{Y}$ that maximize their mutual correlation. The canonical directions are obtained via SVD of the cross-covariance matrix $\mathbf{\Sigma}_{XY} = \mathbf{\Sigma}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{\Sigma}_{YY}^{-1/2}$, making SVD the computational backbone of CCA as well.
+
+\subsection{Partial Least Squares}
+
+Partial Least Squares (PLS) \cite{wold1975} finds successive directions $\mathbf{w}$ and $\mathbf{c}$ in feature and response spaces that maximize the covariance $\text{Cov}(\mathbf{X}\mathbf{w}, \mathbf{Y}\mathbf{c})$. The first PLS direction is obtained via the left and right singular vectors of $\mathbf{X}^\top\mathbf{Y}$, again an SVD. PLS regression is preferred over PCR when the leading principal components of $\mathbf{X}$ are not predictive of $\mathbf{Y}$.
+
+\subsection{Non-Negative Matrix Factorization}
+
+Non-Negative Matrix Factorization (NMF) \cite{lee1999} decomposes $\mathbf{A} \approx \mathbf{W}\mathbf{H}$ with $\mathbf{W}, \mathbf{H} \geq 0$. Unlike SVD, which allows negative entries and negative cancellations, NMF produces a \emph{parts-based} representation that is often more interpretable for data such as face images or document-term matrices. NMF minimizes $\|\mathbf{A} - \mathbf{W}\mathbf{H}\|_F^2$ subject to non-negativity, a non-convex problem solved by multiplicative update rules.
+
+\subsection{Kernel PCA}
+
+Kernel PCA \cite{scholkopf1998} performs PCA in a high-dimensional feature space $\mathcal{H}$ implicitly defined by a kernel function $k(\mathbf{x}_i, \mathbf{x}_j) = \langle \phi(\mathbf{x}_i), \phi(\mathbf{x}_j)\rangle_{\mathcal{H}}$. By the kernel trick, the $n \times n$ kernel matrix $\mathbf{K}_{ij} = k(\mathbf{x}_i,\mathbf{x}_j)$ is eigen-decomposed instead of the $p \times p$ covariance matrix, enabling nonlinear dimensionality reduction without explicitly mapping to $\mathcal{H}$.
+
+\subsection{Independent Component Analysis}
+
+ICA \cite{comon1994} seeks a linear transformation $\mathbf{x} = \mathbf{A}\mathbf{s}$ such that the source signals $\mathbf{s}$ are statistically independent (not merely uncorrelated). PCA is typically used as a preprocessing step for ICA (whitening the data), and ICA can be seen as rotating the PCA components to achieve independence by maximizing non-Gaussianity (measured by negentropy or kurtosis). ICA finds application in blind source separation, EEG artifact removal, and financial returns analysis.
+
+\subsection{Dynamic Mode Decomposition}
+
+Dynamic Mode Decomposition (DMD) \cite{schmid2010} analyzes time-evolving data by computing the leading eigendecomposition of the linear operator $\mathbf{A}$ mapping $\mathbf{x}_t \to \mathbf{x}_{t+1}$, estimated via SVD: $\mathbf{A} \approx \mathbf{X}'\mathbf{V}_k\mathbf{\Sigma}_k^{-1}\mathbf{U}_k^\top$. DMD modes are spatiotemporal coherent structures; their eigenvalues encode growth rates and oscillation frequencies. DMD is widely used in fluid dynamics and has found application in epidemiology and neuroscience.
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% ============================================================
+
+This survey has provided a comprehensive treatment of Principal Component Analysis and Singular Value Decomposition, tracing their mathematical foundations, algorithmic implementations, and broad applicability in data science. The central theoretical result---that PCA is optimally computed via SVD, and that truncated SVD provides the best low-rank approximation in both Frobenius and spectral norms (Eckart--Young--Mirsky)---underlies the practical success of these methods across domains ranging from genomics to collaborative filtering.
+
+Both methods address all four themes of advanced predictive modeling: they expose linear \emph{dependencies} in structured data through the covariance and singular value structure; they provide a principled basis for \emph{model construction} by decorrelating inputs; they support \emph{forecasting} via dimensionality-reduced regression and factor models; and they reveal \emph{latent structure} in the form of principal components, singular modes, and low-dimensional embeddings.
+
+At the same time, their limitations are important to appreciate: linearity constrains their applicability to non-Gaussian manifolds; scale sensitivity requires careful preprocessing; and interpretability of components is not guaranteed. The rich ecosystem of related methods---kernel PCA, ICA, NMF, CCA, PLS, probabilistic PCA, DMD---extends these ideas to address these limitations, and understanding PCA and SVD deeply provides the foundation for mastering this broader landscape.
+
+As data dimensionality continues to grow, driven by genomics, imaging, language models, and sensor networks, the fundamental geometric insight of PCA and SVD---that complex data often has low intrinsic dimensionality---remains one of the most powerful and enduring ideas in the field.
+
+% ============================================================
+\begin{thebibliography}{99}
+
+\bibitem{pearson1901}
+K.~Pearson, ``On lines and planes of closest fit to systems of points in space,'' \textit{Philosophical Magazine}, vol.~2, no.~11, pp.~559--572, 1901.
+
+\bibitem{hotelling1933}
+H.~Hotelling, ``Analysis of a complex of statistical variables into principal components,'' \textit{Journal of Educational Psychology}, vol.~24, no.~6, pp.~417--441, 1933.
+
+\bibitem{golub1965}
+G.~H. Golub and W.~Kahan, ``Calculating the singular values and pseudo-inverse of a matrix,'' \textit{SIAM Journal on Numerical Analysis}, vol.~2, no.~2, pp.~205--224, 1965.
+
+\bibitem{golub2013}
+G.~H. Golub and C.~F. Van~Loan, \textit{Matrix Computations}, 4th ed. Baltimore, MD: Johns Hopkins University Press, 2013.
+
+\bibitem{eckart1936}
+C.~Eckart and G.~Young, ``The approximation of one matrix by another of lower rank,'' \textit{Psychometrika}, vol.~1, no.~3, pp.~211--218, 1936.
+
+\bibitem{jolliffe2002}
+I.~T. Jolliffe, \textit{Principal Component Analysis}, 2nd ed. New York, NY: Springer, 2002.
+
+\bibitem{trefethen1997}
+L.~N. Trefethen and D.~Bau III, \textit{Numerical Linear Algebra}. Philadelphia, PA: SIAM, 1997.
+
+\bibitem{halko2011}
+N.~Halko, P.~G. Martinsson, and J.~A. Tropp, ``Finding structure with randomness: Probabilistic algorithms for constructing approximate matrix decompositions,'' \textit{SIAM Review}, vol.~53, no.~2, pp.~217--288, 2011.
+
+\bibitem{pedregosa2011}
+F.~Pedregosa \textit{et al.}, ``Scikit-learn: Machine learning in Python,'' \textit{Journal of Machine Learning Research}, vol.~12, pp.~2825--2830, 2011.
+
+\bibitem{ross2008}
+D.~A. Ross, J.~Lim, R.-S. Lin, and M.-H. Yang, ``Incremental learning for robust visual tracking,'' \textit{International Journal of Computer Vision}, vol.~77, no.~1--3, pp.~125--141, 2008.
+
+\bibitem{horn1965}
+J.~L. Horn, ``A rationale and test for the number of factors in factor analysis,'' \textit{Psychometrika}, vol.~30, no.~2, pp.~179--185, 1965.
+
+\bibitem{jackson1993}
+D.~A. Jackson, ``Stopping rules in principal components analysis: A comparison of heuristical and statistical approaches,'' \textit{Ecology}, vol.~74, no.~8, pp.~2204--2214, 1993.
+
+\bibitem{bro2008}
+R.~Bro and A.~K. Smilde, ``Principal component analysis,'' \textit{Analytical Methods}, vol.~6, no.~9, pp.~2812--2831, 2014.
+
+\bibitem{novembre2008}
+J.~Novembre \textit{et al.}, ``Genes mirror geography within Europe,'' \textit{Nature}, vol.~456, no.~7218, pp.~98--101, 2008.
+
+\bibitem{price2006}
+A.~L. Price \textit{et al.}, ``Principal components analysis corrects for stratification in genome-wide association studies,'' \textit{Nature Genetics}, vol.~38, no.~8, pp.~904--909, 2006.
+
+\bibitem{brunet2004}
+J.-P. Brunet, P.~Tamayo, T.~R. Golub, and J.~P. Mesirov, ``Metagenes and molecular pattern discovery using matrix factorization,'' \textit{Proceedings of the National Academy of Sciences}, vol.~101, no.~12, pp.~4164--4169, 2004.
+
+\bibitem{deerwester1990}
+S.~Deerwester, S.~T. Dumais, G.~W. Furnas, T.~K. Landauer, and R.~Harshman, ``Indexing by latent semantic analysis,'' \textit{Journal of the American Society for Information Science}, vol.~41, no.~6, pp.~391--407, 1990.
+
+\bibitem{blei2003}
+D.~M. Blei, A.~Y. Ng, and M.~I. Jordan, ``Latent Dirichlet allocation,'' \textit{Journal of Machine Learning Research}, vol.~3, pp.~993--1022, 2003.
+
+\bibitem{koren2009}
+Y.~Koren, R.~Bell, and C.~Volinsky, ``Matrix factorization techniques for recommender systems,'' \textit{IEEE Computer}, vol.~42, no.~8, pp.~30--37, 2009.
+
+\bibitem{stock2002}
+J.~H. Stock and M.~W. Watson, ``Forecasting using principal components from a large number of predictors,'' \textit{Journal of the American Statistical Association}, vol.~97, no.~460, pp.~1167--1179, 2002.
+
+\bibitem{lorenz1956}
+E.~N. Lorenz, ``Empirical orthogonal functions and statistical weather prediction,'' Scientific Report No. 1, Statistical Forecasting Project, MIT, Cambridge, MA, 1956.
+
+\bibitem{hastie2009}
+T.~Hastie, R.~Tibshirani, and J.~Friedman, \textit{The Elements of Statistical Learning}, 2nd ed. New York, NY: Springer, 2009.
+
+\bibitem{bellman1957}
+R.~Bellman, \textit{Dynamic Programming}. Princeton, NJ: Princeton University Press, 1957.
+
+\bibitem{scholkopf1998}
+B.~Sch\"{o}lkopf, A.~Smola, and K.-R. M\"{u}ller, ``Nonlinear component analysis as a kernel eigenvalue problem,'' \textit{Neural Computation}, vol.~10, no.~5, pp.~1299--1319, 1998.
+
+\bibitem{comon1994}
+P.~Comon, ``Independent component analysis: A new concept?'' \textit{Signal Processing}, vol.~36, no.~3, pp.~287--314, 1994.
+
+\bibitem{tipping1999}
+M.~E. Tipping and C.~M. Bishop, ``Probabilistic principal component analysis,'' \textit{Journal of the Royal Statistical Society: Series B}, vol.~61, no.~3, pp.~611--622, 1999.
+
+\bibitem{roweis1998}
+S.~Roweis, ``EM algorithms for PCA and SPCA,'' in \textit{Advances in Neural Information Processing Systems}, vol.~10, pp.~626--632, 1998.
+
+\bibitem{candes2009}
+E.~J. Cand\`{e}s and B.~Recht, ``Exact matrix completion via convex optimization,'' \textit{Foundations of Computational Mathematics}, vol.~9, no.~6, pp.~717--772, 2009.
+
+\bibitem{kaiser1958}
+H.~F. Kaiser, ``The varimax criterion for analytic rotation in factor analysis,'' \textit{Psychometrika}, vol.~23, no.~3, pp.~187--200, 1958.
+
+\bibitem{zou2006}
+H.~Zou, T.~Hastie, and R.~Tibshirani, ``Sparse principal component analysis,'' \textit{Journal of Computational and Graphical Statistics}, vol.~15, no.~2, pp.~265--286, 2006.
+
+\bibitem{hotelling1936}
+H.~Hotelling, ``Relations between two sets of variates,'' \textit{Biometrika}, vol.~28, no.~3/4, pp.~321--377, 1936.
+
+\bibitem{wold1975}
+H.~Wold, ``Path models with latent variables: The NIPALS approach,'' in \textit{Quantitative Sociology}, H.~M. Blalock \textit{et al.}, Eds. New York, NY: Academic Press, 1975, pp.~307--357.
+
+\bibitem{lee1999}
+D.~D. Lee and H.~S. Seung, ``Learning the parts of objects by non-negative matrix factorization,'' \textit{Nature}, vol.~401, no.~6755, pp.~788--791, 1999.
+
+\bibitem{schmid2010}
+P.~J. Schmid, ``Dynamic mode decomposition of numerical and experimental data,'' \textit{Journal of Fluid Mechanics}, vol.~656, pp.~5--28, 2010.
+
+\bibitem{spearman1904}
+C.~Spearman, ``General intelligence, objectively determined and measured,'' \textit{American Journal of Psychology}, vol.~15, no.~2, pp.~201--293, 1904.
+
+\bibitem{mcinnes2018}
+L.~McInnes, J.~Healy, and J.~Melville, ``UMAP: Uniform manifold approximation and projection for dimension reduction,'' \textit{arXiv preprint arXiv:1802.03426}, 2018.
+
+\bibitem{andrews1976}
+H.~C. Andrews and C.~L. Patterson, ``Singular value decompositions and digital image processing,'' \textit{IEEE Transactions on Acoustics, Speech, and Signal Processing}, vol.~24, no.~1, pp.~26--53, 1976.
+
+\bibitem{hotelling1957}
+H.~Hotelling, ``The relations of the newer multivariate statistical methods to factor analysis,'' \textit{British Journal of Statistical Psychology}, vol.~10, no.~2, pp.~69--79, 1957.
+
+\end{thebibliography}
+
+\end{document}

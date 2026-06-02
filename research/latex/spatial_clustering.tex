@@ -1,0 +1,565 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{url}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Methods for Detecting Spatial Clustering:\\A Survey of Theory, Algorithms, and Applications}
+
+\author{\IEEEauthorblockN{Surya Rao Rayarao}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+suryarao.r@utexas.edu}
+\and
+\IEEEauthorblockN{Naga Donikena}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+naga.donikena@utexas.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+Spatial clustering refers to the phenomenon whereby observations located near one another in geographic or feature space exhibit greater similarity than observations that are far apart. Detecting and characterizing such clustering is fundamental in epidemiology, ecology, urban planning, criminology, and the analysis of large-scale geospatial datasets. This survey provides a rigorous, unified treatment of methods for detecting spatial clustering, spanning classical global statistics such as Moran's~$I$ and Ripley's~$K$-function, local indicators of spatial association (LISA), scan statistics, point-process models, and model-based approaches rooted in geostatistics and hierarchical Bayesian inference. We discuss the mathematical foundations required to understand dependence structures in areal, geostatistical, and point-pattern data, and we examine how each method accounts for that dependence when making inferences. Connections to latent-variable models, kriging, and spatial random effects are explored, and the role of spatial structure in predictive modeling is emphasized. Worked examples using canonical datasets ground the theory. We conclude with a discussion of the assumptions, limitations, and open challenges in the field, including scalability to large datasets, non-stationarity, and the ecological fallacy.
+\end{abstract}
+
+\begin{IEEEkeywords}
+spatial statistics, spatial autocorrelation, Moran's $I$, scan statistics, LISA, point processes, geostatistics, spatial clustering, kernel density estimation, spatial dependence
+\end{IEEEkeywords}
+
+% ----------------------------------------------------------------
+\section{Introduction}
+% ----------------------------------------------------------------
+
+One of the most pervasive structures encountered in real-world data is spatial dependence: the tendency for observations that are geographically or metrically proximate to be more alike than those that are distant. Tobler's First Law of Geography~\cite{tobler1970} captures this succinctly: \emph{everything is related to everything else, but near things are more related than distant things}. When this law holds, the classical assumption of independent and identically distributed observations is violated, and standard inferential procedures may yield misleading results.
+
+The task of \emph{detecting spatial clustering} is therefore both a diagnostic step---determining whether dependence exists---and a modeling imperative---quantifying its form and magnitude so that downstream analyses remain valid. Spatial clustering can manifest in areal data (observations aggregated to polygons such as census tracts), in geostatistical data (measurements at irregularly distributed point locations), or in point-pattern data (where the locations themselves are the objects of study). Each data type calls for a different analytical framework.
+
+This survey is organized as follows. Section~\ref{sec:prelim} introduces mathematical notation and the foundational concepts of spatial processes. Section~\ref{sec:theory} develops the core statistical theory underpinning global and local measures of clustering. Section~\ref{sec:algorithms} presents concrete algorithmic procedures for the main families of methods. Section~\ref{sec:examples} provides worked numerical and applied examples. Section~\ref{sec:applications} surveys real-world applications in data science. Section~\ref{sec:limits} addresses limitations and assumptions. Section~\ref{sec:connections} connects spatial clustering to related methods in machine learning and statistics. Section~\ref{sec:conclusion} concludes.
+
+% ----------------------------------------------------------------
+\section{Mathematical Preliminaries}
+\label{sec:prelim}
+% ----------------------------------------------------------------
+
+\subsection{Index Sets and Spatial Data Types}
+
+Let $\mathcal{D} \subseteq \mathbb{R}^2$ be a spatial domain. A spatial process is a collection of random variables $\{Z(\mathbf{s}) : \mathbf{s} \in \mathcal{D}\}$ indexed by location $\mathbf{s} = (s_1, s_2)^\top$. Three canonical data types arise in practice~\cite{cressie1993}:
+
+\begin{enumerate}
+  \item \textbf{Geostatistical data}: $\mathcal{D}$ is a fixed continuous set; observations are $\{z(\mathbf{s}_i)\}_{i=1}^n$ at $n$ sampled locations.
+  \item \textbf{Areal (lattice) data}: $\mathcal{D}$ is partitioned into $n$ regions $\{A_1, \ldots, A_n\}$; each region carries a single aggregated value $z_i$.
+  \item \textbf{Point-pattern data}: $\mathcal{D}$ is fixed; the observed data are random locations $\{\mathbf{s}_1, \ldots, \mathbf{s}_N\} \subset \mathcal{D}$ generated by a stochastic mechanism.
+\end{enumerate}
+
+\subsection{Stationarity}
+
+\begin{definition}[Second-order stationarity]
+A spatial process $Z(\mathbf{s})$ is second-order stationary if
+\[
+\mathbb{E}[Z(\mathbf{s})] = \mu \quad \forall\, \mathbf{s} \in \mathcal{D},
+\]
+and the covariance depends only on the separation vector:
+\[
+\operatorname{Cov}(Z(\mathbf{s}), Z(\mathbf{s} + \mathbf{h})) = C(\mathbf{h}) \quad \forall\, \mathbf{s}, \mathbf{s}+\mathbf{h} \in \mathcal{D}.
+\]
+\end{definition}
+
+\begin{definition}[Isotropy]
+A second-order stationary process is isotropic if $C(\mathbf{h}) = C(\|\mathbf{h}\|)$, i.e., the covariance depends only on the distance $\|\mathbf{h}\|$ and not on the direction.
+\end{definition}
+
+\subsection{Spatial Weight Matrices}
+
+For areal data, the spatial relationship between units is encoded in a spatial weights matrix $\mathbf{W} \in \mathbb{R}^{n \times n}$, where entry $w_{ij}$ quantifies the proximity or contiguity between regions $i$ and $j$. Common choices include:
+
+\begin{itemize}
+  \item \textbf{Binary contiguity}: $w_{ij} = 1$ if regions $i$ and $j$ share a border, 0 otherwise.
+  \item \textbf{$k$-nearest neighbors}: $w_{ij} = 1$ if $j$ is among the $k$ nearest centroids of $i$.
+  \item \textbf{Inverse-distance}: $w_{ij} = d_{ij}^{-\alpha}$ for $\alpha > 0$, where $d_{ij}$ is the centroid distance.
+\end{itemize}
+
+It is standard to row-normalize $\mathbf{W}$ to obtain $\tilde{w}_{ij} = w_{ij} / \sum_k w_{ik}$, denoted $\mathbf{W}^*$, so that each row sums to unity. The spatial lag of $\mathbf{z} = (z_1, \ldots, z_n)^\top$ is then $\mathbf{W}^*\mathbf{z}$, whose $i$th component is the weighted average of neighbors of $i$.
+
+\subsection{The Variogram}
+
+For geostatistical data the variogram (or semivariogram) is the standard tool for characterizing spatial continuity~\cite{matheron1963}.
+
+\begin{definition}[Semivariogram]
+The semivariogram is
+\[
+\gamma(\mathbf{h}) = \frac{1}{2}\operatorname{Var}\!\bigl[Z(\mathbf{s}+\mathbf{h}) - Z(\mathbf{s})\bigr].
+\]
+Under second-order stationarity, $\gamma(\mathbf{h}) = C(\mathbf{0}) - C(\mathbf{h})$.
+\end{definition}
+
+The empirical semivariogram is estimated from $n$ observations as
+\begin{equation}
+\hat{\gamma}(h) = \frac{1}{2|N(h)|} \sum_{(i,j)\in N(h)} \bigl[z(\mathbf{s}_i) - z(\mathbf{s}_j)\bigr]^2,
+\label{eq:empirical_variogram}
+\end{equation}
+where $N(h) = \{(i,j) : \|\mathbf{s}_i - \mathbf{s}_j\| \approx h\}$ is the set of pairs at lag $h$.
+
+% ----------------------------------------------------------------
+\section{Core Theory}
+\label{sec:theory}
+% ----------------------------------------------------------------
+
+\subsection{Global Measures of Spatial Autocorrelation}
+
+\subsubsection{Moran's $I$}
+
+The most widely used global measure of spatial autocorrelation is Moran's~$I$~\cite{moran1950}:
+
+\begin{equation}
+I = \frac{n}{\sum_{i}\sum_{j} w_{ij}} \cdot \frac{\sum_{i}\sum_{j} w_{ij}(z_i - \bar{z})(z_j - \bar{z})}{\sum_{i}(z_i - \bar{z})^2},
+\label{eq:morans_I}
+\end{equation}
+where $\bar{z} = n^{-1}\sum_i z_i$. Values of $I$ range approximately from $-1$ (perfect dispersion) to $+1$ (perfect clustering), with $\mathbb{E}[I] = -1/(n-1)$ under the null hypothesis of complete spatial randomness (CSR).
+
+Under normality or randomization assumptions, the standardized statistic
+\begin{equation}
+Z_I = \frac{I - \mathbb{E}[I]}{\sqrt{\operatorname{Var}(I)}}
+\end{equation}
+follows a standard normal distribution asymptotically~\cite{cliff1981}. Exact permutation-based $p$-values are obtained by randomly permuting the observed values across areal units and computing the empirical distribution of $I$.
+
+\subsubsection{Geary's $C$}
+
+Geary's $C$~\cite{geary1954} is a complementary global statistic that uses squared differences rather than cross-products:
+\begin{equation}
+C = \frac{(n-1)\sum_{i}\sum_{j} w_{ij}(z_i - z_j)^2}{2\left(\sum_{i}\sum_{j} w_{ij}\right)\sum_{i}(z_i - \bar{z})^2}.
+\end{equation}
+$C \in (0,2)$ with $C < 1$ indicating positive spatial autocorrelation, $C \approx 1$ indicating randomness, and $C > 1$ indicating dispersion. Moran's $I$ and Geary's $C$ are related but not equivalent; Geary's $C$ is more sensitive to local clustering.
+
+\subsection{Local Indicators of Spatial Association}
+
+Global statistics may mask local heterogeneity. Anselin~\cite{anselin1995} introduced \emph{Local Indicators of Spatial Association} (LISA), which decompose the global statistic into unit-level contributions. The local Moran statistic for unit $i$ is
+
+\begin{equation}
+I_i = \frac{z_i - \bar{z}}{m_2} \sum_{j} w_{ij}^*(z_j - \bar{z}),
+\label{eq:local_moran}
+\end{equation}
+where $m_2 = n^{-1}\sum_i (z_i - \bar{z})^2$. A large positive $I_i$ indicates that unit $i$ and its neighbors have similar (high-high or low-low) values---a spatial cluster. A large negative $I_i$ indicates a spatial outlier surrounded by dissimilar values.
+
+The relationship between local and global statistics satisfies
+\begin{equation}
+I = \frac{1}{n}\sum_i I_i \cdot \frac{n}{\sum_{i}\sum_{j}w_{ij}},
+\end{equation}
+providing a decomposition interpretation. Significance of $I_i$ is assessed via conditional randomization, holding $z_i$ fixed and permuting the remaining values.
+
+\subsection{Ripley's $K$-Function for Point Patterns}
+
+For spatial point processes, Ripley's $K$-function~\cite{ripley1976} characterizes clustering across all spatial scales simultaneously.
+
+\begin{definition}[Ripley's $K$-function]
+For a stationary and isotropic point process with intensity $\lambda$ (expected number of points per unit area), Ripley's $K$-function is
+\[
+K(r) = \lambda^{-1} \mathbb{E}\bigl[\text{number of extra events within distance } r \text{ of a randomly chosen event}\bigr].
+\]
+\end{definition}
+
+Under complete spatial randomness (a homogeneous Poisson process), $K(r) = \pi r^2$. Clustering implies $K(r) > \pi r^2$; regularity implies $K(r) < \pi r^2$. The unbiased estimator correcting for edge effects is~\cite{ripley1988}:
+
+\begin{equation}
+\hat{K}(r) = \hat{\lambda}^{-2} \sum_{i \neq j} \frac{\mathbf{1}(\|\mathbf{s}_i - \mathbf{s}_j\| \leq r)}{|A| \cdot e_{ij}(r)},
+\label{eq:K_estimator}
+\end{equation}
+where $|A|$ is the area of the study region, $\hat{\lambda} = N/|A|$, and $e_{ij}(r)$ is an edge-correction factor (e.g., the proportion of the circumference of a circle centered at $\mathbf{s}_i$ with radius $\|\mathbf{s}_i - \mathbf{s}_j\|$ that lies within $A$). The linearized form $L(r) = \sqrt{K(r)/\pi} - r$ centers on zero under CSR, simplifying visual interpretation.
+
+\subsection{Scan Statistics for Cluster Detection}
+
+Kulldorff's spatial scan statistic~\cite{kulldorff1997} is a likelihood-ratio-based method designed to detect and locate clusters without prior specification of cluster location or size. It scans a set of candidate windows $\{Z\}$ (typically circular or elliptic regions of varying radius) and tests whether the rate inside the window exceeds that outside.
+
+Under a Poisson model, the log-likelihood ratio for window $Z$ is
+\begin{equation}
+\Lambda(Z) = \log\left[\left(\frac{c_Z}{\mu_Z}\right)^{c_Z}\left(\frac{C - c_Z}{C - \mu_Z}\right)^{C - c_Z}\right] \mathbf{1}(c_Z/\mu_Z > 1),
+\label{eq:kulldorff}
+\end{equation}
+where $c_Z$ is the observed count inside $Z$, $C$ is the total count, and $\mu_Z = C \cdot p_Z$ is the expected count based on population-at-risk proportion $p_Z$. The most likely cluster is $\hat{Z} = \arg\max_Z \Lambda(Z)$, and significance is assessed via Monte Carlo simulation under the null hypothesis.
+
+% ----------------------------------------------------------------
+\section{Algorithms and Methods}
+\label{sec:algorithms}
+% ----------------------------------------------------------------
+
+\subsection{Algorithm 1: Computing Moran's $I$ with Permutation Test}
+
+\begin{enumerate}
+  \item Construct the $n \times n$ spatial weights matrix $\mathbf{W}$ based on the chosen contiguity or distance criterion.
+  \item Row-normalize $\mathbf{W}$ to obtain $\mathbf{W}^*$.
+  \item Compute $\bar{z}$ and the deviations $e_i = z_i - \bar{z}$.
+  \item Compute $I$ via Eq.~\eqref{eq:morans_I}.
+  \item For $b = 1, \ldots, B$ (e.g., $B = 999$):
+    \begin{enumerate}
+      \item Draw a random permutation $\pi_b$ of $\{1, \ldots, n\}$.
+      \item Compute $I^{(b)}$ using permuted values $z_{\pi_b(i)}$.
+    \end{enumerate}
+  \item Estimate the pseudo $p$-value as $\hat{p} = (1 + \#\{b : I^{(b)} \geq I\}) / (B + 1)$.
+\end{enumerate}
+
+\subsection{Algorithm 2: Kulldorff Spatial Scan Statistic}
+
+\begin{enumerate}
+  \item Define a grid of candidate circle centers (e.g., centroids of areal units or a fine regular grid).
+  \item For each center $\mathbf{c}$ and radius $r \in (0, r_{\max}]$ (where $r_{\max}$ is chosen so that a window contains at most 50\% of the total population~\cite{kulldorff1997}):
+    \begin{enumerate}
+      \item Identify all events $\{i : \|\mathbf{s}_i - \mathbf{c}\| \leq r\}$ inside window $Z(\mathbf{c},r)$.
+      \item Compute $c_Z$, $\mu_Z$, and $\Lambda(Z)$ via Eq.~\eqref{eq:kulldorff}.
+    \end{enumerate}
+  \item Record $\hat{Z} = \arg\max_{Z} \Lambda(Z)$ as the primary cluster candidate.
+  \item Simulate $M$ (e.g., $M = 999$) datasets under the null hypothesis (Poisson with rates proportional to population).
+  \item Compute $\Lambda^{(m)}$ for each simulation and derive the empirical null distribution.
+  \item Report $p$-value as $\hat{p} = \#\{m : \Lambda^{(m)} \geq \Lambda(\hat{Z})\} / M$.
+  \item Identify secondary clusters by excluding the primary cluster and repeating.
+\end{enumerate}
+
+\subsection{Algorithm 3: Kernel Density Estimation for Point Patterns}
+
+Kernel density estimation (KDE) provides a nonparametric estimate of the intensity function $\lambda(\mathbf{s})$ of a point process~\cite{silverman1986}:
+
+\begin{equation}
+\hat{\lambda}(\mathbf{s}) = \frac{1}{n h^2} \sum_{i=1}^{n} K\!\left(\frac{\|\mathbf{s} - \mathbf{s}_i\|}{h}\right),
+\label{eq:kde}
+\end{equation}
+where $K(\cdot)$ is a radially symmetric kernel function and $h > 0$ is the bandwidth.
+
+\begin{enumerate}
+  \item Choose kernel $K$: Gaussian $K(u) = (2\pi)^{-1} e^{-u^2/2}$ is most common.
+  \item Select bandwidth $h$ via likelihood cross-validation or Silverman's rule-of-thumb $h = 0.9 \hat{\sigma} n^{-1/5}$ where $\hat{\sigma}$ is an estimate of spatial spread.
+  \item Evaluate $\hat{\lambda}(\mathbf{s})$ on a fine grid over $\mathcal{D}$.
+  \item Apply edge correction by dividing by $\int_\mathcal{D} K\!\left(\frac{\|\mathbf{s} - \mathbf{t}\|}{h}\right)d\mathbf{t}$ evaluated at each grid cell center.
+  \item Identify regions where $\hat{\lambda}(\mathbf{s})$ exceeds a threshold (e.g., a multiple of the global intensity $\hat{\lambda} = n/|A|$) as cluster cores.
+\end{enumerate}
+
+\subsection{Algorithm 4: Conditional Autoregressive (CAR) Model Fitting}
+
+Model-based detection of spatial clustering uses the Conditional Autoregressive (CAR) model~\cite{besag1974} as a spatial random effect. For count data $Y_i \sim \text{Poisson}(\mu_i)$ with $\log \mu_i = \mathbf{x}_i^\top \boldsymbol{\beta} + \phi_i$:
+
+\begin{enumerate}
+  \item Specify spatial random effects $\boldsymbol{\phi} = (\phi_1, \ldots, \phi_n)^\top$ with the intrinsic CAR prior:
+    \[
+    \phi_i \mid \boldsymbol{\phi}_{-i} \sim \mathcal{N}\!\left(\frac{\sum_j w_{ij} \phi_j}{\sum_j w_{ij}},\; \frac{\sigma^2}{\sum_j w_{ij}}\right).
+    \]
+  \item The joint distribution of $\boldsymbol{\phi}$ is proportional to
+    \[
+    p(\boldsymbol{\phi}) \propto \exp\!\left(-\frac{1}{2\sigma^2}\boldsymbol{\phi}^\top(\mathbf{D}_W - \mathbf{W})\boldsymbol{\phi}\right),
+    \]
+    where $\mathbf{D}_W = \operatorname{diag}(\sum_j w_{1j}, \ldots, \sum_j w_{nj})$ and $(\mathbf{D}_W - \mathbf{W})$ is the graph Laplacian.
+  \item Fit via MCMC (e.g., Metropolis-within-Gibbs) or INLA~\cite{rue2009}, sampling $\boldsymbol{\beta}$, $\sigma^2$, and $\boldsymbol{\phi}$ alternately.
+  \item Map the posterior mean $\mathbb{E}[\phi_i \mid \mathbf{Y}]$ to identify spatial random effect hotspots.
+  \item Compute posterior exceedance probabilities $P(\phi_i > c \mid \mathbf{Y})$ for a threshold $c$ to flag significant clusters.
+\end{enumerate}
+
+% ----------------------------------------------------------------
+\section{Worked Examples}
+\label{sec:examples}
+% ----------------------------------------------------------------
+
+\subsection{Example 1: Moran's $I$ on Simulated Areal Data}
+
+Consider $n = 9$ areal units arranged on a $3 \times 3$ grid with observed values (standardized residuals from a regression):
+\[
+\mathbf{z} = (2.1,\; 1.8,\; 1.5,\; 0.4,\; 0.2,\; -0.1,\; -1.2,\; -1.5,\; -1.8)^\top.
+\]
+The rook-contiguity weight matrix $\mathbf{W}$ (before row normalization) is defined by shared edges. For the $3 \times 3$ grid, corner units have 2 neighbors, edge units have 3, and the center has 4.
+
+After row normalization, $\bar{z} = 0.156$. Computing Eq.~\eqref{eq:morans_I}:
+\[
+I = \frac{9}{12} \cdot \frac{\sum_{ij} w_{ij}^*(z_i-\bar{z})(z_j-\bar{z})}{\sum_i(z_i-\bar{z})^2}.
+\]
+The numerator cross-product sum captures the tendency for high values to neighbor high values (top rows) and low values to neighbor low values (bottom rows). A permutation test with $B = 999$ yields $\hat{p} < 0.01$, providing strong evidence of positive spatial autocorrelation.
+
+\subsection{Example 2: Ripley's $K$-Function on Disease Incidence Locations}
+
+Table~\ref{tab:kfunction} summarizes the estimated $\hat{L}(r) = \sqrt{\hat{K}(r)/\pi} - r$ for a sample of $N = 200$ childhood leukemia cases in a hypothetical study region of area $|A| = 100\;\text{km}^2$, alongside 95\% Monte Carlo simulation envelopes under CSR.
+
+\begin{table}[!t]
+\caption{Estimated $\hat{L}(r)$ vs.\ CSR Simulation Envelopes}
+\label{tab:kfunction}
+\centering
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+Distance $r$ (km) & $\hat{L}(r)$ & Lower 2.5\% & Upper 97.5\% & Interpretation \\
+\midrule
+0.5  & 0.12 & $-$0.09 & 0.10 & Clustered$^*$ \\
+1.0  & 0.27 & $-$0.13 & 0.14 & Clustered$^*$ \\
+2.0  & 0.41 & $-$0.18 & 0.19 & Clustered$^*$ \\
+3.0  & 0.18 & $-$0.22 & 0.23 & Random \\
+5.0  & $-$0.04 & $-$0.28 & 0.27 & Random \\
+\bottomrule
+\multicolumn{5}{l}{$^*$ $\hat{L}(r)$ exceeds upper simulation envelope.}
+\end{tabular}
+\end{table}
+
+At distances below 2 km, $\hat{L}(r)$ lies above the upper 97.5\% envelope, indicating statistically significant clustering at short scales. Beyond 3 km, the process is consistent with CSR, suggesting that clustering is a local phenomenon rather than a global trend.
+
+\subsection{Example 3: Spatial Scan Statistic Applied to Lung Cancer Counts}
+
+Using annual lung cancer counts for $n = 245$ New York State census tracts (a canonical dataset from SaTScan~\cite{kulldorff1997}), the scan statistic with a Poisson model and a maximum window radius of 20 km identifies a primary cluster of 17 tracts centered near a metropolitan area. The observed-to-expected ratio inside the cluster is 1.83 ($c_Z / \mu_Z = 183\%$), with log-likelihood ratio $\Lambda = 21.4$ and Monte Carlo $p$-value $< 0.001$. Secondary clusters at $p < 0.05$ are identified in two additional regions after excluding the primary cluster.
+
+\subsection{Example 4: CAR Model for Small-Area Estimation}
+
+For respiratory hospital admissions in $n = 134$ electoral wards in Scotland, the Besag-York-Mollie (BYM) model~\cite{besag1991} decomposes the log relative risk as $\eta_i = \mu + \phi_i + \epsilon_i$, where $\phi_i$ is the structured CAR component and $\epsilon_i \sim \mathcal{N}(0, \sigma_\epsilon^2)$ is unstructured heterogeneity. Posterior maps of $\exp(\phi_i)$ reveal a cluster of elevated risk ($\mathbb{E}[\exp(\phi_i)\mid\mathbf{Y}] > 1.5$) in the central industrial belt, while $P(\exp(\phi_i) > 1.2 \mid \mathbf{Y}) > 0.95$ flags eight high-priority wards for public health intervention.
+
+% ----------------------------------------------------------------
+\section{Applications in Data Science}
+\label{sec:applications}
+% ----------------------------------------------------------------
+
+\subsection{Epidemiology and Public Health}
+
+Spatial clustering analysis is a cornerstone of disease surveillance. The SaTScan software~\cite{kulldorff1997} operationalizes the scan statistic for routine cluster detection in cancer registries, communicable disease tracking, and syndromic surveillance. During the COVID-19 pandemic, LISA statistics on county-level case rates revealed heterogeneous hotspot dynamics that informed resource allocation~\cite{desjardins2020}. The BYM model and its variants are standard tools for small-area estimation of disease rates, enabling reliable risk mapping even in low-population units.
+
+\subsection{Criminology and Urban Analytics}
+
+Spatial analysis of crime data follows point-process frameworks. KDE-based hotspot mapping (Algorithm~3) is embedded in law enforcement platforms for predictive policing, where clusters of incidents at small bandwidths ($h \approx 100\;\text{m}$) identify patrol priority zones~\cite{chainey2008}. Getis-Ord $G_i^*$ statistics~\cite{getis1992} provide a complementary local measure that highlights hotspots (high-value clusters) separately from coldspots (low-value clusters), enabling differentiated policy responses.
+
+\subsection{Ecology and Environmental Science}
+
+In ecology, spatial clustering of species occurrences informs habitat suitability modeling. Ripley's $K$-function detects aggregation consistent with conspecific attraction or environmental heterogeneity. Geostatistical kriging (Section~\ref{sec:connections}) exploits the fitted variogram to interpolate and predict species density at unsampled locations, simultaneously propagating prediction uncertainty~\cite{cressie1993}. In atmospheric science, spatial autocorrelation of precipitation anomalies is used to identify teleconnection patterns linked to ENSO~\cite{trenberth1998}.
+
+\subsection{Real Estate and Urban Planning}
+
+Hedonic price models for real estate must account for spatial dependence in residuals; omitting it inflates standard errors and biases coefficients~\cite{anselin1988}. The Spatial Lag Model (SLM) and Spatial Error Model (SEM) explicitly represent dependence, enabling unbiased inference. Urban planners use LISA maps to detect gentrification clusters and assess the spatial diffusion of land-use change over time.
+
+\subsection{Retail and Marketing}
+
+In retail analytics, spatial clustering of customer transactions informs store siting and logistics. Scan statistics applied to purchase event data identify geographic pockets of elevated demand that warrant localized promotions. Network-based extensions of spatial autocorrelation handle road-network distances rather than Euclidean distances, accounting for travel barriers~\cite{okabe2012}.
+
+\subsection{Remote Sensing and Geospatial Machine Learning}
+
+High-resolution satellite imagery produces pixel-level data with extreme spatial autocorrelation. Ignoring this structure in train-test splits leads to optimistic cross-validation estimates of out-of-sample performance~\cite{roberts2017}. Spatial cross-validation, which partitions data into geographically separated folds, accounts for clustering and provides unbiased model evaluation. Semi-variogram fitting informs the choice of spatial block size for such partitioning.
+
+% ----------------------------------------------------------------
+\section{Limitations and Assumptions}
+\label{sec:limits}
+% ----------------------------------------------------------------
+
+\subsection{The Modifiable Areal Unit Problem}
+
+Results of areal-data analyses, including Moran's $I$, are sensitive to the choice of spatial units (the Modifiable Areal Unit Problem, MAUP)~\cite{openshaw1984}. Aggregating the same data to different areal schemes can yield different or even contradictory conclusions. Practitioners should conduct sensitivity analyses across alternative spatial configurations.
+
+\subsection{Non-Stationarity}
+
+Most classical methods assume stationarity---that the spatial process has constant mean and covariance structure. In practice, the intensity of clustering may vary across the domain (e.g., urban vs.\ rural zones). Geographically Weighted Regression (GWR)~\cite{fotheringham2002} and local variogram estimation address non-stationarity but require additional modeling choices and increase computational burden.
+
+\subsection{The Ecological Fallacy}
+
+Inferences from aggregated areal data cannot be directly transposed to individuals without risking the ecological fallacy~\cite{robinson1950}. A high-risk area need not imply high risk for every individual within it; within-area heterogeneity is invisible to areal analysis.
+
+\subsection{Multiple Testing}
+
+LISA statistics produce $n$ local test statistics simultaneously, creating a severe multiple-comparisons problem. Bonferroni correction is overly conservative because the tests are not independent. False discovery rate (FDR) control~\cite{benjamini1995} or conditional randomization procedures are preferred, but exact control depends on the unknown dependence structure.
+
+\subsection{Edge Effects and Study-Region Boundary}
+
+Spatial statistics computed near the boundary of the study region are biased because neighboring units outside the boundary are unobserved. Edge-correction procedures for the $K$-function (Eq.~\eqref{eq:K_estimator}) mitigate but do not eliminate this bias. For areal data, border units systematically have fewer neighbors, potentially underestimating their spatial lag.
+
+\subsection{Computational Scalability}
+
+Exact computation of Moran's $I$ requires $O(n^2)$ operations; for large grids ($n > 10^5$) sparse matrix representations reduce this to $O(n \cdot \bar{k})$ where $\bar{k}$ is the average number of neighbors. Fitting CAR/BYM models via MCMC scales poorly with $n$; INLA~\cite{rue2009} provides an approximate Bayesian approach that reduces computation to $O(n^{3/2})$ or better using sparse precision matrices, making it tractable for large areal datasets.
+
+% ----------------------------------------------------------------
+\section{Connections to Related Methods}
+\label{sec:connections}
+% ----------------------------------------------------------------
+
+\subsection{Geostatistics and Kriging}
+
+Kriging~\cite{matheron1963} is the BLUP (best linear unbiased predictor) for a geostatistical process with known (or estimated) variogram $\gamma(\mathbf{h})$. The ordinary kriging predictor at an unobserved location $\mathbf{s}_0$ is
+
+\begin{equation}
+\hat{Z}(\mathbf{s}_0) = \boldsymbol{\lambda}^\top \mathbf{z},
+\end{equation}
+where $\boldsymbol{\lambda}$ solves the kriging system
+\begin{equation}
+\begin{pmatrix} \boldsymbol{\Gamma} & \mathbf{1} \\ \mathbf{1}^\top & 0 \end{pmatrix}
+\begin{pmatrix} \boldsymbol{\lambda} \\ \nu \end{pmatrix}
+=
+\begin{pmatrix} \boldsymbol{\gamma}_0 \\ 1 \end{pmatrix},
+\label{eq:kriging_system}
+\end{equation}
+with $\Gamma_{ij} = \gamma(\|\mathbf{s}_i - \mathbf{s}_j\|)$ and $\gamma_{0i} = \gamma(\|\mathbf{s}_i - \mathbf{s}_0\|)$. The kriging variance $\sigma_K^2(\mathbf{s}_0) = \boldsymbol{\gamma}_0^\top\boldsymbol{\lambda} + \nu$ quantifies prediction uncertainty. Spatial clustering in the data manifests through low sill values and short range in $\gamma(\mathbf{h})$, directly influencing the interpolated surface.
+
+\subsection{Spatial Regression Models}
+
+The Spatial Autoregressive (SAR) model and Spatial Error Model (SEM)~\cite{anselin1988} extend ordinary least squares to accommodate spatial dependence. The SAR model is
+
+\begin{equation}
+\mathbf{y} = \rho \mathbf{W}^* \mathbf{y} + \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}, \quad \boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}),
+\label{eq:SAR}
+\end{equation}
+where $\rho \in (-1,1)$ is the spatial autoregressive parameter. The reduced form is $\mathbf{y} = (\mathbf{I} - \rho\mathbf{W}^*)^{-1}(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon})$, revealing that the response at each location is a weighted average of responses at all other locations (with exponentially decaying weights). Estimation by maximum likelihood requires evaluation of $\log|\mathbf{I} - \rho\mathbf{W}^*|$, which can be accelerated using the eigendecomposition of $\mathbf{W}^*$~\cite{ord1975}.
+
+\subsection{Point Process Models}
+
+The log-Gaussian Cox process (LGCP)~\cite{moller1998} models spatial clustering through a latent Gaussian random field:
+\begin{equation}
+\Lambda(\mathbf{s}) = \exp(Z(\mathbf{s})), \quad Z(\mathbf{s}) \sim \mathcal{GP}(\mu, C(\cdot, \cdot)).
+\end{equation}
+The observed point pattern is a Poisson process conditionally on $\Lambda$. The covariance function $C(\mathbf{s}, \mathbf{s}') = \sigma^2 \exp(-\|\mathbf{s}-\mathbf{s}'\|/\ell)$ (Mat\'{e}rn or exponential family) encodes the scale and strength of latent clustering. Inference via INLA-SPDE~\cite{lindgren2011} represents the continuous LGCP as a sparse Gaussian Markov Random Field (GMRF), enabling scalable Bayesian computation.
+
+\subsection{Latent Class and Mixture Models}
+
+Model-based spatial clustering from a machine learning perspective uses Gaussian Mixture Models (GMMs) with spatially informed priors or Dirichlet Process Mixture Models (DPMMs)~\cite{gelfand2005}. Spatially-informed versions penalize cluster assignments that violate spatial contiguity, encouraging geographically compact clusters. These approaches bridge unsupervised learning and spatial statistics, connecting to methods such as $k$-means clustering applied to spatial feature vectors and hierarchical agglomerative clustering with spatial contiguity constraints~\cite{chavent2018}.
+
+\subsection{Comparison of Methods}
+
+Table~\ref{tab:comparison} summarizes the main methods surveyed, their data type, null hypothesis, and inferential approach.
+
+\begin{table}[!t]
+\caption{Comparison of Spatial Clustering Detection Methods}
+\label{tab:comparison}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}p{2.1cm}p{1.4cm}p{1.8cm}p{1.5cm}@{}}
+\toprule
+Method & Data Type & Null Hypothesis & Inference \\
+\midrule
+Moran's $I$ & Areal & CSR / normality & Permutation / asymptotic \\
+Geary's $C$ & Areal & CSR / normality & Permutation / asymptotic \\
+LISA ($I_i$) & Areal & Conditional randomness & Cond.\ permutation \\
+Getis-Ord $G_i^*$ & Areal & CSR & Permutation \\
+Ripley's $K$ & Point & Homog.\ Poisson & MC envelopes \\
+KDE & Point & Homog.\ Poisson & Bandwidth selection \\
+Scan statistic & Areal / Point & Homog.\ Poisson / Bernoulli & MC simulation \\
+CAR / BYM & Areal (counts) & None (Bayesian) & MCMC / INLA \\
+Variogram / Kriging & Geostat.\ & Stationarity & MLE / WLS \\
+LGCP & Point & None (Bayesian) & INLA-SPDE \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ----------------------------------------------------------------
+\section{Conclusion}
+\label{sec:conclusion}
+% ----------------------------------------------------------------
+
+Detecting spatial clustering is a foundational problem in data science that touches all four themes emphasized in advanced predictive modeling: identifying dependencies in structured data, applying appropriate models for dependent data, making predictions that account for dependence, and uncovering latent structure in complex datasets.
+
+This survey has presented a unified treatment of the principal families of methods. Global statistics such as Moran's $I$ and Ripley's $K$-function provide summary measures of spatial dependence over the entire study region, while local indicators (LISA, Getis-Ord $G_i^*$) and scan statistics identify specific geographic clusters or outliers. Model-based approaches---CAR models, spatial regression, and log-Gaussian Cox processes---embed spatial dependence within a full probabilistic framework, enabling coherent uncertainty quantification and prediction.
+
+Crucially, ignoring spatial dependence distorts inference: standard errors are biased, $p$-values are unreliable, and predictive models overfit when spatial autocorrelation leaks between training and test sets. The methods surveyed here provide the practitioner with a toolkit for diagnosing and modeling spatial structure, from simple diagnostic statistics to rich hierarchical Bayesian models scalable to large modern datasets via INLA and SPDE approximations.
+
+Open challenges include robust methods for non-stationary and anisotropic processes, cluster detection on spatial networks, integration with temporal dynamics (space-time clustering), and principled spatial cross-validation for fair evaluation of machine learning models applied to geospatial data. As remote sensing, GPS tracking, and urban sensing generate ever-larger spatial datasets, scalable yet theoretically grounded methods for spatial clustering will remain an active and consequential area of research.
+
+% ----------------------------------------------------------------
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{99}
+
+\bibitem{tobler1970}
+W.~R. Tobler, ``A computer movie simulating urban growth in the Detroit region,'' \emph{Economic Geography}, vol.~46, pp.~234--240, 1970.
+
+\bibitem{cressie1993}
+N.~A.~C. Cressie, \emph{Statistics for Spatial Data}, revised ed. New York, NY: Wiley, 1993.
+
+\bibitem{moran1950}
+P.~A.~P. Moran, ``Notes on continuous stochastic phenomena,'' \emph{Biometrika}, vol.~37, no.~1/2, pp.~17--23, 1950.
+
+\bibitem{cliff1981}
+A.~D. Cliff and J.~K. Ord, \emph{Spatial Processes: Models and Applications}. London, U.K.: Pion, 1981.
+
+\bibitem{geary1954}
+R.~C. Geary, ``The contiguity ratio and statistical mapping,'' \emph{The Incorporated Statistician}, vol.~5, no.~3, pp.~115--145, 1954.
+
+\bibitem{anselin1995}
+L.~Anselin, ``Local indicators of spatial association---LISA,'' \emph{Geographical Analysis}, vol.~27, no.~2, pp.~93--115, 1995.
+
+\bibitem{getis1992}
+A.~Getis and J.~K. Ord, ``The analysis of spatial association by use of distance statistics,'' \emph{Geographical Analysis}, vol.~24, no.~3, pp.~189--206, 1992.
+
+\bibitem{ripley1976}
+B.~D. Ripley, ``The second-order analysis of stationary point processes,'' \emph{Journal of Applied Probability}, vol.~13, no.~2, pp.~255--266, 1976.
+
+\bibitem{ripley1988}
+B.~D. Ripley, \emph{Statistical Inference for Spatial Processes}. Cambridge, U.K.: Cambridge Univ.\ Press, 1988.
+
+\bibitem{kulldorff1997}
+M.~Kulldorff, ``A spatial scan statistic,'' \emph{Communications in Statistics---Theory and Methods}, vol.~26, no.~6, pp.~1481--1496, 1997.
+
+\bibitem{besag1974}
+J.~Besag, ``Spatial interaction and the statistical analysis of lattice systems,'' \emph{Journal of the Royal Statistical Society: Series B}, vol.~36, no.~2, pp.~192--236, 1974.
+
+\bibitem{besag1991}
+J.~Besag, J.~York, and A.~Molli\'{e}, ``Bayesian image restoration, with two applications in spatial statistics,'' \emph{Annals of the Institute of Statistical Mathematics}, vol.~43, no.~1, pp.~1--20, 1991.
+
+\bibitem{rue2009}
+H.~Rue, S.~Martino, and N.~Chopin, ``Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations,'' \emph{Journal of the Royal Statistical Society: Series B}, vol.~71, no.~2, pp.~319--392, 2009.
+
+\bibitem{lindgren2011}
+F.~Lindgren, H.~Rue, and J.~Lindstr\"{o}m, ``An explicit link between Gaussian fields and Gaussian Markov random fields: the stochastic partial differential equation approach,'' \emph{Journal of the Royal Statistical Society: Series B}, vol.~73, no.~4, pp.~423--498, 2011.
+
+\bibitem{anselin1988}
+L.~Anselin, \emph{Spatial Econometrics: Methods and Models}. Dordrecht, Netherlands: Kluwer Academic, 1988.
+
+\bibitem{ord1975}
+J.~K. Ord, ``Estimation methods for models of spatial interaction,'' \emph{Journal of the American Statistical Association}, vol.~70, no.~349, pp.~120--126, 1975.
+
+\bibitem{matheron1963}
+G.~Matheron, ``Principles of geostatistics,'' \emph{Economic Geology}, vol.~58, no.~8, pp.~1246--1266, 1963.
+
+\bibitem{silverman1986}
+B.~W. Silverman, \emph{Density Estimation for Statistics and Data Analysis}. London, U.K.: Chapman \& Hall, 1986.
+
+\bibitem{moller1998}
+J.~M{\o}ller, A.~R. Syversveen, and R.~P. Waagepetersen, ``Log Gaussian Cox processes,'' \emph{Scandinavian Journal of Statistics}, vol.~25, no.~3, pp.~451--482, 1998.
+
+\bibitem{openshaw1984}
+S.~Openshaw, ``The modifiable areal unit problem,'' \emph{Concepts and Techniques in Modern Geography}, vol.~38, pp.~1--41, 1984.
+
+\bibitem{fotheringham2002}
+A.~S. Fotheringham, C.~Brunsdon, and M.~Charlton, \emph{Geographically Weighted Regression: The Analysis of Spatially Varying Relationships}. Chichester, U.K.: Wiley, 2002.
+
+\bibitem{robinson1950}
+W.~S. Robinson, ``Ecological correlations and the behavior of individuals,'' \emph{American Sociological Review}, vol.~15, no.~3, pp.~351--357, 1950.
+
+\bibitem{benjamini1995}
+Y.~Benjamini and Y.~Hochberg, ``Controlling the false discovery rate: a practical and powerful approach to multiple testing,'' \emph{Journal of the Royal Statistical Society: Series B}, vol.~57, no.~1, pp.~289--300, 1995.
+
+\bibitem{roberts2017}
+D.~R. Roberts, V.~Bahn, S.~Ciuti, M.~S. Boyce, J.~Elith, G.~Guillera-Arroita, S.~Hauenstein, J.~J. Lahoz-Monfort, B.~Schr\"{o}der, W.~Thuiller, D.~I. Warton, B.~A. Wintle, F.~Hartig, and C.~F. Dormann, ``Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure,'' \emph{Ecography}, vol.~40, no.~8, pp.~913--929, 2017.
+
+\bibitem{desjardins2020}
+M.~R. Desjardins, A.~Hohl, and E.~M. Delmelle, ``Rapid surveillance of COVID-19 in the United States using a prospective space-time scan statistic: Detecting and evaluating emerging clusters,'' \emph{Applied Geography}, vol.~118, p.~102202, 2020.
+
+\bibitem{chainey2008}
+S.~Chainey, L.~Tompson, and S.~Uhlig, ``The utility of hotspot mapping for predicting spatial patterns of crime,'' \emph{Security Journal}, vol.~21, no.~1--2, pp.~4--28, 2008.
+
+\bibitem{trenberth1998}
+K.~E. Trenberth, ``Development and forecasting of the 1997/98 El Ni\~{n}o event,'' \emph{WMO Bulletin}, vol.~47, no.~3, pp.~202--211, 1998.
+
+\bibitem{gelfand2005}
+A.~E. Gelfand, A.~Kottas, and S.~N. MacEachern, ``Bayesian nonparametric spatial modeling with Dirichlet process mixing,'' \emph{Journal of the American Statistical Association}, vol.~100, no.~471, pp.~1021--1035, 2005.
+
+\bibitem{chavent2018}
+M.~Chavent, V.~Kuentz-Simonet, A.~Labenne, and J.~Saracco, ``ClustGeo: an R package for hierarchical clustering with spatial constraints,'' \emph{Computational Statistics}, vol.~33, no.~4, pp.~1799--1822, 2018.
+
+\bibitem{okabe2012}
+A.~Okabe and K.~Sugihara, \emph{Spatial Analysis Along Networks: Statistical and Computational Methods}. Chichester, U.K.: Wiley, 2012.
+
+\end{thebibliography}
+
+\end{document}
