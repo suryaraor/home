@@ -1,0 +1,27 @@
+Create detailed research paper on the topic listed at the end.
+provide a full length context, deep dive on the concept from basics, examples, review and need not to provide any new contribution.
+give the output text in latex format
+Use this for author section
+
+\author{\IEEEauthorblockN{Surya Rao Rayarao}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+suryarao.r@utexas.edu}
+\and
+\IEEEauthorblockN{Naga Donikena}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+naga.donikena@utexas.edu}
+}
+
+Topic Name:  Data Science - Advance Predictive Models
+
+Topics to discuss
+How to identify different types of dependencies in structured data
+How to apply appropriate models for dependent data
+How to make forecasts/predictions that account for dependence and structure
+How to identify latent structure in complex data

@@ -1234,7 +1234,7 @@
             'Summer 2027': new Date('2027-08-15'),
             'Fall 2027': new Date('2027-12-20')
         };
-        const now = new Date('2025-08-19'); // Use current date from context
+        const now = new Date('2026-06-02'); // Current date
         document.querySelectorAll('.timeline .timeline-item').forEach(function(item) {
             const dateDiv = item.querySelector('.timeline-date');
             if (!dateDiv) return;
@@ -1261,42 +1261,7 @@
                     "program": "UT Austin MSDS",
                     "totalCourses": 10,
                     "semesterPlan": {
-                        "spring 2026": [
-                            {
-                                "id": "data-structures",
-                                "title": "Data Structures & Algorithms",
-                                "code": "DSC 395T",
-                                "type": "foundational",
-                                "credits": 3,
-                                "difficulty": 3,
-                                "workload": 18,
-                                "rating": 3,
-                                "recommendation": "caution"
-                            },
-                            {
-                                "id": "health-data",
-                                "title": "Data Science in Healthcare Discovery and Innovation",
-                                "code": "DSC 395T",
-                                "type": "elective-1",
-                                "credits": 3,
-                                "difficulty": 3.5,
-                                "workload": 16,
-                                "rating": 3.5,
-                                "recommendation": "caution"
-                            }
-                        ],
                         "fall 2024": [
-                            {
-                                "id": "probability-inference",
-                                "title": "Probability & Simulation Based Inference for Data Science",
-                                "code": "DSC 381",
-                                "type": "foundational",
-                                "credits": 3,
-                                "difficulty": 3.5,
-                                "workload": 18,
-                                "rating": 3.5,
-                                "recommendation": "recommend"
-                            },
                             {
                                 "id": "data-exploration",
                                 "title": "Data Exploration, Visualization & Foundations of Unsupervised Learning",
@@ -1306,20 +1271,20 @@
                                 "difficulty": 2.5,
                                 "workload": 12,
                                 "rating": 4,
-                                "recommendation": "recommend"
-                            }
-                        ],
-                        "fall 2025": [
+                                "recommendation": "recommend",
+                                "status": "completed"
+                            },
                             {
-                                "id": "deep-learning",
-                                "title": "Deep Learning",
-                                "code": "DSC 394D",
-                                "type": "required",
+                                "id": "probability-inference",
+                                "title": "Probability & Simulation Based Inference for Data Science",
+                                "code": "DSC 381",
+                                "type": "foundational",
                                 "credits": 3,
-                                "difficulty": 4,
-                                "workload": 24,
-                                "rating": 4,
-                                "recommendation": "recommend"
+                                "difficulty": 3.5,
+                                "workload": 18,
+                                "rating": 3.5,
+                                "recommendation": "recommend",
+                                "status": "completed"
                             }
                         ],
                         "spring 2025": [
@@ -1332,46 +1297,8 @@
                                 "difficulty": 3.5,
                                 "workload": 18,
                                 "rating": 3.5,
-                                "recommendation": "recommend"
-                            }
-                        ],
-                        "fall 2026": [
-                            {
-                                "id": "nlp",
-                                "title": "Natural Language Processing",
-                                "code": "DSC 395T",
-                                "type": "elective-2",
-                                "credits": 3,
-                                "difficulty": 3.5,
-                                "workload": 18,
-                                "rating": 4,
-                                "recommendation": "recommend"
-                            }
-                        ],
-                        "summer 2026": [
-                            {
-                                "id": "advanced-predictive",
-                                "title": "Advanced Predictive Models for Complex Data",
-                                "code": "DSC 383",
-                                "type": "elective-1",
-                                "credits": 3,
-                                "difficulty": 4,
-                                "workload": 18,
-                                "rating": 3.5,
-                                "recommendation": "recommend"
-                            }
-                        ],
-                        "spring 2027": [
-                            {
-                                "id": "generative-ai",
-                                "title": "Advances in Deep Generative Models (Generative AI)",
-                                "code": "DSC 395T",
-                                "type": "elective-2",
-                                "credits": 3,
-                                "difficulty": 4.5,
-                                "workload": 18,
-                                "rating": 4.6,
-                                "recommendation": "recommend"
+                                "recommendation": "recommend",
+                                "status": "completed"
                             }
                         ],
                         "summer 2025": [
@@ -1384,7 +1311,90 @@
                                 "difficulty": 3,
                                 "workload": 16,
                                 "rating": 3.5,
-                                "recommendation": "recommend"
+                                "recommendation": "recommend",
+                                "status": "completed"
+                            }
+                        ],
+                        "fall 2025": [
+                            {
+                                "id": "deep-learning",
+                                "title": "Deep Learning",
+                                "code": "DSC 394D",
+                                "type": "required",
+                                "credits": 3,
+                                "difficulty": 4,
+                                "workload": 24,
+                                "rating": 4,
+                                "recommendation": "recommend",
+                                "status": "completed"
+                            }
+                        ],
+                        "spring 2026": [
+                            {
+                                "id": "principles-ds",
+                                "title": "Principles of Data Science",
+                                "code": "DSC 394T",
+                                "type": "elective-1",
+                                "credits": 3,
+                                "difficulty": 3.3,
+                                "workload": 12,
+                                "rating": 4,
+                                "recommendation": "caution",
+                                "status": "completed"
+                            }
+                        ],
+                        "summer 2026": [
+                            {
+                                "id": "advanced-predictive",
+                                "title": "Advanced Predictive Models for Complex Data",
+                                "code": "DSC 383",
+                                "type": "elective-1",
+                                "credits": 3,
+                                "difficulty": 4,
+                                "workload": 18,
+                                "rating": 3.5,
+                                "recommendation": "recommend",
+                                "status": "pending"
+                            }
+                        ],
+                        "fall 2026": [
+                            {
+                                "id": "health-data",
+                                "title": "AI In Healthcare",
+                                "code": "DSC 395T",
+                                "type": "elective-1",
+                                "credits": 3,
+                                "difficulty": 3.5,
+                                "workload": 16,
+                                "rating": 3.5,
+                                "recommendation": "caution",
+                                "status": "pending"
+                            },
+                            {
+                                "id": "data-structures",
+                                "title": "Data Structures & Algorithms",
+                                "code": "DSC 395T",
+                                "type": "foundational",
+                                "credits": 3,
+                                "difficulty": 3,
+                                "workload": 18,
+                                "rating": 3,
+                                "recommendation": "caution",
+                                "status": "pending"
+                            }
+                        ],
+                        "spring 2027": [
+                            {
+                                "id": "generative-ai",
+                                "title": "Advances in Deep Generative Models (Generative AI)",
+                                "code": "DSC 395T",
+                                "type": "elective-2",
+                                "credits": 3,
+                                "difficulty": 4.5,
+                                "workload": 18,
+                                "rating": 4.6,
+                                "recommendation": "recommend",
+                                "status": "pending"
                             }
                         ]
                     },
@@ -1545,20 +1555,20 @@
                 </h2>
                 <div class="progress-container">
                     <div class="progress-item">
-                        <span class="progress-number">Summer</span>
-                        <div class="progress-label">Current Semester</div>
+                        <span class="progress-number">Summer 2026</span>
+                        <div class="progress-label">Next Semester</div>
                     </div>
                     <div class="progress-item">
-                        <span class="progress-number">12</span>
-                        <div class="progress-label">Credit Hours (In Progress)</div>
+                        <span class="progress-number">18</span>
+                        <div class="progress-label">Credit Hours Completed (6 of 10 Courses)</div>
                     </div>
                     <div class="progress-item">
-                        <span class="progress-number">4</span>
-                        <div class="progress-label">Courses (3 Complete + 1 Current of 10 Total)</div>
+                        <span class="progress-number">6 / 10</span>
+                        <div class="progress-label">Courses Complete — 4 Remaining</div>
                     </div>
                     <div class="progress-item">
-                        <span class="progress-number">Fall 2027</span>
-                        <div class="progress-label">Expected Graduation (Balanced Plan)</div>
+                        <span class="progress-number">Spring 2027</span>
+                        <div class="progress-label">Expected Graduation</div>
                     </div>
                 </div>
             </section>
@@ -1598,25 +1608,23 @@
                 <div class="recommendation-container">
                     <div class="priority-section">
                         <h3 class="priority-title high-priority">
-                            <i class="fas fa-foundation"></i>
-                            Foundation Phase (Fall 2025 - Spring 2026)
+                            <i class="fas fa-check-circle"></i>
+                            Foundation Phase — COMPLETED (Fall 2024 – Spring 2026)
                         </h3>
                         <div class="course-recommendations">
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Data Structures & Algorithms</h4>
-                                    <span class="course-type">Core Foundation</span>
+                                    <h4>Data Exploration &amp; Visualization + Probability &amp; Inference</h4>
+                                    <span class="course-type">Fall 2024 ✓</span>
                                 </div>
-                                <p><strong>Why this timing:</strong> Complete all foundational requirements before specializing in AI.</p>
-                                <p><strong>Strategic value:</strong> Essential for understanding AI algorithm implementations and optimizations.</p>
+                                <p>Dual-course launch: built core statistical thinking and data storytelling skills simultaneously.</p>
                             </div>
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Deep Learning</h4>
-                                    <span class="course-type">AI Foundation</span>
+                                    <h4>Machine Learning → Regression → Deep Learning → Principles of DS</h4>
+                                    <span class="course-type">Spring 2025 – Spring 2026 ✓</span>
                                 </div>
-                                <p><strong>Perfect progression:</strong> Builds on ML foundations and prepares for generative AI specialization.</p>
-                                <p><strong>Industry relevance:</strong> Essential for any AI-focused career path.</p>
+                                <p>Sequential mastery from classical ML through cutting-edge deep learning, finishing with data science methodology and ethics.</p>
                             </div>
                         </div>
                     </div>
@@ -1624,16 +1632,16 @@
                     <div class="priority-section">
                         <h3 class="priority-title medium-priority">
                             <i class="fas fa-brain"></i>
-                            Advanced Modeling Phase (Summer 2026)
+                            Advanced Modeling Phase — UPCOMING (Summer 2026)
                         </h3>
                         <div class="course-recommendations">
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Advanced Predictive Models</h4>
-                                    <span class="course-type">Modeling Mastery</span>
+                                    <h4>Advanced Predictive Models for Complex Data</h4>
+                                    <span class="course-type">Summer 2026</span>
                                 </div>
-                                <p><strong>Strategic timing:</strong> Bridges traditional ML and modern AI approaches.</p>
-                                <p><strong>Career impact:</strong> Advanced ensemble methods are highly valued in industry.</p>
+                                <p><strong>Strategic timing:</strong> Bridges classical statistics with modern AI approaches using time series, spatial data, and mixed models.</p>
+                                <p><strong>Career impact:</strong> These real-world modeling techniques are highly valued across all industries.</p>
                             </div>
                         </div>
                     </div>
@@ -1641,32 +1649,23 @@
                     <div class="priority-section">
                         <h3 class="priority-title low-priority">
                             <i class="fas fa-rocket"></i>
-                            AI Specialization Phase (Fall 2026 - Summer 2027)
+                            AI Specialization Phase — UPCOMING (Fall 2026 – Spring 2027)
                         </h3>
                         <div class="course-recommendations">
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Advances in Deep Generative Models</h4>
-                                    <span class="course-type">AI Frontier</span>
+                                    <h4>AI In Healthcare + Data Structures &amp; Algorithms</h4>
+                                    <span class="course-type">Fall 2026</span>
                                 </div>
-                                <p><strong>Perfect timing:</strong> Brand new course covering GANs, VAEs, and diffusion models.</p>
-                                <p><strong>Market advantage:</strong> Generative AI is the hottest field in tech right now!</p>
+                                <p><strong>Applied AI:</strong> Healthcare domain expertise combined with algorithmic foundations for scalable AI systems.</p>
                             </div>
                             <div class="rec-course-item">
                                 <div class="rec-course-header">
-                                    <h4>Design Principles & Causal Inference</h4>
-                                    <span class="course-type">Research Excellence</span>
+                                    <h4>Advances in Deep Generative Models (Generative AI)</h4>
+                                    <span class="course-type">Spring 2027 — Final Course</span>
                                 </div>
-                                <p><strong>Differentiation:</strong> Experimental design skills that separate data scientists from analysts.</p>
-                                <p><strong>Foundation synergy:</strong> Perfectly builds on probability and statistics background.</p>
-                            </div>
-                            <div class="rec-course-item">
-                                <div class="rec-course-header">
-                                    <h4>Optimization</h4>
-                                    <span class="course-type">Mathematical Mastery</span>
-                                </div>
-                                <p><strong>Perfect finale:</strong> The mathematical foundation underlying all AI and ML algorithms.</p>
-                                <p><strong>Career preparation:</strong> Essential for research roles and PhD preparation.</p>
+                                <p><strong>Perfect capstone:</strong> Covers GANs, VAEs, and diffusion models — the technology behind ChatGPT, DALL-E, and the current AI revolution.</p>
+                                <p><strong>Market advantage:</strong> Generative AI expertise is the most in-demand skill in tech right now!</p>
                             </div>
                         </div>
                     </div>
@@ -1675,49 +1674,67 @@
                 <div class="graduation-timeline">
                     <h3 style="color: var(--ut-orange); margin-bottom: 1rem;">
                         <i class="fas fa-graduation-cap"></i>
-                        My AI-Focused Path to Fall 2027 Graduation
+                        My AI-Focused Path to Spring 2027 Graduation
                     </h3>
                     <div class="timeline-steps">
                         <div class="step">
-                            <div class="step-number">5</div>
+                            <div class="step-number" style="background:linear-gradient(135deg,#28a745,#20c997);">✓</div>
                             <div class="step-content">
-                                <strong>Fall 2025:</strong> Data Structures & Algorithms (Foundation Completion)
+                                <strong>Fall 2024:</strong> Data Exploration &amp; Visualization + Probability &amp; Inference — <em>Completed</em>
                             </div>
                         </div>
                         <div class="step">
-                            <div class="step-number">6</div>
+                            <div class="step-number" style="background:linear-gradient(135deg,#28a745,#20c997);">✓</div>
                             <div class="step-content">
-                                <strong>Spring 2026:</strong> Deep Learning (AI Foundation)
+                                <strong>Spring 2025:</strong> Machine Learning — <em>Completed</em>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number" style="background:linear-gradient(135deg,#28a745,#20c997);">✓</div>
+                            <div class="step-content">
+                                <strong>Summer 2025:</strong> Foundations of Regression &amp; Modeling — <em>Completed</em>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number" style="background:linear-gradient(135deg,#28a745,#20c997);">✓</div>
+                            <div class="step-content">
+                                <strong>Fall 2025:</strong> Deep Learning — <em>Completed</em>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number" style="background:linear-gradient(135deg,#28a745,#20c997);">✓</div>
+                            <div class="step-content">
+                                <strong>Spring 2026:</strong> Principles of Data Science — <em>Completed</em>
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">7</div>
                             <div class="step-content">
-                                <strong>Summer 2026:</strong> Advanced Predictive Models (Modeling Mastery)
+                                <strong>Summer 2026:</strong> Advanced Predictive Models for Complex Data
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">8</div>
                             <div class="step-content">
-                                <strong>Fall 2026:</strong> Advances in Deep Generative Models (AI Frontier!)
+                                <strong>Fall 2026:</strong> AI In Healthcare
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">9</div>
                             <div class="step-content">
-                                <strong>Spring 2027:</strong> Design Principles & Causal Inference (Research Excellence)
+                                <strong>Fall 2026:</strong> Data Structures &amp; Algorithms
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">10</div>
                             <div class="step-content">
-                                <strong>Summer 2027:</strong> Optimization (Mathematical Foundation)
+                                <strong>Spring 2027:</strong> Advances in Deep Generative Models (Generative AI) — Final Course!
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">🎓</div>
                             <div class="step-content">
-                                <strong>Fall 2027:</strong> Graduate as an AI-Specialized Data Scientist!
+                                <strong>Spring 2027:</strong> Graduate as an AI-Specialized Data Scientist!
                             </div>
                         </div>
                     </div>
@@ -1725,14 +1742,14 @@
                     <div style="background: linear-gradient(135deg, #e8f5e8 0%, #d4f1d4 100%); padding: 1.5rem; border-radius: 10px; margin-top: 2rem; border-left: 4px solid #28a745;">
                         <h4 style="color: #155724; margin-bottom: 1rem;">
                             <i class="fas fa-rocket"></i>
-                            Why This AI-Focused Strategy is Perfect for 2025-2027
+                            Why This Strategy is Perfect — Graduating Spring 2027
                         </h4>
                         <ul style="margin: 0; padding-left: 1.5rem; color: var(--ut-dark-gray);">
-                            <li><strong>Market Timing:</strong> Graduate right as generative AI becomes mainstream in enterprise</li>
-                            <li><strong>Unique Positioning:</strong> Combination of statistical rigor and cutting-edge AI expertise</li>
-                            <li><strong>Career Flexibility:</strong> Prepared for research, industry, or entrepreneurship paths</li>
-                            <li><strong>Future-Proof Skills:</strong> Mathematical foundations that adapt to new AI developments</li>
-                            <li><strong>Competitive Edge:</strong> Causal inference skills that most AI practitioners lack</li>
+                            <li><strong>Market Timing:</strong> Graduate right as generative AI becomes mainstream in enterprise — 6 of 10 courses already done!</li>
+                            <li><strong>Unique Positioning:</strong> Statistical rigor (Probability, Regression, ML) + cutting-edge AI (Deep Learning, Generative AI)</li>
+                            <li><strong>Healthcare AI Edge:</strong> Domain expertise in one of the fastest-growing AI application areas</li>
+                            <li><strong>Algorithmic Foundation:</strong> Data Structures ensures ability to implement scalable, efficient AI solutions</li>
+                            <li><strong>Generative AI Capstone:</strong> Final course covers the models powering the current AI revolution</li>
                         </ul>
                     </div>
                 </div>
@@ -1755,27 +1772,10 @@
                                         Click on any course below to see detailed information, prerequisites, difficulty ratings, and my personal insights. Only currently planned courses are shown.
                                 </p>
                                 <div class="course-details-category">
-                                    <h3 class="category-title"><i class="fas fa-list"></i> All Selected Courses (by Semester)</h3>
-                                    <div class="course-detail-item">
-                                        <div class="course-detail-header" onclick="toggleCourseDetail('dsc381-detail')">
-                                            <div class="course-detail-title"><strong>DSC 381: Probability & Simulation Based Inference for Data Science</strong> <span class="course-status-badge">Fall 2024</span></div>
-                                            <i class="fas fa-chevron-down course-detail-arrow"></i>
-                                        </div>
-                                        <div class="course-detail-content" id="dsc381-detail">
-                                            <div class="course-detail-grid">
-                                                <div class="course-detail-info">
-                                                    <p><strong>Description:</strong> Comprehensive introduction to probability theory and statistical inference using simulation-based methods.</p>
-                                                    <p><strong>Credits:</strong> 3</p>
-                                                    <p><strong>Difficulty:</strong> 3.5/5</p>
-                                                    <p><strong>Workload:</strong> 18 hrs/week</p>
-                                                    <p><strong>Rating:</strong> 3.5/5</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <h3 class="category-title"><i class="fas fa-check-circle" style="color:#28a745;"></i> Completed Courses</h3>
                                     <div class="course-detail-item">
                                         <div class="course-detail-header" onclick="toggleCourseDetail('dsc385-detail')">
-                                            <div class="course-detail-title"><strong>DSC 385: Data Exploration, Visualization & Foundations of Unsupervised Learning</strong> <span class="course-status-badge">Fall 2024</span></div>
+                                            <div class="course-detail-title"><strong>DSC 385: Data Exploration, Visualization & Foundations of Unsupervised Learning</strong> <span class="course-status-badge completed">Fall 2024 ✓</span></div>
                                             <i class="fas fa-chevron-down course-detail-arrow"></i>
                                         </div>
                                         <div class="course-detail-content" id="dsc385-detail">
@@ -1791,8 +1791,25 @@
                                         </div>
                                     </div>
                                     <div class="course-detail-item">
+                                        <div class="course-detail-header" onclick="toggleCourseDetail('dsc381-detail')">
+                                            <div class="course-detail-title"><strong>DSC 381: Probability & Simulation Based Inference for Data Science</strong> <span class="course-status-badge completed">Fall 2024 ✓</span></div>
+                                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                                        </div>
+                                        <div class="course-detail-content" id="dsc381-detail">
+                                            <div class="course-detail-grid">
+                                                <div class="course-detail-info">
+                                                    <p><strong>Description:</strong> Comprehensive introduction to probability theory and statistical inference using simulation-based methods.</p>
+                                                    <p><strong>Credits:</strong> 3</p>
+                                                    <p><strong>Difficulty:</strong> 3.5/5</p>
+                                                    <p><strong>Workload:</strong> 18 hrs/week</p>
+                                                    <p><strong>Rating:</strong> 3.5/5</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="course-detail-item">
                                         <div class="course-detail-header" onclick="toggleCourseDetail('dsc391l-detail')">
-                                            <div class="course-detail-title"><strong>DSC 391L: Machine Learning</strong> <span class="course-status-badge">Spring 2025</span></div>
+                                            <div class="course-detail-title"><strong>DSC 391L: Machine Learning</strong> <span class="course-status-badge completed">Spring 2025 ✓</span></div>
                                             <i class="fas fa-chevron-down course-detail-arrow"></i>
                                         </div>
                                         <div class="course-detail-content" id="dsc391l-detail">
@@ -1809,7 +1826,7 @@
                                     </div>
                                     <div class="course-detail-item">
                                         <div class="course-detail-header" onclick="toggleCourseDetail('dsc382-detail')">
-                                            <div class="course-detail-title"><strong>DSC 382: Foundations of Regression & Modeling</strong> <span class="course-status-badge">Summer 2025</span></div>
+                                            <div class="course-detail-title"><strong>DSC 382: Foundations of Regression & Modeling</strong> <span class="course-status-badge completed">Summer 2025 ✓</span></div>
                                             <i class="fas fa-chevron-down course-detail-arrow"></i>
                                         </div>
                                         <div class="course-detail-content" id="dsc382-detail">
@@ -1826,7 +1843,7 @@
                                     </div>
                                     <div class="course-detail-item">
                                         <div class="course-detail-header" onclick="toggleCourseDetail('deep-learning-detail')">
-                                            <div class="course-detail-title"><strong>DSC 394D: Deep Learning</strong> <span class="course-status-badge">Fall 2025</span></div>
+                                            <div class="course-detail-title"><strong>DSC 394D: Deep Learning</strong> <span class="course-status-badge completed">Fall 2025 ✓</span></div>
                                             <i class="fas fa-chevron-down course-detail-arrow"></i>
                                         </div>
                                         <div class="course-detail-content" id="deep-learning-detail">
@@ -1842,48 +1859,34 @@
                                         </div>
                                     </div>
                                     <div class="course-detail-item">
-                                        <div class="course-detail-header" onclick="toggleCourseDetail('data-structures-detail')">
-                                            <div class="course-detail-title"><strong>DSC 395T: Data Structures & Algorithms</strong> <span class="course-status-badge">Spring 2026</span></div>
+                                        <div class="course-detail-header" onclick="toggleCourseDetail('principles-ds-detail')">
+                                            <div class="course-detail-title"><strong>DSC 394T: Principles of Data Science</strong> <span class="course-status-badge completed">Spring 2026 ✓</span></div>
                                             <i class="fas fa-chevron-down course-detail-arrow"></i>
                                         </div>
-                                        <div class="course-detail-content" id="data-structures-detail">
+                                        <div class="course-detail-content" id="principles-ds-detail">
                                             <div class="course-detail-grid">
                                                 <div class="course-detail-info">
-                                                    <p><strong>Description:</strong> Fundamental data structures and algorithms for efficient data processing.</p>
+                                                    <p><strong>Description:</strong> Foundational concepts in data science including ethics, methodology, best practices, and the data science lifecycle.</p>
                                                     <p><strong>Credits:</strong> 3</p>
-                                                    <p><strong>Difficulty:</strong> 3/5</p>
-                                                    <p><strong>Workload:</strong> 18 hrs/week</p>
-                                                    <p><strong>Rating:</strong> 3/5</p>
+                                                    <p><strong>Difficulty:</strong> 3.3/5</p>
+                                                    <p><strong>Workload:</strong> 12 hrs/week</p>
+                                                    <p><strong>Rating:</strong> 4/5</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="course-detail-item">
-                                        <div class="course-detail-header" onclick="toggleCourseDetail('health-data-detail')">
-                                            <div class="course-detail-title"><strong>DSC 395T: Data Science in Healthcare Discovery and Innovation</strong> <span class="course-status-badge">Spring 2026</span></div>
-                                            <i class="fas fa-chevron-down course-detail-arrow"></i>
-                                        </div>
-                                        <div class="course-detail-content" id="health-data-detail">
-                                            <div class="course-detail-grid">
-                                                <div class="course-detail-info">
-                                                    <p><strong>Description:</strong> Applied data science techniques for healthcare and medical research applications.</p>
-                                                    <p><strong>Credits:</strong> 3</p>
-                                                    <p><strong>Difficulty:</strong> 3.5/5</p>
-                                                    <p><strong>Workload:</strong> 16 hrs/week</p>
-                                                    <p><strong>Rating:</strong> 3.5/5</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+                                <div class="course-details-category">
+                                    <h3 class="category-title"><i class="fas fa-calendar-alt" style="color:var(--ut-orange);"></i> Upcoming Courses</h3>
                                     <div class="course-detail-item">
                                         <div class="course-detail-header" onclick="toggleCourseDetail('advanced-predictive-detail')">
-                                            <div class="course-detail-title"><strong>DSC 383: Advanced Predictive Models for Complex Data</strong> <span class="course-status-badge">Summer 2026</span></div>
+                                            <div class="course-detail-title"><strong>DSC 383: Advanced Predictive Models for Complex Data</strong> <span class="course-status-badge current">Summer 2026</span></div>
                                             <i class="fas fa-chevron-down course-detail-arrow"></i>
                                         </div>
                                         <div class="course-detail-content" id="advanced-predictive-detail">
                                             <div class="course-detail-grid">
                                                 <div class="course-detail-info">
-                                                    <p><strong>Description:</strong> Advanced modeling techniques including ensemble methods and model interpretation.</p>
+                                                    <p><strong>Description:</strong> Advanced modeling techniques including time series, spatial statistics, longitudinal data, and model interpretation.</p>
                                                     <p><strong>Credits:</strong> 3</p>
                                                     <p><strong>Difficulty:</strong> 4/5</p>
                                                     <p><strong>Workload:</strong> 18 hrs/week</p>
@@ -1893,25 +1896,42 @@
                                         </div>
                                     </div>
                                     <div class="course-detail-item">
-                                        <div class="course-detail-header" onclick="toggleCourseDetail('nlp-detail')">
-                                            <div class="course-detail-title"><strong>DSC 395T: Natural Language Processing</strong> <span class="course-status-badge">Fall 2026</span></div>
+                                        <div class="course-detail-header" onclick="toggleCourseDetail('health-data-detail')">
+                                            <div class="course-detail-title"><strong>DSC 395T: AI In Healthcare</strong> <span class="course-status-badge pending">Fall 2026</span></div>
                                             <i class="fas fa-chevron-down course-detail-arrow"></i>
                                         </div>
-                                        <div class="course-detail-content" id="nlp-detail">
+                                        <div class="course-detail-content" id="health-data-detail">
                                             <div class="course-detail-grid">
                                                 <div class="course-detail-info">
-                                                    <p><strong>Description:</strong> Text processing, language models, and NLP applications using modern techniques.</p>
+                                                    <p><strong>Description:</strong> Applied machine learning and data science techniques for healthcare discovery and innovation.</p>
                                                     <p><strong>Credits:</strong> 3</p>
                                                     <p><strong>Difficulty:</strong> 3.5/5</p>
+                                                    <p><strong>Workload:</strong> 16 hrs/week</p>
+                                                    <p><strong>Rating:</strong> 3.5/5</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="course-detail-item">
+                                        <div class="course-detail-header" onclick="toggleCourseDetail('data-structures-detail')">
+                                            <div class="course-detail-title"><strong>DSC 395T: Data Structures & Algorithms</strong> <span class="course-status-badge pending">Fall 2026</span></div>
+                                            <i class="fas fa-chevron-down course-detail-arrow"></i>
+                                        </div>
+                                        <div class="course-detail-content" id="data-structures-detail">
+                                            <div class="course-detail-grid">
+                                                <div class="course-detail-info">
+                                                    <p><strong>Description:</strong> Fundamental data structures and algorithms for efficient data processing and algorithm design.</p>
+                                                    <p><strong>Credits:</strong> 3</p>
+                                                    <p><strong>Difficulty:</strong> 3/5</p>
                                                     <p><strong>Workload:</strong> 18 hrs/week</p>
-                                                    <p><strong>Rating:</strong> 4/5</p>
+                                                    <p><strong>Rating:</strong> 3/5</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="course-detail-item">
                                         <div class="course-detail-header" onclick="toggleCourseDetail('generative-ai-detail')">
-                                            <div class="course-detail-title"><strong>DSC 395T: Advances in Deep Generative Models (Generative AI)</strong> <span class="course-status-badge">Spring 2027</span></div>
+                                            <div class="course-detail-title"><strong>DSC 395T: Advances in Deep Generative Models (Generative AI)</strong> <span class="course-status-badge pending">Spring 2027 — Final Course</span></div>
                                             <i class="fas fa-chevron-down course-detail-arrow"></i>
                                         </div>
                                         <div class="course-detail-content" id="generative-ai-detail">
@@ -1994,16 +2014,16 @@
             // Render timeline dynamically with expandable details
             function renderTimeline() {
                 const timelineData = [
-                    { semester: 'Fall 2024', title: 'Probability & Simulation Based Inference for Data Science', code: 'DSC 381', summary: 'Kickoff: Foundations of probability theory, statistical inference, and simulation methods for data science applications.' },
-                    { semester: 'Fall 2024', title: 'Data Exploration, Visualization & Foundations of Unsupervised Learning', code: 'DSC 385', summary: 'Exploration: Data visualization, unsupervised learning, and foundational analytics skills.' },
-                    { semester: 'Spring 2025', title: 'Machine Learning', code: 'DSC 391L', summary: 'Core ML: Supervised and unsupervised learning, model evaluation, and practical implementation.' },
-                    { semester: 'Summer 2025', title: 'Foundations of Regression & Modeling', code: 'DSC 382', summary: 'Regression: Advanced regression techniques and statistical modeling methods.' },
-                    { semester: 'Fall 2025', title: 'Deep Learning', code: 'DSC 394D', summary: 'AI Core: Neural networks, deep learning architectures, and modern AI applications.' },
-                    { semester: 'Spring 2026', title: 'Data Structures & Algorithms', code: 'DSC 395T', summary: 'Algorithmic Thinking: Fundamental data structures and algorithms for efficient data processing.' },
-                    { semester: 'Spring 2026', title: 'Data Science in Healthcare Discovery and Innovation', code: 'DSC 395T', summary: 'Healthcare: Applied data science techniques for healthcare and medical research applications.' },
-                    { semester: 'Summer 2026', title: 'Advanced Predictive Models for Complex Data', code: 'DSC 383', summary: 'Modeling Mastery: Advanced ensemble methods and model interpretation techniques.' },
-                    { semester: 'Fall 2026', title: 'Natural Language Processing', code: 'DSC 395T', summary: 'NLP: Text processing, language models, and NLP applications using modern techniques.' },
-                    { semester: 'Spring 2027', title: 'Advances in Deep Generative Models (Generative AI)', code: 'DSC 395T', summary: 'Generative AI: Theory and practice of deep generative models including GANs, VAEs, and diffusion models.' }
+                    { semester: 'Fall 2024', title: 'Data Exploration, Visualization & Foundations of Unsupervised Learning', code: 'DSC 385', summary: 'Exploration: Data visualization, unsupervised learning, and foundational analytics skills. ✅ Completed.' },
+                    { semester: 'Fall 2024', title: 'Probability & Simulation Based Inference for Data Science', code: 'DSC 381', summary: 'Kickoff: Foundations of probability theory, statistical inference, and simulation methods for data science applications. ✅ Completed.' },
+                    { semester: 'Spring 2025', title: 'Machine Learning', code: 'DSC 391L', summary: 'Core ML: Supervised and unsupervised learning, model evaluation, and practical implementation. ✅ Completed.' },
+                    { semester: 'Summer 2025', title: 'Foundations of Regression & Modeling', code: 'DSC 382', summary: 'Regression: Advanced regression techniques and statistical modeling methods. ✅ Completed.' },
+                    { semester: 'Fall 2025', title: 'Deep Learning', code: 'DSC 394D', summary: 'AI Core: Neural networks, deep learning architectures, and modern AI applications. ✅ Completed.' },
+                    { semester: 'Spring 2026', title: 'Principles of Data Science', code: 'DSC 394T', summary: 'Foundations: Data science methodology, ethics, lifecycle, and reproducibility. ✅ Completed.' },
+                    { semester: 'Summer 2026', title: 'Advanced Predictive Models for Complex Data', code: 'DSC 383', summary: 'Modeling Mastery: Advanced ensemble methods, time series, spatial statistics, and model interpretation techniques. Upcoming.' },
+                    { semester: 'Fall 2026', title: 'AI In Healthcare', code: 'DSC 395T', summary: 'Healthcare AI: Applied machine learning and data science for healthcare discovery and innovation. Upcoming.' },
+                    { semester: 'Fall 2026', title: 'Data Structures & Algorithms', code: 'DSC 395T', summary: 'Algorithmic Thinking: Fundamental data structures and algorithms for efficient data processing. Upcoming.' },
+                    { semester: 'Spring 2027', title: 'Advances in Deep Generative Models (Generative AI)', code: 'DSC 395T', summary: 'Generative AI: Theory and practice of deep generative models including GANs, VAEs, and diffusion models. Final course — graduation! 🎓' }
                 ];
                 const semesterEndDates = {
                     'Fall 2024': new Date('2024-12-20'),
@@ -2017,7 +2037,7 @@
                     'Summer 2027': new Date('2027-08-15'),
                     'Fall 2027': new Date('2027-12-20')
                 };
-                const now = new Date('2025-08-20'); // Use current date from context
+                const now = new Date('2026-06-02'); // Current date
                 const timeline = document.getElementById('timeline-courses');
                 timeline.innerHTML = '';
                 timelineData.forEach((item, idx) => {
@@ -2140,7 +2160,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Surya Rao Rayarao | MSDS Student | The University of Texas at Austin</p>
+            <p>&copy; 2026 Surya Rao Rayarao | MSDS Student | The University of Texas at Austin</p>
             <p>Hook 'em Horns! 🤘</p>
         </div>
     </footer>
