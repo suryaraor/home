@@ -7,3 +7,6 @@ Spatial Autoregressive Models
 PCA and SVD
 Methods for Matrix Completion and Denoising
 Clustering
+Nvidia enters PC market with RTX Spark artificial intelligence chips
+Dismantling the Entry-Level Pyramid: How Generative AI is Restructuring Fresh Graduate Hiring in India's IT Sector
+Catching the Wave Without Wiping Out: A Quantitative Risk Handbook for Retail Investors in the 2026 IPO Cycle

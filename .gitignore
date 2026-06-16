@@ -38,3 +38,6 @@ Icon
 
 # Jekyll build output
 _site/
+
+# API keys — never commit
+research/.env

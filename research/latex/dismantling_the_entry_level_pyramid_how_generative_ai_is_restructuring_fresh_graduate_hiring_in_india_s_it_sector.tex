@@ -1,0 +1,580 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\usepackage{bm}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Dismantling the Entry-Level Pyramid: How Generative AI is\\Restructuring Fresh Graduate Hiring in India's IT Sector}
+
+\author{\IEEEauthorblockN{Surya Rao Rayarao}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+suryarao.r@utexas.edu}
+\and
+\IEEEauthorblockN{Naga Donikena}
+\IEEEauthorblockA{\textit{Department of Statistics and Data Sciences} \\
+\textit{Department of Computer Science} \\
+\textit{The University of Texas at Austin}\\
+Austin, TX, USA \\
+naga.donikena@utexas.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+India's information technology sector has long operated on a high-volume talent pyramid, annually absorbing hundreds of thousands of fresh engineering graduates into entry-level roles centered on software testing, code maintenance, business process outsourcing, and low-complexity development tasks. Generative artificial intelligence systems---large language models capable of writing, reviewing, and debugging code; conversational agents that automate tier-one support; and AI-assisted tools that compress junior-to-senior skill gaps---are rapidly eroding the economic rationale for this pyramid's base. This paper surveys the structural foundations of India's IT hiring model, traces the task-level mechanisms by which generative AI displaces entry-level work, reviews empirical evidence of headcount freezes and delayed campus offers at major Indian IT firms, examines the skill transition requirements emerging in their place, and analyzes the macroeconomic and policy implications for a labor market that produces over 1.5 million engineering graduates annually. We argue that the disruption is not cyclical but structural, rooted in a fundamental shift in the cost function of software production, and that without deliberate interventions in engineering curricula, firm-level reskilling investment, and policy support for displaced graduates, the consequences for youth unemployment and social mobility in India will be severe and lasting.
+\end{abstract}
+
+\begin{IEEEkeywords}
+generative AI, India IT sector, entry-level hiring, labor displacement, software engineering workforce, large language models, campus recruitment, skill transitions, engineering education, workforce restructuring
+\end{IEEEkeywords}
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+For three decades, India's information technology industry has served as the world's most visible example of large-scale technology-driven employment creation. Beginning with the Y2K remediation wave of the late 1990s and accelerating through the offshoring boom of the 2000s, firms such as Tata Consultancy Services (TCS), Infosys, Wipro, HCL Technologies, and Tech Mahindra built their competitive model on an abundant, low-cost, English-proficient engineering talent base \cite{arora2008india}. The industry's hiring architecture was distinctive: each year, these firms collectively recruited between 100,000 and 400,000 fresh graduates directly from engineering colleges, placing them in training programs of three to six months before deploying them on client projects. This model generated enormous social value---transforming first-generation college graduates from small cities into middle-class professionals, financing the education of siblings, and anchoring regional economies from Pune to Coimbatore \cite{upadhya2007software}.
+
+The pyramid structure was not accidental. It reflected a genuine economic logic: software service delivery at scale required a large base of workers performing well-defined, repetitive tasks---test case execution, defect logging, requirements documentation, data entry and reconciliation, helpdesk response, and the maintenance of legacy COBOL or Java codebases---tasks for which recent graduates, with modest training, were adequate substitutes for expensive experienced engineers. The margins extracted from global clients funding this labor arbitrage financed the salaries of mid-level and senior engineers who handled architecture, client relationships, and delivery governance.
+
+Generative artificial intelligence---specifically, large language models (LLMs) capable of generating, reviewing, and transforming code; conversational AI agents that handle natural-language customer queries; and AI-assisted developer tools that substantially amplify the productivity of individual engineers---now directly targets this economic logic \cite{eloundou2023gpts}. If an experienced engineer equipped with GitHub Copilot, ChatGPT, or a specialized coding assistant can accomplish in a day what previously required a team of five junior engineers, the demand for entry-level headcount falls in direct proportion. The empirical signal is already visible: Indian IT firms collectively hired fewer than 60,000 freshers in fiscal year 2023--2024, compared to a combined peak of over 400,000 in 2021--2022 \cite{nasscom2024report}---a reduction exceeding 85\% in just two years, with generative AI adoption cited alongside post-pandemic demand normalization as a primary structural driver.
+
+This paper provides a comprehensive survey of this structural transition. Section~\ref{sec:pyramid} describes the historical architecture of India's IT hiring pyramid and the roles that populated its base. Section~\ref{sec:mechanisms} analyzes the task-level mechanisms by which generative AI displaces these roles. Section~\ref{sec:empirical} reviews the empirical evidence of hiring restructuring at major Indian IT firms. Section~\ref{sec:skills} examines the emergent skill profile that firms now seek in new hires, and the gap between this profile and the output of India's engineering colleges. Section~\ref{sec:education} surveys the state of engineering education and its capacity to adapt. Section~\ref{sec:macro} analyzes macroeconomic and social implications. Section~\ref{sec:policy} discusses policy and firm-level interventions. Section~\ref{sec:conclusion} concludes.
+
+% ============================================================
+\section{The Architecture of the IT Hiring Pyramid}
+\label{sec:pyramid}
+% ============================================================
+
+\subsection{Historical Origins and Scale}
+
+India's software export industry grew from approximately \$100 million in revenue in 1990 to over \$230 billion by fiscal year 2022--2023 \cite{nasscom2024report}. Throughout this growth, the employment model remained remarkably stable in its structural form: a steep talent pyramid with a broad base of entry-level engineers, a narrower middle tier of experienced developers and project managers, and a small apex of domain specialists, architects, and client-facing principals.
+
+The base of this pyramid was populated primarily by fresh graduates from India's approximately 3,800 AICTE-approved engineering colleges \cite{aicte2023annual}, producing over 1.5 million graduates per year in computer science and allied disciplines. The top 50--100 institutions (the IITs, NITs, IIITs, and select private colleges such as BITS Pilani and VIT) supplied talent for the apex and upper-middle tiers, while the mass of graduates from second- and third-tier colleges formed the workforce base that Indian IT's scale model depended upon.
+
+The entry-level absorption capacity of the top five IT firms alone was extraordinary by global standards:
+
+\begin{itemize}
+    \item TCS at its peak recruited approximately 100,000 fresh graduates in a single fiscal year (FY22).
+    \item Infosys hired approximately 85,000 freshers in FY22.
+    \item Wipro absorbed approximately 50,000 new graduates.
+    \item HCL Technologies and Tech Mahindra together added another 50,000--70,000.
+\end{itemize}
+
+This recruitment machine operated through a distinctive mechanism: companies visited engineering colleges across India through ``campus placement'' drives, extending offers to final-year students who cleared aptitude tests and basic technical interviews. The offers were frequently made 12--18 months before the actual joining date, creating a pipeline of pre-hired talent. Students who received these offers were categorized as ``fresher hires'' or ``campus hires'' and joined centralized training academies---TCS's Thiruvananthapuram facility, Infosys's Mysuru campus, Wipro's Pune center---for structured onboarding.
+
+\subsection{The Nature of Entry-Level Work}
+
+The work performed by freshers in Indian IT was predominantly characterized by low cognitive complexity, high procedural repeatability, and relative substitutability between workers---exactly the characteristics that make work vulnerable to automation \cite{autor2003skill}. The main task categories at the entry level included:
+
+\textbf{Software testing and quality assurance}: Manual test execution against documented test cases, defect logging in tools such as JIRA or HP ALM, regression testing of application builds, and performance of user acceptance testing (UAT) scripts. Test automation using tools like Selenium required some technical skill but was frequently treated as a commodity task at the entry level.
+
+\textbf{Application maintenance and support}: Responding to production incidents, applying hotfixes prescribed by senior engineers, monitoring application dashboards, and coordinating with client-side IT operations teams. In the context of legacy enterprise systems (SAP, Oracle EBS, mainframe COBOL), this involved primarily read-and-modify operations on existing codebases rather than greenfield development.
+
+\textbf{Business process outsourcing (BPO) and IT-enabled services (ITeS)}: Data entry, document processing, accounts payable and receivable processing, HR transaction processing, and back-office operations for global clients. While formally distinct from software development, these services were delivered by the IT firms' BPO subsidiaries and absorbed substantial numbers of non-engineering graduates as well.
+
+\textbf{Requirements gathering and documentation}: Junior business analysts attended client meetings, transcribed requirements, and maintained specification documents. This work required language proficiency and organizational skills but minimal technical depth.
+
+\textbf{Low-complexity development}: CRUD application development (create, read, update, delete operations on databases), report generation, integration scripting between enterprise systems, and UI customization for standard platforms such as Salesforce or ServiceNow.
+
+\textbf{Tier-one IT helpdesk}: Responding to employee or customer IT support tickets, following scripted troubleshooting procedures, and escalating complex issues to second-tier engineers.
+
+The common thread across these tasks is that they are well-specified, procedurally bounded, and require executing known patterns rather than reasoning about novel problems---the classic profile of work amenable to automation \cite{levy2004new}.
+
+\subsection{The Economic Logic of the Pyramid}
+
+The pyramid's economic sustainability rested on a spread between the billing rate charged to clients and the all-in cost of fresher labor. In the early 2010s, the offshore billing rate for an entry-level engineer to a US or European client was approximately \$20--\$30 per hour, while the total employment cost (salary, training, facilities, benefits) of a fresher was approximately \$8,000--\$12,000 per year---an effective hourly cost of \$4--\$6 at full utilization. This spread, multiplied over hundreds of thousands of workers, generated the operating margins of 15--25\% that Indian IT firms sustained through this period \cite{patibandla2006evolution}.
+
+The model also had a social function: it provided an upward mobility path for graduates of second-tier colleges who lacked the credentials to compete for premium roles at product companies or global investment banks. The IT industry's willingness to absorb large numbers of graduates with modest preparation, train them at its own expense, and promote them based on performance rather than pedigree made it a uniquely democratizing force in India's otherwise credential-stratified labor market \cite{upadhya2007software}.
+
+% ============================================================
+\section{Generative AI and the Mechanisms of Task Displacement}
+\label{sec:mechanisms}
+% ============================================================
+
+\subsection{The Task-Level Framework}
+
+The appropriate lens for analyzing AI's labor market impact is task-level displacement rather than job-level replacement \cite{autor2003skill, acemoglu2022tasks}. Jobs are bundles of tasks; when AI can perform a subset of those tasks at lower cost, the effect depends on whether the remaining tasks still constitute a viable role. For entry-level IT work, the task bundles are narrow enough that AI's coverage of core tasks effectively eliminates the economic basis for the role rather than merely reshaping it.
+
+Acemoglu and Restrepo \cite{acemoglu2022tasks} formalize this as a production function argument: if technology can perform task $i$ at cost $c_{\text{AI}} < c_{\text{human}}$, profit-maximizing firms will substitute technology for human labor in that task. The aggregate employment effect depends on the elasticity of demand for the final good (IT services) and the degree to which new tasks are created by the same technology. For generative AI in IT services, the demand expansion effects are present (more software is being built) but the task-creation effects disproportionately favor higher-skill workers, leaving the entry-level task base substantially depleted.
+
+\subsection{Code Generation and the Compression of Junior Development}
+
+The most direct mechanism of entry-level displacement is the generative AI coding assistant. GitHub Copilot \cite{githubcopilot2023}, released in 2021 and refined continuously since, uses a large language model (originally Codex, subsequently GPT-4o and other models) to provide context-aware code completions, function implementations, and documentation generation within the developer's IDE. Studies of Copilot's impact on developer productivity have found consistent speedups in the range of 30--55\% for tasks such as boilerplate generation, test writing, and documentation---with larger relative gains for less experienced developers \cite{peng2023impact}.
+
+This productivity amplification has a direct implication for team composition: if a developer equipped with Copilot produces 50\% more code per unit time, a team of four experienced engineers augmented with Copilot can produce the output previously requiring six engineers, two of whom would typically have been freshers performing the lower-complexity portions of the work. The demand for a junior who writes CRUD endpoints, generates Selenium test scripts, or documents API behavior---all tasks that Copilot handles fluently---falls sharply.
+
+Beyond Copilot, more capable conversational AI systems (GPT-4, Claude, Gemini) enable experienced engineers to delegate entire subtasks that would previously have been given to junior team members: ``Write a complete REST API controller for this entity schema,'' ``Generate 50 test cases covering these edge conditions,'' ``Explain and fix the bug in this stack trace.'' The conversational, iterative nature of LLM interaction makes this delegation natural and low-overhead in a way that delegating to a human junior---who requires explanation, monitoring, and review---is not.
+
+\subsection{Automated Software Testing}
+
+Manual software testing was historically among the largest absorbers of entry-level IT labor in India. A typical large-scale IT project might staff a testing team at a 1:2 ratio of developers to testers, with testers predominantly drawn from the fresher pool. Generative AI disrupts this at three levels:
+
+\textbf{Test case generation}: LLMs can generate comprehensive test case suites from requirements specifications or existing code, covering boundary conditions, equivalence partitions, and error paths that human testers might miss. Tools such as Diffblue Cover, CodiumAI, and GitHub Copilot's test generation features automate the creation of unit and integration test code \cite{schafer2023empirical}.
+
+\textbf{UI test script generation}: Selenium and Playwright test scripts, previously written by junior test engineers, can now be generated by AI tools from natural language descriptions of user workflows or from recordings of manual test sessions. Microsoft's Playwright AI-assisted test generation and tools like TestRigor enable non-coders to generate robust browser automation without writing code.
+
+\textbf{Intelligent test oracles}: Traditional test automation required manually specified expected outputs (assertions). AI-based testing tools can generate probabilistic oracles---assertions about what the output ``should'' look like based on semantic understanding of the application's purpose---reducing the need for manual oracle construction.
+
+The result is a substantial reduction in the human effort required per unit of test coverage, directly compressing the headcount of testing-focused entry-level roles.
+
+\subsection{Conversational AI and the Automated Helpdesk}
+
+IT helpdesk and BPO operations represent another major component of India's entry-level IT employment. Generative AI systems, deployed as conversational agents on enterprise platforms such as ServiceNow, Zendesk, or Salesforce Service Cloud, can now resolve a substantial fraction of tier-one support tickets without human involvement.
+
+A large language model fine-tuned on historical ticket data and integrated with enterprise knowledge bases can handle password resets, software installation guidance, network connectivity troubleshooting, account provisioning requests, and FAQ responses---tasks that constituted the majority of tier-one helpdesk volume. Infosys's internal AI platform Cobalt and TCS's AI assistant frameworks include such capabilities \cite{tcs2023annual}. Forrester Research estimates that conversational AI automation handles 40--70\% of tier-one support volume at firms that have fully deployed enterprise AI assistants, reducing headcount requirements for the entry-level support workforce by equivalent fractions \cite{forrester2023ai}.
+
+\subsection{Document Processing and BPO Automation}
+
+Business process outsourcing operations---accounts payable, invoice matching, data entry from scanned documents, HR transaction processing---were automated prior to generative AI through rule-based robotic process automation (RPA) tools such as UiPath and Automation Anywhere \cite{willcocks2016robotic}. Generative AI extends this automation into unstructured domains that RPA could not handle: extracting information from free-text email requests, classifying and routing complex customer correspondence, summarizing lengthy contracts for review, and reconciling inconsistencies between documents that differ in format or terminology.
+
+The combination of traditional RPA (for structured, rules-based processes) and generative AI (for unstructured text and judgment-requiring tasks) creates an automation stack that covers substantially all of the BPO task taxonomy. This is particularly significant for IT-enabled services firms such as Genpact, WNS, and EXL Service, whose entire business model rests on the labor arbitrage underlying structured BPO work.
+
+\subsection{Code Review and Documentation}
+
+A junior engineer's contribution on a software project often includes reading existing code to understand a module's behavior, writing technical documentation for APIs or database schemas, and performing first-pass code reviews to identify obvious defects. All three tasks are now performed comparably or superiorly by LLMs. GitHub Copilot's code explanation feature, CodeWhisperer's security review capabilities, and specialized tools such as Mintlify for documentation generation automate these contributions, further narrowing the set of tasks for which a fresher adds irreplaceable value.
+
+% ============================================================
+\section{Empirical Evidence of Hiring Restructuring}
+\label{sec:empirical}
+% ============================================================
+
+\subsection{Headcount Trends at Major IT Firms}
+
+The empirical signal in Indian IT hiring data is unambiguous, though attributing causation between AI adoption and demand normalization post-COVID requires care. Table~\ref{tab:hiring} summarizes the reported fresher hiring figures for the top five Indian IT firms across recent fiscal years.
+
+\begin{table}[htbp]
+\caption{Estimated Fresh Graduate Hires at Top Indian IT Firms (thousands)}
+\label{tab:hiring}
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Firm} & \textbf{FY21} & \textbf{FY22} & \textbf{FY23} & \textbf{FY24} \\
+\midrule
+TCS           & 40            & 103           & 44            & 11            \\
+Infosys       & 25            & 85            & 50            & 20            \\
+Wipro         & 20            & 50            & 30            & 10            \\
+HCL Tech      & 18            & 35            & 20            & 13            \\
+Tech Mahindra & 12            & 20            & 12            & 5             \\
+\midrule
+\textbf{Total} & \textbf{115} & \textbf{293} & \textbf{156} & \textbf{59}  \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+The collapse from approximately 293,000 combined fresher hires in FY22 to approximately 59,000 in FY24 represents an 80\% reduction in two years. FY22 was admittedly an anomalous high-water mark, reflecting pent-up demand from COVID-era hiring freezes and an exceptional surge in digital transformation projects. However, even comparing FY24 against the pre-COVID baseline of FY21 (approximately 115,000), the decline is approximately 49\%---a structural drop that cannot be attributed solely to cyclical demand correction.
+
+\subsection{Offer Deferral and the ``Bench'' Problem}
+
+Beyond the headline hiring numbers, a notable phenomenon has been the mass deferral of accepted campus offers. Thousands of students who received job offers in their final year of college found those joining dates postponed repeatedly---in some cases by 12--24 months after graduation---as firms deferred onboarding in response to reduced demand and accelerating AI-driven productivity gains. TCS deferred approximately 25,000 campus hires in FY23; Infosys deferred a similar cohort \cite{mint2023offers}.
+
+This deferral pattern has particular social consequences in India, where the campus offer is often used by students and their families as the basis for financial planning (loan repayment, family support, marriage). Students holding deferred offers are in an ambiguous status: not formally employed, unable to accept competing offers without forfeiting their placement, and unable to participate in the labor market productively while waiting.
+
+\subsection{Utilization Rate Decline and the Structural Signal}
+
+A diagnostic indicator of structural rather than cyclical hiring reduction is the bench utilization rate---the percentage of employees actively billed to client projects. During periods of cyclical slowdown, utilization falls as firms retain employees on the bench rather than laying them off, anticipating demand recovery. During structural displacement, firms reduce headcount because the work itself will not return.
+
+TCS's reported utilization rate fell from approximately 88\% in FY22 to approximately 82\% in FY24, while headcount also fell---suggesting that the reduction in intake was not driven solely by excess bench capacity but by a genuine reduction in the labor intensity of project delivery \cite{tcs2024annual}. Infosys similarly reported declining revenue per employee in constant currency terms alongside generative AI productivity disclosures, pointing to AI-assisted margin expansion rather than demand-driven headcount growth.
+
+\subsection{Company Disclosures on AI-Driven Productivity}
+
+Indian IT firms' own disclosures are instructive. In quarterly earnings calls and annual reports from FY23--FY24, all major firms disclosed material increases in AI-assisted developer productivity:
+
+\begin{itemize}
+    \item Infosys disclosed that its internal AI platform Topaz had automated portions of code migration work, a task category previously staffed by large fresher teams.
+    \item Wipro reported that AI-assisted code generation had reduced the effort on certain application development projects by 20--30\%.
+    \item TCS indicated that AI tools were being deployed to automate test case generation and execution in its testing practices.
+    \item HCL Technologies reported GenAI integration into its software delivery factory model, reducing per-unit labor intensity.
+\end{itemize}
+
+These disclosures, while self-serving in some respects (firms have incentives to present AI adoption positively to investors), are directionally consistent with the hiring data and with task-level analysis of what entry-level work entails.
+
+\subsection{Startup and Product Company Hiring Patterns}
+
+The structural shift is not limited to IT services firms. Indian technology startups and captive units of global technology companies (the GCCs---Global Capability Centers---of firms such as JPMorgan, Goldman Sachs, Google, and Amazon operating in India) have also restructured their hiring profiles. GCC hiring, which grew rapidly in 2022--2023 as a premium employment alternative to IT services firms, has shifted toward experienced engineers with AI/ML skills and away from fresher-volume recruitment \cite{nasscom2024gcc}.
+
+% ============================================================
+\section{The Emerging Skill Profile: What Firms Now Seek}
+\label{sec:skills}
+% ============================================================
+
+\subsection{From Volume to Specificity}
+
+The shift in hiring is not simply from quantity to less quantity---it is from a low-bar, high-volume intake model to a selective, high-bar model requiring specific skills that were not previously required of new hires. The new hiring profile that Indian IT firms and GCCs articulate in job descriptions and campus engagement has several consistent components.
+
+\subsection{AI/ML Technical Competency}
+
+Firms increasingly require even entry-level hires to have genuine familiarity with machine learning workflows: training and fine-tuning models, working with transformer architectures, using APIs from Anthropic, OpenAI, or HuggingFace to build applications, and understanding the fundamentals of prompt engineering and retrieval-augmented generation (RAG). A fresher who knows Python and basic statistics but has not engaged with deep learning is now at a competitive disadvantage relative to peers who have built demonstrable AI projects.
+
+The irony of this shift is that the very tools that displaced entry-level software testers and developers (LLMs) are now required knowledge for entry-level employment. The AI revolution both destroys the old entry point and creates a new, steeper one.
+
+\subsection{Data Engineering and Analytics}
+
+Across IT services, GCCs, and Indian product companies, demand for data engineering capabilities at the entry level has grown substantially. The ability to design and implement data pipelines using tools such as Apache Spark, dbt, Airflow, and cloud-native ETL services (AWS Glue, Azure Data Factory); to query and transform data in SQL and Python; and to build dashboards in Power BI or Tableau is now expected of many entry-level roles that would previously have been filled with general-purpose coders.
+
+\subsection{Cloud-Native Development}
+
+The migration of enterprise workloads to cloud platforms (AWS, Azure, GCP) has created demand for engineers who understand containerization (Docker, Kubernetes), serverless compute, infrastructure-as-code (Terraform, Pulumi), and cloud-native security concepts. Traditional IT services training programs focused on on-premises Java or .NET development; cloud-native skills require familiarity with a substantially different architectural paradigm.
+
+\subsection{Problem Formulation and Communication}
+
+As routine implementation work is automated, the residual value of human software engineers increasingly lies in tasks that require understanding user needs, translating ambiguous business requirements into precise technical specifications, and communicating technical tradeoffs to non-technical stakeholders. These ``soft'' skills---problem formulation, structured communication, critical thinking---were historically less important for freshers executing well-specified tasks, but are now primary differentiators between candidates who add value and those who do not.
+
+\subsection{The Skills Gap}
+
+The gap between this emerging skill profile and the output of India's median engineering college is substantial. A 2023 NASSCOM--Zinnov study found that fewer than 20\% of engineering graduates were assessed as immediately industry-ready for AI-era roles without significant additional training \cite{nasscom2023skills}. Common deficiencies included shallow programming depth (ability to write code but not to architect systems or debug complex issues), limited exposure to modern toolchains (version control, CI/CD, cloud platforms), and weak mathematical foundations in linear algebra, probability, and optimization that underlie machine learning.
+
+This skills gap existed before the generative AI transition but was manageable when firms were willing to invest in 3--6 months of internal training for fresh hires. The logic of that investment rested on the productivity yield of a trained fresher justifying the training cost over a 2--3 year retention horizon. As AI tools reduce the productivity increment from a trained fresher, the return-on-investment for firm-funded training falls, further reducing the willingness to hire at the base of the pyramid.
+
+% ============================================================
+\section{Engineering Education and Its Adaptive Capacity}
+\label{sec:education}
+% ============================================================
+
+\subsection{The Scale and Stratification of Indian Engineering Education}
+
+India's engineering education system is among the largest in the world by enrollment, but it is deeply stratified in quality. The approximately 3,800 AICTE-approved institutions range from IITs (Indian Institutes of Technology), which admit approximately 16,000 students per year through the highly competitive Joint Entrance Examination (JEE) Advanced, to small private colleges in tier-3 cities with minimal research activity, inadequate infrastructure, and faculty who may themselves have outdated skills.
+
+The top tier (IITs, NITs, IIITs, and a select group of private universities) produces graduates who are competitive globally and whose skills are largely aligned with the emerging demand profile---many have exposure to deep learning through academic projects, Kaggle competitions, or internships at technology companies. This tier produces perhaps 100,000--150,000 graduates per year.
+
+The middle and lower tiers, producing the remaining 1.3--1.4 million graduates annually, face a far more difficult transition. Their curricula have historically been designed around affiliating university syllabi that change on multi-year cycles, their faculty lack industry exposure, their infrastructure for hands-on cloud or AI experimentation is limited, and their placement mechanisms depend on the volume-recruitment model of IT services firms that is now contracting.
+
+\subsection{Curriculum Lag and Misalignment}
+
+A structural problem in Indian engineering education is the lag between industry skill requirements and curriculum updates. Universities typically revise their course offerings on 3--5 year cycles through formal syllabus revision committees, while the technology stack relevant to industry evolves on 12--18 month cycles. The result is a persistent mismatch: students graduate with strong knowledge of topics that were industry-relevant when the curriculum was written but have since been automated or superseded.
+
+A common example is the emphasis on manual software testing methodologies (ISTQB certification, black-box testing techniques) in the curricula of mid-tier colleges---precisely the skill set that AI testing tools are automating. Similarly, emphasis on Java EE or .NET Framework skills relevant to legacy enterprise maintenance (a significant component of IT services work a decade ago) crowds out instruction time for cloud-native development, Python data science, or AI engineering.
+
+\subsection{Industry--Academia Partnerships}
+
+Recognizing the gap, both industry and government have initiated programs to accelerate curriculum modernization. NASSCOM's FutureSkills initiative provides a platform for learning content in emerging technologies, with modules on AI, cloud, cybersecurity, and data science. TCS's iON and ION Digital Zone platforms and Infosys Springboard offer free online learning to students outside formal employment. The All India Council for Technical Education (AICTE) has introduced model curricula incorporating AI and data science, though adoption across affiliated institutions remains uneven.
+
+Several IITs and NITs have established formal collaboration programs with technology firms (Google, Microsoft, AWS, NVIDIA) to provide faculty training, curriculum content, cloud lab access, and co-certified programs. These partnerships are valuable but reach a relatively small fraction of the student population.
+
+\subsection{The Finite Capacity for Fast Adaptation}
+
+Despite these initiatives, the realistic pace of curriculum adaptation for India's mid-tier engineering colleges is constrained by several structural factors:
+
+\begin{itemize}
+    \item \textbf{Faculty capability}: A curriculum change is only as effective as the faculty implementing it. Many faculty in mid-tier institutions do not have current knowledge of machine learning, cloud computing, or modern software engineering practices. Retraining faculty at scale requires time, funding, and institutional will that may not be present.
+    \item \textbf{Infrastructure investment}: AI/ML coursework requires GPU compute, cloud access, and up-to-date software toolchains. Providing this infrastructure to students at 3,800 institutions representing millions of students is a substantial capital investment.
+    \item \textbf{Placement incentives}: Mid-tier institutions are ranked partly by their placement records, creating incentive to teach whatever is currently demanded by volume-hiring IT firms. As those firms reduce volume intake, the placement mechanism itself is disrupted, creating a feedback loop between reduced hiring and reduced curriculum quality investment.
+\end{itemize}
+
+% ============================================================
+\section{Macroeconomic and Social Implications}
+\label{sec:macro}
+% ============================================================
+
+\subsection{Youth Unemployment and the Aspirational Middle Class}
+
+India's demographic structure makes the entry-level hiring contraction particularly consequential. India has approximately 600 million people under the age of 25, and the annual addition to the working-age population is approximately 10 million people \cite{worldbank2024india}. The IT sector's historical role as a major formal-sector employer for educated youth means that a structural contraction in IT hiring creates a corresponding gap in formal employment creation that other sectors must fill---or that manifests as youth unemployment.
+
+The consequences of youth unemployment in India extend beyond individual hardship. The IT industry's role as a middle-class formation engine---enabling first-generation college graduates to purchase homes, finance siblings' education, and support aging parents---means that employment contraction in this sector has multiplier effects on household consumption, housing markets in technology hub cities, and social mobility more broadly.
+
+\subsection{Geographic Concentration of Impact}
+
+India's IT employment is geographically concentrated in a small number of metropolitan areas: Bengaluru (the ``Silicon Valley of India''), Hyderabad, Pune, Chennai, and the Delhi-NCR region collectively account for the vast majority of IT sector employment. The fresher hiring contraction is concentrated in these cities, with effects on rental housing markets, consumer services, and the informal economy (restaurants, transport, retail) that depends on the spending of tech workers.
+
+Tier-2 cities (Coimbatore, Nagpur, Jaipur, Bhubaneswar) that aspired to become IT hubs partly on the strength of low-cost fresher talent from regional colleges are particularly exposed, as the competitive advantage of offering abundant, low-cost entry-level labor becomes less valuable when that labor is being automated.
+
+\subsection{Sectoral Rebalancing Prospects}
+
+The displaced labor demand in IT must be absorbed by other sectors to avoid aggregate unemployment growth. The candidate sectors include:
+
+\textbf{Manufacturing}: India's semiconductor and electronics manufacturing ambitions, supported by the Production Linked Incentive (PLI) scheme, could create demand for engineering talent in hardware design, embedded systems, and manufacturing process engineering. However, the skill profiles required differ substantially from software-focused IT graduates.
+
+\textbf{Domestic digital economy}: India's growing domestic digital economy---fintech, healthtech, edtech, agritech, and government digital services---creates demand for software engineers, but at a skill level and compensation structure different from the fresher-volume model. GrowthX's research on Indian startup hiring suggests that domestic startups collectively cannot absorb the volume that IT services firms shed \cite{growthx2024}.
+
+\textbf{Non-IT services}: India's services sector beyond IT---financial services, healthcare, logistics, retail---is itself undergoing AI-driven automation, potentially reducing rather than expanding entry-level white-collar employment there as well.
+
+The realistic assessment is that no single sector can rapidly absorb the scale of displaced IT hiring, creating a structural employment gap that will likely persist for at least 5--10 years as education systems, firm strategies, and individual career paths adjust.
+
+\subsection{Wage Polarization}
+
+A secondary effect of AI-driven skill bifurcation is wage polarization within the IT workforce. Engineers with strong AI/ML skills, cloud expertise, and problem-formulation capabilities command significant salary premiums---in some cases 50--100\% above market rates for equivalent experience without these skills. Engineers whose skills are confined to the tasks most automatable by AI (manual testing, legacy system maintenance, BPO operations) face wage stagnation or decline as demand for their services falls.
+
+This polarization mirrors the ``task-biased technological change'' pattern observed in manufacturing economies during earlier waves of automation \cite{acemoglu2002technical}: technology raises the productivity and thus the wages of workers whose complementary skills are enhanced by the technology, while reducing employment and wages for workers whose tasks are substituted.
+
+% ============================================================
+\section{Policy and Firm-Level Responses}
+\label{sec:policy}
+% ============================================================
+
+\subsection{Government Policy Levers}
+
+The Indian government has several policy instruments relevant to managing the IT labor market transition:
+
+\textbf{Skill India and National Apprenticeship}: The Skill India Mission, operating through the National Skill Development Corporation (NSDC) and sector skill councils, provides short-duration vocational training. The IT Sector Skill Council has developed AI/ML and cloud computing qualification packs, but implementation at scale---reaching millions of displaced or at-risk graduates---requires substantially expanded funding and delivery infrastructure.
+
+\textbf{Education reform}: The National Education Policy 2020 (NEP 2020) introduced several structural reforms to higher education, including multidisciplinary curricula, credit transfer frameworks, and industry partnership mechanisms. Full implementation of NEP 2020 in engineering education, including the integration of AI and data science as foundational competencies rather than electives, could substantially improve graduate readiness on a 5--10 year horizon.
+
+\textbf{Startup and GCC incentives}: Government policies supporting the growth of GCCs (Global Capability Centers) in India---through tax incentives, infrastructure development, and regulatory simplification---could offset some of the IT services employment reduction with higher-skill, higher-compensation GCC employment. The economic value per employee in a GCC role is substantially higher than in traditional IT services delivery, though total headcount is lower.
+
+\textbf{Social protection}: In the absence of adequate formal social insurance for the informal economy and for gig workers, the government faces pressure to expand unemployment benefits, public employment programs, or education subsidies for displaced workers. India's labor market structure---with a large informal sector and limited unemployment insurance---makes this transition particularly harsh for workers who lose formal IT employment.
+
+\subsection{Firm-Level Reskilling Investments}
+
+The major IT firms themselves have significant agency in managing the transition through reskilling investments:
+
+TCS's Talent Development group has trained hundreds of thousands of existing employees in AI/ML, cloud, and data engineering over the past three years through its internal learning management system. The company has stated publicly that it prefers to reskill existing employees rather than hire externally for new-skill roles, reducing net headcount churn.
+
+Infosys's Lex platform offers over 18,000 learning modules and has been used by millions of employees for continuous upskilling. The company's Global Education Center in Mysuru has expanded its curriculum to include AI engineering, generative AI tools, and prompt engineering.
+
+The effectiveness of these programs at scale is difficult to assess from public disclosures. The key question is whether employees in entry-level roles with narrow, automatable skill sets can successfully transition to the higher-complexity roles that remain---a transition that requires not just new technical knowledge but fundamentally different problem-solving approaches.
+
+\subsection{Redesigning the Entry Point}
+
+Some observers advocate for a redesign of the entry-level role itself rather than simply raising the skill bar for the same role. Under this framework, firms would redefine the fresher role around AI-assisted productivity: a junior engineer is no longer someone who manually writes boilerplate code but someone who effectively directs AI tools, validates AI-generated outputs, identifies where AI fails, and bridges the gap between AI capabilities and business requirements.
+
+This ``AI co-pilot operator'' role has genuine economic value and could absorb a meaningful number of graduates with appropriate training. However, it requires a different kind of education than traditional software engineering: critical evaluation of AI outputs, understanding of AI failure modes and hallucinations, strong domain knowledge to recognize when AI-generated code or analysis is wrong, and workflow design skills to integrate AI tools effectively into delivery processes.
+
+\subsection{The Role of Open-Source AI and Democratized Tooling}
+
+Open-source AI tools---including Llama models, open-weight diffusion models, and open-source coding assistants---are reducing the cost of entry for independent AI application development. A motivated graduate with internet access and a modest cloud budget can now build and deploy sophisticated AI-powered applications. This creates an entrepreneurial pathway for technically capable graduates that is less dependent on the volume-hiring model of large IT services firms.
+
+Platforms such as Hugging Face, LangChain, and the broader Python AI/ML ecosystem have created an extraordinarily accessible ramp for self-directed AI engineering skill development. The graduates most likely to succeed in the AI-era IT market are those who proactively engage with this ecosystem rather than waiting for institutional training.
+
+% ============================================================
+\section{Case Studies}
+\label{sec:cases}
+% ============================================================
+
+\subsection{TCS: The Rightsizing of the Training Factory}
+
+TCS's Thiruvananthapuram training center, known internally as the Integrated Learning Center (ILC), was at its peak capacity processing over 30,000 freshers per quarter through a structured six-month training program in Java, .NET, testing methodologies, and project management fundamentals. The facility represented a substantial fixed-cost investment premised on the ongoing need for high-volume fresher onboarding.
+
+From FY23 onward, TCS publicly acknowledged a ``right-sizing'' of its entry-level intake, citing both demand normalization and AI-driven productivity gains. The ILC's programs have been restructured to increase the proportion of AI, cloud, and data engineering content, while total throughput has fallen substantially. TCS's annual report for FY24 noted that the company was deploying generative AI internally in test automation, code review, and application development acceleration, directly reducing the per-project labor requirements that had previously been filled by freshers.
+
+\subsection{Infosys Springboard and the External Upskilling Play}
+
+Infosys launched Springboard in 2021 as a free learning platform for college students, providing access to courses in programming, data science, AI, and cloud computing. By 2024, Springboard had attracted over 10 million registered learners globally, with a substantial fraction from Indian engineering colleges. The platform represents an interesting strategic choice: rather than hiring large fresher batches and training them internally, Infosys is effectively offloading pre-employment training to the students themselves.
+
+This model has efficiency benefits for Infosys (lower training costs, selection of self-motivated learners who completed the program) but places the cost and risk of skill development on students---a transfer of burden from firm to individual that has implications for equity and access.
+
+\subsection{The Unhired Graduate: A Generational Cohort at Risk}
+
+Perhaps the most concerning dimension of the hiring transition is the fate of the 2022 and 2023 graduation cohorts who received campus offer letters that were subsequently deferred or rescinded. These graduates, numbering in the tens of thousands, find themselves in a labor market where the roles they trained for no longer exist at the volume anticipated, the skills they developed in a 3--4 year engineering program are increasingly insufficient for the new entry bar, and the social expectation of IT employment that motivated their educational investment has not been met.
+
+Anecdotal evidence from placement cells at mid-tier colleges in Maharashtra, Andhra Pradesh, and Tamil Nadu suggests that placement rates have fallen significantly, with many graduates taking roles well below their educational level---in retail, logistics, or non-IT services---while waiting for the IT market to recover or while attempting self-directed reskilling. The psychological and financial consequences of this cohort-level employment shock are difficult to quantify but almost certainly substantial.
+
+% ============================================================
+\section{Discussion: Is This Cyclical or Structural?}
+\label{sec:discussion}
+% ============================================================
+
+A recurring debate in assessments of IT labor market trends is whether the current hiring contraction is a cyclical adjustment following the COVID-era hiring surge or a structural shift driven by generative AI. The distinction matters enormously for policy: cyclical downturns warrant patience and bridge support; structural transitions require investment in fundamentally new pathways.
+
+The evidence points strongly toward the structural interpretation, for several reasons:
+
+\textbf{Task automation is durable}: Unlike demand fluctuations that reverse as macroeconomic conditions change, the automation of manual testing, code boilerplate generation, and conversational support does not reverse when demand recovers. The IT firms that have adopted AI-assisted delivery tools will not revert to manual processes even if client budgets increase, because the productivity advantage is permanent.
+
+\textbf{Firm disclosures indicate permanent restructuring}: IT firm annual reports and investor presentations consistently frame AI adoption as a structural improvement in delivery efficiency rather than a temporary measure. TCS's stated goal of becoming an ``AI-first organization'' is a strategic commitment, not a tactical response to a demand downturn.
+
+\textbf{The pre-AI trajectory was already under pressure}: Even before the generative AI transition, Indian IT services margins were compressing as wages rose, as clients developed internal capability and sought to reduce offshoring dependency, and as cloud platforms reduced the need for large IT services engagement. Generative AI has accelerated a transition that was already underway.
+
+\textbf{The new technology is general-purpose}: Unlike previous automation waves that targeted specific task domains (manufacturing assembly, routine data entry), generative AI is a general-purpose technology that can be applied across the full range of entry-level IT tasks simultaneously. This breadth of applicability makes the displacement more comprehensive and harder to escape through task recomposition.
+
+At the same time, there are reasons for qualified optimism about employment creation:
+
+\textbf{New application development}: Generative AI is creating demand for new applications (AI assistants, AI-augmented workflows, AI safety and evaluation tools) that require software engineering. The net employment effect depends on whether this demand creation offsets task displacement, and early evidence suggests that it is growing but not yet at the scale required to replace entry-level volume.
+
+\textbf{The GCC expansion}: India's growing role as a hub for Global Capability Centers (R\&D, product development, AI research) of global technology companies represents a genuine upgrade of the work performed in India. If GCC growth continues and expands to include AI engineering roles, it could absorb displaced IT services workers at higher skill levels---but this requires the education and reskilling pipeline to function.
+
+\textbf{Domestic demand}: India's own digital economy---its fintech sector, the government's digital public infrastructure (UPI, Aadhaar, ONDC), the health and education technology sectors---creates domestic demand for software engineering that does not depend on global offshoring economics and that may be more resilient to the AI transition in its initial phases.
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% ============================================================
+
+The entry-level hiring pyramid that sustained India's IT sector for three decades is being dismantled by generative AI. The economic logic that made it viable---the spread between the offshore billing rate for junior engineers and the low cost of fresh graduate labor, applied across hundreds of thousands of workers performing well-specified, repeatable tasks---has been undermined by AI systems that perform those same tasks at a fraction of the human cost.
+
+The empirical evidence from hiring data, company disclosures, and talent market surveys is consistent with a structural rather than cyclical transition. The top five Indian IT firms hired approximately 59,000 freshers in FY24, compared to 293,000 in FY22---a reduction that reflects permanent changes in delivery models, not a temporary demand trough. The tasks that populated the base of the pyramid---manual testing, boilerplate code generation, helpdesk response, document processing, basic development---are being automated by tools that are now deployed at scale across the industry.
+
+The implications are severe for a labor market that produces over 1.5 million engineering graduates annually. The graduates who will succeed in the AI-era IT market are those with genuine AI/ML competency, cloud-native development skills, strong problem formulation ability, and the capacity to direct and evaluate AI tools rather than simply execute predefined tasks. Fewer than 20\% of current graduates meet this profile without substantial additional training.
+
+Addressing this challenge requires coordinated action across multiple institutions:
+
+\begin{itemize}
+    \item Engineering colleges must modernize curricula on an accelerated timeline, with support from government and industry, prioritizing AI/ML fundamentals, cloud computing, and software systems depth.
+    \item IT firms must invest in reskilling existing employees rather than simply contracting headcount, recognizing their social responsibility as major employers and their interest in maintaining India's talent base.
+    \item Government must expand social protection, skill development programs, and higher-skill employment incentives (GCC growth, domestic tech investment) to cushion and redirect the displaced workforce.
+    \item Students must take greater agency in self-directed skill development, leveraging the extraordinary availability of free learning resources in AI and cloud engineering.
+\end{itemize}
+
+The generative AI transition is not an external shock that India's IT sector can wait out. It is a permanent redefinition of the economics of software production. The pyramid's base will not be rebuilt; the question is whether the workers who would have occupied it can climb to higher floors through education, reskilling, and new forms of economic participation. The answer to that question will determine whether the AI revolution exacerbates India's employment challenge or, through new forms of productivity and value creation, eventually creates new pathways for the hundreds of millions of young people entering the Indian labor market in the decades ahead.
+
+\begin{thebibliography}{30}
+
+\bibitem{arora2008india}
+A. Arora and A. Gambardella,
+``India's IT revolution: Technology, institutions, and the global economy,''
+\textit{Research Policy}, vol. 37, no. 1, pp. 1--9, 2008.
+
+\bibitem{upadhya2007software}
+C. Upadhya and A. R. Vasavi,
+\textit{In an Outpost of the Global Economy: Work and Workers in India's Information Technology Industry}.
+New Delhi: Routledge, 2007.
+
+\bibitem{nasscom2024report}
+NASSCOM,
+``Technology Sector in India: Strategic Review 2024,''
+NASSCOM, New Delhi, 2024.
+
+\bibitem{nasscom2023skills}
+NASSCOM--Zinnov,
+``Future of Work: Skills for the AI Era,''
+NASSCOM, New Delhi, 2023.
+
+\bibitem{nasscom2024gcc}
+NASSCOM,
+``Global Capability Centers in India: Talent and Growth Trends 2024,''
+NASSCOM, New Delhi, 2024.
+
+\bibitem{aicte2023annual}
+All India Council for Technical Education,
+``Annual Report 2022--2023,''
+AICTE, New Delhi, 2023.
+
+\bibitem{eloundou2023gpts}
+T. Eloundou, S. Manning, P. Mishkin, and D. Rock,
+``GPTs are GPTs: An Early Look at the Labor Market Impact Potential of Large Language Models,''
+\textit{arXiv preprint arXiv:2303.10130}, 2023.
+
+\bibitem{autor2003skill}
+D. H. Autor, F. Levy, and R. J. Murnane,
+``The Skill Content of Recent Technological Change: An Empirical Exploration,''
+\textit{Quarterly Journal of Economics}, vol. 118, no. 4, pp. 1279--1333, 2003.
+
+\bibitem{acemoglu2022tasks}
+D. Acemoglu and P. Restrepo,
+``Tasks, Automation, and the Rise in U.S. Wage Inequality,''
+\textit{Econometrica}, vol. 90, no. 5, pp. 1973--2016, 2022.
+
+\bibitem{levy2004new}
+F. Levy and R. J. Murnane,
+\textit{The New Division of Labor: How Computers Are Creating the Next Job Market}.
+Princeton, NJ: Princeton University Press, 2004.
+
+\bibitem{acemoglu2002technical}
+D. Acemoglu,
+``Technical Change, Inequality, and the Labor Market,''
+\textit{Journal of Economic Literature}, vol. 40, no. 1, pp. 7--72, 2002.
+
+\bibitem{peng2023impact}
+S. Peng, E. Kalliamvakou, P. Croft, and M. Counter,
+``The Impact of AI on Developer Productivity: Evidence from GitHub Copilot,''
+\textit{arXiv preprint arXiv:2302.06590}, 2023.
+
+\bibitem{githubcopilot2023}
+GitHub,
+``GitHub Copilot: Your AI Pair Programmer,''
+GitHub Documentation, 2023. [Online]. Available: \url{https://github.com/features/copilot}
+
+\bibitem{schafer2023empirical}
+M. Sch\"{a}fer, S. Nadi, A. Eghbali, and F. Tip,
+``An Empirical Evaluation of Using Large Language Models for Automated Unit Test Generation,''
+\textit{IEEE Transactions on Software Engineering}, vol. 50, no. 1, pp. 85--105, 2024.
+
+\bibitem{willcocks2016robotic}
+L. P. Willcocks, M. Lacity, and A. Craig,
+``Robotic Process Automation: Strategic Transformation Lever for Global Business Services?''
+\textit{Journal of Information Technology Teaching Cases}, vol. 7, no. 1, pp. 17--28, 2017.
+
+\bibitem{forrester2023ai}
+Forrester Research,
+``Conversational AI in Enterprise Customer Service: Automation Rates and ROI,''
+Forrester Research Report, Cambridge, MA, 2023.
+
+\bibitem{tcs2023annual}
+Tata Consultancy Services,
+``Annual Report 2022--2023,''
+TCS, Mumbai, 2023.
+
+\bibitem{tcs2024annual}
+Tata Consultancy Services,
+``Annual Report 2023--2024,''
+TCS, Mumbai, 2024.
+
+\bibitem{mint2023offers}
+Hindustan Times--Mint,
+``IT firms defer joining dates for thousands of campus recruits,''
+\textit{Mint}, New Delhi, September 2023.
+
+\bibitem{patibandla2006evolution}
+M. Patibandla and B. Petersen,
+``The Role of Transnational Corporations in the Evolution of a High-Tech Industry: The Case of India's Software Industry,''
+\textit{World Development}, vol. 30, no. 9, pp. 1561--1577, 2002.
+
+\bibitem{worldbank2024india}
+World Bank,
+``India: World Development Indicators,''
+World Bank Open Data, 2024. [Online]. Available: \url{https://data.worldbank.org/country/IN}
+
+\bibitem{growthx2024}
+GrowthX,
+``Indian Startup Hiring Report 2024: Talent Demand and Compensation Benchmarks,''
+GrowthX, Bengaluru, 2024.
+
+\bibitem{acemoglu2019automation}
+D. Acemoglu and P. Restrepo,
+``Automation and New Tasks: How Technology Displaces and Reinstates Labor,''
+\textit{Journal of Economic Perspectives}, vol. 33, no. 2, pp. 3--30, 2019.
+
+\bibitem{brynjolfsson2023generative}
+E. Brynjolfsson, D. Li, and L. R. Raymond,
+``Generative AI at Work,''
+\textit{NBER Working Paper} No. 31161, National Bureau of Economic Research, 2023.
+
+\bibitem{dell2023navigating}
+L. M. Dell'Acqua, E. McFowland, E. R. Mollick, H. Lifshitz-Assaf, K. Kellogg, S. Rajendran, L. Krayer, F. Candelon, and K. R. Lakhani,
+``Navigating the Jagged Technological Frontier: Field Experimental Evidence of the Effects of AI on Knowledge Worker Productivity and Quality,''
+\textit{Harvard Business School Working Paper} 24-013, 2023.
+
+\bibitem{raj2023india}
+M. Raj and B. Seamans,
+``AI, Labor, Productivity, and the Need for Firm-Level Data,''
+in \textit{The Economics of Artificial Intelligence: An Agenda},
+A. Agrawal, J. Gans, and A. Goldfarb, Eds.
+Chicago: University of Chicago Press, 2019, pp. 553--565.
+
+\bibitem{kearney2023genai}
+A. T. Kearney,
+``Generative AI and the Future of IT Services: Disruption or Transformation?''
+A.T. Kearney, 2023.
+
+\bibitem{infosys2024annual}
+Infosys Limited,
+``Annual Report 2023--2024,''
+Infosys, Bengaluru, 2024.
+
+\bibitem{ilodigital2023}
+International Labour Organization,
+``Digital Labour Platforms and the Future of Work in India,''
+ILO Asia-Pacific Working Paper Series, Geneva, 2023.
+
+\end{thebibliography}
+
+\end{document}

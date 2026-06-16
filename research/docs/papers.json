@@ -1,0 +1,14 @@
+{
+  "Classical Time-series Models": "classical_timeseries",
+  "State-Space Models": "state_space_models",
+  "Hidden Markov Models": "hidden_markov_models",
+  "Methods for Detecting Spatial Clustering": "spatial_clustering",
+  "Gaussian Process Models for Spatial Prediction": "gaussian_process_spatial",
+  "Spatial Autoregressive Models": "spatial_autoregressive",
+  "PCA and SVD": "pca_svd",
+  "Methods for Matrix Completion and Denoising": "matrix_completion",
+  "Clustering": "clustering",
+  "Nvidia enters PC market with RTX Spark artificial intelligence chips": "nvidia_enters_pc_market_with_rtx_spark_artificial_intelligence_chips",
+  "Dismantling the Entry-Level Pyramid: How Generative AI is Restructuring Fresh Graduate Hiring in India's IT Sector": "dismantling_the_entry_level_pyramid_how_generative_ai_is_restructuring_fresh_graduate_hiring_in_india_s_it_sector",
+  "Catching the Wave Without Wiping Out: A Quantitative Risk Handbook for Retail Investors in the 2026 IPO Cycle": "catching_the_wave_without_wiping_out_a_quantitative_risk_handbook_for_retail_investors_in_the_2026_ipo_cycle"
+}
